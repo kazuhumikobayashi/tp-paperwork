@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}技術者登録{% endblock %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="{{ url_for('project.detail', project_id=form.project_id.data) }}" class="btn btn-default">
+      <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+    <li>プロジェクト</li>
+    <li><span class="fa fa-handshake-o"></span> 見積り</li>
+    <li class="active">技術者登録</li>
+  </ol>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 詳細情報</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="post">
+    {{ form.hidden_tag() }}
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          {{ render_field(form.engineer_id, "col-xs-6", "required", input_class="select2") }}
+          {{ render_field(form.sales_unit_price, "col-xs-6", "required") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.payment_unit_price, "col-xs-6", "required") }}
+          {{ render_field(form.start_date, "col-xs-6", "required", input_class="date") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.end_date, "col-xs-6", "required", input_class="date") }}
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> 保存</button>
+      </div>
+    </form>
+  </div>
+  <!-- /.box -->
+{% endblock %}

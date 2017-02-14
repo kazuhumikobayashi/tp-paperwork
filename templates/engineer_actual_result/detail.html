@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+{% endblock %}
+{% block title %}実績登録{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="{{ url_for('project.detail', project_id=form.project_id.data) }}?month={{ form.result_month.data|datetime_format("%Y%m") }}" class="btn btn-default">
+      <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+    <li>プロジェクト</li>
+    <li><span class="fa fa-edit"></span> 技術者実績</li>
+    <li class="active">実績登録</li>
+  </ol>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i>
+          {{ form.result_month.data|datetime_format("%Y年%m月") }}実績
+      </h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="post">
+    {{ form.hidden_tag() }}
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          {{ render_field(form.engineer_id, "col-xs-6", input_class="select2") }}
+          {{ render_field(form.fixed_flg, "col-xs-6", 'required', input_class="select2") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.working_hours, "col-xs-6") }}
+          {{ render_field(form.adjustment_hours, "col-xs-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.billing_amount, "col-xs-6") }}
+          {{ render_field(form.billing_adjustment_amount, "col-xs-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.payment_amount, "col-xs-6") }}
+          {{ render_field(form.payment_adjustment_amount, "col-xs-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.carfare, "col-xs-6") }}
+          {{ render_field(form.remarks, "col-xs-12") }}
+        </div>
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> 保存</button>
+      </div>
+    </form>
+  </div>
+  <!-- /.box -->
+{% endblock %}

@@ -1,0 +1,6 @@
+insert into companies (company_code, company_name, company_name_kana, trade_name, trade_name_position, client_flg, consignment_flg, start_date, end_date, postal_code, address1, address2, phone, fax, payment_site, receipt_site, tax, remarks, created_at, created_user, updated_at, updated_user) values
+ ('0001', 'テクノプラン', 'テクノプラン', '株式会社', '1', '1', '1', '2016-12-27', '2099-12-31', null, null, null, null, null, 30, 30, '1', null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
+ ('0002', 'NRIシステムテクノ', 'エヌアールアイシステムテクノ', '株式会社', '2', '1', '1', '2016-12-27', '2099-12-31', null, null, null, null, null, 1, 1, '1', null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
+ ('0003', 'リボルブシス', 'リボルブシス', '株式会社', '1', '1', '1', '2016-12-27', '2099-12-31', null, null, null, null, null, 30, 30, '1', null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
+ ('0004', 'フリー', 'フリー', NULL, NULL, '1', '1', '2016-12-27', '2099-12-31', null, null, null, null, null, 30, 30, '1', null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
+ ('0005', 'シークエンス', 'シークエンス', '株式会社', '2', '1', '1', '2016-12-27', '2099-12-31', null, null, null, null, null, 30, 50, '1', null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴');

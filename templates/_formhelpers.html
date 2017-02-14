@@ -1,0 +1,24 @@
+{% macro render_field(field, group_class, required="", input_class="") %}
+<div class="form-group {{ group_class }} no-margin{% if field.errors|length %} has-error{% endif %}">
+  {{ field.label(class_="control-label no-margin") }}
+  {% if required %}
+    {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;") }}
+  {% else %}
+    {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;") }}
+  {% endif %}
+  <span class="help-block no-margin">
+  {% for error in field.errors %}
+      <p>{{error}}</p>
+  {% endfor %}
+  </span>
+</div>
+{% endmacro %}
+{% macro render_search_field(field, group_class, required="", input_class="") %}
+<div class="{{ group_class }}" style="margin-bottom: 5px;">
+  {% if required %}
+    {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;") }}
+  {% else %}
+    {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;") }}
+  {% endif %}
+</div>
+{% endmacro %}

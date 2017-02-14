@@ -1,0 +1,2 @@
+insert into billings (project_id, billing_month, billing_amount, billing_adjustment_amount, tax, carfare, scheduled_billing_date, billing_date, bill_output_date, scheduled_payment_date, payment_date, status, remarks, created_at, created_user, updated_at, updated_user) values
+ (1, '2016/12/1', 30000000, 0, 240000, 0, '2017/3/31', '2017/3/31', '2017/3/31', '2017/3/31', '2017/3/31', 1, '備考', CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴');

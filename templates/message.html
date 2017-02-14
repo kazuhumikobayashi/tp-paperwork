@@ -1,0 +1,9 @@
+{% if get_flashed_messages() %}
+<script>
+  {% for message in get_flashed_messages() %}
+    $(function () {
+        MessageBox.show('{{ message }}');
+    });
+  {% endfor %}
+</script>
+{% endif %}

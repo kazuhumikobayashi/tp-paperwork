@@ -1,0 +1,64 @@
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu">
+        <li class="header"></li>
+        <!-- Optionally, you can add icons to the links -->
+        <li{% if request.path == '/' %} class="active"{% endif %}>
+            <a href="/">
+                <i class="fa fa-dashboard fa-fw"></i> <span>ダッシュボード</span>
+            </a>
+        </li>
+        <li{% if request.path.count('/project/') %} class="active"{% endif %}>
+            <a href="{{ url_for('project.index') }}">
+                <i class="fa fa-home fa-fw"></i> <span>プロジェクト</span>
+            </a>
+        </li>
+        <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> <span>支払い</span></a></li>
+        <li><a href="#"><i class="fa fa-calculator fa-fw"></i> <span>請求</span></a></li>
+        <li><a href="#"><i class="fa fa-file-text-o fa-fw"></i> <span>弥生I/F出力</span></a></li>
+        <li class="treeview{% if request.path.count('/company/') or
+                                 request.path.count('/engineer/') or
+                                 request.path.count('/skill/') or
+                                 request.path.count('/department/') or
+                                 request.path.count('/calculation/') or
+                                 request.path.count('/tax/') or
+                                 request.path.count('/user/') %} active{% endif %}">
+          <a href="#"><i class="fa fa-database fa-fw"></i> <span>マスタ管理</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li{% if request.path.count('/company/') %} class="active"{% endif %}>
+                <a href="{{ url_for('company.index') }}"><i class="fa fa-building fa-fw"></i> 会社情報</a>
+            </li>
+            <li{% if request.path.count('/engineer/') %} class="active"{% endif %}>
+                <a href="{{ url_for('engineer.index') }}"><i class="fa fa-users fa-fw"></i> 技術者情報</a>
+            </li>
+            <li{% if request.path.count('/skill/') %} class="active"{% endif %}>
+                <a href="{{ url_for('skill.index') }}"><i class="fa fa-edit fa-fw"></i> スキル</a>
+            </li>
+            <li{% if request.path.count('/department/') %} class="active"{% endif %}>
+                <a href="{{ url_for('department.index') }}"><i class="fa fa-briefcase fa-fw"></i> 部署</a>
+            </li>
+            <li{% if request.path.count('/calculation/') %} class="active"{% endif %}>
+                <a href="{{ url_for('calculation.index') }}"><i class="fa fa-arrows-alt fa-fw"></i> 計算式</a>
+            </li>
+            <li{% if request.path.count('/tax/') %} class="active"{% endif %}>
+                <a href="{{ url_for('tax.index') }}"><i class="fa fa-yen fa-fw"></i> 消費税</a>
+            </li>
+            <li{% if request.path.count('/user/') %} class="active"{% endif %}>
+                <a href="{{ url_for('user.index') }}"><i class="fa fa-user-o fa-fw"></i> ユーザー</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>

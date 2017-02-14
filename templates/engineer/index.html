@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_search_field %}
+{% import "_pagination.html" as p %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+{% endblock %}
+{% block title %}技術者情報{% endblock %}
+{% block content_header %}
+  <h1>技術者情報</h1>
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+    <li><i class="fa fa-database"></i> マスタ管理</li>
+    <li class="active"><i class="fa fa-users"></i> 技術者情報</li>
+  </ol>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 検索条件</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="get" action="{{ url_for('.index') }}">
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row">
+        {{ render_search_field(form.engineer_name, "col-md-6") }}
+        {{ render_search_field(form.skill_id, "col-md-6", input_class="select2") }}
+      </div>
+      <!-- /.row -->
+      <div class="row">
+        {{ render_search_field(form.company_id, "col-md-6", input_class="select2") }}
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <button type="submit" class="btn btn-sm btn-primary pull-right"><i class="fa fa-search"></i> 検索</button>
+    </div>
+    </form>
+  </div>
+  <!-- /.box -->
+
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          {% if pagination %}
+            {% if pagination.total > pagination.per_page %}
+              {{ p.pagination_widget(pagination,'.engineer_page', company_id=request.args.get('company_id', ''),
+              engineer_name=request.args.get('engineer_name', ''), skill=request.args.get('engineer_name', '')) }}
+            {% endif %}
+          {% endif %}
+          <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
+            <i class="fa fa-plus"></i> 新規登録
+          </a>
+
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover">
+            <tr>
+              <th width="50px">#</th>
+              <th>技術者名</th>
+              <th>技術者名カナ</th>
+              <th>所属会社</th>
+              <th width="350px">スキル</th>
+              <th>適用開始年月日</th>
+              <th>適用終了年月日</th>
+              <th width="70px" class="center"></th>
+              <th width="70px" class="center"></th>
+            </tr>
+            {% for engineer in pagination.items %}
+            <tr>
+              <td>{{ (pagination.prev_num * pagination.per_page) + loop.index }}</td>
+              <td>{{ engineer.engineer_name|filter_suppress_none }}</td>
+              <td>{{ engineer.engineer_name_kana|filter_suppress_none }}</td>
+              <td>{{ engineer.company.company_name|filter_suppress_none }}</td>
+              <td>
+                {% for skill in engineer.engineer_skills %}
+                  <label class="label label-primary">{{ skill.skill.skill_name }}</label>
+                {% endfor %}
+              </td>
+              <td>{{ engineer.start_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ engineer.end_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>
+                <a class="btn btn-sm btn-default" href="{{ url_for('.detail', engineer_id=engineer.id) }}">
+                   詳細 <i class="fa fa-navicon"></i>
+                </a>
+              </td>
+              <td>
+                <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', engineer_id=engineer.id) }}">
+                  <i class="fa fa-trash"></i> 削除
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
+            <i class="fa fa-plus"></i> 新規登録
+          </a>
+        </div>
+        <!-- /.box-footer -->
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+{% endblock %}

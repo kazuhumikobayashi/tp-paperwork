@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}ユーザー登録{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="{{ url_for('.index') }}" class="btn btn-default">
+      <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+    <li><i class="fa fa-database"></i> マスタ管理</li>
+    <li><i class="fa fa-user"></i> ユーザーマスタ</li>
+    <li class="active">登録</li>
+  </ol>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 詳細情報</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="post">
+    {{ form.hidden_tag() }}
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          {{ render_field(form.shain_number, "col-xs-6", "required") }}
+          {{ render_field(form.user_name, "col-xs-6", "required") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.mail, "col-xs-6", "required") }}
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> 保存</button>
+      </div>
+    </form>
+  </div>
+  <!-- /.box -->
+{% endblock %}

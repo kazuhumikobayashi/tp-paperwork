@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>システム名 | ログイン</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <!-- Bootstrap 3.3.6 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-3.3.7/css/bootstrap.min.css') }}">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/ionicons-2.0.1/css/ionicons.min.css') }}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/AdminLTE/css/AdminLTE.min.css') }}">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="{{ url_for('static', filename='vendor/html5shiv-3.7.3/html5shiv.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/Respond-1.4.2/respond.min.js') }}"></script>
+  <![endif]-->
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="/">システム名</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    {% if form.password.errors %}
+    <div class="alert alert-danger alert-dismissible">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {% for error in form.password.errors %}
+          <p class="small">{{error}}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post">
+      {{ form.csrf_token }}
+      <div class="form-group has-feedback">
+        {{ form.shain_number(class_="form-control", placeholder=form.shain_number.label.text, style="ime-mode: inactive", required="required") }}
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        {{ form.password(class_="form-control", placeholder=form.password.label.text, required="required") }}
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">ログイン</button>
+        </div>
+        <!-- /.col -->
+      </div>
+    </form>
+
+    <a href="#">パスワードを忘れた場合はこちらをクリック</a><br>
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 3.1.1 -->
+<script src="{{ url_for('static', filename='vendor/jquery/jquery-3.1.1.min.js') }}"></script>
+<!-- Bootstrap 3.3.7 -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-3.3.7/js/bootstrap.min.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<div class="tab-pane fade" id="billing">
+
+{% for billings in form.billings %}
+  <div class="box box-primary{% if request.args.get('month') != billings[0]|datetime_format("%Y%m") %} collapsed-box{% endif %}">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-edit"></i> {{ billings[0]|datetime_format("%Y年%m月") }}</h3>
+
+      <div class="box-tools pull-right">
+        {% if request.args.get('month') == billings[0]|datetime_format("%Y%m") %}
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        {% else %}
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+        {% endif %}
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="table-responsive no-padding">
+        <table class="table table-hover small">
+          <tr>
+            <th width="20px">#</th>
+            <th class="text-right">請求<br />金額</th>
+            <th class="text-right">請求<br />過不足金額</th>
+            <th class="text-right">消費税</th>
+            <th class="text-right">交通費</th>
+            <th>請求<br />予定日</th>
+            <th>請求日</th>
+            <th>請求書<br />発行日</th>
+            <th>支払日</th>
+            <th>ステータス</th>
+            <th width="50px" class="center"></th>
+            <th width="50px" class="center"></th>
+          </tr>
+            {% for item in billings[1] %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td class="text-right">¥{{ item.billing_amount|number_with_commas }}</td>
+              <td class="text-right">¥{{ item.billing_adjustment_amount|number_with_commas }}</td>
+              <td class="text-right">¥{{ item.tax|number_with_commas }}</td>
+              <td class="text-right">¥{{ item.carfare|number_with_commas }}</td>
+              <td>{{ item.scheduled_billing_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ item.billing_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ item.bill_output_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ item.payment_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ item.get_status_name()|filter_suppress_none }}</td>
+              <td>
+                <a class="btn btn-sm btn-default" style="font-size: xx-small;" href="{{ url_for('billing.detail', billing_id=item.id) }}">
+                   詳細 <i class="fa fa-navicon"></i>
+                </a>
+              </td>
+              <td>
+                <a class="btn btn-sm btn-danger" style="font-size: xx-small;" href="{{ url_for('billing.delete', billing_id=item.id) }}">
+                  <i class="fa fa-trash"></i> 削除
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+        </table>
+      </div>
+      <!-- /.table -->
+      <hr />
+      <div class="text-right">
+          合計金額：3,000,000 円
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+{% endfor %}
+</div>
+<!-- /.tab-pane #billing -->
