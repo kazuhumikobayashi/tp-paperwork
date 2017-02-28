@@ -16,12 +16,27 @@ Database Setting
 ```
 mysql -uroot -Dmysql -p******** < data/sql/00-database.sql
 ```
+エラーになったら、sqlを書き換える。  
+① 'admin_user'の後ろに@'localhost'をつける。  
+```mysql
+create database if not exists tp_paperwork character set utf8;
+create user 'admin_user'@'localhost' identified by 'admin_user';
+grant all on tp_paperwork.* to 'admin_user'@'localhost';
+create database if not exists tp_paperwork_test character set utf8;
+create user 'admin_user_test'@'localhost' identified by 'admin_user_test';
+grant all on tp_paperwork_test.* to 'admin_user_test'@'localhost';
+```
+
+② passwordの桁数エラーだったら、以下のSQLを実行
+```mysql
+mysql> SET GLOBAL validate_password_length=4;
+mysql> SET GLOBAL validate_password_policy=LOW;
+```
 
 
 Initialize Data
 ----------------------------
 ```
-mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/00-database.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/01-schema.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/02-data-users.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/03-data-statuses.sql
