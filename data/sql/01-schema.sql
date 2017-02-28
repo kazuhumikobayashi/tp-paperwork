@@ -1,23 +1,23 @@
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS engineers;
-DROP TABLE IF EXISTS engineer_skills;
-DROP TABLE IF EXISTS departments;
-DROP TABLE IF EXISTS companies;
-DROP TABLE IF EXISTS skills;
 DROP TABLE IF EXISTS tax;
-DROP TABLE IF EXISTS projects;
-DROP TABLE IF EXISTS engineer_actual_results;
+DROP TABLE IF EXISTS estimation_sequence;
 DROP TABLE IF EXISTS billings;
 DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS project_attachments;
+DROP TABLE IF EXISTS attachments;
+DROP TABLE IF EXISTS engineer_skills;
 DROP TABLE IF EXISTS assigned_members;
 DROP TABLE IF EXISTS estimation_remarks;
 DROP TABLE IF EXISTS order_remarks;
-DROP TABLE IF EXISTS project_attachments;
-DROP TABLE IF EXISTS attachments;
-DROP TABLE IF EXISTS calculations;
-DROP TABLE IF EXISTS statuses;
+DROP TABLE IF EXISTS engineer_actual_results;
+DROP TABLE IF EXISTS engineers;
+DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS contract_forms;
-DROP TABLE IF EXISTS estimation_sequence;
+DROP TABLE IF EXISTS calculations;
+DROP TABLE IF EXISTS companies;
+DROP TABLE IF EXISTS skills;
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS statuses;
 
 
 CREATE TABLE IF NOT EXISTS users (
