@@ -1,5 +1,6 @@
 DEBUG = False
 TESTING = True
+WTF_CSRF_ENABLED = False
 
 # Google Cloud Project ID
 PROJECT_ID = 'tp-paperwork-development'
@@ -7,8 +8,8 @@ PROJECT_ID = 'tp-paperwork-development'
 # CloudSQL & SQLAlchemy configuration
 HOST = 'localhost'
 PORT = '3306'
-USER = 'admin_user'
-PASSWORD = 'admin_user'
+USER = 'admin_user_test'
+PASSWORD = 'admin_user_test'
 DATABASE = 'tp_paperwork_test'
 SQLALCHEMY_DATABASE_URI = (
     'mysql://{user}:{password}@{host}:{port}/{database}').format(
