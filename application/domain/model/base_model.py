@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date
+from sqlalchemy import Column, Integer, String, DateTime
 
 
 class BaseModel(object):
@@ -6,9 +6,9 @@ class BaseModel(object):
     PER_PAGE = 10
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    created_at = Column(Date, nullable=False)
+    created_at = Column(DateTime, nullable=False)
     created_user = Column(String(128), nullable=False)
-    updated_at = Column(Date, nullable=False)
+    updated_at = Column(DateTime, nullable=False)
     updated_user = Column(String(128), nullable=False)
 
     def __init__(self,
