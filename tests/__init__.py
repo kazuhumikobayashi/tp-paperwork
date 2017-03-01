@@ -1,7 +1,8 @@
-import datetime
 import unittest
+from datetime import datetime
 
-from application import app, db
+from application import app, db, bcrypt
+from application.domain.model.user import User
 
 
 class BaseTestCase(unittest.TestCase):
@@ -28,22 +29,24 @@ class BaseTestCase(unittest.TestCase):
         pass
 
     def create_user(self):
-        # self.app.post('/register', data={
-        #     'user_name': '単体テスト1',
-        #     'mail': 'test@test.com',
-        #     'password': 'test',
-        #     'password_confirmation': 'test'
-        # })
-        # self.app.post('/register', data={
-        #     'user_name': '単体テスト2',
-        #     'mail': 'test@test2.com',
-        #     'password': 'test',
-        #     'password_confirmation': 'test'
-        # })
-        # self.app.post('/register', data={
-        #     'user_name': '単体テスト3',
-        #     'mail': datetime.datetime.now().strftime('%Y%m%d-%H%M%S') + '@test.com',
-        #     'password': 'test',
-        #     'password_confirmation': 'test'
-        # })
-        pass
+        user = User(
+                 shain_number='test',
+                 user_name='単体テスト',
+                 mail='test@test.com',
+                 password=bcrypt.generate_password_hash('test'),
+                 created_at=datetime.today(),
+                 created_user='test',
+                 updated_at=datetime.today(),
+                 updated_user='test')
+        db.session.add(user)
+        user = User(
+                 shain_number='test',
+                 user_name='単体テスト',
+                 mail='test@test1.com',
+                 password=bcrypt.generate_password_hash('test'),
+                 created_at=datetime.today(),
+                 created_user='test',
+                 updated_at=datetime.today(),
+                 updated_user='test')
+        db.session.add(user)
+        db.session.commit()

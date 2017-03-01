@@ -20,10 +20,9 @@ def login():
     # ログイン処理
     if form.validate_on_submit():
         user = service.find_by_shain_number(form.shain_number.data)
-        if user is not None:
-            # セッションにユーザ名を保存してからインデックスページにリダイレクトする
-            session['user'] = user.serialize()
-            return redirect('/')
+        # セッションにユーザ名を保存してからインデックスページにリダイレクトする
+        session['user'] = user.serialize()
+        return redirect('/')
     # ログインページを表示する
     return render_template('login/login.html', form=form, no_header=True)
 

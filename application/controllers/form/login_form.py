@@ -14,5 +14,5 @@ class LoginForm(FlaskForm):
 
     def validate_password(self, field):
         user = repository.find_by_shain_number(self.shain_number.data)
-        if user and not user.can_login(field.data):
+        if user is None or user.can_not_login(field.data):
             raise ValidationError('社員番号またはパスワードが違います。')
