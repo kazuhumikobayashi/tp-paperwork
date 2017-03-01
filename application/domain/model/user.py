@@ -10,7 +10,7 @@ class User(BaseModel, db.Model):
 
     shain_number = Column(String(32), nullable=False)
     user_name = Column(String(128))
-    mail = Column(String(128))
+    mail = Column(String(255), unique=True)
     password = Column(String(256))
 
     def __init__(self,
@@ -30,6 +30,9 @@ class User(BaseModel, db.Model):
 
     def can_login(self, password):
         return bcrypt.check_password_hash(self.password, password)
+
+    def can_not_login(self, password):
+        return not self.can_login(password)
 
     def __repr__(self):
         return "<User:" + \
