@@ -20,7 +20,7 @@ class LoginTests(BaseTestCase):
     # ログインできることを確認
     def test_login(self):
         result = self.app.post('/login', data={
-            'shain_number': 'test',
+            'shain_number': 'test1',
             'password': 'test'
         })
         self.assertEqual(result.status_code, 302)
@@ -38,7 +38,7 @@ class LoginTests(BaseTestCase):
     def test_logout(self):
         # ログインする
         self.app.post('/login', data={
-            'shain_number': 'test',
+            'shain_number': 'test1',
             'password': 'test'
         })
         result = self.app.get('/logout')

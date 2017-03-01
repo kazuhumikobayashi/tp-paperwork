@@ -14,7 +14,7 @@ bp = Blueprint('user', __name__, url_prefix='/user')
 service = UserService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     user_name = request.args.get('user_name','')
     shain_number = request.args.get('shain_number','')
@@ -22,7 +22,7 @@ def index(page=1):
     return render_template('user/index.html', pagination=pagination)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def user_page(page=1):
     return index(page)
 
@@ -32,7 +32,7 @@ def detail(user_id=None):
     user = service.find_by_id(user_id)
     current_app.logger.debug(str(user))
 
-    if user is None and user_id is not None:
+    if user.id is None and user_id is not None:
         return abort(404)
     form = UserForm(request.form, user)
 
@@ -55,7 +55,7 @@ def create():
 @bp.route('/delete/<user_id>', methods=['GET'])
 def delete(user_id):
     user = service.find_by_id(user_id)
-    if user is not None:
+    if user.id is not None:
         service.destroy(user)
         flash('削除しました。')
     return redirect('/user')
