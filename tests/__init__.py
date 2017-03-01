@@ -29,24 +29,15 @@ class BaseTestCase(unittest.TestCase):
         pass
 
     def create_user(self):
-        user = User(
-                 shain_number='test',
-                 user_name='単体テスト',
-                 mail='test@test.com',
-                 password=bcrypt.generate_password_hash('test'),
-                 created_at=datetime.today(),
-                 created_user='test',
-                 updated_at=datetime.today(),
-                 updated_user='test')
-        db.session.add(user)
-        user = User(
-                 shain_number='test',
-                 user_name='単体テスト',
-                 mail='test@test1.com',
-                 password=bcrypt.generate_password_hash('test'),
-                 created_at=datetime.today(),
-                 created_user='test',
-                 updated_at=datetime.today(),
-                 updated_user='test')
-        db.session.add(user)
+        for num in range(12):
+            user = User(
+                     shain_number='test' + str(num),
+                     user_name='単体テスト',
+                     mail='test@test' + str(num) + '.com',
+                     password=bcrypt.generate_password_hash('test'),
+                     created_at=datetime.today(),
+                     created_user='test',
+                     updated_at=datetime.today(),
+                     updated_user='test')
+            db.session.add(user)
         db.session.commit()
