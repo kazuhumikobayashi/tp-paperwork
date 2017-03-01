@@ -8,6 +8,7 @@ Installation
 ```
 git clone https://ユーザー名@github.com/technoplan-inc/tp-paperwork
 cd tp-paperwork
+pip install -r requirements.txt
 ```
 
 
