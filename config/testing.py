@@ -1,3 +1,5 @@
+import os
+
 DEBUG = False
 TESTING = True
 WTF_CSRF_ENABLED = False
@@ -6,8 +8,8 @@ WTF_CSRF_ENABLED = False
 PROJECT_ID = 'tp-paperwork-development'
 
 # CloudSQL & SQLAlchemy configuration
-HOST = 'localhost'
-PORT = '3306'
+HOST = os.getenv('MYSQL_PORT_3306_TCP_ADDR', 'localhost')
+PORT = os.getenv('MYSQL_PORT_3306_TCP_PORT', '3306')
 USER = 'admin_user_test'
 PASSWORD = 'admin_user_test'
 DATABASE = 'tp_paperwork_test'
