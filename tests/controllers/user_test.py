@@ -39,6 +39,17 @@ class UserTests(BaseTestCase):
         result = self.app.get('/user/page/2')
         self.assertEqual(result.status_code, 200)
 
+    # ユーザーを検索する。
+    def test_search_user(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.get('/user/?user_name=test&shain_number=test')
+        self.assertEqual(result.status_code, 200)
+
     # ユーザー登録画面に遷移する。
     def test_get_user_create(self):
         # ログインする
@@ -49,6 +60,49 @@ class UserTests(BaseTestCase):
 
         result = self.app.get('/user/create')
         self.assertEqual(result.status_code, 200)
+
+    # ユーザー登録する。
+    def test_create_user(self):
+        before = len(self.user_repository.find_all())
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/user/create', data={
+            'shain_number': 'create_user',
+            'user_name': '登録テスト',
+            'mail': 'create_user@test.com'
+        })
+        user = self.user_repository.find_by_shain_number('create_user')
+
+        self.assertEqual(result.status_code, 302)
+        ok_('/user/detail/' + str(user.id) in result.headers['Location'])
+
+        after = len(self.user_repository.find_all())
+        # 1件追加されていることを確認
+        self.assertEqual(before + 1, after)
+
+    # ユーザー登録に失敗する。
+    def test_create_user_fail(self):
+        before = len(self.user_repository.find_all())
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/user/create', data={
+            'shain_number': 'test1',
+            'user_name': '登録テスト',
+            'mail': 'test@test1.com'
+        })
+        self.assertEqual(result.status_code, 200)
+
+        after = len(self.user_repository.find_all())
+        # 前後で件数が変わっていないことを確認
+        self.assertEqual(before, after)
 
     # ユーザー詳細画面に遷移する。
     def test_get_user_detail(self):

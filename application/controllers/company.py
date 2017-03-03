@@ -14,7 +14,7 @@ bp = Blueprint('company', __name__, url_prefix='/company')
 service = CompanyService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     company_name = request.args.get('company_name','')
     company_code = request.args.get('company_code','')
@@ -22,7 +22,7 @@ def index(page=1):
     return render_template('company/index.html', pagination=pagination)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def company_page(page=1):
     return index(page)
 
@@ -32,7 +32,7 @@ def detail(company_id=None):
     company = service.find_by_id(company_id)
     current_app.logger.debug(str(company))
 
-    if company is None and company_id is not None:
+    if company.id is None and company_id is not None:
         return abort(404)
     form = CompanyForm(request.form, company)
     if form.validate_on_submit():
@@ -69,7 +69,7 @@ def create():
 @bp.route('/delete/<company_id>', methods=['GET'])
 def delete(company_id):
     company = service.find_by_id(company_id)
-    if company is not None:
+    if company.id is not None:
         service.destroy(company)
         flash('削除しました。')
     return redirect('/company')
