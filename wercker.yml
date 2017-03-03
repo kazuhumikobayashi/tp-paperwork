@@ -1,0 +1,60 @@
+# This references the default Python container from
+# the Docker Hub with the 2.7 tag:
+# https://registry.hub.docker.com/_/python/
+# If you want to use a slim Python container with
+# version 3.4.3 you would use: python:3.4-slim
+# If you want Google's container you would reference google/python
+# Read more about containers on our dev center
+# http://devcenter.wercker.com/docs/containers/index.html
+box: python:3.6
+# You can also use services such as databases. Read more on our dev center:
+# http://devcenter.wercker.com/docs/services/index.html
+services:
+  - id: mysql
+    env:
+      MYSQL_ROOT_PASSWORD: password
+
+# This is the build pipeline. Pipelines are the core of wercker
+# Read more about pipelines on our dev center
+# http://devcenter.wercker.com/docs/pipelines/index.html
+build:
+  # The steps that will be executed on build
+  # Steps make up the actions in your pipeline
+  # Read more about steps on our dev center:
+  # http://devcenter.wercker.com/docs/steps/index.html
+  steps:
+    # A step that executes `pip install` command.
+    - pip-install
+
+    # A custom script step, name value is used in the UI
+    # and the code value contains the command that get executed
+    - script:
+        name: echo python information
+        code: |
+          echo "python version $(python --version) running"
+          echo "pip version $(pip --version) running"
+    - script:
+        name: install mysql-client
+        code: |
+          sudo apt-get update
+          sudo apt-get -y install mysql-client
+    - script:
+        name: mysql information
+        code: |
+          mysql --version
+    - script:
+        name: db create
+        code: |
+          echo "db creating..."
+          mysql -h$MYSQL_PORT_3306_TCP_ADDR -P$MYSQL_PORT_3306_TCP_PORT -uroot -Dmysql -p$MYSQL_ENV_MYSQL_ROOT_PASSWORD < data/sql/00-database.sql
+          echo "db created"
+    - script:
+        name: execute test
+        code: |
+          nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches          
+deploy:
+  steps:
+    - script:
+        name: deploy gae
+        code: |
+          echo "python version $(python --version) running"
