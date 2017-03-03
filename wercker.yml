@@ -71,4 +71,4 @@ deploy-production:
     - script:
         name: authentification
         code: |
-         "python version $(python --version) running"
+          echo "python version $(python --version) running"
