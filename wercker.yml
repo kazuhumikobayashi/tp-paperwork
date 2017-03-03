@@ -51,10 +51,24 @@ build:
     - script:
         name: execute test
         code: |
-          nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches          
+          nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches
 deploy:
+  box: google/cloud-sdk
   steps:
     - script:
-        name: deploy gae
+        name: authentification
         code: |
-          echo "python version $(python --version) running"
+          gcloud config set project tp-paperwork-development
+          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json
+          gcloud auth activate-service-account --key-file tp-paperwork-development-2146f321f716.json
+    - script:
+        name: deploy GAE
+        code: |
+          gcloud --quiet app deploy app.yaml --project tp-paperwork-development
+deploy-production:
+  box: google/cloud-sdk
+  steps:
+    - script:
+        name: authentification
+        code: |
+         "python version $(python --version) running"
