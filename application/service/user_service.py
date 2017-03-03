@@ -7,9 +7,6 @@ class UserService(object):
     def find(self, page, user_name, shain_number):
         return self.repository.find(page, user_name, shain_number)
 
-    def find_all(self, page):
-        return self.repository.find_all(page)
-
     def find_by_id(self, user_id):
         return self.repository.find_by_id(user_id)
 
