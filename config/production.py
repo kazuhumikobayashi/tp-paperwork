@@ -5,7 +5,7 @@ TESTING = False
 PROJECT_ID = 'tp-paperwork'
 
 # CloudSQL & SQLAlchemy configuration
-HOST = ''
+HOST = '35.187.200.29'
 PORT = '3306'
 USER = 'admin_user'
 PASSWORD = 'admin_user'
