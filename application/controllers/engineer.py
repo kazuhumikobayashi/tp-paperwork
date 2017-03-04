@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask import abort
+from flask import current_app
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -38,7 +39,7 @@ def engineer_page(page=1):
 def detail(engineer_id=None):
     engineer = service.find_by_id(engineer_id)
 
-    if engineer is None and engineer_id is not None:
+    if engineer.id is None and engineer_id is not None:
         return abort(404)
     engineer.skill = [h.skill_id for h in engineer.engineer_skills]
     form = EngineerForm(request.form, engineer)
@@ -60,6 +61,7 @@ def detail(engineer_id=None):
         service.save(engineer)
         flash('保存しました。')
         return redirect(url_for('.detail', engineer_id=engineer.id))
+    current_app.logger.debug(form.errors)
     return render_template('engineer/detail.html', form=form)
 
 
@@ -71,7 +73,7 @@ def create():
 @bp.route('/delete/<engineer_id>', methods=['GET'])
 def delete(engineer_id):
     engineer = service.find_by_id(engineer_id)
-    if engineer is not None:
+    if engineer.id is not None:
         service.destroy(engineer)
         flash('削除しました。')
     return redirect('/engineer')
