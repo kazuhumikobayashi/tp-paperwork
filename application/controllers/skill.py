@@ -13,14 +13,14 @@ bp = Blueprint('skill', __name__, url_prefix='/skill')
 service = SkillService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     skill_name = request.args.get('skill_name', '')
     pagination = service.find(page, skill_name)
     return render_template('skill/index.html', pagination=pagination)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def skill_page(page=1):
     return index(page)
 
@@ -29,7 +29,7 @@ def skill_page(page=1):
 def detail(skill_id=None):
     skill = service.find_by_id(skill_id)
 
-    if skill is None and skill_id is not None:
+    if skill.id is None and skill_id is not None:
         return abort(404)
     form = SkillForm(request.form, skill)
 
@@ -50,7 +50,7 @@ def create():
 @bp.route('/delete/<skill_id>', methods=['GET'])
 def delete(skill_id):
     skill = service.find_by_id(skill_id)
-    if skill is not None:
+    if skill.id is not None:
         service.destroy(skill)
         flash('削除しました。')
     return redirect('/skill')
