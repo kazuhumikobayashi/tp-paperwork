@@ -5,8 +5,6 @@ class CalculationService(object):
     repository = CalculationRepository()
 
     def find(self, page, calculation_name):
-        if calculation_name == '' or None:
-            return self.find_all(page)
         return self.repository.find(page, calculation_name)
 
     def find_all(self, page=None):
