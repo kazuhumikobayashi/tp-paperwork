@@ -11,13 +11,13 @@ class Status(BaseModel, db.Model):
     status_name = Column(String(32), nullable=False)
 
     def __init__(self,
-                 status=None,
+                 status_name=None,
                  created_at=None,
                  created_user=None,
                  updated_at=None,
                  updated_user=None):
         super(Status, self).__init__(created_at, created_user, updated_at, updated_user)
-        self.status = status
+        self.status_name = status_name
 
     def __repr__(self):
         return "<Status:" + \
