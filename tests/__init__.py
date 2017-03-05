@@ -1,8 +1,7 @@
 import unittest
-from datetime import datetime
 
-from application import app, db, bcrypt
-from application.domain.model.user import User
+from application import app, db
+from tests.fixture import init_data
 
 
 class BaseTestCase(unittest.TestCase):
@@ -16,7 +15,7 @@ class BaseTestCase(unittest.TestCase):
         cls.app.testing = True
         db.drop_all()
         db.create_all()
-        cls().create_user()
+        init_data()
 
     @classmethod
     def tearDownClass(cls):
@@ -27,17 +26,3 @@ class BaseTestCase(unittest.TestCase):
 
     def tearDown(self):
         pass
-
-    def create_user(self):
-        for num in range(12):
-            user = User(
-                     shain_number='test' + str(num),
-                     user_name='単体テスト',
-                     mail='test@test' + str(num) + '.com',
-                     password=bcrypt.generate_password_hash('test'),
-                     created_at=datetime.today(),
-                     created_user='test',
-                     updated_at=datetime.today(),
-                     updated_user='test')
-            db.session.add(user)
-        db.session.commit()

@@ -13,7 +13,6 @@ class TaxTests(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super(TaxTests, cls).setUpClass()
-        cls().create_taxes()
 
     def setUp(self):
         super(TaxTests, self).setUp()
@@ -205,16 +204,3 @@ class TaxTests(BaseTestCase):
         after = len(self.tax_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
-
-    def create_taxes(self):
-        for num in range(12):
-            tax = Tax(
-                start_date=date.today(),
-                end_date='2099/12/31',
-                tax_rate=num,
-                created_at=datetime.today(),
-                created_user='test',
-                updated_at=datetime.today(),
-                updated_user='test')
-            db.session.add(tax)
-        db.session.commit()

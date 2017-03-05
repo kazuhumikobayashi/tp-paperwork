@@ -3,7 +3,6 @@ from datetime import datetime, date
 from nose.tools import ok_
 
 from application import db
-from application.domain.model.company import Company
 from application.domain.model.engineer import Engineer
 from application.domain.repository.engineer_repository import EngineerRepository
 from tests import BaseTestCase
@@ -14,8 +13,6 @@ class EngineerTests(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super(EngineerTests, cls).setUpClass()
-        cls().create_companies()
-        cls().create_engineers()
 
     def setUp(self):
         super(EngineerTests, self).setUp()
@@ -191,34 +188,3 @@ class EngineerTests(BaseTestCase):
         after = len(self.engineer_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
-
-    def create_companies(self):
-        for num in range(12):
-            company = Company(
-                     company_code='test' + str(num),
-                     company_name='単体テスト',
-                     client_flg='1',
-                     consignment_flg='1',
-                     start_date=date.today(),
-                     end_date='2099/12/31',
-                     tax='1',
-                     created_at=datetime.today(),
-                     created_user='test',
-                     updated_at=datetime.today(),
-                     updated_user='test')
-            db.session.add(company)
-        db.session.commit()
-
-    def create_engineers(self):
-        for num in range(12):
-            engineer = Engineer(
-                    start_date=date.today(),
-                    end_date='2099/12/31',
-                    engineer_name='単体テスト',
-                    company_id='1',
-                    created_at=datetime.today(),
-                    created_user='test',
-                    updated_at=datetime.today(),
-                    updated_user='test')
-            db.session.add(engineer)
-        db.session.commit()

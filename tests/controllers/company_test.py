@@ -13,7 +13,6 @@ class CompanyTests(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super(CompanyTests, cls).setUpClass()
-        cls().create_companies()
 
     def setUp(self):
         super(CompanyTests, self).setUp()
@@ -183,20 +182,3 @@ class CompanyTests(BaseTestCase):
         after = len(self.company_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
-
-    def create_companies(self):
-        for num in range(12):
-            company = Company(
-                     company_code='test' + str(num),
-                     company_name='単体テスト',
-                     client_flg='1',
-                     consignment_flg='1',
-                     start_date=date.today(),
-                     end_date='2099/12/31',
-                     tax='1',
-                     created_at=datetime.today(),
-                     created_user='test',
-                     updated_at=datetime.today(),
-                     updated_user='test')
-            db.session.add(company)
-        db.session.commit()
