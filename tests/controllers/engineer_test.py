@@ -78,6 +78,7 @@ class EngineerTests(BaseTestCase):
             'start_date': date.today().strftime('%Y/%m/%d'),
             'end_date': '2099/12/31',
             'engineer_name': 'テスト登録',
+            'skill': ['1', '2'],
             'company_id': '1'
         })
         self.assertEqual(result.status_code, 302)

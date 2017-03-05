@@ -20,7 +20,7 @@ company_service = CompanyService()
 skill_service = SkillService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     form = EngineerSearchForm(request.values)
     form.company_id.choices = company_service.find_all_for_multi_select()
@@ -30,7 +30,7 @@ def index(page=1):
     return render_template('engineer/index.html', pagination=pagination, form=form)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def engineer_page(page=1):
     return index(page)
 
