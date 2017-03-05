@@ -19,8 +19,8 @@ class Department(BaseModel, db.Model):
                  updated_at=None,
                  updated_user=None):
         super(Department, self).__init__(created_at, created_user, updated_at, updated_user)
-        self.company_code = department_code
-        self.company_name = department_name
+        self.department_code = department_code
+        self.department_name = department_name
 
     def __repr__(self):
         return "<Department:" + \
