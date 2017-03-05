@@ -15,14 +15,14 @@ bp = Blueprint('calculation', __name__, url_prefix='/calculation')
 service = CalculationService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     calculation_name = request.args.get('calculation_name', '')
     pagination = service.find(page, calculation_name)
     return render_template('calculation/index.html', pagination=pagination)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def calculation_page(page=1):
     return index(page)
 
@@ -31,7 +31,7 @@ def calculation_page(page=1):
 def detail(calculation_id=None):
     calculation = service.find_by_id(calculation_id)
 
-    if calculation is None and calculation_id is not None:
+    if calculation.id is None and calculation_id is not None:
         return abort(404)
     form = CalculationForm(request.form, calculation)
 
@@ -61,7 +61,7 @@ def create():
 @bp.route('/delete/<calculation_id>', methods=['GET'])
 def delete(calculation_id):
     calculation = service.find_by_id(calculation_id)
-    if calculation is not None:
+    if calculation.id is not None:
         service.destroy(calculation)
         flash('削除しました。')
     return redirect('/calculation')
