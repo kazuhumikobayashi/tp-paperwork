@@ -13,7 +13,6 @@ class CalculationTests(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super(CalculationTests, cls).setUpClass()
-        cls().create_calculations()
 
     def setUp(self):
         super(CalculationTests, self).setUp()
@@ -202,16 +201,3 @@ class CalculationTests(BaseTestCase):
         after = len(self.calculation_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
-
-    def create_calculations(self):
-        for num in range(12):
-            calculation = Calculation(
-                calculation_name='単体テスト' + str(num),
-                amount=num,
-                formula=1,
-                created_at=datetime.today(),
-                created_user='test',
-                updated_at=datetime.today(),
-                updated_user='test')
-            db.session.add(calculation)
-        db.session.commit()

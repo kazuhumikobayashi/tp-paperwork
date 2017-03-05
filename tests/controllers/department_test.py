@@ -13,7 +13,6 @@ class DepartmentTests(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super(DepartmentTests, cls).setUpClass()
-        cls().create_departments()
 
     def setUp(self):
         super(DepartmentTests, self).setUp()
@@ -181,15 +180,3 @@ class DepartmentTests(BaseTestCase):
         after = len(self.department_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
-
-    def create_departments(self):
-        for num in range(12):
-            department = Department(
-                department_code='test' + str(num),
-                department_name='単体テスト' + str(num),
-                created_at=datetime.today(),
-                created_user='test',
-                updated_at=datetime.today(),
-                updated_user='test')
-            db.session.add(department)
-        db.session.commit()

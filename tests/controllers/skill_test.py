@@ -13,7 +13,6 @@ class SkillTests(BaseTestCase):
     @classmethod
     def setUpClass(cls):
         super(SkillTests, cls).setUpClass()
-        cls().create_skills()
 
     def setUp(self):
         super(SkillTests, self).setUp()
@@ -197,14 +196,3 @@ class SkillTests(BaseTestCase):
         after = len(self.skill_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
-
-    def create_skills(self):
-        for num in range(12):
-            skill = Skill(
-                skill_name='test' + str(num),
-                created_at=datetime.today(),
-                created_user='test',
-                updated_at=datetime.today(),
-                updated_user='test')
-            db.session.add(skill)
-        db.session.commit()
