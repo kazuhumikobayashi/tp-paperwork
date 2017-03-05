@@ -14,14 +14,14 @@ bp = Blueprint('tax', __name__, url_prefix='/tax')
 service = TaxService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     tax_rate = request.args.get('tax_rate', '')
     pagination = service.find(page, tax_rate)
     return render_template('tax/index.html', pagination=pagination)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def tax_page(page=1):
     return index(page)
 
@@ -30,7 +30,7 @@ def tax_page(page=1):
 def detail(tax_id=None):
     tax = service.find_by_id(tax_id)
 
-    if tax is None and tax_id is not None:
+    if tax.id is None and tax_id is not None:
         return abort(404)
     form = TaxForm(request.form, tax)
 
@@ -42,6 +42,7 @@ def detail(tax_id=None):
         service.save(tax)
         flash('保存しました。')
         return redirect(url_for('.detail', tax_id=tax.id))
+    current_app.logger.debug(form.errors)
     return render_template('tax/detail.html', form=form)
 
 
@@ -53,7 +54,7 @@ def create():
 @bp.route('/delete/<tax_id>', methods=['GET'])
 def delete(tax_id):
     tax = service.find_by_id(tax_id)
-    if tax is not None:
+    if tax.id is not None:
         service.destroy(tax)
         flash('削除しました。')
     return redirect('/tax')
