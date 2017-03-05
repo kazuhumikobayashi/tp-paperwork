@@ -14,7 +14,7 @@ bp = Blueprint('department', __name__, url_prefix='/department')
 service = DepartmentService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     department_name = request.args.get('department_name','')
     department_code = request.args.get('department_code','')
@@ -22,7 +22,7 @@ def index(page=1):
     return render_template('department/index.html', pagination=pagination)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def department_page(page=1):
     return index(page)
 
@@ -31,7 +31,7 @@ def department_page(page=1):
 def detail(department_id=None):
     department = service.find_by_id(department_id)
 
-    if department is None and department_id is not None:
+    if department.id is None and department_id is not None:
         return abort(404)
     form = DepartmentForm(request.form, department)
 
@@ -42,6 +42,7 @@ def detail(department_id=None):
         service.save(department)
         flash('保存しました。')
         return redirect(url_for('.detail', department_id=department.id))
+    current_app.logger.debug(form.errors)
     return render_template('department/detail.html', form=form)
 
 
@@ -53,7 +54,7 @@ def create():
 @bp.route('/delete/<department_id>', methods=['GET'])
 def delete(department_id):
     department = service.find_by_id(department_id)
-    if department is not None:
+    if department.id is not None:
         service.destroy(department)
         flash('削除しました。')
     return redirect('/department')
