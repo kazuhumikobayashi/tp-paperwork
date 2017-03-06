@@ -6,6 +6,7 @@ from application.domain.model.company import Company
 from application.domain.model.contract_form import ContractForm
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
+from application.domain.model.project import Project
 from application.domain.model.skill import Skill
 from application.domain.model.status import Status
 from application.domain.model.tax import Tax
@@ -23,6 +24,7 @@ def init_data():
     create_calculations()
     create_statuses()
     create_contract_forms()
+    create_projects()
 
 
 def create_user():
@@ -149,4 +151,28 @@ def create_contract_forms():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(contract_form)
+    db.session.commit()
+
+
+def create_projects():
+    for num in range(12):
+        project = Project(
+            project_code=str(num),
+            project_name='単体テスト' + str(num),
+            end_user='test',
+            client_company_id=1,
+            start_date=date.today(),
+            end_date='2099/12/31',
+            recorded_department_id=1,
+            over_time_calculation_id=1,
+            contract_form_id=1,
+            estimation_no='test' + str(num),
+            status_id=1,
+            billing_timing='1',
+            remarks='test',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project)
     db.session.commit()

@@ -32,7 +32,7 @@ estimation_remarks_service = EstimationRemarksService()
 order_remarks_service = OrderRemarksService()
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET'])
 def index(page=1):
     form = ProjectSearchForm(request.values)
     form.client_company_id.choices = company_service.find_all_for_multi_select()
@@ -47,7 +47,7 @@ def index(page=1):
     return render_template('project/index.html', pagination=pagination, form=form)
 
 
-@bp.route('/page/<int:page>', methods=['GET', 'POST'])
+@bp.route('/page/<int:page>', methods=['GET'])
 def project_page(page=1):
     return index(page)
 
@@ -57,7 +57,7 @@ def detail(project_id=None):
     # basic
     project = service.find_by_id(project_id)
 
-    if project is None and project_id is not None:
+    if project.id is None and project_id is not None:
         return abort(404)
 
     form = ProjectForm(request.form, project)
@@ -163,7 +163,7 @@ def copy(project_id):
 @bp.route('/delete/<project_id>', methods=['GET'])
 def delete(project_id):
     project = service.find_by_id(project_id)
-    if project is not None:
+    if project.id is not None:
         service.destroy(project)
         flash('削除しました。')
     return redirect('/project')
