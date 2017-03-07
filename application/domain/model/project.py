@@ -52,7 +52,6 @@ class Project(BaseModel, db.Model):
     is_start_date_change = False
 
     def __init__(self,
-                 project_code=None,
                  project_name=None,
                  end_user=None,
                  client_company_id=None,
@@ -70,7 +69,6 @@ class Project(BaseModel, db.Model):
                  updated_at=None,
                  updated_user=None):
         super(Project, self).__init__(created_at, created_user, updated_at, updated_user)
-        self.project_code = project_code
         self.project_name = project_name
         self.end_user = end_user
         self.client_company_id = client_company_id

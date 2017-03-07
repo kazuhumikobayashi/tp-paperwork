@@ -6,6 +6,9 @@ from application.domain.model.company import Company
 from application.domain.model.contract_form import ContractForm
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
+from application.domain.model.estimation_remarks import EstimationRemarks
+from application.domain.model.order_remarks import OrderRemarks
+from application.domain.model.project import Project
 from application.domain.model.skill import Skill
 from application.domain.model.status import Status
 from application.domain.model.tax import Tax
@@ -23,6 +26,7 @@ def init_data():
     create_calculations()
     create_statuses()
     create_contract_forms()
+    create_projects()
 
 
 def create_user():
@@ -149,4 +153,66 @@ def create_contract_forms():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(contract_form)
+    db.session.commit()
+
+
+def create_projects():
+    for num in range(12):
+        project = Project(
+            project_name='単体テスト' + str(num),
+            end_user='test',
+            client_company_id=1,
+            start_date=date.today(),
+            end_date='2099/12/31',
+            recorded_department_id=1,
+            over_time_calculation_id=1,
+            contract_form_id=1,
+            estimation_no='test' + str(num),
+            status_id=1,
+            billing_timing='1',
+            remarks='test',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+
+        estimation_remarks = EstimationRemarks(
+            project_id=project.id,
+            scope='scope',
+            contents='contents',
+            deliverables='deliverables',
+            delivery_place='delivery_place',
+            inspection_date='2017/1/1',
+            responsible_person='responsible_person',
+            quality_control='quality_control',
+            subcontractor='subcontractor',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+
+        order_remarks = OrderRemarks(
+            project_id=project.id,
+            order_no='1',
+            order_amount=1,
+            contents='contents',
+            responsible_person='responsible_person',
+            subcontractor='subcontractor',
+            scope='scope',
+            work_place='work_place',
+            delivery_place='delivery_place',
+            deliverables='deliverables',
+            inspection_date='2017/1/1',
+            payment_terms='payment_terms',
+            billing_company_id=1,
+            remarks='remarks',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+
+        project.estimation_remarks = estimation_remarks
+        project.order_remarks = order_remarks
+
+        db.session.add(project)
     db.session.commit()
