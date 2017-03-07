@@ -21,9 +21,8 @@ def detail(assigned_member_id=None):
     assigned_member = service.find_by_id(assigned_member_id)
     if assigned_member_id is None:
         assigned_member.project_id = request.args.get('project_id', '')
-    current_app.logger.debug(str(assigned_member))
 
-    if assigned_member is None and assigned_member_id is not None:
+    if assigned_member.id is None and assigned_member_id is not None:
         return abort(404)
     form = AssignedMemberForm(request.form, assigned_member)
     form.engineer_id.choices = engineer_service.find_all_for_select()
@@ -40,6 +39,7 @@ def detail(assigned_member_id=None):
         service.save(assigned_member)
         flash('保存しました。')
         return redirect(url_for('.detail', assigned_member_id=assigned_member.id))
+    current_app.logger.debug(form.errors)
     return render_template('assigned_member/detail.html', form=form)
 
 
@@ -51,7 +51,10 @@ def add():
 @bp.route('/delete/<assigned_member_id>', methods=['GET'])
 def delete(assigned_member_id):
     assigned_member = service.find_by_id(assigned_member_id)
-    if assigned_member is not None:
+
+    if assigned_member.id is None:
+        return abort(404)
+    else:
         service.destroy(assigned_member)
         flash('削除しました。')
     return redirect(url_for('project.detail', project_id=assigned_member.project_id))

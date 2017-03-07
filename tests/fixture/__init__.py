@@ -1,6 +1,7 @@
 from datetime import datetime, date
 
 from application import bcrypt, db
+from application.domain.model.assigned_members import AssignedMember
 from application.domain.model.calculation import Calculation
 from application.domain.model.company import Company
 from application.domain.model.contract_form import ContractForm
@@ -211,8 +212,37 @@ def create_projects():
             updated_at=datetime.today(),
             updated_user='test')
 
+        assigned_members = \
+            [
+                AssignedMember(
+                    project_id=project.id,
+                    seq_no=1,
+                    engineer_id=1,
+                    sales_unit_price=1,
+                    payment_unit_price=1,
+                    start_date=date.today().strftime('%Y/%m/%d'),
+                    end_date='2099/12/31',
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test'),
+                AssignedMember(
+                    project_id=project.id,
+                    seq_no=1,
+                    engineer_id=2,
+                    sales_unit_price=1,
+                    payment_unit_price=1,
+                    start_date=date.today().strftime('%Y/%m/%d'),
+                    end_date='2099/12/31',
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+            ]
+
         project.estimation_remarks = estimation_remarks
         project.order_remarks = order_remarks
+        project.assigned_members = assigned_members
 
         db.session.add(project)
     db.session.commit()
