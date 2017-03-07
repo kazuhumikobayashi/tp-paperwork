@@ -15,9 +15,6 @@ class ProjectService(object):
     def find(self, page, start_date, end_date, project_name, end_user, client_company_id, recorded_department_id):
         return self.repository.find(page, start_date, end_date, project_name, end_user, client_company_id, recorded_department_id)
 
-    def find_all(self, page):
-        return self.repository.find_all(page)
-
     def find_by_id(self, project_id):
         return self.repository.find_by_id(project_id)
 

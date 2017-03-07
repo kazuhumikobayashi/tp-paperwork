@@ -6,6 +6,8 @@ from application.domain.model.company import Company
 from application.domain.model.contract_form import ContractForm
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
+from application.domain.model.estimation_remarks import EstimationRemarks
+from application.domain.model.order_remarks import OrderRemarks
 from application.domain.model.project import Project
 from application.domain.model.skill import Skill
 from application.domain.model.status import Status
@@ -157,7 +159,6 @@ def create_contract_forms():
 def create_projects():
     for num in range(12):
         project = Project(
-            project_code=str(num),
             project_name='単体テスト' + str(num),
             end_user='test',
             client_company_id=1,
@@ -174,5 +175,44 @@ def create_projects():
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
+
+        estimation_remarks = EstimationRemarks(
+            project_id=project.id,
+            scope='scope',
+            contents='contents',
+            deliverables='deliverables',
+            delivery_place='delivery_place',
+            inspection_date='2017/1/1',
+            responsible_person='responsible_person',
+            quality_control='quality_control',
+            subcontractor='subcontractor',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+
+        order_remarks = OrderRemarks(
+            project_id=project.id,
+            order_no='1',
+            order_amount=1,
+            contents='contents',
+            responsible_person='responsible_person',
+            subcontractor='subcontractor',
+            scope='scope',
+            work_place='work_place',
+            delivery_place='delivery_place',
+            deliverables='deliverables',
+            inspection_date='2017/1/1',
+            payment_terms='payment_terms',
+            billing_company_id=1,
+            remarks='remarks',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+
+        project.estimation_remarks = estimation_remarks
+        project.order_remarks = order_remarks
+
         db.session.add(project)
     db.session.commit()

@@ -1,5 +1,6 @@
 from flask import Blueprint
 from flask import abort
+from flask import current_app
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -87,6 +88,7 @@ def detail(project_id=None):
         service.save(project)
         flash('保存しました。')
         return redirect(url_for('.detail', project_id=project.id))
+    current_app.logger.debug(form.errors)
 
     # estimation:
     if project.estimation_remarks is not None:
@@ -110,6 +112,7 @@ def detail(project_id=None):
         estimation_remarks_service.save(estimation_remarks)
         flash('保存しました。')
         return redirect(url_for('.detail', project_id=project.id))
+    current_app.logger.debug(estimation_remarks_form.errors)
 
     # order:
     if project.order_remarks is not None:
@@ -139,6 +142,7 @@ def detail(project_id=None):
         order_remarks_service.save(order_remarks)
         flash('保存しました。')
         return redirect(url_for('.detail', project_id=project.id))
+    current_app.logger.debug(order_remarks_form.errors)
 
     return render_template('project/detail.html',
                            form=form,
