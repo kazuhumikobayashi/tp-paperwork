@@ -1,6 +1,6 @@
 TP営業事務
 ==============
-<!-- [![Build Status](https://travis-ci.org//tp-paperwork.png?branch=master)](https://travis-ci.org//tp-paperwork) -->
+[![wercker status](https://app.wercker.com/status/1d08c3dd2718861b36c1680c228dfb92/s/master "wercker status")](https://app.wercker.com/project/byKey/1d08c3dd2718861b36c1680c228dfb92)
 
 
 Installation
