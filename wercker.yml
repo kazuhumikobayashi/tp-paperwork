@@ -71,12 +71,10 @@ deploy-development:
         code: |
           sudo apt-get update
           sudo apt-get -y install curl
-    - sherzberg/slack-notify:
-        subdomain: technoplan-inc
-        token: $SLACK_TOKEN
-        channel: “#tp-paperwork”
+    - slack-notifier:
+        url: $SLACK_URL
+        channel: tp-paperwork
         username: wercker
-        icon_url: https://avatars3.githubusercontent.com/u/1695193?s=140
 deploy-production:
   box: google/cloud-sdk
   steps:
@@ -96,9 +94,7 @@ deploy-production:
         code: |
           sudo apt-get update
           sudo apt-get -y install curl
-    - sherzberg/slack-notify:
-        subdomain: technoplan-inc
-        token: $SLACK_TOKEN
-        channel: “#tp-paperwork”
+    - slack-notifier:
+        url: $SLACK_URL
+        channel: tp-paperwork
         username: wercker
-        icon_url: https://avatars3.githubusercontent.com/u/1695193?s=140
