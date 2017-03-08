@@ -65,6 +65,13 @@ deploy-development:
         name: deploy GAE
         code: |
           gcloud --quiet app deploy app-development.yaml --project tp-paperwork-development
+  after-steps:
+    - sherzberg/slack-notify:
+        subdomain: technoplan-inc
+        token: $SLACK_TOKEN
+        channel: “#tp-paperwork”
+        username: wercker
+        icon_url: https://avatars3.githubusercontent.com/u/1695193?s=140
 deploy-production:
   box: google/cloud-sdk
   steps:
@@ -78,3 +85,10 @@ deploy-production:
         name: deploy GAE
         code: |
           gcloud --quiet app deploy app-production.yaml --project tp-paperwork
+  after-steps:
+    - sherzberg/slack-notify:
+        subdomain: technoplan-inc
+        token: $SLACK_TOKEN
+        channel: “#tp-paperwork”
+        username: wercker
+        icon_url: https://avatars3.githubusercontent.com/u/1695193?s=140
