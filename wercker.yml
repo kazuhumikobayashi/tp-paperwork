@@ -66,6 +66,11 @@ deploy-development:
         code: |
           gcloud --quiet app deploy app-development.yaml --project tp-paperwork-development
   after-steps:
+    - script:
+        name: install curl
+        code: |
+          sudo apt-get update
+          sudo apt-get -y install curl
     - sherzberg/slack-notify:
         subdomain: technoplan-inc
         token: $SLACK_TOKEN
@@ -86,6 +91,11 @@ deploy-production:
         code: |
           gcloud --quiet app deploy app-production.yaml --project tp-paperwork
   after-steps:
+    - script:
+        name: install curl
+        code: |
+          sudo apt-get update
+          sudo apt-get -y install curl
     - sherzberg/slack-notify:
         subdomain: technoplan-inc
         token: $SLACK_TOKEN
