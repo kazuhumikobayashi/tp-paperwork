@@ -161,7 +161,7 @@ class CompanyTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
         ok_('/company' in result.headers['Location'])
 
-        # 削除したユーザーが存在しないことを確認
+        # 削除した会社が存在しないことを確認
         company = self.company_repository.find_by_id(delete_company_id)
         self.assertIsNone(company.id)
 
