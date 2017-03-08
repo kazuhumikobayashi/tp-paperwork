@@ -52,7 +52,7 @@ class AssignedMemberTests(BaseTestCase):
         self.assertEqual(before + 1, after)
 
     # 技術者登録に失敗する。
-    def test_save_calculation_fail(self):
+    def test_save_assigned_member_fail(self):
         before = len(self.assigned_member_repository.find_all())
         # ログインする
         self.app.post('/login', data={

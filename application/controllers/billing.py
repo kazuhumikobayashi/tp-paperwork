@@ -22,7 +22,7 @@ def detail(billing_id=None):
     if billing_id is None:
         billing.project_id = request.args.get('project_id', '')
 
-    if billing is None and billing_id is not None:
+    if billing.id is None and billing_id is not None:
         return abort(404)
     form = BillingForm(request.form, billing)
 
@@ -44,13 +44,22 @@ def detail(billing_id=None):
         service.save(billing)
         flash('保存しました。')
         return redirect(url_for('.detail', billing_id=billing.id))
+    current_app.logger.debug(form.errors)
     return render_template('billing/detail.html', form=form)
+
+
+@bp.route('/add', methods=['GET', 'POST'])
+def add():
+    return detail()
 
 
 @bp.route('/delete/<billing_id>', methods=['GET'])
 def delete(billing_id):
     billing = service.find_by_id(billing_id)
-    if billing is not None:
+
+    if billing.id is None:
+        return abort(404)
+    else:
         service.destroy(billing)
         flash('削除しました。')
     return redirect(url_for('project.detail', project_id=billing.project_id) +

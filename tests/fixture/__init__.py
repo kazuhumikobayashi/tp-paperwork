@@ -2,6 +2,7 @@ from datetime import datetime, date
 
 from application import bcrypt, db
 from application.domain.model.assigned_members import AssignedMember
+from application.domain.model.billing import Billing
 from application.domain.model.calculation import Calculation
 from application.domain.model.company import Company
 from application.domain.model.contract_form import ContractForm
@@ -240,9 +241,51 @@ def create_projects():
                     updated_user='test')
             ]
 
+        # 請求を登録
+        billings = \
+            [
+                Billing(
+                    project_id=project.id,
+                    billing_month=date.today().strftime('%Y/%m/%d'),
+                    billing_amount=1,
+                    billing_adjustment_amount=1,
+                    tax=1,
+                    carfare=1,
+                    scheduled_billing_date=date.today().strftime('%Y/%m/%d'),
+                    billing_date=date.today().strftime('%Y/%m/%d'),
+                    bill_output_date=date.today().strftime('%Y/%m/%d'),
+                    scheduled_payment_date=date.today().strftime('%Y/%m/%d'),
+                    payment_date=date.today().strftime('%Y/%m/%d'),
+                    status=1,
+                    remarks='remarks',
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test'),
+                Billing(
+                    project_id=project.id,
+                    billing_month=date.today().strftime('%Y/%m/%d'),
+                    billing_amount=2,
+                    billing_adjustment_amount=2,
+                    tax=2,
+                    carfare=2,
+                    scheduled_billing_date=date.today().strftime('%Y/%m/%d'),
+                    billing_date=date.today().strftime('%Y/%m/%d'),
+                    bill_output_date=date.today().strftime('%Y/%m/%d'),
+                    scheduled_payment_date=date.today().strftime('%Y/%m/%d'),
+                    payment_date=date.today().strftime('%Y/%m/%d'),
+                    status=None,
+                    remarks='remarks',
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+            ]
+
         project.estimation_remarks = estimation_remarks
         project.order_remarks = order_remarks
         project.assigned_members = assigned_members
+        project.billings = billings
 
         db.session.add(project)
     db.session.commit()

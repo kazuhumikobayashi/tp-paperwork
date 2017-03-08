@@ -180,7 +180,7 @@ class CalculationTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
         ok_('/calculation' in result.headers['Location'])
 
-        # 削除したエンジニアが存在しないことを確認
+        # 削除した計算式が存在しないことを確認
         calculation = self.calculation_repository.find_by_id(delete_calculation_id)
         self.assertIsNone(calculation.id)
 

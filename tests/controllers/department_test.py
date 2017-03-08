@@ -159,7 +159,7 @@ class DepartmentTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
         ok_('/department' in result.headers['Location'])
 
-        # 削除したエンジニアが存在しないことを確認
+        # 削除した部署が存在しないことを確認
         department = self.department_repository.find_by_id(delete_department_id)
         self.assertIsNone(department.id)
 
