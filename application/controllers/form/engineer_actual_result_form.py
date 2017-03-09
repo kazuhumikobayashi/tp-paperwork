@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, HiddenField, TextAreaField, StringField, DateField
+from wtforms import SelectField, HiddenField, TextAreaField
 
-from application.controllers.form.fields import IntegerField, DecimalField
+from application.controllers.form.fields import IntegerField, DecimalField, DateField
 from application.controllers.form.validators import DataRequired, Length
 
 

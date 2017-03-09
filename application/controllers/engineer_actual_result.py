@@ -23,7 +23,7 @@ def detail(engineer_actual_result_id=None):
         engineer_actual_result.project_id = request.args.get('project_id', '')
     current_app.logger.debug(engineer_actual_result)
 
-    if engineer_actual_result is None and engineer_actual_result_id is not None:
+    if engineer_actual_result.id is None and engineer_actual_result_id is not None:
         return abort(404)
     form = EngineerActualResultForm(request.form, engineer_actual_result)
     form.engineer_id.choices = engineer_service.find_all_for_select()
@@ -45,13 +45,22 @@ def detail(engineer_actual_result_id=None):
         service.save(engineer_actual_result)
         flash('保存しました。')
         return redirect(url_for('.detail', engineer_actual_result_id=engineer_actual_result.id))
+    current_app.logger.debug(form.errors)
     return render_template('engineer_actual_result/detail.html', form=form)
+
+
+@bp.route('/add', methods=['GET', 'POST'])
+def add():
+    return detail()
 
 
 @bp.route('/delete/<engineer_actual_result_id>', methods=['GET'])
 def delete(engineer_actual_result_id):
     engineer_actual_result = service.find_by_id(engineer_actual_result_id)
-    if engineer_actual_result is not None:
+
+    if engineer_actual_result.id is None:
+        return abort(404)
+    else:
         service.destroy(engineer_actual_result)
         flash('削除しました。')
     return redirect(url_for('project.detail', project_id=engineer_actual_result.project_id) +
