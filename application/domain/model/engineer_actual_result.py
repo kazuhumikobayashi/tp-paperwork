@@ -80,11 +80,3 @@ class EngineerActualResult(BaseModel, db.Model):
                 "', updated_at='{}".format(self.updated_at) + \
                 "', updated_user='{}".format(self.updated_user) + \
                 "'>"
-
-    def clone(self):
-        arguments = dict()
-        copy = EngineerActualResult()
-        for name, column in self.__mapper__.columns.items():
-            if not (column.primary_key or column.unique):
-                arguments[name] = getattr(self, name)
-        return copy.__class__(**arguments)
