@@ -20,7 +20,7 @@ attachment_service = AttachmentService()
 def detail(project_attachment_id=None):
     project_attachment = service.find_by_id(project_attachment_id)
 
-    if project_attachment is None and project_attachment_id is not None:
+    if project_attachment.id is None and project_attachment_id is not None:
         return abort(404)
     form = ProjectAttachmentForm(request.form, project_attachment)
     file_form = FileForm()
@@ -43,6 +43,8 @@ def detail(project_attachment_id=None):
         service.save(project_attachment)
         flash('保存しました。')
         return redirect(url_for('.detail', project_attachment_id=project_attachment.id))
+    current_app.logger.debug(form.errors)
+    current_app.logger.debug(file_form.errors)
     return render_template('project_attachment/detail.html', form=form, file_form=file_form)
 
 
@@ -54,10 +56,13 @@ def create():
 @bp.route('/delete/<project_attachment_id>', methods=['GET'])
 def delete(project_attachment_id):
     project_attachment = service.find_by_id(project_attachment_id)
-    if project_attachment is not None:
-        attachment = attachment_service.find_by_id(project_attachment.attachment_id)
 
+    if project_attachment.id is None:
+        return abort(404)
+    else:
+        # storageのファイルを削除
         service.destroy(project_attachment)
+        attachment = attachment_service.find_by_id(project_attachment.attachment_id)
         attachment_service.destroy(attachment)
         flash('削除しました。')
     return redirect(url_for('project.detail', project_id=project_attachment.project_id))

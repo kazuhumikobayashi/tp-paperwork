@@ -2,6 +2,7 @@ from datetime import datetime, date
 
 from application import bcrypt, db
 from application.domain.model.assigned_members import AssignedMember
+from application.domain.model.attachment import Attachment
 from application.domain.model.billing import Billing
 from application.domain.model.calculation import Calculation
 from application.domain.model.company import Company
@@ -12,6 +13,7 @@ from application.domain.model.engineer_actual_result import EngineerActualResult
 from application.domain.model.estimation_remarks import EstimationRemarks
 from application.domain.model.order_remarks import OrderRemarks
 from application.domain.model.project import Project
+from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.skill import Skill
 from application.domain.model.status import Status
 from application.domain.model.tax import Tax
@@ -30,6 +32,7 @@ def init_data():
     create_statuses()
     create_contract_forms()
     create_projects()
+    create_attachments()
 
 
 def create_user():
@@ -330,4 +333,30 @@ def create_projects():
         project.engineer_actual_results = engineer_actual_results
 
         db.session.add(project)
+    db.session.commit()
+
+
+def create_attachments():
+    attachment = Attachment(
+        filename='見積書.pdf',
+        storage_filename='#',
+        size='10',
+        content_type='pdf',
+        created_at=datetime.today(),
+        created_user='test',
+        updated_at=datetime.today(),
+        updated_user='test')
+    db.session.add(attachment)
+    db.session.commit()
+
+    project_attachment = ProjectAttachment(
+        project_id=1,
+        attachment_id=attachment.id,
+        type=1,
+        remarks='remarks',
+        created_at=datetime.today(),
+        created_user='test',
+        updated_at=datetime.today(),
+        updated_user='test')
+    db.session.add(project_attachment)
     db.session.commit()
