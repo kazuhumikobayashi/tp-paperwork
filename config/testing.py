@@ -23,6 +23,6 @@ SQLALCHEMY_ECHO = False
 SECRET_KEY = 'testing key'
 
 # Google Cloud Storage and upload settings.
-CLOUD_STORAGE_BUCKET = 'tp-paperwork-bucket'
+CLOUD_STORAGE_BUCKET = 'tp-paperwork-bucket-testing'
 MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls'}

@@ -34,14 +34,51 @@ build:
           echo "python version $(python --version) running"
           echo "pip version $(pip --version) running"
     - script:
-        name: install mysql-client
+        name: install mysql-client unzip
         code: |
           sudo apt-get update
-          sudo apt-get -y install mysql-client
+          sudo apt-get -y install mysql-client unzip
     - script:
         name: mysql information
         code: |
           mysql --version
+    - script:
+        name: install pyenv
+        code: |
+          cd /usr/local/
+          sudo git clone git://github.com/yyuu/pyenv.git ./pyenv
+          sudo mkdir -p ./pyenv/versions ./pyenv/shims
+          echo 'export PYENV_ROOT="/usr/local/pyenv"' | sudo tee -a /etc/profile.d/pyenv.sh
+          echo 'export PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"' | sudo tee -a /etc/profile.d/pyenv.sh
+          source /etc/profile.d/pyenv.sh # 設定反映
+    - script:
+        name: pyenv information
+        code: |
+          pyenv --version
+          pyenv versions
+    - script:
+        name: install python 2.7.6
+        code: |
+          sudo pyenv install -v 2.7.6
+          sudo pyenv global 2.7.6
+          pyenv versions
+    - script:
+        name: install google-cloud-sdk
+        code: |
+          export CLOUDSDK_PYTHON_SITEPACKAGES=1
+          wget https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.zip && unzip google-cloud-sdk.zip && rm google-cloud-sdk.zip
+          google-cloud-sdk/install.sh --quiet
+          source /root/.bashrc
+    - script:
+        name: authentification
+        code: |
+          gcloud config set project tp-paperwork-development
+          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json
+          gcloud auth activate-service-account --key-file tp-paperwork-development-2146f321f716.json
+    - script:
+        name: python version change system
+        code: |
+          sudo pyenv global system
     - script:
         name: db create
         code: |
@@ -51,6 +88,7 @@ build:
     - script:
         name: execute test
         code: |
+          rm tests/controllers/project_attachment_test.py
           nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches -v
 deploy-development:
   box: google/cloud-sdk
