@@ -33,13 +33,13 @@ class ProjectAttachmentTests(BaseTestCase):
     # 添付文書を登録する。
     def test_create_project_attachment(self):
         before = len(self.project_attachment_repository.find_all())
-        file = (BytesIO(b'my file contents'), 'hello world.pdf')
         # ログインする
         self.app.post('/login', data={
             'shain_number': 'test1',
             'password': 'test'
         })
 
+        file = (BytesIO(b'my file contents'), 'hello world.pdf')
         result = self.app.post('/project_attachment/create?project_id=1', data={
             'upload': file,
             'type': '1',
@@ -111,16 +111,21 @@ class ProjectAttachmentTests(BaseTestCase):
 
     # 添付文書を削除できる
     def test_delete_project_attachment(self):
-        # 削除用の添付文書を登録
-        project_attachment = self.create_attachment()
-
-        delete_project_attachment_id = project_attachment.id
-
-        # ログイン
+        # ログインする
         self.app.post('/login', data={
             'shain_number': 'test1',
             'password': 'test'
         })
+
+        # 削除用の添付文書を登録
+        file = (BytesIO(b'my file contents'), 'delete_project_attachment.pdf')
+        result = self.app.post('/project_attachment/create?project_id=1', data={
+            'upload': file,
+            'type': '1',
+            'remarks': 'remarks'
+        })
+        self.assertEqual(result.status_code, 302)
+        delete_project_attachment_id = result.headers['Location'][-1:]
         project_attachment = self.project_attachment_repository.find_by_id(delete_project_attachment_id)
 
         result = self.app.get('/project_attachment/delete/' + str(project_attachment.id))
@@ -130,6 +135,17 @@ class ProjectAttachmentTests(BaseTestCase):
 
         # 削除した添付文書が存在しないことを確認
         project_attachment = self.project_attachment_repository.find_by_id(delete_project_attachment_id)
+        self.assertIsNone(project_attachment.id)
+
+    # storageにファイルが存在しない場合でも削除できる
+    def test_delete_project_attachment_not_exist_storage(self):
+        delete_attachment = self.create_attachment()
+        result = self.app.get('/project_attachment/delete/' + str(delete_attachment.id))
+        # 削除できることを確認
+        self.assertEqual(result.status_code, 302)
+
+        # 削除した添付文書がDB上に存在しないことを確認
+        project_attachment = self.project_attachment_repository.find_by_id(delete_attachment.id)
         self.assertIsNone(project_attachment.id)
 
     # 存在しない添付文書は削除できない
