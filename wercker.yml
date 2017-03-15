@@ -72,6 +72,7 @@ build:
     - script:
         name: authentification
         code: |
+          export GOOGLE_APPLICATION_CREDENTIALS=/pipeline/source/tp-paperwork-development-2146f321f716.json
           gcloud config set project tp-paperwork-development
           openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json
           gcloud auth activate-service-account --key-file tp-paperwork-development-2146f321f716.json
@@ -88,7 +89,6 @@ build:
     - script:
         name: execute test
         code: |
-          rm tests/controllers/project_attachment_test.py
           nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches -v
 deploy-development:
   box: google/cloud-sdk
