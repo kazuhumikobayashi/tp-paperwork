@@ -90,6 +90,10 @@ build:
         name: execute test
         code: |
           nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches -v
+    - script:
+        name: codecov
+        code: |
+          codecov
 deploy-development:
   box: google/cloud-sdk
   steps:

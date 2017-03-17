@@ -1,7 +1,7 @@
 TP営業事務
 ==============
 [![wercker status](https://app.wercker.com/status/1d08c3dd2718861b36c1680c228dfb92/s/master "wercker status")](https://app.wercker.com/project/byKey/1d08c3dd2718861b36c1680c228dfb92)
-
+[![codecov](https://codecov.io/gh/technoplan-inc/tp-paperwork/branch/master/graph/badge.svg?token=SU2rTsmyVx)](https://codecov.io/gh/technoplan-inc/tp-paperwork)
 
 Installation
 ------------
