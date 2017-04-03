@@ -68,7 +68,7 @@ build:
           export CLOUDSDK_PYTHON_SITEPACKAGES=1
           wget https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.zip && unzip google-cloud-sdk.zip && rm google-cloud-sdk.zip
           google-cloud-sdk/install.sh --quiet
-          source /root/.bashrc
+          export PATH="$PATH:google-cloud-sdk/bin"
     - script:
         name: authentification
         code: |
