@@ -13,14 +13,6 @@ class UserForm(FlaskForm):
     shain_number = StringField('社員番号', [DataRequired(),
                                         Length(max=32)])
     user_name = StringField('ユーザー名', [DataRequired(), Length(max=128)])
-    mail = StringField('メールアドレス', [DataRequired(),
-                                   Length(max=255),
-                                   validators.Email('正しいメールアドレスにしてください。')])
-
-    def validate_mail(self, field):
-        user = repository.find_by_mail(mail=field.data)
-        if user and user.id != self.id.data:
-            raise ValidationError('このメールアドレスは既に登録されています。')
 
     def validate_shain_number(self, field):
         user = repository.find_by_shain_number(shain_number=field.data)

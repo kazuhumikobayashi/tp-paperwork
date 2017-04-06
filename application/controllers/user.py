@@ -39,7 +39,6 @@ def detail(user_id=None):
     if form.validate_on_submit():
         user.shain_number = form.shain_number.data
         user.user_name = form.user_name.data
-        user.mail = form.mail.data
 
         service.save(user)
         flash('保存しました。')

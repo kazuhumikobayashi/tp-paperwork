@@ -58,19 +58,15 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
-              <th width="50px">#</th>
               <th>社員番号</th>
               <th>ユーザー名</th>
-              <th>メールアドレス</th>
               <th width="70px" class="center"></th>
               <th width="70px" class="center"></th>
             </tr>
             {% for user in pagination.items %}
             <tr>
-              <td>{{ (pagination.prev_num * pagination.per_page) + loop.index }}</td>
               <td>{{ user.shain_number }}</td>
               <td>{{ user.user_name|filter_suppress_none }}</td>
-              <td>{{ user.mail|filter_suppress_none }}</td>
               <td>
                 <a class="btn btn-sm btn-default" href="{{ url_for('.detail', user_id=user.id) }}">
                    詳細 <i class="fa fa-navicon"></i>

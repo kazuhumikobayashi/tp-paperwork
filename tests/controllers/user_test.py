@@ -72,8 +72,7 @@ class UserTests(BaseTestCase):
 
         result = self.app.post('/user/create', data={
             'shain_number': 'create_user',
-            'user_name': '登録テスト',
-            'mail': 'create_user@test.com'
+            'user_name': '登録テスト'
         })
         user = self.user_repository.find_by_shain_number('create_user')
 
@@ -95,8 +94,7 @@ class UserTests(BaseTestCase):
 
         result = self.app.post('/user/create', data={
             'shain_number': 'test1',
-            'user_name': '登録テスト',
-            'mail': 'test@test1.com'
+            'user_name': '登録テスト'
         })
         self.assertEqual(result.status_code, 200)
 
@@ -141,8 +139,7 @@ class UserTests(BaseTestCase):
 
         result = self.app.post('/user/detail/' + str(user.id), data={
             'shain_number': user.shain_number,
-            'user_name': expected,
-            'mail': user.mail
+            'user_name': expected
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -158,7 +155,6 @@ class UserTests(BaseTestCase):
         user = User(
                  shain_number='delete_user',
                  user_name='削除用ユーザー',
-                 mail='test@delete.com',
                  password=bcrypt.generate_password_hash('test'),
                  created_at=datetime.today(),
                  created_user='test',
