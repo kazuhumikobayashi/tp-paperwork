@@ -8,7 +8,7 @@ class User(BaseModel, db.Model):
     __tablename__ = 'users'
     PER_PAGE = 10
 
-    shain_number = Column(String(32), nullable=False)
+    shain_number = Column(String(32), nullable=False, unique=True)
     user_name = Column(String(128))
     password = Column(String(256))
 
