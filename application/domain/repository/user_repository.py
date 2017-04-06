@@ -24,9 +24,6 @@ class UserRepository(BaseRepository):
     def find_by_shain_number(self, shain_number):
         return User.query.filter(User.shain_number == shain_number).first()
 
-    def find_by_mail(self, mail):
-        return User.query.filter(User.mail == mail).first()
-
     def save(self, user):
         if user.id is None:
             user.created_at = datetime.today()

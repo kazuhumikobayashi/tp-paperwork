@@ -40,7 +40,6 @@ def create_user():
         user = User(
                  shain_number='test' + str(num),
                  user_name='単体テスト',
-                 mail='test@test' + str(num) + '.com',
                  password=bcrypt.generate_password_hash('test'),
                  created_at=datetime.today(),
                  created_user='test',

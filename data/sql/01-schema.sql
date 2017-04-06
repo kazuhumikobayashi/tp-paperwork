@@ -24,14 +24,12 @@ CREATE TABLE IF NOT EXISTS users (
   id INT NOT NULL AUTO_INCREMENT,
   shain_number VARCHAR(32) NOT NULL ,
   user_name VARCHAR(128) ,
-  mail VARCHAR(255) ,
   password VARCHAR(256) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id) ,
-  UNIQUE KEY (mail)
+  PRIMARY KEY (id)
 ) ENGINE = INNODB;
 
 
