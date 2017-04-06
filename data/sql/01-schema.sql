@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS users (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  UNIQUE KEY (shain_number)
 ) ENGINE = INNODB;
 
 
