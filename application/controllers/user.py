@@ -30,11 +30,16 @@ def user_page(page=1):
 @bp.route('/detail/<user_id>', methods=['GET', 'POST'])
 def detail(user_id=None):
     user = service.find_by_id(user_id)
-    current_app.logger.debug(str(user))
 
     if user.id is None and user_id is not None:
         return abort(404)
     form = UserForm(request.form, user)
+    
+    if user.id:
+        form.shain_number.render_kw = {"disabled": "disabled"}
+        form.shain_number.data = user.shain_number
+    else:
+        form.shain_number.render_kw = {"required": "required"}
 
     if form.validate_on_submit():
         user.shain_number = form.shain_number.data
@@ -43,6 +48,7 @@ def detail(user_id=None):
         service.save(user)
         flash('保存しました。')
         return redirect(url_for('.detail', user_id=user.id))
+    current_app.logger.debug(form.errors)
     return render_template('user/detail.html', form=form)
 
 
