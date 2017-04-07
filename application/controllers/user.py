@@ -35,14 +35,20 @@ def detail(user_id=None):
     if user.id is None and user_id is not None:
         return abort(404)
     form = UserForm(request.form, user)
+    
+    if user.shain_number:
+        form.shain_number.render_kw = {"disabled": "disabled"}
+    else:
+        form.shain_number.render_kw = {"required": "required"}
 
     if form.validate_on_submit():
-        user.shain_number = form.shain_number.data
-        user.user_name = form.user_name.data
-
-        service.save(user)
-        flash('保存しました。')
-        return redirect(url_for('.detail', user_id=user.id))
+        if form.shain_number.data:
+            user.shain_number = form.shain_number.data
+            user.user_name = form.user_name.data
+    
+            service.save(user)
+            flash('保存しました。')
+            return redirect(url_for('.detail', user_id=user.id))
     return render_template('user/detail.html', form=form)
 
 
