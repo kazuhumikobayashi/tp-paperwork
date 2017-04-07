@@ -82,9 +82,6 @@ class UserTests(BaseTestCase):
         after = len(self.user_repository.find_all())
         # 1件追加されていることを確認
         self.assertEqual(before + 1, after)
-        
-        # 
-        
 
     # ユーザー登録に失敗する。
     def test_create_user_fail(self):
@@ -221,8 +218,7 @@ class UserTests(BaseTestCase):
         after = len(self.user_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
-        
-        
+
     # 更新時に社員番号は必須
     def test_update_shain_number_empty_fail(self):
         # ログイン
@@ -235,17 +231,16 @@ class UserTests(BaseTestCase):
         
         before = user.shain_number
 
-        #　社員番号を空で登録する。
+        # 社員番号を空で登録する。
         result = self.app.post('/user/detail/' + str(user.id), data={
             'shain_number': '',
             'user_name': user.user_name
         })
         # 保存
-        self.assertEqual(result.status_code, 200)
-        
+        self.assertEqual(result.status_code, 302)
+        ok_('/user/detail/' + str(user.id) in result.headers['Location'])
+
         # 登録前後の社員番号に変更がないことを確認
         user = self.user_repository.find_by_shain_number(shain_number)
         after = user.shain_number
         self.assertEqual(before, after)
-        
-    
