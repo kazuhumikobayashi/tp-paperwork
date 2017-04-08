@@ -67,7 +67,7 @@ Running on [http://127.0.0.1:5000/](http://127.0.0.1:5000/) (Press CTRL+C to qui
 Run Test
 -----------------------------
 ```
-nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches
+nosetests --cover-tests --with-coverage --cover-erase --cover-package=application --cover-branches -v
 coverage html
 ```
 
