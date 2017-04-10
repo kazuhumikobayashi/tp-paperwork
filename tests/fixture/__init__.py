@@ -15,6 +15,7 @@ from application.domain.model.order_remarks import OrderRemarks
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.skill import Skill
+from application.domain.model.business_category import BusinessCategory
 from application.domain.model.status import Status
 from application.domain.model.tax import Tax
 from application.domain.model.user import User
@@ -33,6 +34,7 @@ def init_data():
     create_contract_forms()
     create_projects()
     create_attachments()
+    create_business_categories()
 
 
 def create_user():
@@ -358,4 +360,16 @@ def create_attachments():
         updated_at=datetime.today(),
         updated_user='test')
     db.session.add(project_attachment)
+    db.session.commit()
+
+
+def create_business_categories():
+    for num in range(12):
+        business_category = BusinessCategory(
+            business_category_name='test' + str(num),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(business_category)
     db.session.commit()
