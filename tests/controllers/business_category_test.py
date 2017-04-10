@@ -8,20 +8,20 @@ from application.domain.repository.business_category_repository import BusinessC
 from tests import BaseTestCase
 
 
-class SkillTests(BaseTestCase):
+class BusinessCategoryTests(BaseTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(SkillTests, cls).setUpClass()
+        super(BusinessCategoryTests, cls).setUpClass()
 
     def setUp(self):
-        super(SkillTests, self).setUp()
+        super(BusinessCategoryTests, self).setUp()
         self.business_category_repository = BusinessCategoryRepository()
 
     def tearDown(self):
-        super(SkillTests, self).tearDown()
+        super(BusinessCategoryTests, self).tearDown()
 
-    # スキルの検索画面に遷移する。
+    # 業種の検索画面に遷移する。
     def test_get_business_category(self):
         # ログインする
         self.app.post('/login', data={
@@ -43,7 +43,7 @@ class SkillTests(BaseTestCase):
         result = self.app.get('/business_category/page/2')
         self.assertEqual(result.status_code, 200)
 
-    # スキルを検索する。
+    # 業種を検索する。
     def test_search_business_category(self):
         # ログインする
         self.app.post('/login', data={
@@ -54,7 +54,7 @@ class SkillTests(BaseTestCase):
         result = self.app.get('/business_category/?business_category_name=test')
         self.assertEqual(result.status_code, 200)
 
-    # スキル登録画面に遷移する。
+    # 業種登録画面に遷移する。
     def test_get_business_category_create(self):
         # ログインする
         self.app.post('/login', data={
@@ -65,7 +65,7 @@ class SkillTests(BaseTestCase):
         result = self.app.get('/business_category/create')
         self.assertEqual(result.status_code, 200)
 
-    # スキル登録する。
+    # 業種登録する。
     def test_create_business_category(self):
         before = len(self.business_category_repository.find_all())
         # ログインする
@@ -83,7 +83,7 @@ class SkillTests(BaseTestCase):
         # 1件追加されていることを確認
         self.assertEqual(before + 1, after)
 
-    # スキル登録に失敗する。
+    # 業種登録に失敗する。
     def test_create_business_category_fail(self):
         before = len(self.business_category_repository.find_all())
         # ログインする
@@ -92,7 +92,7 @@ class SkillTests(BaseTestCase):
             'password': 'test'
         })
 
-        # 同じ名称のスキルは登録できない
+        # 同じ名称の業種は登録できない
         result = self.app.post('/business_category/create', data={
             'business_category_name': 'test0'
         })
@@ -102,7 +102,7 @@ class SkillTests(BaseTestCase):
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
 
-    # スキル詳細画面に遷移する。
+    # 業種詳細画面に遷移する。
     def test_get_business_category_detail(self):
         # ログインする
         shain_number = 'test1'
@@ -115,7 +115,7 @@ class SkillTests(BaseTestCase):
         result = self.app.get('/business_category/detail/' + str(business_category.id))
         self.assertEqual(result.status_code, 200)
 
-    # 存在しないスキルの場合はnot_found
+    # 存在しない業種の場合はnot_found
     def test_get_business_category_detail_fail(self):
         # ログインする
         self.app.post('/login', data={
@@ -126,7 +126,7 @@ class SkillTests(BaseTestCase):
         result = self.app.get('/business_category/detail/0')
         self.assertEqual(result.status_code, 404)
 
-    # スキルを保存できる
+    # 業種を保存できる
     def test_save_business_category(self):
         shain_number = 'test1'
         self.app.post('/login', data={
@@ -149,11 +149,11 @@ class SkillTests(BaseTestCase):
         actual = business_category.business_category_name
         self.assertEqual(actual, expected)
 
-    # スキルを削除できる
+    # 業種を削除できる
     def test_delete_business_category(self):
-        # 削除用のスキルを登録
+        # 削除用の業種を登録
         business_category = BusinessCategory(
-            business_category_name='削除用スキル',
+            business_category_name='削除用業種',
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -175,11 +175,11 @@ class SkillTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
         ok_('/business_category' in result.headers['Location'])
 
-        # 削除したスキルが存在しないことを確認
+        # 削除した業種が存在しないことを確認
         business_category = self.business_category_repository.find_by_id(delete_business_category_id)
         self.assertIsNone(business_category.id)
 
-    # 存在しないスキルは削除できない
+    # 存在しない業種は削除できない
     def test_delete_business_category_fail(self):
         before = len(self.business_category_repository.find_all())
         # ログイン
