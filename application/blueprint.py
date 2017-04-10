@@ -7,6 +7,7 @@ def register(app):
     from application.controllers import user
     from application.controllers import login
     from application.controllers import skill
+    from application.controllers import business_category
     from application.controllers import pwchange
     from application.controllers import assigned_member
     from application.controllers import calculation
@@ -23,6 +24,7 @@ def register(app):
     app.register_blueprint(user.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(skill.bp)
+    app.register_blueprint(business_category.bp)
     app.register_blueprint(pwchange.bp)
     app.register_blueprint(assigned_member.bp)
     app.register_blueprint(calculation.bp)

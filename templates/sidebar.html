@@ -43,6 +43,9 @@
             <li{% if request.path.count('/skill/') %} class="active"{% endif %}>
                 <a href="{{ url_for('skill.index') }}"><i class="fa fa-edit fa-fw"></i> スキル</a>
             </li>
+            <li{% if request.path.count('/business_category/') %} class="active"{% endif %}>
+                <a href="{{ url_for('business_category.index') }}"><i class="fa fa-edit fa-fw"></i> 業種</a>
+            </li>
             <li{% if request.path.count('/department/') %} class="active"{% endif %}>
                 <a href="{{ url_for('department.index') }}"><i class="fa fa-briefcase fa-fw"></i> 部署</a>
             </li>
