@@ -9,14 +9,9 @@
   <!-- Select2 -->
   <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
 {% endblock %}
-{% block title %}技術者情報{% endblock %}
+{% block title %}技術者{% endblock %}
 {% block content_header %}
-  <h1>技術者情報</h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li><i class="fa fa-database"></i> マスタ管理</li>
-    <li class="active"><i class="fa fa-users"></i> 技術者情報</li>
-  </ol>
+  <h1>技術者</h1>
 {% endblock %}
 {% block main_content %}
   <div class="box box-primary">
@@ -68,7 +63,6 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
-              <th width="50px">#</th>
               <th>技術者名</th>
               <th>技術者名カナ</th>
               <th>所属会社</th>
@@ -76,12 +70,14 @@
               <th>適用開始年月日</th>
               <th>適用終了年月日</th>
               <th width="70px" class="center"></th>
-              <th width="70px" class="center"></th>
             </tr>
             {% for engineer in pagination.items %}
             <tr>
-              <td>{{ (pagination.prev_num * pagination.per_page) + loop.index }}</td>
-              <td>{{ engineer.engineer_name|filter_suppress_none }}</td>
+              <td>
+                <a href="{{ url_for('.detail', engineer_id=engineer.id) }}">
+                  {{ engineer.engineer_name|filter_suppress_none }}
+                </a>
+              </td>
               <td>{{ engineer.engineer_name_kana|filter_suppress_none }}</td>
               <td>{{ engineer.company.company_name|filter_suppress_none }}</td>
               <td>
@@ -91,11 +87,6 @@
               </td>
               <td>{{ engineer.start_date|datetime_format("%Y/%m/%d") }}</td>
               <td>{{ engineer.end_date|datetime_format("%Y/%m/%d") }}</td>
-              <td>
-                <a class="btn btn-sm btn-default" href="{{ url_for('.detail', engineer_id=engineer.id) }}">
-                   詳細 <i class="fa fa-navicon"></i>
-                </a>
-              </td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', engineer_id=engineer.id) }}">
                   <i class="fa fa-trash"></i> 削除
