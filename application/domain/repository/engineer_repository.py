@@ -18,11 +18,11 @@ class EngineerRepository(BaseRepository):
         query = self.model.query
         if engineer_name:
             query = query.filter(self.model.engineer_name.like('%' + engineer_name + '%'))
-        if company_id:
+        if company_id and company_id != '' and company_id != [''] and company_id != []:
             query = query.filter(self.model.company_id.in_(company_id))
-        if skill_id:
+        if skill_id and skill_id != '' and skill_id != [''] and skill_id != []:
             query = query.filter(self.model.engineer_skills.any(EngineerSkill.skill_id.in_(skill_id)))
-        if business_category_id:
+        if business_category_id and business_category_id != '' and business_category_id != [''] and business_category_id != []:
             query = query.filter(self.model.engineer_business_categories.any(EngineerBusinessCategory.business_category_id.in_(business_category_id)))
         pagination = query.paginate(page, self.model.PER_PAGE)
         return pagination
@@ -34,9 +34,8 @@ class EngineerRepository(BaseRepository):
         engineer.updated_at = datetime.today()
         engineer.updated_user = session['user']['user_name']
         for engineer_skills in engineer.engineer_skills:
-            if engineer_skills.id is None:
-                engineer_skills.created_at = datetime.today()
-                engineer_skills.created_user = session['user']['user_name']
+            engineer_skills.created_at = datetime.today()
+            engineer_skills.created_user = session['user']['user_name']
             engineer_skills.updated_at = datetime.today()
             engineer_skills.updated_user = session['user']['user_name']
         for engineer_business_categories in engineer.engineer_business_categories:
