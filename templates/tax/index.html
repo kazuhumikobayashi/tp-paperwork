@@ -3,11 +3,6 @@
 {% block title %}消費税{% endblock %}
 {% block content_header %}
   <h1>消費税</h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li><i class="fa fa-database"></i> マスタ管理</li>
-    <li class="active"><i class="fa fa-yen"></i> 消費税</li>
-  </ol>
 {% endblock %}
 {% block main_content %}
   <div class="box box-primary">
@@ -55,24 +50,20 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
-              <th width="50px">#</th>
-              <th width="200px">適用開始年月日</th>
-              <th width="200px">適用終了年月日</th>
-              <th>消費税率</th>
-              <th width="70px" class="center"></th>
+              <th width="120px">消費税率</th>
+              <th width="150px">適用開始年月日</th>
+              <th>適用終了年月日</th>
               <th width="70px" class="center"></th>
             </tr>
             {% for tax in pagination.items %}
             <tr>
-              <td>{{ (pagination.prev_num * pagination.per_page) + loop.index }}</td>
-              <td>{{ tax.start_date|datetime_format("%Y/%m/%d") }}</td>
-              <td>{{ tax.end_date|datetime_format("%Y/%m/%d") }}</td>
-              <td>{{ tax.tax_rate|filter_suppress_none }}</td>
               <td>
-                <a class="btn btn-sm btn-default" href="{{ url_for('.detail', tax_id=tax.id) }}">
-                   詳細 <i class="fa fa-navicon"></i>
+                <a href="{{ url_for('.detail', tax_id=tax.id) }}">
+                  {{ tax.tax_rate|filter_suppress_none }}
                 </a>
               </td>
+              <td>{{ tax.start_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ tax.end_date|datetime_format("%Y/%m/%d") }}</td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', tax_id=tax.id) }}">
                   <i class="fa fa-trash"></i> 削除
