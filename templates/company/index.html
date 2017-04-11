@@ -1,13 +1,8 @@
 {% extends "layout.html" %}
 {% import "_pagination.html" as p %}
-{% block title %}会社情報{% endblock %}
+{% block title %}会社{% endblock %}
 {% block content_header %}
-  <h1>会社情報</h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li><i class="fa fa-database"></i> マスタ管理</li>
-    <li class="active"><i class="fa fa-building"></i> 会社情報</li>
-  </ol>
+  <h1>会社</h1>
 {% endblock %}
 {% block main_content %}
   <div class="box box-primary">
@@ -58,26 +53,20 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
-              <th width="50px">#</th>
-              <th>会社コード</th>
               <th>会社名</th>
               <th>取引開始日</th>
               <th>取引終了日</th>
               <th width="70px" class="center"></th>
-              <th width="70px" class="center"></th>
             </tr>
             {% for company in pagination.items %}
             <tr>
-              <td>{{ (pagination.prev_num * pagination.per_page) + loop.index }}</td>
-              <td>{{ company.company_code }}</td>
-              <td>{{ company.company_name|filter_suppress_none }}</td>
-              <td>{{ company.start_date|datetime_format("%Y/%m/%d") }}</td>
-              <td>{{ company.end_date|datetime_format("%Y/%m/%d") }}</td>
               <td>
-                <a class="btn btn-sm btn-default" href="{{ url_for('.detail', company_id=company.id) }}">
-                   詳細 <i class="fa fa-navicon"></i>
+                <a href="{{ url_for('.detail', company_id=company.id) }}">
+                  {{ company.company_name|filter_suppress_none }}
                 </a>
               </td>
+              <td>{{ company.start_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ company.end_date|datetime_format("%Y/%m/%d") }}</td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', company_id=company.id) }}">
                   <i class="fa fa-trash"></i> 削除
