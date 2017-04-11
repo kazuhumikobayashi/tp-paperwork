@@ -32,6 +32,7 @@
       <!-- /.row -->
       <div class="row">
         {{ render_search_field(form.company_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.business_category_id, "col-md-6", input_class="select2") }}
       </div>
       <!-- /.row -->
     </div>
@@ -51,7 +52,8 @@
           {% if pagination %}
             {% if pagination.total > pagination.per_page %}
               {{ p.pagination_widget(pagination,'.engineer_page', company_id=request.args.get('company_id', ''),
-              engineer_name=request.args.get('engineer_name', ''), skill=request.args.get('engineer_name', '')) }}
+              engineer_name=request.args.get('engineer_name', ''), skill_id=request.args.get('skill_id', ''),
+              business_category_id=request.args.get('business_category_id', '')) }}
             {% endif %}
           {% endif %}
           <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
@@ -66,7 +68,8 @@
               <th>技術者名</th>
               <th>技術者名カナ</th>
               <th>所属会社</th>
-              <th width="350px">スキル</th>
+              <th width="250px">スキル</th>
+              <th width="100px">業種</th>
               <th>適用開始年月日</th>
               <th>適用終了年月日</th>
               <th width="70px" class="center"></th>
@@ -83,6 +86,11 @@
               <td>
                 {% for skill in engineer.engineer_skills %}
                   <label class="label label-primary">{{ skill.skill.skill_name }}</label>
+                {% endfor %}
+              </td>
+              <td>
+                {% for business_category in engineer.engineer_business_categories %}
+                  <label class="label label-primary">{{ business_category.business_category.business_category_name }}</label>
                 {% endfor %}
               </td>
               <td>{{ engineer.start_date|datetime_format("%Y/%m/%d") }}</td>

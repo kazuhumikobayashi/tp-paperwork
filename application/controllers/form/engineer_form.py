@@ -14,3 +14,4 @@ class EngineerForm(FlaskForm):
     company_id = SelectField('会社', [validators.optional()], filters=[lambda x: x or None])
     remarks = StringField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     skill = SelectMultipleField('スキル', [Length(max=2048)], coerce=int)
+    business_category = SelectMultipleField('業種', [Length(max=2048)], coerce=int)

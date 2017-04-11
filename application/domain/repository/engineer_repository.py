@@ -6,6 +6,7 @@ from flask import session
 from application import db
 from application.domain.model.engineer import Engineer
 from application.domain.model.engineer_skill import EngineerSkill
+from application.domain.model.engineer_business_category import EngineerBusinessCategory
 from application.domain.repository.base_repository import BaseRepository
 
 
@@ -13,7 +14,7 @@ class EngineerRepository(BaseRepository):
 
     model = Engineer
 
-    def find(self, page, engineer_name, company_id, skill_id=None):
+    def find(self, page, engineer_name, company_id, skill_id=None, business_category_id=None):
         query = self.model.query
         if engineer_name:
             query = query.filter(self.model.engineer_name.like('%' + engineer_name + '%'))
@@ -21,6 +22,8 @@ class EngineerRepository(BaseRepository):
             query = query.filter(self.model.company_id.in_(company_id))
         if skill_id:
             query = query.filter(self.model.engineer_skills.any(EngineerSkill.skill_id.in_(skill_id)))
+        if business_category_id:
+            query = query.filter(self.model.engineer_business_categories.any(EngineerBusinessCategory.business_category_id.in_(business_category_id)))
         pagination = query.paginate(page, self.model.PER_PAGE)
         return pagination
 
@@ -36,6 +39,11 @@ class EngineerRepository(BaseRepository):
                 engineer_skills.created_user = session['user']['user_name']
             engineer_skills.updated_at = datetime.today()
             engineer_skills.updated_user = session['user']['user_name']
+        for engineer_business_categories in engineer.engineer_business_categories:
+            engineer_business_categories.created_at = datetime.today()
+            engineer_business_categories.created_user = session['user']['user_name']
+            engineer_business_categories.updated_at = datetime.today()
+            engineer_business_categories.updated_user = session['user']['user_name']
 
         db.session.add(engineer)
         db.session.commit()

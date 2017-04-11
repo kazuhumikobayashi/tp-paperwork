@@ -10,14 +10,17 @@ from flask import url_for
 from application.controllers.form.engineer_form import EngineerForm
 from application.controllers.form.engineer_search_form import EngineerSearchForm
 from application.domain.model.engineer_skill import EngineerSkill
+from application.domain.model.engineer_business_category import EngineerBusinessCategory
 from application.service.company_service import CompanyService
 from application.service.engineer_service import EngineerService
 from application.service.skill_service import SkillService
+from application.service.business_category_service import BusinessCategoryService
 
 bp = Blueprint('engineer', __name__, url_prefix='/engineer')
 service = EngineerService()
 company_service = CompanyService()
 skill_service = SkillService()
+business_category_service = BusinessCategoryService()
 
 
 @bp.route('/', methods=['GET'])
@@ -25,8 +28,9 @@ def index(page=1):
     form = EngineerSearchForm(request.values)
     form.company_id.choices = company_service.find_all_for_multi_select()
     form.skill_id.choices = skill_service.find_all_for_multi_select()
+    form.business_category_id.choices = business_category_service.find_all_for_multi_select()
 
-    pagination = service.find(page, form.engineer_name.data, form.company_id.data, form.skill_id.data)
+    pagination = service.find(page, form.engineer_name.data, form.company_id.data, form.skill_id.data, form.business_category_id.data)
     return render_template('engineer/index.html', pagination=pagination, form=form)
 
 
@@ -42,9 +46,11 @@ def detail(engineer_id=None):
     if engineer.id is None and engineer_id is not None:
         return abort(404)
     engineer.skill = [h.skill_id for h in engineer.engineer_skills]
+    engineer.business_category = [h.business_category_id for h in engineer.engineer_business_categories]
     form = EngineerForm(request.form, engineer)
     form.company_id.choices = company_service.find_all_for_select()
     form.skill.choices = skill_service.find_all_for_multi_select()
+    form.business_category.choices = business_category_service.find_all_for_multi_select()
 
     if form.validate_on_submit():
         engineer.start_date = form.start_date.data
@@ -57,6 +63,10 @@ def detail(engineer_id=None):
         for skill_id in form.skill.data:
             skills.extend([EngineerSkill(engineer.id, skill_id)])
         engineer.engineer_skills = skills
+        business_categories = []
+        for business_category_id in form.business_category.data:
+            business_categories.extend([EngineerBusinessCategory(engineer.id, business_category_id)])
+        engineer.engineer_business_categories = business_categories
 
         service.save(engineer)
         flash('保存しました。')
