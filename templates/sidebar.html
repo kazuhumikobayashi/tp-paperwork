@@ -39,7 +39,7 @@
                 <a href="{{ url_for('company.index') }}"><i class="fa fa-building fa-fw"></i> 会社</a>
             </li>
             <li{% if request.path.count('/engineer/') %} class="active"{% endif %}>
-                <a href="{{ url_for('engineer.index') }}"><i class="fa fa-users fa-fw"></i> 技術者情報</a>
+                <a href="{{ url_for('engineer.index') }}"><i class="fa fa-users fa-fw"></i> 技術者</a>
             </li>
             <li{% if request.path.count('/skill/') %} class="active"{% endif %}>
                 <a href="{{ url_for('skill.index') }}"><i class="fa fa-edit fa-fw"></i> スキル</a>
