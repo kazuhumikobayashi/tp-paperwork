@@ -3,11 +3,6 @@
 {% block title %}部署{% endblock %}
 {% block content_header %}
   <h1>部署</h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li><i class="fa fa-database"></i> マスタ管理</li>
-    <li class="active"><i class="fa fa-briefcase"></i> 部署</li>
-  </ol>
 {% endblock %}
 {% block main_content %}
   <div class="box box-primary">
@@ -58,20 +53,14 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
-              <th width="50px">#</th>
-              <th width="150px">部署コード</th>
               <th>部署名</th>
-              <th width="70px" class="center"></th>
               <th width="70px" class="center"></th>
             </tr>
             {% for department in pagination.items %}
             <tr>
-              <td>{{ (pagination.prev_num * pagination.per_page) + loop.index }}</td>
-              <td>{{ department.department_code }}</td>
-              <td>{{ department.department_name|filter_suppress_none }}</td>
               <td>
-                <a class="btn btn-sm btn-default" href="{{ url_for('.detail', department_id=department.id) }}">
-                   詳細 <i class="fa fa-navicon"></i>
+                <a href="{{ url_for('.detail', department_id=department.id) }}">
+                  {{ department.department_name|filter_suppress_none }}
                 </a>
               </td>
               <td>
