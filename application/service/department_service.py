@@ -4,8 +4,8 @@ from application.domain.repository.department_repository import DepartmentReposi
 class DepartmentService(object):
     repository = DepartmentRepository()
 
-    def find(self, page, department_name, department_code):
-        return self.repository.find(page, department_name, department_code)
+    def find(self, page, department_name):
+        return self.repository.find(page, department_name)
 
     def find_all(self, page=None):
         return self.repository.find_all(page)

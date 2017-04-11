@@ -17,10 +17,7 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="row">
-        <div class="col-md-6">
-          <input type="text" class="form-control" name="department_code" placeholder="部署コード" value="{{ request.args.get('department_code', '') }}">
-        </div>
-        <div class="col-md-6">
+        <div class="col-xs-12">
           <input type="text" class="form-control" name="department_name" placeholder="部署名" value="{{ request.args.get('department_name', '') }}">
         </div>
       </div>
@@ -41,7 +38,7 @@
         <div class="box-header">
           {% if pagination %}
             {% if pagination.total > pagination.per_page %}
-              {{ p.pagination_widget(pagination,'.department_page', department_code=request.args.get('department_code', ''), department_name=request.args.get('department_name', '')) }}
+              {{ p.pagination_widget(pagination,'.department_page', department_name=request.args.get('department_name', '')) }}
             {% endif %}
           {% endif %}
           <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
