@@ -6,6 +6,7 @@ from application import db
 from application.domain.model.base_model import BaseModel
 from application.domain.model.company import Company
 from application.domain.model.engineer_skill import EngineerSkill
+from application.domain.model.engineer_business_category import EngineerBusinessCategory
 
 
 class Engineer(BaseModel, db.Model):
@@ -21,6 +22,7 @@ class Engineer(BaseModel, db.Model):
 
     company = relationship(Company, lazy='joined')
     engineer_skills = relationship(EngineerSkill, cascade='all, delete-orphan')
+    engineer_business_categories = relationship(EngineerBusinessCategory, cascade='all, delete-orphan')
 
     def __init__(self,
                  start_date=None,
@@ -51,6 +53,7 @@ class Engineer(BaseModel, db.Model):
                 "', company_id='{}".format(self.company_id) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', engineer_skills='{}".format(self.engineer_skills) + \
+                "', engineer_business_categories='{}".format(self.engineer_business_categories) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \
                 "', updated_at='{}".format(self.updated_at) + \

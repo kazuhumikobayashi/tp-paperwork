@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS project_attachments;
 DROP TABLE IF EXISTS attachments;
 DROP TABLE IF EXISTS engineer_skills;
+DROP TABLE IF EXISTS engineer_business_categories
 DROP TABLE IF EXISTS assigned_members;
 DROP TABLE IF EXISTS estimation_remarks;
 DROP TABLE IF EXISTS order_remarks;
@@ -55,6 +56,18 @@ CREATE TABLE IF NOT EXISTS engineer_skills (
   id INT NOT NULL AUTO_INCREMENT,
   engineer_id INT,
   skill_id INT,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS engineer_business_categories (
+  id INT NOT NULL AUTO_INCREMENT,
+  engineer_id INT,
+  business_category_id INT,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

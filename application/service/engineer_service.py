@@ -4,8 +4,8 @@ from application.domain.repository.engineer_repository import EngineerRepository
 class EngineerService(object):
     repository = EngineerRepository()
 
-    def find(self, page, engineer_name, company_id, skill_id):
-        return self.repository.find(page, engineer_name, company_id, skill_id)
+    def find(self, page, engineer_name, company_id, skill_id, business_category_id):
+        return self.repository.find(page, engineer_name, company_id, skill_id, business_category_id)
 
     def find_all(self, page=None):
         return self.repository.find_all(page)

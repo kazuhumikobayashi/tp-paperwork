@@ -51,7 +51,7 @@ class EngineerTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer/?engineer_name=test&skill_id=2&company_id=2')
+        result = self.app.get('/engineer/?engineer_name=test&skill_id=2&company_id=2&business_category_id=2')
         self.assertEqual(result.status_code, 200)
 
     # 技術者登録画面に遷移する。
@@ -79,6 +79,7 @@ class EngineerTests(BaseTestCase):
             'end_date': '2099/12/31',
             'engineer_name': 'テスト登録',
             'skill': ['1', '2'],
+            'business_category': ['1', '2'],
             'company_id': '1'
         })
         self.assertEqual(result.status_code, 302)
