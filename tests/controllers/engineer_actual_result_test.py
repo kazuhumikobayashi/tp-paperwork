@@ -84,6 +84,37 @@ class EngineerActualResultTests(BaseTestCase):
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
 
+    # 技術者実績登録にValidation Errorで失敗する。
+    def test_save_engineer_actual_result_valid_error(self):
+        before = len(self.engineer_actual_result_repository.find_all())
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # Validation Errorで登録できない
+        result = self.app.post('/engineer_actual_result/detail/1', data={
+            'project_id': '1',
+            'result_month': '20170101',
+            'seq_no': 1,
+            'engineer_id': 1,
+            'fixed_flg': '1',
+            'working_hours': 'test',
+            'adjustment_hours': 1,
+            'billing_amount': 1,
+            'billing_adjustment_amount': 1,
+            'payment_amount': 1,
+            'payment_adjustment_amount': 1,
+            'carfare': 'test',
+            'remarks': 'remarks',
+        })
+        self.assertEqual(result.status_code, 200)
+
+        after = len(self.engineer_actual_result_repository.find_all())
+        # 前後で件数が変わっていないことを確認
+        self.assertEqual(before, after)
+
     # 技術者実績を削除できる
     def test_delete_engineer_actual_result(self):
         # 削除用の技術者実績を登録
