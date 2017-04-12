@@ -1,5 +1,4 @@
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS tax;
 DROP TABLE IF EXISTS estimation_sequence;
 DROP TABLE IF EXISTS billings;
 DROP TABLE IF EXISTS payments;
@@ -106,19 +105,6 @@ CREATE TABLE IF NOT EXISTS companies (
   receipt_site INT ,
   tax CHAR(1) NOT NULL DEFAULT '0',
   remarks VARCHAR(1024) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS tax (
-  id INT NOT NULL AUTO_INCREMENT,
-  start_date DATE NOT NULL ,
-  end_date DATE NOT NULL ,
-  tax_rate DECIMAL(6,2),
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

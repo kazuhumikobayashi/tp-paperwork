@@ -2,7 +2,6 @@ def register(app):
     from application.controllers import company
     from application.controllers import department
     from application.controllers import project
-    from application.controllers import tax
     from application.controllers import engineer
     from application.controllers import user
     from application.controllers import login
@@ -19,7 +18,6 @@ def register(app):
     app.register_blueprint(department.bp)
     app.register_blueprint(engineer.bp)
     app.register_blueprint(project.bp)
-    app.register_blueprint(tax.bp)
     app.register_blueprint(user.bp)
     app.register_blueprint(login.bp)
     app.register_blueprint(skill.bp)
