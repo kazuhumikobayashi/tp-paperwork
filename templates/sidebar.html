@@ -26,7 +26,6 @@
                                  request.path.count('/skill/') or
                                  request.path.count('/business_category/') or
                                  request.path.count('/department/') or
-                                 request.path.count('/calculation/') or
                                  request.path.count('/tax/') or
                                  request.path.count('/user/') %} active{% endif %}">
           <a href="#"><i class="fa fa-database fa-fw"></i> <span>マスタ管理</span>
@@ -49,9 +48,6 @@
             </li>
             <li{% if request.path.count('/department/') %} class="active"{% endif %}>
                 <a href="{{ url_for('department.index') }}"><i class="fa fa-briefcase fa-fw"></i> 部署</a>
-            </li>
-            <li{% if request.path.count('/calculation/') %} class="active"{% endif %}>
-                <a href="{{ url_for('calculation.index') }}"><i class="fa fa-arrows-alt fa-fw"></i> 計算式</a>
             </li>
             <li{% if request.path.count('/tax/') %} class="active"{% endif %}>
                 <a href="{{ url_for('tax.index') }}"><i class="fa fa-yen fa-fw"></i> 消費税</a>

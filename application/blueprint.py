@@ -10,7 +10,6 @@ def register(app):
     from application.controllers import business_category
     from application.controllers import pwchange
     from application.controllers import assigned_member
-    from application.controllers import calculation
     from application.controllers import engineer_actual_result
     from application.controllers import project_attachment
     from application.controllers import attachment
@@ -27,7 +26,6 @@ def register(app):
     app.register_blueprint(business_category.bp)
     app.register_blueprint(pwchange.bp)
     app.register_blueprint(assigned_member.bp)
-    app.register_blueprint(calculation.bp)
     app.register_blueprint(engineer_actual_result.bp)
     app.register_blueprint(project_attachment.bp)
     app.register_blueprint(attachment.bp)
