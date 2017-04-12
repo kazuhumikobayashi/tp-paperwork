@@ -13,7 +13,6 @@ from application.controllers.form.project_form import ProjectForm
 from application.controllers.form.project_search_form import ProjectSearchForm
 from application.domain.model.estimation_remarks import EstimationRemarks
 from application.domain.model.order_remarks import OrderRemarks
-from application.service.calculation_service import CalculationService
 from application.service.company_service import CompanyService
 from application.service.contract_form_service import ContractFormService
 from application.service.department_service import DepartmentService
@@ -28,7 +27,6 @@ department_service = DepartmentService()
 company_service = CompanyService()
 status_service = StatusService()
 contract_form_service = ContractFormService()
-calculation_service = CalculationService()
 estimation_remarks_service = EstimationRemarksService()
 order_remarks_service = OrderRemarksService()
 
@@ -66,7 +64,6 @@ def detail(project_id=None):
     form.client_company_id.choices = company_service.find_all_for_select()
     form.status_id.choices = status_service.find_all_for_select()
     form.contract_form_id.choices = contract_form_service.find_all_for_select()
-    form.over_time_calculation_id.choices = calculation_service.find_all_for_select()
     form.assigned_members = project.assigned_members
     form.engineer_actual_results = project.get_engineer_actual_results()
     form.billings = project.get_billings()

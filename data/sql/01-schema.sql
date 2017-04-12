@@ -14,7 +14,6 @@ DROP TABLE IF EXISTS engineer_actual_results;
 DROP TABLE IF EXISTS engineers;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS contract_forms;
-DROP TABLE IF EXISTS calculations;
 DROP TABLE IF EXISTS companies;
 DROP TABLE IF EXISTS skills;
 DROP TABLE IF EXISTS business_categories;
@@ -321,19 +320,6 @@ CREATE TABLE IF NOT EXISTS attachments (
   storage_filename VARCHAR(256) NOT NULL ,
   size INT NOT NULL ,
   content_type VARCHAR(256) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS calculations (
-  id INT NOT NULL AUTO_INCREMENT,
-  calculation_name VARCHAR(32) NOT NULL ,
-  amount INT NOT NULL ,
-  formula INT NOT NULL ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

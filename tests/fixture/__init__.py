@@ -4,7 +4,6 @@ from application import bcrypt, db
 from application.domain.model.assigned_members import AssignedMember
 from application.domain.model.attachment import Attachment
 from application.domain.model.billing import Billing
-from application.domain.model.calculation import Calculation
 from application.domain.model.company import Company
 from application.domain.model.contract_form import ContractForm
 from application.domain.model.department import Department
@@ -29,7 +28,6 @@ def init_data():
     create_companies()
     create_engineers()
     create_departments()
-    create_calculations()
     create_statuses()
     create_contract_forms()
     create_projects()
@@ -119,20 +117,6 @@ def create_departments():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(department)
-    db.session.commit()
-
-
-def create_calculations():
-    for num in range(12):
-        calculation = Calculation(
-            calculation_name='単体テスト' + str(num),
-            amount=num,
-            formula=1,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-        db.session.add(calculation)
     db.session.commit()
 
 

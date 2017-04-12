@@ -5,6 +5,7 @@ from wtforms import ValidationError
 from application.controllers.form.fields import IntegerField, DateField
 from application.controllers.form.validators import Length, DataRequired
 from application.domain.repository.project_repository import ProjectRepository
+from application.const import FORMULA
 
 repository = ProjectRepository()
 
@@ -28,6 +29,7 @@ class ProjectForm(FlaskForm):
                                          [DataRequired()],
                                          render_kw={"data-minimum-results-for-search": "Infinity"})
     over_time_calculation_id = SelectField('残業計算', [DataRequired()],
+                                           choices=FORMULA,
                                            render_kw={"data-minimum-results-for-search": "Infinity"})
     contract_form_id = SelectField('契約形態', [Length(max=1)],
                                    filters=[lambda x: x or None],

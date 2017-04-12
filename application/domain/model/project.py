@@ -7,7 +7,6 @@ from application.const import PROJECT_ATTACHMENT_TYPE
 from application.domain.model.assigned_members import AssignedMember
 from application.domain.model.base_model import BaseModel
 from application.domain.model.billing import Billing
-from application.domain.model.calculation import Calculation
 from application.domain.model.company import Company
 from application.domain.model.contract_form import ContractForm
 from application.domain.model.department import Department
@@ -29,7 +28,7 @@ class Project(BaseModel, db.Model):
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
     recorded_department_id = Column(Integer, ForeignKey("departments.id"))
-    over_time_calculation_id = Column(Integer, ForeignKey("calculations.id"), nullable=False)
+    over_time_calculation_id = Column(Integer, nullable=False)
     contract_form_id = Column(Integer, ForeignKey("contract_forms.id"), nullable=False)
     estimation_no = Column(String(64), nullable=False, unique=True)
     status_id = Column(Integer, ForeignKey("statuses.id"), nullable=False)
@@ -40,7 +39,6 @@ class Project(BaseModel, db.Model):
     recorded_department = relationship(Department, lazy='joined')
     status = relationship(Status, lazy='joined')
     contract_form = relationship(ContractForm, lazy='joined')
-    over_time_calculation = relationship(Calculation, lazy='joined')
     assigned_members = relationship(AssignedMember, cascade='all, delete-orphan')
     estimation_remarks = relationship(EstimationRemarks, cascade='all, delete-orphan', uselist=False)
     order_remarks = relationship(OrderRemarks, cascade='all, delete-orphan', uselist=False)
@@ -92,7 +90,7 @@ class Project(BaseModel, db.Model):
                 "', start_date='{}".format(self.start_date) + \
                 "', end_date='{}".format(self.end_date) + \
                 "', recorded_department='{}".format(self.recorded_department) + \
-                "', over_time_calculation='{}".format(self.over_time_calculation) + \
+                "', over_time_calculation_id='{}".format(self.over_time_calculation_id) + \
                 "', contract_form='{}".format(self.contract_form) + \
                 "', estimation_no='{}".format(self.estimation_no) + \
                 "', status='{}".format(self.status) + \
