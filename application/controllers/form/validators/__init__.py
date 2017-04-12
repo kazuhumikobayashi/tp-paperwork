@@ -58,7 +58,7 @@ class FileAllowed(file.FileAllowed):
             if any(filename.endswith('.' + x) for x in self.upload_set):
                 return
             message = (
-                'File does not end with any of the allowed extentions: {}'
+                'この拡張子のファイルは保存できません: {}'
             ).format(self.upload_set)
             raise StopValidation(self.message or message)
 
