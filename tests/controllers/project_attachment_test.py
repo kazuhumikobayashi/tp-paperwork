@@ -70,6 +70,26 @@ class ProjectAttachmentTests(BaseTestCase):
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
 
+    # 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls'以外は添付できない
+    def test_create_project_attachment_extention_error(self):
+        before = len(self.project_attachment_repository.find_all())
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+        file = (BytesIO(b'my file contents'), 'hello world.doc')
+        result = self.app.post('/project_attachment/create?project_id=1', data={
+            'upload': file,
+            'type': '1',
+            'remarks': 'remarks'
+        })
+        self.assertEqual(result.status_code, 200)
+
+        after = len(self.project_attachment_repository.find_all())
+        # 前後で件数が変わっていないことを確認
+        self.assertEqual(before, after)
+
     # 添付文書を編集する。
     def test_detail_project_attachment(self):
         expected = 'remarks_edit'
