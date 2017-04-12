@@ -51,7 +51,7 @@ class DepartmentTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/department/?department_code=test&department_name=test')
+        result = self.app.get('/department/?department_name=test')
         self.assertEqual(result.status_code, 200)
 
     # 部署登録画面に遷移する。
@@ -75,7 +75,6 @@ class DepartmentTests(BaseTestCase):
         })
 
         result = self.app.post('/department/create', data={
-            'department_code': '0001',
             'department_name': 'テスト登録'
         })
         self.assertEqual(result.status_code, 302)
@@ -121,8 +120,7 @@ class DepartmentTests(BaseTestCase):
         department_id = department.id
 
         result = self.app.post('/department/detail/' + str(department_id), data={
-            'department_name': expected,
-            'department_code': department.department_code
+            'department_name': expected
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -136,7 +134,6 @@ class DepartmentTests(BaseTestCase):
     def test_delete_department(self):
         # 削除用の部署を登録
         department = Department(
-            department_code='delete_department',
             department_name='削除用部署',
             created_at=datetime.today(),
             created_user='test',
