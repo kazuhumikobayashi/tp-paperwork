@@ -6,7 +6,7 @@ DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS project_attachments;
 DROP TABLE IF EXISTS attachments;
 DROP TABLE IF EXISTS engineer_skills;
-DROP TABLE IF EXISTS engineer_business_categories
+DROP TABLE IF EXISTS engineer_business_categories;
 DROP TABLE IF EXISTS assigned_members;
 DROP TABLE IF EXISTS estimation_remarks;
 DROP TABLE IF EXISTS order_remarks;
