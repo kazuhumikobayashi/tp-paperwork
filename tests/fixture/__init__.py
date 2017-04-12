@@ -16,14 +16,12 @@ from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.skill import Skill
 from application.domain.model.business_category import BusinessCategory
 from application.domain.model.status import Status
-from application.domain.model.tax import Tax
 from application.domain.model.user import User
 
 
 def init_data():
     # マスターデータの作成
     create_user()
-    create_taxes()
     create_skills()
     create_companies()
     create_engineers()
@@ -46,20 +44,6 @@ def create_user():
                  updated_at=datetime.today(),
                  updated_user='test')
         db.session.add(user)
-    db.session.commit()
-
-
-def create_taxes():
-    for num in range(12):
-        tax = Tax(
-            start_date=date.today(),
-            end_date='2099/12/31',
-            tax_rate=num,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-        db.session.add(tax)
     db.session.commit()
 
 
