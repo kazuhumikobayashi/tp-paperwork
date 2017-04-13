@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS skills;
 DROP TABLE IF EXISTS business_categories;
 DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS statuses;
+DROP TABLE IF EXISTS banks;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -340,6 +341,18 @@ CREATE TABLE IF NOT EXISTS estimation_sequence (
   id INT NOT NULL AUTO_INCREMENT ,
   fiscal_year INT NOT NULL ,
   sequence INT NOT NULL ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS banks (
+  id INT NOT NULL AUTO_INCREMENT ,
+  bank_name VARCHAR(32) NOT NULL ,
+  text_for_document VARCHAR(128) NOT NULL ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
