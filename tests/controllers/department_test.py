@@ -51,7 +51,7 @@ class DepartmentTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/department/?department_name=test')
+        result = self.app.get('/department/?group_name=test&department_name=test')
         self.assertEqual(result.status_code, 200)
 
     # 部署登録画面に遷移する。
@@ -75,6 +75,7 @@ class DepartmentTests(BaseTestCase):
         })
 
         result = self.app.post('/department/create', data={
+            'group_name': 'テスト本部',
             'department_name': 'テスト登録'
         })
         self.assertEqual(result.status_code, 302)
@@ -82,6 +83,32 @@ class DepartmentTests(BaseTestCase):
         after = len(self.department_repository.find_all())
         # 1件追加されていることを確認
         self.assertEqual(before + 1, after)
+
+    # 部署登録に失敗する
+    def test_create_department_fail(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/department/create', data={
+            'group_name': 'テスト本部',
+            'department_name': '重複テスト'
+        })
+        self.assertEqual(result.status_code, 302)
+
+        before = len(self.department_repository.find_all())
+
+        result = self.app.post('/department/create', data={
+            'group_name': 'テスト本部',
+            'department_name': '重複テスト'
+        })
+        self.assertEqual(result.status_code, 200)
+
+        after = len(self.department_repository.find_all())
+        # 前後で件数が変わっていないことを確認
+        self.assertEqual(before, after)
 
     # 部署詳細画面に遷移する。
     def test_get_department_detail(self):
@@ -120,6 +147,7 @@ class DepartmentTests(BaseTestCase):
         department_id = department.id
 
         result = self.app.post('/department/detail/' + str(department_id), data={
+            'group_name': department.group_name,
             'department_name': expected
         })
         # 保存できることを確認
@@ -134,6 +162,7 @@ class DepartmentTests(BaseTestCase):
     def test_delete_department(self):
         # 削除用の部署を登録
         department = Department(
+            group_name='削除用本部',
             department_name='削除用部署',
             created_at=datetime.today(),
             created_user='test',

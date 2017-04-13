@@ -17,8 +17,11 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="row">
-        <div class="col-xs-12">
-          <input type="text" class="form-control" name="department_name" placeholder="部署名" value="{{ request.args.get('department_name', '') }}">
+        <div class="col-xs-6">
+          <input type="text" class="form-control" name="group_name" placeholder="本部名称" value="{{ request.args.get('group_name', '') }}">
+        </div>
+        <div class="col-xs-6">
+          <input type="text" class="form-control" name="department_name" placeholder="部署名称" value="{{ request.args.get('department_name', '') }}">
         </div>
       </div>
       <!-- /.row -->
@@ -38,7 +41,9 @@
         <div class="box-header">
           {% if pagination %}
             {% if pagination.total > pagination.per_page %}
-              {{ p.pagination_widget(pagination,'.department_page', department_name=request.args.get('department_name', '')) }}
+              {{ p.pagination_widget(pagination,'.department_page',
+                  group_name=request.args.get('group_name', ''),
+                  department_name=request.args.get('department_name', '')) }}
             {% endif %}
           {% endif %}
           <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
@@ -50,11 +55,13 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
-              <th>部署名</th>
+              <th width="130px">本部名称</th>
+              <th>部署名称</th>
               <th width="70px" class="center"></th>
             </tr>
             {% for department in pagination.items %}
             <tr>
+              <td>{{ department.group_name|filter_suppress_none }}</td>
               <td>
                 <a href="{{ url_for('.detail', department_id=department.id) }}">
                   {{ department.department_name|filter_suppress_none }}
