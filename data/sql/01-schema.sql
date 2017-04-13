@@ -77,7 +77,8 @@ CREATE TABLE IF NOT EXISTS engineer_business_categories (
 
 CREATE TABLE IF NOT EXISTS departments (
   id INT NOT NULL AUTO_INCREMENT,
-  department_name VARCHAR(128) ,
+  group_name VARCHAR(128) NOT NULL ,
+  department_name VARCHAR(128) NOT NULL ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

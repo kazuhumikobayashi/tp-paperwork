@@ -16,8 +16,9 @@ service = DepartmentService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
+    group_name = request.args.get('group_name', '')
     department_name = request.args.get('department_name', '')
-    pagination = service.find(page, department_name)
+    pagination = service.find(page, group_name, department_name)
     return render_template('department/index.html', pagination=pagination)
 
 
@@ -35,6 +36,7 @@ def detail(department_id=None):
     form = DepartmentForm(request.form, department)
 
     if form.validate_on_submit():
+        department.group_name = form.group_name.data
         department.department_name = form.department_name.data
 
         service.save(department)
