@@ -17,6 +17,7 @@ from application.domain.model.skill import Skill
 from application.domain.model.business_category import BusinessCategory
 from application.domain.model.status import Status
 from application.domain.model.user import User
+from application.domain.model.bank import Bank
 
 
 def init_data():
@@ -31,6 +32,7 @@ def init_data():
     create_projects()
     create_attachments()
     create_business_categories()
+    create_banks()
 
 
 def create_user():
@@ -339,4 +341,17 @@ def create_business_categories():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(business_category)
+    db.session.commit()
+
+
+def create_banks():
+    for num in range(12):
+        bank = Bank(
+                 bank_name='test' + str(num),
+                 text_for_document='単体テスト',
+                 created_at=datetime.today(),
+                 created_user='test',
+                 updated_at=datetime.today(),
+                 updated_user='test')
+        db.session.add(bank)
     db.session.commit()
