@@ -10,7 +10,7 @@ class SkillRepository(BaseRepository):
         query = self.model.query
         if skill_name:
             query = query.filter(self.model.skill_name.like('%' + skill_name + '%'))
-        pagination = query.paginate(page, self.model.PER_PAGE)
+        pagination = query.order_by(self.model.skill_name.asc()).paginate(page, self.model.PER_PAGE)
         return pagination
 
     def find_by_name(self, skill_name):
