@@ -10,7 +10,7 @@ class BusinessCategoryRepository(BaseRepository):
         query = self.model.query
         if business_category_name:
             query = query.filter(self.model.business_category_name.like('%' + business_category_name + '%'))
-        pagination = query.paginate(page, self.model.PER_PAGE)
+        pagination = query.order_by(self.model.business_category_name.asc()).paginate(page, self.model.PER_PAGE)
         return pagination
 
     def find_by_name(self, business_category_name):

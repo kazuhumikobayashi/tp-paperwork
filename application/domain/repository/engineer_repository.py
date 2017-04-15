@@ -4,6 +4,7 @@ from flask import current_app
 from flask import session
 
 from application import db
+from application.domain.model.company import Company
 from application.domain.model.engineer import Engineer
 from application.domain.model.engineer_skill import EngineerSkill
 from application.domain.model.engineer_business_category import EngineerBusinessCategory
@@ -24,7 +25,10 @@ class EngineerRepository(BaseRepository):
             query = query.filter(self.model.engineer_skills.any(EngineerSkill.skill_id.in_(skill_id)))
         if business_category_id and business_category_id != '' and business_category_id != [''] and business_category_id != []:
             query = query.filter(self.model.engineer_business_categories.any(EngineerBusinessCategory.business_category_id.in_(business_category_id)))
-        pagination = query.paginate(page, self.model.PER_PAGE)
+        pagination = \
+            query.join(Company, Engineer.company)\
+            .order_by(Company.company_name.asc(), self.model.engineer_name_kana.asc())\
+            .paginate(page, self.model.PER_PAGE)
         return pagination
 
     def save(self, engineer):

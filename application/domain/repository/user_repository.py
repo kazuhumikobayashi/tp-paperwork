@@ -18,7 +18,7 @@ class UserRepository(BaseRepository):
             query = query.filter(self.model.user_name.like('%' + user_name + '%'))
         if shain_number:
             query = query.filter(self.model.shain_number.like('%' + shain_number + '%'))
-        pagination = query.paginate(page, self.model.PER_PAGE)
+        pagination = query.order_by(self.model.shain_number.asc()).paginate(page, self.model.PER_PAGE)
         return pagination
 
     def find_by_shain_number(self, shain_number):
