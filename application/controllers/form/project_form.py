@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField
+from wtforms import validators, StringField, SelectField, TextAreaField
 from wtforms import ValidationError
 
 from application.controllers.form.fields import IntegerField, DateField
@@ -31,7 +31,7 @@ class ProjectForm(FlaskForm):
     over_time_calculation_id = SelectField('残業計算', [DataRequired()],
                                            choices=FORMULA,
                                            render_kw={"data-minimum-results-for-search": "Infinity"})
-    contract_form_id = SelectField('契約形態', [Length(max=1)],
+    contract_form_id = SelectField('契約形態', [validators.optional(), Length(max=1)],
                                    filters=[lambda x: x or None],
                                    render_kw={"data-minimum-results-for-search": "Infinity"})
     estimation_no = StringField('見積No', [Length(max=64)])
@@ -39,7 +39,7 @@ class ProjectForm(FlaskForm):
                             [DataRequired(), Length(max=1)],
                             render_kw={"data-minimum-results-for-search": "Infinity"})
     billing_timing = SelectField('請求タイミング',
-                                 [Length(max=1)],
+                                 [validators.optional(), Length(max=1)],
                                  choices=[('', ''), ('1', '毎月'), ('2', '指定月')],
                                  filters=[lambda x: x or None],
                                  render_kw={"data-minimum-results-for-search": "Infinity"})
