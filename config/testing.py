@@ -1,6 +1,6 @@
 import os
 
-DEBUG = False
+DEBUG = True
 TESTING = True
 WTF_CSRF_ENABLED = False
 
