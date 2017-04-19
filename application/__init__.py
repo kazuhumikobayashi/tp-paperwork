@@ -7,6 +7,7 @@ from flask import request
 from flask import session
 from flask import url_for
 from flask_bcrypt import Bcrypt
+from flask_sslify import SSLify
 from flask_sqlalchemy import SQLAlchemy
 import pymysql
 
@@ -23,6 +24,7 @@ app.config.from_object('config.' + config_name)
 
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+sslify = SSLify(app)
 
 register(app)
 my_filter(app)
