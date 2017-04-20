@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 FORMULA = [('', ''),
            ('1', '未満切り捨て'),
            ('2', '以下切り捨て'),
@@ -14,6 +17,17 @@ PROJECT_ATTACHMENT_TYPE = {'1': '見積書',
                            '9': 'その他'}
 
 BILLING_STATUS = {'1': '請求済み'}
+
+TAX_CLASSIFICATION = [('',''),
+                      ('なし', 'なし'),
+                      ('8', '8'),
+                      ('10', '10')]
+
+class ClientFlag(Enum):
+    OUR_COMPANY = 1
+    CLIENT = 2
+    END_USER = 3
+    BP = 4
 
 
 def get_type_for_select():

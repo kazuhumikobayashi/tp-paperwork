@@ -18,6 +18,8 @@ from application.domain.model.business_category import BusinessCategory
 from application.domain.model.status import Status
 from application.domain.model.user import User
 from application.domain.model.bank import Bank
+from application.domain.model.client_flag import ClientFlag
+from application.domain.model import client_flag
 
 
 def init_data():
@@ -33,6 +35,7 @@ def init_data():
     create_attachments()
     create_business_categories()
     create_banks()
+    create_client_flags()
 
 
 def create_user():
@@ -64,13 +67,19 @@ def create_skills():
 def create_companies():
     for num in range(12):
         company = Company(
-                 company_code='test' + str(num),
-                 company_name='単体テスト',
-                 client_flg='1',
-                 consignment_flg='1',
-                 start_date=date.today(),
-                 end_date='2099/12/31',
-                 tax='1',
+                 company_name='test' + str(num),
+                 company_name_kana='タンタイテスト',
+                 company_name_abbreviated = "単テス",
+                 contract_date=date.today(),
+                 postal_code='000-0000',
+                 address1='住所',
+                 phone='000-0000',
+                 fax='000-0000',
+                 payment_site='10' ,
+                 receipt_site='30' ,
+                 payment_tax='なし' ,
+                 receipt_tax='8' ,
+                 remarks='備考' ,
                  created_at=datetime.today(),
                  created_user='test',
                  updated_at=datetime.today(),
@@ -355,4 +364,16 @@ def create_banks():
                  updated_at=datetime.today(),
                  updated_user='test')
         db.session.add(bank)
+    db.session.commit()
+
+
+def create_client_flags():
+    for num in range(12):
+        client_flag = ClientFlag(
+            client_flag_name='test' + str(num),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(client_flag)    
     db.session.commit()

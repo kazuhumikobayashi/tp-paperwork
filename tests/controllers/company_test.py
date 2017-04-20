@@ -51,7 +51,7 @@ class CompanyTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/company/?company_name=test&company_code=test')
+        result = self.app.get('/company/?input_company_name=test&client_flag_id=2&bank_id=2')
         self.assertEqual(result.status_code, 200)
 
     # 会社登録画面に遷移する。
@@ -102,23 +102,19 @@ class CompanyTests(BaseTestCase):
         company_id = company.id
 
         result = self.app.post('/company/detail/' + str(company_id), data={
-            'company_code': company.company_code,
             'company_name': expected,
             'company_name_kana': company.company_name_kana,
-            'trade_name': company.trade_name,
-            'trade_name_position': '1',
-            'client_flg': company.client_flg,
-            'consignment_flg': company.consignment_flg,
-            'start_date': company.start_date.strftime('%Y/%m/%d'),
-            'end_date': company.end_date.strftime('%Y/%m/%d'),
+            'contract_date': datetime.today().strftime('%Y/%m/%d'),
+            'client_flag': ['1', '2'],
             'postal_code': company.postal_code,
             'address1': company.address1,
-            'address2': company.address2,
             'phone': company.phone,
             'fax': company.fax,
             'payment_site': company.payment_site,
             'receipt_site': company.receipt_site,
-            'tax': company.tax,
+            'payment_tax': company.payment_tax,
+            'receipt_tax': company.receipt_tax,
+            'bank_id': '1',
             'remarks': company.remarks
         })
         # 保存できることを確認
@@ -133,13 +129,8 @@ class CompanyTests(BaseTestCase):
     def test_delete_company(self):
         # 削除用のユーザーを登録
         company = Company(
-            company_code='delete_company',
             company_name='削除用会社',
-            client_flg='1',
-            consignment_flg='1',
-            start_date=date.today(),
-            end_date='2099/12/31',
-            tax='1',
+            contract_date=datetime.today().strftime('%Y/%m/%d'),
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -182,3 +173,88 @@ class CompanyTests(BaseTestCase):
         after = len(self.company_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
+
+    # 会社が顧客の場合、「入金サイト」「入金消費税区分」「振込先銀行」が必須
+    def test_not_null_by_client(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+        company_id = 2
+        company_before = self.company_repository.find_by_id(company_id)
+        
+        # 顧客の場合に、nullで更新。
+        result = self.app.post('/company/detail/' + str(company_id), data={
+            'company_name': 'test_not_null_by_client',
+            'client_flag': ['2'],
+            'payment_site' : '',
+            'payment_tax' : '',
+            'bank_id' : ''
+        })
+        self.assertEqual(result.status_code, 200)
+        
+        # nullで更新出来なかったことを確認する。
+        company_after = self.company_repository.find_by_id(company_id)
+        self.assertEqual(company_before.payment_site, company_after.payment_site)
+        self.assertEqual(company_before.payment_tax, company_after.payment_tax)
+        self.assertEqual(company_before.bank_id, company_after.bank_id)
+
+
+    # 会社がBP所属の場合、「支払サイト」「支払消費税区分」が必須
+    def test_not_null_by_BP(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+        company_id = 3
+        company_before = self.company_repository.find_by_id(company_id)
+        
+        # 「支払サイト」「支払消費税区分」に値を入れておく
+        company_before.receipt_site = 5
+        company_before.receipt_tax = '100'
+        db.session.commit()
+
+        # BPの場合に、nullで更新。
+        self.app.post('/company/detail/' + str(company_id), data={
+            'company_name': 'test_not_null_by_BP',
+            'client_flag': ['4'],
+            'receipt_site': '',
+            'receipt_tax': ''
+        })
+
+        # nullで更新出来なかったことを確認する。
+        company_after = self.company_repository.find_by_id(company_id)
+        self.assertEqual(company_before.receipt_site, company_after.receipt_site)
+        self.assertEqual(company_before.receipt_tax, company_after.receipt_tax)
+
+    # 会社情報を新規登録できる
+    def test_create_company(self):
+        before = len(self.company_repository.find_all())
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/company/create', data={
+            'company_name': 'test99',
+            'company_name_kana': 'テスト99',
+            'contract_date': datetime.today().strftime('%Y/%m/%d'),
+            'client_flag': ['1', '2'],
+            'postal_code': '111-1111',
+            'address1': '住所２',
+            'phone': '111-1111',
+            'fax': '111-1111',
+            'payment_site': 15,
+            'receipt_site': 25,
+            'payment_tax': 'なし',
+            'receipt_tax': '10',
+            'bank_id': '1',
+            'remarks': '備考'
+        })
+        self.assertEqual(result.status_code, 302)
+
+        after = len(self.company_repository.find_all())
+        # 1件追加されていることを確認
+        self.assertEqual(before + 1, after)

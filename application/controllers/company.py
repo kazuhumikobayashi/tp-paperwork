@@ -6,20 +6,32 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from wtforms import validators
 
+from application.const import ClientFlag
 from application.controllers.form.company_form import CompanyForm
+from application.controllers.form.company_search_form import CompanySearchForm
+from application.domain.model.company_client_flag import CompanyClientFlag
+from application.service.bank_service import BankService
+from application.service.client_flag_service import ClientFlagService
 from application.service.company_service import CompanyService
+
 
 bp = Blueprint('company', __name__, url_prefix='/company')
 service = CompanyService()
+bank_service = BankService()
+client_flag_service = ClientFlagService()
 
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    company_name = request.args.get('company_name','')
-    company_code = request.args.get('company_code','')
-    pagination = service.find(page, company_name, company_code)
-    return render_template('company/index.html', pagination=pagination)
+    form = CompanySearchForm(request.values)
+    form.client_flag_id.choices = client_flag_service.find_all_for_multi_select()
+    form.bank_id.choices = bank_service.find_all_for_multi_select()
+
+    pagination = service.find(page, form.input_company_name.data, form.client_flag_id.data,
+                              form.bank_id.data)
+    return render_template('company/index.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
@@ -34,30 +46,43 @@ def detail(company_id=None):
 
     if company.id is None and company_id is not None:
         return abort(404)
+    company.client_flag = [h.client_flag_id for h in company.company_client_flags]
     form = CompanyForm(request.form, company)
+    form.bank_id.choices = bank_service.find_all_for_select()
+    form.client_flag.choices = client_flag_service.find_all_for_multi_select()
+    
+    #顧客ではない場合、validationチェックをスルーする。
+    if not ClientFlag.CLIENT.value in form.client_flag.data:
+        form.payment_tax.validators = [validators.optional()]
+        form.bank_id.validators = [validators.optional()]
+    #BP所属ではない場合、validationチェックをスルーする。
+    if not ClientFlag.BP.value in form.client_flag.data:
+        form.receipt_tax.validators = [validators.optional()]        
+    
     if form.validate_on_submit():
-        company.company_code = form.company_code.data
         company.company_name = form.company_name.data
         company.company_name_kana = form.company_name_kana.data
-        company.trade_name = form.trade_name.data
-        company.trade_name_position = form.trade_name_position.data
-        company.client_flg = form.client_flg.data
-        company.consignment_flg = form.consignment_flg.data
-        company.start_date = form.start_date.data
-        company.end_date = form.end_date.data
+        company.company_name_abbreviated = form.company_name_abbreviated.data
+        company.contract_date = form.contract_date.data
         company.postal_code = form.postal_code.data
         company.address1 = form.address1.data
-        company.address2 = form.address2.data
         company.phone = form.phone.data
         company.fax = form.fax.data
         company.payment_site = form.payment_site.data
         company.receipt_site = form.receipt_site.data
-        company.tax = form.tax.data
+        company.payment_tax = form.payment_tax.data
+        company.receipt_tax = form.receipt_tax.data
+        company.bank_id = form.bank_id.data
         company.remarks = form.remarks.data
+        client_flags = []
+        for client_flag_id in form.client_flag.data:
+            client_flags.extend([CompanyClientFlag(company.id, client_flag_id)])
+        company.company_client_flags = client_flags
 
         service.save(company)
         flash('保存しました。')
         return redirect(url_for('.detail', company_id=company.id))
+    current_app.logger.debug(form.errors)
     return render_template('company/detail.html', form=form)
 
 
