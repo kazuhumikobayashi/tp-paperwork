@@ -29,7 +29,7 @@ def index(page=1):
     form.client_flag_id.choices = client_flag_service.find_all_for_multi_select()
     form.bank_id.choices = bank_service.find_all_for_multi_select()
 
-    pagination = service.find(page, form.input_company_name.data, form.client_flag_id.data,
+    pagination = service.find(page, form.company_name.data, form.client_flag_id.data,
                               form.bank_id.data)
     return render_template('company/index.html', pagination=pagination, form=form)
 
@@ -51,21 +51,21 @@ def detail(company_id=None):
     form.bank_id.choices = bank_service.find_all_for_select()
     form.client_flag.choices = client_flag_service.find_all_for_multi_select()
     
-    #顧客ではない場合、validationチェックをスルーする。
-    if not ClientFlag.CLIENT.value in form.client_flag.data:
+    # 顧客ではない場合、validationチェックをスルーする。
+    if ClientFlag.CLIENT.value not in form.client_flag.data:
         form.payment_tax.validators = [validators.optional()]
         form.bank_id.validators = [validators.optional()]
-    #BP所属ではない場合、validationチェックをスルーする。
-    if not ClientFlag.BP.value in form.client_flag.data:
-        form.receipt_tax.validators = [validators.optional()]        
+    # BP所属ではない場合、validationチェックをスルーする。
+    if ClientFlag.BP.value not in form.client_flag.data:
+        form.receipt_tax.validators = [validators.optional()]
     
     if form.validate_on_submit():
         company.company_name = form.company_name.data
         company.company_name_kana = form.company_name_kana.data
-        company.company_name_abbreviated = form.company_name_abbreviated.data
+        company.company_short_name = form.company_short_name.data
         company.contract_date = form.contract_date.data
         company.postal_code = form.postal_code.data
-        company.address1 = form.address1.data
+        company.address = form.address.data
         company.phone = form.phone.data
         company.fax = form.fax.data
         company.payment_site = form.payment_site.data

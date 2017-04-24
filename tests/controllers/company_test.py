@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 
 from nose.tools import ok_
 
@@ -51,7 +51,7 @@ class CompanyTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/company/?input_company_name=test&client_flag_id=2&bank_id=2')
+        result = self.app.get('/company/?company_name=test&client_flag_id=2&bank_id=2')
         self.assertEqual(result.status_code, 200)
 
     # 会社登録画面に遷移する。
@@ -102,12 +102,12 @@ class CompanyTests(BaseTestCase):
         company_id = company.id
 
         result = self.app.post('/company/detail/' + str(company_id), data={
-            'company_name': expected,
-            'company_name_kana': company.company_name_kana,
+            'company_name': company.company_name,
+            'company_name_kana': expected,
             'contract_date': datetime.today().strftime('%Y/%m/%d'),
-            'client_flag': ['1', '2'],
+            'client_flag': [2, 3],
             'postal_code': company.postal_code,
-            'address1': company.address1,
+            'address': company.address,
             'phone': company.phone,
             'fax': company.fax,
             'payment_site': company.payment_site,
@@ -122,7 +122,7 @@ class CompanyTests(BaseTestCase):
         ok_('/company/detail/' + str(company.id) in result.headers['Location'])
 
         company = self.company_repository.find_by_id(company_id)
-        actual = company.company_name
+        actual = company.company_name_kana
         self.assertEqual(actual, expected)
 
     # 会社情報を削除できる
@@ -187,10 +187,10 @@ class CompanyTests(BaseTestCase):
         # 顧客の場合に、nullで更新。
         result = self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_client',
-            'client_flag': ['2'],
-            'payment_site' : '',
-            'payment_tax' : '',
-            'bank_id' : ''
+            'client_flag': [3],
+            'payment_site': '',
+            'payment_tax': '',
+            'bank_id': ''
         })
         self.assertEqual(result.status_code, 200)
         
@@ -199,7 +199,6 @@ class CompanyTests(BaseTestCase):
         self.assertEqual(company_before.payment_site, company_after.payment_site)
         self.assertEqual(company_before.payment_tax, company_after.payment_tax)
         self.assertEqual(company_before.bank_id, company_after.bank_id)
-
 
     # 会社がBP所属の場合、「支払サイト」「支払消費税区分」が必須
     def test_not_null_by_BP(self):
@@ -213,13 +212,13 @@ class CompanyTests(BaseTestCase):
         
         # 「支払サイト」「支払消費税区分」に値を入れておく
         company_before.receipt_site = 5
-        company_before.receipt_tax = '100'
+        company_before.receipt_tax = 100
         db.session.commit()
 
         # BPの場合に、nullで更新。
         self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_BP',
-            'client_flag': ['4'],
+            'client_flag': [2],
             'receipt_site': '',
             'receipt_tax': ''
         })
@@ -241,15 +240,15 @@ class CompanyTests(BaseTestCase):
             'company_name': 'test99',
             'company_name_kana': 'テスト99',
             'contract_date': datetime.today().strftime('%Y/%m/%d'),
-            'client_flag': ['1', '2'],
+            'client_flag': [1],
             'postal_code': '111-1111',
-            'address1': '住所２',
+            'address': '住所２',
             'phone': '111-1111',
             'fax': '111-1111',
             'payment_site': 15,
             'receipt_site': 25,
-            'payment_tax': 'なし',
-            'receipt_tax': '10',
+            'payment_tax': 0,
+            'receipt_tax': 10,
             'bank_id': '1',
             'remarks': '備考'
         })
@@ -258,3 +257,25 @@ class CompanyTests(BaseTestCase):
         after = len(self.company_repository.find_all())
         # 1件追加されていることを確認
         self.assertEqual(before + 1, after)
+    
+    # client_flag「自社」は一社のみ
+    def test_only_one_our_company(self):
+        # 「自社」の会社を抽出
+        before = len(self.company_repository.find_by_client_flag_id(1))
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/company/create', data={
+            'company_name': 'test_only_one_our_company',
+            'client_flag': [1],
+            'payment_tax': '',
+            'receipt_tax': '',
+            'bank_id': ''
+        })
+        self.assertEqual(result.status_code, 200)
+        
+        # 件数が変わっていないことを確認する。
+        after = len(self.company_repository.find_by_client_flag_id(1))
+        self.assertEqual(before, after)

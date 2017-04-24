@@ -19,7 +19,6 @@ from application.domain.model.status import Status
 from application.domain.model.user import User
 from application.domain.model.bank import Bank
 from application.domain.model.client_flag import ClientFlag
-from application.domain.model import client_flag
 
 
 def init_data():
@@ -69,17 +68,17 @@ def create_companies():
         company = Company(
                  company_name='test' + str(num),
                  company_name_kana='タンタイテスト',
-                 company_name_abbreviated = "単テス",
+                 company_short_name="単テス",
                  contract_date=date.today(),
                  postal_code='000-0000',
-                 address1='住所',
+                 address='住所',
                  phone='000-0000',
                  fax='000-0000',
-                 payment_site='10' ,
-                 receipt_site='30' ,
-                 payment_tax='なし' ,
-                 receipt_tax='8' ,
-                 remarks='備考' ,
+                 payment_site='10',
+                 receipt_site='30',
+                 payment_tax='0',
+                 receipt_tax='8',
+                 remarks='備考',
                  created_at=datetime.today(),
                  created_user='test',
                  updated_at=datetime.today(),

@@ -12,18 +12,18 @@ class Company(BaseModel, db.Model):
     __tablename__ = 'companies'
     PER_PAGE = 10
 
-    company_name = Column(String(128))
+    company_name = Column(String(128), nullable=False)
     company_name_kana = Column(String(128))
-    company_name_abbreviated = Column(String(128))
-    contract_date = Column(Date, nullable=False)
+    company_short_name = Column(String(128))
+    contract_date = Column(Date)
     postal_code = Column(String(32))
-    address1 = Column(String(1024))
+    address = Column(String(1024))
     phone = Column(String(32))
     fax = Column(String(32))
     payment_site = Column(Integer)
     receipt_site = Column(Integer)
-    payment_tax = Column(String(4))
-    receipt_tax = Column(String(4))
+    payment_tax = Column(Integer)
+    receipt_tax = Column(Integer)
     bank_id = Column(Integer, ForeignKey("banks.id"))
     remarks = Column(String(1024))
 
@@ -33,10 +33,10 @@ class Company(BaseModel, db.Model):
     def __init__(self,
                  company_name=None,
                  company_name_kana=None,
-                 company_name_abbreviated=None,
+                 company_short_name=None,
                  contract_date=None,
                  postal_code=None,
-                 address1=None,
+                 address=None,
                  phone=None,
                  fax=None,
                  payment_site=None,
@@ -52,10 +52,10 @@ class Company(BaseModel, db.Model):
         super(Company, self).__init__(created_at, created_user, updated_at, updated_user)
         self.company_name = company_name
         self.company_name_kana = company_name_kana
-        self.company_name_abbreviated = company_name_abbreviated
+        self.company_short_name = company_short_name
         self.contract_date = contract_date
         self.postal_code = postal_code
-        self.address1 = address1
+        self.address = address
         self.phone = phone
         self.fax = fax
         self.payment_site = payment_site
@@ -70,10 +70,10 @@ class Company(BaseModel, db.Model):
                 "'id='{}".format(self.id) + \
                 "', company_name='{}".format(self.company_name) + \
                 "', company_name_kana='{}".format(self.company_name_kana) + \
-                "', company_name_abbreviated='{}".format(self.company_name_abbreviated) + \
+                "', company_short_name='{}".format(self.company_short_name) + \
                 "', contract_date='{}".format(self.contract_date) + \
                 "', postal_code='{}".format(self.postal_code) + \
-                "', address1='{}".format(self.address1) + \
+                "', address='{}".format(self.address) + \
                 "', phone='{}".format(self.phone) + \
                 "', fax='{}".format(self.fax) + \
                 "', payment_site='{}".format(self.payment_site) + \

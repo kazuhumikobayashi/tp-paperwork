@@ -18,16 +18,17 @@ PROJECT_ATTACHMENT_TYPE = {'1': '見積書',
 
 BILLING_STATUS = {'1': '請求済み'}
 
-TAX_CLASSIFICATION = [('',''),
-                      ('なし', 'なし'),
+TAX_CLASSIFICATION = [('', ''),
+                      ('0', 'なし'),
                       ('8', '8'),
                       ('10', '10')]
 
+
 class ClientFlag(Enum):
     OUR_COMPANY = 1
-    CLIENT = 2
-    END_USER = 3
-    BP = 4
+    BP = 2
+    CLIENT = 3
+    END_USER = 4
 
 
 def get_type_for_select():

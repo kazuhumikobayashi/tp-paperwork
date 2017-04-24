@@ -26,11 +26,12 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="row">
-        {{ render_search_field(form.input_company_name, "col-md-6") }}
+        {{ render_search_field(form.company_name, "col-md-6") }}
         {{ render_search_field(form.client_flag_id, "col-md-6", input_class="select2") }}
       </div>
       <div class="row">
         {{ render_search_field(form.bank_id, "col-md-6", input_class="select2") }}
+      </div>
       <!-- /.row -->
     </div>
     <!-- /.box-body -->
@@ -80,7 +81,7 @@
                   {{ company.company_name|filter_suppress_none }}
                 </a>
               </td>
-              <td>{{ company.company_name_abbreviated|filter_suppress_none }}</td>
+              <td>{{ company.company_short_name|filter_suppress_none }}</td>
               <td>{{ company.payment_site|filter_suppress_none }}</td>
               <td>{{ company.receipt_site|filter_suppress_none }}</td>
               <td>{{ company.bank.bank_name|filter_suppress_none }}</td>

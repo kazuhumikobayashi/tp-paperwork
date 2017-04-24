@@ -18,14 +18,14 @@ class CompanyClientFlag(BaseModel, db.Model):
 
     def __init__(self,
                  company_id=None,
-                 client_flug_id=None,
+                 client_flag_id=None,
                  created_at=None,
                  created_user=None,
                  updated_at=None,
                  updated_user=None):
         super(CompanyClientFlag, self).__init__(created_at, created_user, updated_at, updated_user)
         self.company_id = company_id
-        self.client_flag_id = client_flug_id
+        self.client_flag_id = client_flag_id
 
     def __repr__(self):
         return "<CompanyClientFlag:" + \

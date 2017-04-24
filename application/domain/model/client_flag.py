@@ -6,9 +6,8 @@ from application.domain.model.base_model import BaseModel
 
 class ClientFlag(BaseModel, db.Model):
     __tablename__ = 'client_flags'
-    PER_PAGE = 10
 
-    client_flag_name = Column(String(32), nullable=False, unique=True)
+    client_flag_name = Column(String(32))
 
     def __init__(self,
                  client_flag_name=None,
@@ -20,7 +19,7 @@ class ClientFlag(BaseModel, db.Model):
         self.client_flag_name = client_flag_name
 
     def __repr__(self):
-        return "<ClientFlug:" + \
+        return "<ClientFlag:" + \
                 "'id='{}".format(self.id) + \
                 "', client_flag_name='{}".format(self.client_flag_name) + \
                 "', created_at='{}".format(self.created_at) + \

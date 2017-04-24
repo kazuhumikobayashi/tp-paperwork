@@ -49,6 +49,7 @@ mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/08-data-companies.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/09-data-engineer_skills.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/10-data-projects.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/11-data-contract_forms.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/11-data-client_flags.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/13-data-engineer_actual_results.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/14-data-estimation_sequence.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/15-data-attachments.sql
@@ -57,6 +58,7 @@ mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/17-data-billings.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/18-data-payments.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/19-data-business_categories.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/20-data-engineer_business_categories.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/21-data-company_client_flags.sql
 ```
 
 

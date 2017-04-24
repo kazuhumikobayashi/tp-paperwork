@@ -38,7 +38,7 @@
         </div>
         <div class="row">
           {{ render_field(form.company_name_kana, "col-xs-6") }}
-          {{ render_field(form.company_name_abbreviated, "col-xs-6") }}
+          {{ render_field(form.company_short_name, "col-xs-6") }}
         </div>
         <div class="row">
           {{ render_field(form.client_flag, "col-xs-6", "required", input_class="select2") }}
@@ -46,7 +46,7 @@
         </div>
         <div class="row">
           {{ render_field(form.postal_code, "col-xs-6") }}
-          {{ render_field(form.address1, "col-md-6") }}
+          {{ render_field(form.address, "col-md-6") }}
         </div>
         <div class="row">
           {{ render_field(form.phone, "col-xs-6") }}
