@@ -1,5 +1,14 @@
 {% extends "layout.html" %}
+{% from "_formhelpers.html" import render_search_field %}
 {% import "_pagination.html" as p %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+{% endblock %}
 {% block title %}会社{% endblock %}
 {% block content_header %}
   <h1>会社</h1>
@@ -17,12 +26,11 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="row">
-        <div class="col-md-6">
-          <input type="text" class="form-control" name="company_name" placeholder="会社名" value="{{ request.args.get('company_name', '') }}">
-        </div>
-        <div class="col-md-6">
-          <input type="text" class="form-control" name="company_code" placeholder="会社コード" value="{{ request.args.get('company_code', '') }}">
-        </div>
+        {{ render_search_field(form.company_name, "col-md-6") }}
+        {{ render_search_field(form.client_flag_id, "col-md-6", input_class="select2") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.bank_id, "col-md-6", input_class="select2") }}
       </div>
       <!-- /.row -->
     </div>
@@ -41,7 +49,7 @@
         <div class="box-header">
           {% if pagination %}
             {% if pagination.total > pagination.per_page %}
-              {{ p.pagination_widget(pagination,'.company_page', company_code=request.args.get('company_code', ''), company_name=request.args.get('company_name', '')) }}
+              {{ p.pagination_widget(pagination,'.company_page', company_name=request.args.get('company_name', '')) }}
             {% endif %}
           {% endif %}
           <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
@@ -53,20 +61,30 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
+              <th width="100px">顧客フラグ</th>
               <th>会社名</th>
-              <th>取引開始日</th>
-              <th>取引終了日</th>
+              <th>略称</th>
+              <th>入金サイト</th>
+              <th>支払いサイト</th>
+              <th>支払先銀行</th>
               <th width="70px" class="center"></th>
             </tr>
             {% for company in pagination.items %}
             <tr>
               <td>
+                {% for company_client_flag in company.company_client_flags %}
+                  <label class="label label-primary">{{ company_client_flag.client_flag.client_flag_name }}</label>
+                {% endfor %}
+              </td>
+              <td>
                 <a href="{{ url_for('.detail', company_id=company.id) }}">
                   {{ company.company_name|filter_suppress_none }}
                 </a>
               </td>
-              <td>{{ company.start_date|datetime_format("%Y/%m/%d") }}</td>
-              <td>{{ company.end_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ company.company_short_name|filter_suppress_none }}</td>
+              <td>{{ company.payment_site|filter_suppress_none }}</td>
+              <td>{{ company.receipt_site|filter_suppress_none }}</td>
+              <td>{{ company.bank.bank_name|filter_suppress_none }}</td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', company_id=company.id) }}">
                   <i class="fa fa-trash"></i> 削除

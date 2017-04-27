@@ -34,40 +34,62 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          {{ render_field(form.company_code, "col-xs-6", "required") }}
-          {{ render_field(form.company_name, "col-xs-6") }}
+          {{ render_field(form.company_name, "col-xs-6", "required") }}
         </div>
         <div class="row">
           {{ render_field(form.company_name_kana, "col-xs-6") }}
-          {{ render_field(form.trade_name, "col-xs-6") }}
+          {{ render_field(form.company_short_name, "col-xs-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.trade_name_position, "col-xs-6", input_class="select2") }}
-          {{ render_field(form.client_flg, "col-xs-6", input_class="select2") }}
+          {{ render_field(form.client_flag, "col-xs-6", "required", input_class="select2") }}
+          {{ render_field(form.contract_date, "col-xs-6", input_class="date") }}
         </div>
         <div class="row">
-          {{ render_field(form.consignment_flg, "col-xs-6", input_class="select2") }}
-          {{ render_field(form.start_date, "col-xs-6", "required", input_class="date") }}
-        </div>
-        <div class="row">
-          {{ render_field(form.end_date, "col-xs-6", "required", input_class="date") }}
           {{ render_field(form.postal_code, "col-xs-6") }}
-        </div>
-        <div class="row">
-          {{ render_field(form.address1, "col-md-6") }}
-          {{ render_field(form.address2, "col-md-6") }}
+          {{ render_field(form.address, "col-md-6") }}
         </div>
         <div class="row">
           {{ render_field(form.phone, "col-xs-6") }}
           {{ render_field(form.fax, "col-xs-6") }}
         </div>
+        <br>
         <div class="row">
-          {{ render_field(form.payment_site, "col-xs-6") }}
-          {{ render_field(form.receipt_site, "col-xs-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.tax, "col-md-6", "required", input_class="select2") }}
-          {{ render_field(form.remarks, "col-md-6") }}
+			<div class="col-md-6">
+				<div class="row">
+         		  <div class="col-xs-12">
+			        <div class="box box-success box-solid">
+			          <div class="box-header with-border">
+	           			<h3 class="box-title">＜請求情報＞</h3>
+	           		  </div>
+	           		  <div class="box-body">
+			            {{ render_field(form.payment_site, "col-xs-12") }}
+			            {{ render_field(form.payment_tax, "col-xs-12", input_class="select2") }}
+			            {{ render_field(form.bank_id, "col-xs-12", input_class="select2") }}
+				      </div><!-- /.box-body -->
+				    </div><!-- /.box -->
+			      </div><!-- /.col -->
+		        </div><!-- /.row -->
+	        </div>
+			<div class="col-md-6">
+				<div class="row">
+         		  <div class="col-xs-12">
+			        <div class="box box-warning box-solid">
+			          <div class="box-header with-border">
+	           			<h3 class="box-title">＜支払情報＞</h3>
+	           		  </div>
+	           		  <div class="box-body">
+			            {{ render_field(form.receipt_site, "col-xs-12") }}
+			            {{ render_field(form.receipt_tax, "col-xs-12", input_class="select2") }}
+				      </div><!-- /.box-body -->
+				    </div><!-- /.box -->
+			      </div><!-- /.col -->
+		        </div><!-- /.row -->
+	        </div>
+        </div>
+        <div class="row">
+          {{ render_field(form.remarks, "col-xs-12") }}
         </div>
         <!-- /.row -->
       </div>

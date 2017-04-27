@@ -19,6 +19,8 @@ DROP TABLE IF EXISTS business_categories;
 DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS statuses;
 DROP TABLE IF EXISTS banks;
+DROP TABLE IF EXISTS client_flags;
+DROP TABLE IF EXISTS company_client_flags;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -89,23 +91,19 @@ CREATE TABLE IF NOT EXISTS departments (
 
 CREATE TABLE IF NOT EXISTS companies (
   id INT NOT NULL AUTO_INCREMENT,
-  company_code VARCHAR(32) NOT NULL ,
-  company_name VARCHAR(128) ,
+  company_name VARCHAR(128) NOT NULL ,
   company_name_kana VARCHAR(128) ,
-  trade_name VARCHAR(32) ,
-  trade_name_position CHAR(1) ,
-  client_flg CHAR(1) NOT NULL DEFAULT '0' ,
-  consignment_flg CHAR(1) NOT NULL DEFAULT '0' ,
-  start_date DATE NOT NULL ,
-  end_date DATE NOT NULL ,
+  company_short_name VARCHAR(128) ,
+  contract_date DATE ,
   postal_code VARCHAR(32) ,
-  address1 VARCHAR(1024) ,
-  address2 VARCHAR(1024) ,
+  address VARCHAR(1024) ,
   phone VARCHAR(32) ,
   fax VARCHAR(32) ,
   payment_site INT ,
   receipt_site INT ,
-  tax CHAR(1) NOT NULL DEFAULT '0',
+  payment_tax INT ,
+  receipt_tax INT ,
+  bank_id INT,
   remarks VARCHAR(1024) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
@@ -354,6 +352,29 @@ CREATE TABLE IF NOT EXISTS banks (
   id INT NOT NULL AUTO_INCREMENT ,
   bank_name VARCHAR(32) NOT NULL ,
   text_for_document VARCHAR(128) NOT NULL ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS client_flags (
+  id INT NOT NULL AUTO_INCREMENT ,
+  client_flag_name VARCHAR(32) ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS company_client_flags (
+  id INT NOT NULL AUTO_INCREMENT ,
+  company_id INT NOT NULL ,
+  client_flag_id INT NOT NULL ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
