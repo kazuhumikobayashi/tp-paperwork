@@ -36,7 +36,7 @@ class CompanyForm(FlaskForm):
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     
     def validate_client_flag(self, field):
-        companies = service.find_by_client_flag_id(ClientFlag.OUR_COMPANY.value)
+        companies = service.find_by_client_flag_id([ClientFlag.OUR_COMPANY.value])
         if ClientFlag.OUR_COMPANY.value in field.data and len(companies) != 0 and companies[0].id != self.id.data:
             raise ValidationError('「自社」は登録できません。')
     

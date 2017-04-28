@@ -12,6 +12,7 @@ class SkillService(object):
 
     def find_all_for_multi_select(self):
         skill_list = [(h.id, h.skill_name) for h in self.find_all()]
+        skill_list.sort(key=lambda x: x[1])
         return skill_list
 
     def find_by_id(self, skill_id):

@@ -29,7 +29,7 @@ class CompanyRepository(BaseRepository):
     def find_by_client_flag_id(self, client_flag_id):
         fil = self.model.query
         companies = fil.filter(self.model.company_client_flags.any(
-                               CompanyClientFlag.client_flag_id == client_flag_id)).all()
+                               CompanyClientFlag.client_flag_id.in_(client_flag_id))).all()
         return companies
 
     def save(self, company):

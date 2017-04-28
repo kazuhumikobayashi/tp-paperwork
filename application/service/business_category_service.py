@@ -12,6 +12,7 @@ class BusinessCategoryService(object):
  
     def find_all_for_multi_select(self):
         business_category_list = [(h.id, h.business_category_name) for h in self.find_all()]
+        business_category_list.sort(key=lambda x: x[1])
         return business_category_list
 
     def find_by_id(self, business_category_id):

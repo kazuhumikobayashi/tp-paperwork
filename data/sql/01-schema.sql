@@ -39,12 +39,11 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS engineers (
   id INT NOT NULL AUTO_INCREMENT,
-  start_date DATE NOT NULL ,
-  end_date DATE NOT NULL ,
-  engineer_name VARCHAR(128),
+  engineer_name VARCHAR(128) NOT NULL,
   engineer_name_kana VARCHAR(128),
-  company_id INT,
-  remarks VARCHAR(1024) ,
+  birthday DATE,
+  gender VARCHAR(4),
+  company_id INT NOT NULL,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

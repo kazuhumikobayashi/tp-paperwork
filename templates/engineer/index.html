@@ -27,12 +27,12 @@
     <div class="box-body">
       <div class="row">
         {{ render_search_field(form.engineer_name, "col-md-6") }}
-        {{ render_search_field(form.skill_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.company_id, "col-md-6", input_class="select2") }}
       </div>
       <!-- /.row -->
       <div class="row">
-        {{ render_search_field(form.company_id, "col-md-6", input_class="select2") }}
         {{ render_search_field(form.business_category_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.skill_id, "col-md-6", input_class="select2") }}
       </div>
       <!-- /.row -->
     </div>
@@ -65,36 +65,30 @@
         <div class="box-body table-responsive no-padding">
           <table class="table table-hover">
             <tr>
-              <th>技術者名</th>
-              <th>技術者名カナ</th>
-              <th>所属会社</th>
-              <th width="250px">スキル</th>
-              <th width="100px">業種</th>
-              <th>適用開始年月日</th>
-              <th>適用終了年月日</th>
+              <th width="250px">所属会社</th>
+              <th width="180px">技術者名</th>
+              <th>業種</th>
+              <th>スキル</th>
               <th width="70px" class="center"></th>
             </tr>
             {% for engineer in pagination.items %}
             <tr>
+              <td>{{ engineer.company.company_name|filter_suppress_none }}</td>
               <td>
                 <a href="{{ url_for('.detail', engineer_id=engineer.id) }}">
                   {{ engineer.engineer_name|filter_suppress_none }}
                 </a>
-              </td>
-              <td>{{ engineer.engineer_name_kana|filter_suppress_none }}</td>
-              <td>{{ engineer.company.company_name|filter_suppress_none }}</td>
-              <td>
-                {% for skill in engineer.engineer_skills %}
-                  <label class="label label-primary">{{ skill.skill.skill_name }}</label>
-                {% endfor %}
               </td>
               <td>
                 {% for business_category in engineer.engineer_business_categories %}
                   <label class="label label-primary">{{ business_category.business_category.business_category_name }}</label>
                 {% endfor %}
               </td>
-              <td>{{ engineer.start_date|datetime_format("%Y/%m/%d") }}</td>
-              <td>{{ engineer.end_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>
+                {% for skill in engineer.engineer_skills %}
+                  <label class="label label-primary">{{ skill.skill.skill_name }}</label>
+                {% endfor %}
+              </td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', engineer_id=engineer.id) }}">
                   <i class="fa fa-trash"></i> 削除

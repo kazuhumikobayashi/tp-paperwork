@@ -19,6 +19,7 @@ from application.domain.model.status import Status
 from application.domain.model.user import User
 from application.domain.model.bank import Bank
 from application.domain.model.client_flag import ClientFlag
+from application.domain.model.company_client_flag import CompanyClientFlag
 
 
 def init_data():
@@ -35,6 +36,7 @@ def init_data():
     create_business_categories()
     create_banks()
     create_client_flags()
+    create_company_client_flags()
 
 
 def create_user():
@@ -90,9 +92,10 @@ def create_companies():
 def create_engineers():
     for num in range(12):
         engineer = Engineer(
-                start_date=date.today(),
-                end_date='2099/12/31',
-                engineer_name='単体テスト',
+                engineer_name='test' + str(num),
+                engineer_name_kana='テスト' + str(num),
+                birthday=date.today(),
+                gender='男性',
                 company_id='1',
                 created_at=datetime.today(),
                 created_user='test',
@@ -375,4 +378,17 @@ def create_client_flags():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(client_flag)    
+    db.session.commit()
+
+
+def create_company_client_flags():
+    for num in range(12):
+        company_client_flag = CompanyClientFlag(
+            company_id=num+1,
+            client_flag_id=num+1,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company_client_flag)    
     db.session.commit()

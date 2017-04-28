@@ -13,3 +13,7 @@ input,textarea {
 .table>thead>tr>td, .table>thead>tr>th {
     vertical-align: middle;
 }
+
+.datepicker.datepicker-dropdown.dropdown-menu {
+    z-index: 1050;
+}

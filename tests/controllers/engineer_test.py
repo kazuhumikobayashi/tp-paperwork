@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime
 
 from nose.tools import ok_
 
@@ -51,7 +51,7 @@ class EngineerTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer/?engineer_name=test&skill_id=2&company_id=2&business_category_id=2')
+        result = self.app.get('/engineer/?engineer_name=test&company_id=2&business_category_id=2&skill_id=2')
         self.assertEqual(result.status_code, 200)
 
     # 技術者登録画面に遷移する。
@@ -75,12 +75,13 @@ class EngineerTests(BaseTestCase):
         })
 
         result = self.app.post('/engineer/create', data={
-            'start_date': date.today().strftime('%Y/%m/%d'),
-            'end_date': '2099/12/31',
             'engineer_name': 'テスト登録',
+            'engineer_name_kana': 'テストトウロク',
+            'birthday': datetime.today().strftime('%Y/%m/%d'),
+            'gender': '男性',
+            'company_id': '2',
             'skill': ['1', '2'],
-            'business_category': ['1', '2'],
-            'company_id': '1'
+            'business_category': ['1', '2']
         })
         self.assertEqual(result.status_code, 302)
 
@@ -125,12 +126,7 @@ class EngineerTests(BaseTestCase):
         engineer_id = engineer.id
 
         result = self.app.post('/engineer/detail/' + str(engineer_id), data={
-            'start_date': engineer.start_date.strftime('%Y/%m/%d'),
-            'end_date': engineer.end_date.strftime('%Y/%m/%d'),
-            'engineer_name': expected,
-            'engineer_name_kana': engineer.engineer_name_kana,
-            'company_id': engineer.company_id,
-            'remarks': engineer.remarks
+            'engineer_name': expected
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -144,10 +140,8 @@ class EngineerTests(BaseTestCase):
     def test_delete_engineer(self):
         # 削除用のエンジニアを登録
         engineer = Engineer(
-            start_date=date.today(),
-            end_date='2099/12/31',
             engineer_name='削除用エンジニア',
-            company_id='1',
+            company_id='2',
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
