@@ -1,11 +1,12 @@
 from datetime import datetime
 
 from nose.tools import ok_
+from tests import BaseTestCase
 
 from application import db
+from application.const import ClientFlag
 from application.domain.model.company import Company
 from application.domain.repository.company_repository import CompanyRepository
-from tests import BaseTestCase
 
 
 class CompanyTests(BaseTestCase):
@@ -105,7 +106,7 @@ class CompanyTests(BaseTestCase):
             'company_name': company.company_name,
             'company_name_kana': expected,
             'contract_date': datetime.today().strftime('%Y/%m/%d'),
-            'client_flag': [2, 3],
+            'client_flag': [ClientFlag.BP.value , ClientFlag.CLIENT.value],
             'postal_code': company.postal_code,
             'address': company.address,
             'phone': company.phone,
@@ -187,7 +188,7 @@ class CompanyTests(BaseTestCase):
         # 顧客の場合に、nullで更新。
         result = self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_client',
-            'client_flag': [3],
+            'client_flag': [ClientFlag.CLIENT.value],
             'payment_site': '',
             'payment_tax': '',
             'bank_id': ''
@@ -218,7 +219,7 @@ class CompanyTests(BaseTestCase):
         # BPの場合に、nullで更新。
         self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_BP',
-            'client_flag': [2],
+            'client_flag': [ClientFlag.BP.value],
             'receipt_site': '',
             'receipt_tax': ''
         })
@@ -240,7 +241,7 @@ class CompanyTests(BaseTestCase):
             'company_name': 'test99',
             'company_name_kana': 'テスト99',
             'contract_date': datetime.today().strftime('%Y/%m/%d'),
-            'client_flag': [1],
+            'client_flag': [ClientFlag.BP.value],
             'postal_code': '111-1111',
             'address': '住所２',
             'phone': '111-1111',
@@ -261,7 +262,11 @@ class CompanyTests(BaseTestCase):
     # client_flag「自社」は一社のみ
     def test_only_one_our_company(self):
         # 「自社」の会社を抽出
-        before = len(self.company_repository.find_by_client_flag_id(1))
+        before = len(self.company_repository.find_by_client_flag_id([ClientFlag.OUR_COMPANY.value]))
+        # 「自社」の会社が1件あることを確認
+        self.assertEqual(before, 1)
+
+        # ログイン
         self.app.post('/login', data={
             'shain_number': 'test1',
             'password': 'test'
@@ -269,7 +274,7 @@ class CompanyTests(BaseTestCase):
 
         result = self.app.post('/company/create', data={
             'company_name': 'test_only_one_our_company',
-            'client_flag': [1],
+            'client_flag': [ClientFlag.OUR_COMPANY.value],
             'payment_tax': '',
             'receipt_tax': '',
             'bank_id': ''
@@ -277,5 +282,5 @@ class CompanyTests(BaseTestCase):
         self.assertEqual(result.status_code, 200)
         
         # 件数が変わっていないことを確認する。
-        after = len(self.company_repository.find_by_client_flag_id(1))
+        after = len(self.company_repository.find_by_client_flag_id([ClientFlag.OUR_COMPANY.value]))
         self.assertEqual(before, after)

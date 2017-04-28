@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
-{% from "_formhelpers.html" import render_field %}
+{% from "_formhelpers.html" import render_field, render_radio_field %}
 {% block title %}技術者{% endblock %}
 {% block include_css %}
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
   <!-- bootstrap datepicker -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
  {% endblock %}
 {% block include_js %}
   <!-- Select2 -->
@@ -13,6 +15,8 @@
   <!-- bootstrap datepicker -->
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
 {% endblock %}
 {% block content_header %}
   <h1>
@@ -34,20 +38,19 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          {{ render_field(form.start_date, "col-xs-6", "required", input_class="date") }}
-          {{ render_field(form.end_date, "col-xs-6", "required", input_class="date") }}
+          {{ render_field(form.engineer_name, "col-sm-6", "required") }}
+          {{ render_field(form.engineer_name_kana, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.engineer_name, "col-xs-6", "required") }}
-          {{ render_field(form.engineer_name_kana, "col-xs-6", "required") }}
+          {{ render_field(form.birthday, "col-sm-6", input_class="date") }}
+          {{ render_field(form.gender, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.company_id, "col-xs-6", input_class="select2") }}
-          {{ render_field(form.remarks, "col-xs-6") }}
+          {{ render_field(form.company_id, "col-sm-6", "required",input_class="select2") }}
         </div>
         <div class="row">
-          {{ render_field(form.skill, "col-xs-6", input_class="select2") }}
-          {{ render_field(form.business_category, "col-xs-6", input_class="select2") }}
+          {{ render_field(form.business_category, "col-sm-6", input_class="select2") }}
+          {{ render_field(form.skill, "col-sm-6", input_class="select2") }}
         </div>
         <!-- /.row -->
       </div>

@@ -23,6 +23,9 @@ TAX_CLASSIFICATION = [('', ''),
                       ('8', '8'),
                       ('10', '10')]
 
+GENDER = [('男性', '男性'),
+          ('女性', '女性')]
+
 
 class ClientFlag(Enum):
     OUR_COMPANY = 1
