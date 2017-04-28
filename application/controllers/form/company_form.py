@@ -26,15 +26,12 @@ class CompanyForm(FlaskForm):
     payment_tax = SelectField('入金消費税区分（顧客フラグ＝顧客の時、必須）',
                               [Length(max=8)],
                               choices=TAX_CLASSIFICATION,
-                              filters=[lambda x: x or None],
                               render_kw={"data-minimum-results-for-search": "Infinity"})
     receipt_tax = SelectField('支払消費税区分（顧客フラグ＝BP所属の時、必須）',
                               [Length(max=8)],
                               choices=TAX_CLASSIFICATION,
-                              filters=[lambda x: x or None],
                               render_kw={"data-minimum-results-for-search": "Infinity"})
     bank_id = SelectField('振込先銀行（顧客フラグ＝顧客の時、必須）',
-                          filters=[lambda x: x or None],
                           render_kw={"data-minimum-results-for-search": "Infinity"})
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     
@@ -46,7 +43,19 @@ class CompanyForm(FlaskForm):
     def validate_payment_site(self, field):
         if ClientFlag.CLIENT.value in self.client_flag.data and field.data is None:
             raise ValidationError('顧客の場合、入力必須です。')
-    
+
     def validate_receipt_site(self, field):
         if ClientFlag.BP.value in self.client_flag.data and field.data is None:
             raise ValidationError('BP所属の場合、入力必須です。')
+
+    def validate_payment_tax(self, field):
+        if ClientFlag.CLIENT.value in self.client_flag.data and field.data == '':
+            raise ValidationError('顧客の場合、入力必須です。')
+
+    def validate_receipt_tax(self, field):
+        if ClientFlag.BP.value in self.client_flag.data and field.data == '':
+            raise ValidationError('BP所属の場合、入力必須です。')
+
+    def validate_bank_id(self, field):
+        if ClientFlag.CLIENT.value in self.client_flag.data and field.data == '':
+            raise ValidationError('顧客の場合、入力必須です。')

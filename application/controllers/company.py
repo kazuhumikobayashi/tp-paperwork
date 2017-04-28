@@ -70,9 +70,9 @@ def detail(company_id=None):
         company.fax = form.fax.data
         company.payment_site = form.payment_site.data
         company.receipt_site = form.receipt_site.data
-        company.payment_tax = form.payment_tax.data
-        company.receipt_tax = form.receipt_tax.data
-        company.bank_id = form.bank_id.data
+        company.payment_tax = form.payment_tax.data or None
+        company.receipt_tax = form.receipt_tax.data or None
+        company.bank_id = form.bank_id.data or None
         company.remarks = form.remarks.data
         client_flags = []
         for client_flag_id in form.client_flag.data:
