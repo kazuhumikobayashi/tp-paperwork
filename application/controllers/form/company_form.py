@@ -23,11 +23,11 @@ class CompanyForm(FlaskForm):
     fax = StringField('Fax番号', [Length(max=32)], filters=[lambda x: x or None])
     payment_site = IntegerField('入金サイト（顧客フラグ＝顧客の時、必須）')
     receipt_site = IntegerField('支払サイト（顧客フラグ＝BP所属の時、必須）')
-    payment_tax = SelectField('入金消費税区分（顧客フラグ＝顧客の時、必須）',
+    payment_tax = SelectField('入金消費税（顧客フラグ＝顧客の時、必須）',
                               [Length(max=8)],
                               choices=TAX_CLASSIFICATION,
                               render_kw={"data-minimum-results-for-search": "Infinity"})
-    receipt_tax = SelectField('支払消費税区分（顧客フラグ＝BP所属の時、必須）',
+    receipt_tax = SelectField('支払消費税（顧客フラグ＝BP所属の時、必須）',
                               [Length(max=8)],
                               choices=TAX_CLASSIFICATION,
                               render_kw={"data-minimum-results-for-search": "Infinity"})
