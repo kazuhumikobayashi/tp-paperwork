@@ -370,19 +370,20 @@ def create_banks():
 
 
 def create_client_flags():
-    for num in range(12):
+    client_flag_names = ['自社', 'BP所属', '顧客', 'エンドユーザー']
+    for client_flag_name in client_flag_names:
         client_flag = ClientFlag(
-            client_flag_name='test' + str(num),
+            client_flag_name=client_flag_name,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
-        db.session.add(client_flag)    
+        db.session.add(client_flag)
     db.session.commit()
 
 
 def create_company_client_flags():
-    for num in range(12):
+    for num in range(4):
         company_client_flag = CompanyClientFlag(
             company_id=num+1,
             client_flag_id=num+1,
