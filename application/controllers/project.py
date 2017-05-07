@@ -9,24 +9,22 @@ from flask import url_for
 
 from application.controllers.form.estimation_remarks_form import EstimationRemarksForm
 from application.controllers.form.order_remarks_form import OrderRemarksForm
+from application.controllers.form.project_create_form import ProjectCreateForm
 from application.controllers.form.project_form import ProjectForm
 from application.controllers.form.project_search_form import ProjectSearchForm
 from application.domain.model.estimation_remarks import EstimationRemarks
 from application.domain.model.order_remarks import OrderRemarks
+from application.domain.model.project import Project
 from application.service.company_service import CompanyService
-from application.service.contract_form_service import ContractFormService
 from application.service.department_service import DepartmentService
 from application.service.estimation_remarks_service import EstimationRemarksService
 from application.service.order_remarks_service import OrderRemarksService
 from application.service.project_service import ProjectService
-from application.service.status_service import StatusService
 
 bp = Blueprint('project', __name__, url_prefix='/project')
 service = ProjectService()
 department_service = DepartmentService()
 company_service = CompanyService()
-status_service = StatusService()
-contract_form_service = ContractFormService()
 estimation_remarks_service = EstimationRemarksService()
 order_remarks_service = OrderRemarksService()
 
@@ -35,12 +33,13 @@ order_remarks_service = OrderRemarksService()
 def index(page=1):
     form = ProjectSearchForm(request.values)
     form.client_company_id.choices = company_service.find_all_for_multi_select()
+    form.end_user_company_id.choices = company_service.find_all_for_multi_select()
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = service.find(page,
                               form.start_date.data,
                               form.end_date.data,
                               form.project_name.data,
-                              form.end_user.data,
+                              form.end_user_company_id.data,
                               form.client_company_id.data,
                               form.recorded_department_id.data)
     return render_template('project/index.html', pagination=pagination, form=form)
@@ -62,14 +61,13 @@ def detail(project_id=None):
     form = ProjectForm(request.form, project)
     form.recorded_department_id.choices = department_service.find_all_for_select()
     form.client_company_id.choices = company_service.find_all_for_select()
-    form.status_id.choices = status_service.find_all_for_select()
-    form.contract_form_id.choices = contract_form_service.find_all_for_select()
+    form.end_user_company_id.choices = company_service.find_all_for_select()
     form.assigned_members = project.assigned_members
     form.engineer_actual_results = project.get_engineer_actual_results()
     form.billings = project.get_billings()
     if form.validate_on_submit() and request.form["save"] == 'basic':
         project.project_name = form.project_name.data
-        project.end_user = form.end_user.data
+        project.end_user_company_id = form.end_user_company_id.data
         project.client_company_id = form.client_company_id.data
         if project.start_date != form.start_date.data:
             project.is_start_date_change = True
@@ -77,8 +75,8 @@ def detail(project_id=None):
         project.end_date = form.end_date.data
         project.recorded_department_id = form.recorded_department_id.data
         project.over_time_calculation_id = form.over_time_calculation_id.data
-        project.contract_form_id = form.contract_form_id.data
-        project.status_id = form.status_id.data
+        project.contract_form = form.contract_form.data
+        project.status = form.status.data
         project.billing_timing = form.billing_timing.data
         project.remarks = form.remarks.data
 
@@ -150,7 +148,18 @@ def detail(project_id=None):
 
 @bp.route('/create', methods=['GET', 'POST'])
 def create():
-    return detail()
+
+    project = Project()
+
+    form = ProjectCreateForm(request.form, project)
+    if form.validate_on_submit():
+        project.project_name = form.project_name.data
+
+        service.save(project)
+        flash('保存しました。')
+        return redirect(url_for('.detail', project_id=project.id))
+    current_app.logger.debug(form.errors)
+    return render_template('project/create.html', form=form)
 
 
 @bp.route('/copy/<project_id>', methods=['GET'])

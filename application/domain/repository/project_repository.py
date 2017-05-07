@@ -6,7 +6,7 @@ class ProjectRepository(BaseRepository):
 
     model = Project
 
-    def find(self, page, start_date, end_date, project_name, end_user, client_company_id, recorded_department_id):
+    def find(self, page, start_date, end_date, project_name, end_user_company_id, client_company_id, recorded_department_id):
         query = self.model.query
         if start_date:
             query = query.filter(self.model.start_date >= start_date)
@@ -14,8 +14,8 @@ class ProjectRepository(BaseRepository):
             query = query.filter(self.model.end_date <= end_date)
         if project_name:
             query = query.filter(self.model.project_name.like('%' + project_name + '%'))
-        if end_user:
-            query = query.filter(self.model.end_user.like('%' + end_user + '%'))
+        if end_user_company_id:
+            query = query.filter(self.model.end_user_company_id.in_(end_user_company_id))
         if client_company_id:
             query = query.filter(self.model.client_company_id.in_(client_company_id))
         if recorded_department_id:

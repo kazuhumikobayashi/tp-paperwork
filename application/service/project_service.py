@@ -12,8 +12,10 @@ class ProjectService(object):
     order_remarks_repository = OrderRemarksRepository()
     estimation_sequence_repository = EstimationSequenceRepository()
 
-    def find(self, page, start_date, end_date, project_name, end_user, client_company_id, recorded_department_id):
-        return self.repository.find(page, start_date, end_date, project_name, end_user, client_company_id, recorded_department_id)
+    def find(self, page, start_date, end_date, project_name, end_user_company_id, client_company_id,
+             recorded_department_id):
+        return self.repository.find(page, start_date, end_date, project_name, end_user_company_id, client_company_id,
+                                    recorded_department_id)
 
     def find_by_id(self, project_id):
         return self.repository.find_by_id(project_id)
@@ -43,7 +45,7 @@ class ProjectService(object):
         return self.find_by_id(project_clone.id)
 
     def save(self, project):
-        if project.is_start_date_change:
+        if project.start_date and project.is_start_date_change:
             fiscal_year = project.get_fiscal_year()
             estimation_sequence = self.estimation_sequence_repository.take_a_sequence(fiscal_year)
             project.estimation_no = estimation_sequence.get_estimation_no()
