@@ -4,4 +4,5 @@ insert into companies (company_name, company_name_kana, company_short_name, cont
  ('株式会社リボルブ・シス', 'リボルブ・シス', 'リボ', '2016-12-27', null, null, null, null, null, 30, null, '8', null, null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
  ('フリー（佐藤）', 'フリー（サトウ）', 'フリー', '2016-12-27', null, null, null, null, null, 30, null, '8', null, null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
  ('株式会社シークエンス', 'シークエンス','シーク', '2016-12-27', null, null, null, null, null, 50, null, '10', null, null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
- ('味の素株式会社', 'アジノモト','味の素', '2016-12-27', null, null, null, null, null, null, null, null, null, null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴');
+ ('味の素株式会社', 'アジノモト','味の素', '2016-12-27', null, null, null, null, null, null, null, null, null, null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴'),
+ ('第一生命保険株式会社', 'ダイイチセイメイ','第一生命', '2016-12-27', null, null, null, null, null, null, null, null, null, null, CURRENT_TIMESTAMP, '竹内大貴', CURRENT_TIMESTAMP, '竹内大貴');

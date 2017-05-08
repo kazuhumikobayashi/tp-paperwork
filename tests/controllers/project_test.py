@@ -56,11 +56,11 @@ class ProjectTests(BaseTestCase):
         })
 
         query_string = urlencode({'start_date': "2016/1/1",
-                                               'end_date': '2017/1/1',
-                                               'project_name': 'test',
-                                               'end_user': 'test',
-                                               'client_company_id': '1',
-                                               'recorded_department_id': '1'})
+                                  'end_date': '2017/1/1',
+                                  'project_name': 'test',
+                                  'end_user_company_id': '1',
+                                  'client_company_id': '1',
+                                  'recorded_department_id': '1'})
         result = self.app.get('/project/?' + query_string)
 
         self.assertEqual(result.status_code, 200)
@@ -109,18 +109,7 @@ class ProjectTests(BaseTestCase):
         })
 
         result = self.app.post('/project/create', data={
-            'project_name': 'test_create_project_basic',
-            'end_user': 'test',
-            'client_company_id': '1',
-            'start_date': (datetime.today() + timedelta(days=1)).strftime('%Y/%m/%d'),
-            'end_date': '2099/12/31',
-            'recorded_department_id': '1',
-            'over_time_calculation_id': '1',
-            'contract_form_id': '1',
-            'status_id': '1',
-            'billing_timing': '1',
-            'remarks': 'test',
-            'save': 'basic'
+            'project_name': 'test_create_project_basic'
         })
         # プロジェクトが保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -135,7 +124,7 @@ class ProjectTests(BaseTestCase):
 
         result = self.app.post('/project/create', data={
             'project_name': 'test_create_project_basic',
-            'end_user': 'test',
+            'end_user_company_id': '1',
             'client_company_id': '1',
             'start_date': str(int(datetime.today().strftime('%Y')) + 1) + '/4/1',
             'end_date': '2099/12/31',
@@ -143,7 +132,7 @@ class ProjectTests(BaseTestCase):
             'over_time_calculation_id': '1',
             'contract_form_id': '1',
             'status_id': '1',
-            'billing_timing': '1',
+            'billing_timing': '契約期間末1回',
             'remarks': 'test',
             'save': 'basic'
         })
@@ -164,7 +153,7 @@ class ProjectTests(BaseTestCase):
 
         result = self.app.post('/project/detail/' + str(project_id), data={
             'project_name': expected,
-            'end_user': 'test',
+            'end_user_company_id': '1',
             'client_company_id': '1',
             'start_date': (datetime.today() + timedelta(days=1)).strftime('%Y/%m/%d'),
             'end_date': '2099/12/31',
@@ -172,7 +161,7 @@ class ProjectTests(BaseTestCase):
             'over_time_calculation_id': '1',
             'contract_form_id': '1',
             'status_id': '1',
-            'billing_timing': '1',
+            'billing_timing': '契約期間末1回',
             'remarks': 'test',
             'save': 'basic'
         })
@@ -198,14 +187,13 @@ class ProjectTests(BaseTestCase):
 
         result = self.app.post('/project/detail/' + str(project_id), data={
             'project_name': project.project_name,
-            'end_user': project.end_user,
+            'end_user_company_id': project.end_user_company_id,
             'client_company_id': project.client_company_id,
             'start_date': project.start_date.strftime('%Y/%m/%d'),
             'end_date': project.end_date.strftime('%Y/%m/%d'),
             'recorded_department_id': 'a',
-            'over_time_calculation_id': project.over_time_calculation_id,
-            'contract_form_id': project.contract_form_id,
-            'status_id': project.status_id,
+            'contract_form': project.contract_form,
+            'status': project.status,
             'billing_timing': project.billing_timing,
             'remarks': project.remarks,
             'save': 'basic'
@@ -219,7 +207,6 @@ class ProjectTests(BaseTestCase):
 
     # プロジェクトの見積り情報を保存出来る
     def test_save_project_estimate(self):
-        before = len(self.project_repository.find_all())
         shain_number = 'test1'
         self.app.post('/login', data={
             'shain_number': shain_number,
@@ -250,7 +237,6 @@ class ProjectTests(BaseTestCase):
 
     # プロジェクトの注文請け情報を保存出来る
     def test_save_project_order(self):
-        before = len(self.project_repository.find_all())
         shain_number = 'test1'
         self.app.post('/login', data={
             'shain_number': shain_number,
@@ -289,17 +275,27 @@ class ProjectTests(BaseTestCase):
         # コピー用のプロジェクトを登録
         project = Project(
             project_name='test_copy_project',
-            end_user='test',
-            client_company_id=1,
+            status='01:契約開始',
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no='test_copy_project',
+            end_user_company_id=1,
+            client_company_id=5,
             start_date=date.today(),
             end_date='2099/12/31',
-            recorded_department_id=1,
-            over_time_calculation_id=1,
-            contract_form_id=1,
-            estimation_no='test_copy_project',
-            status_id=1,
-            billing_timing='1',
-            remarks='test',
+            contract_form='請負契約（一括契約）',
+            billing_timing='契約期間末1回',
+            estimated_total_amount=1000000,
+            deposit_date='2099/12/31',
+            scope='test',
+            contents=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -400,17 +396,27 @@ class ProjectTests(BaseTestCase):
         # 削除用のプロジェクトを登録
         project = Project(
             project_name='test_delete_project',
-            end_user='test',
-            client_company_id=1,
+            status='01:契約開始',
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no='test_delete_project',
+            end_user_company_id=1,
+            client_company_id=5,
             start_date=date.today(),
             end_date='2099/12/31',
-            recorded_department_id=1,
-            over_time_calculation_id=1,
-            contract_form_id=1,
-            estimation_no='test_delete_project',
-            status_id=1,
-            billing_timing='1',
-            remarks='test',
+            contract_form='請負契約（一括契約）',
+            billing_timing='契約期間末1回',
+            estimated_total_amount=1000000,
+            deposit_date='2099/12/31',
+            scope='test',
+            contents=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),

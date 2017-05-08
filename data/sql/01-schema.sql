@@ -12,12 +12,10 @@ DROP TABLE IF EXISTS order_remarks;
 DROP TABLE IF EXISTS engineer_actual_results;
 DROP TABLE IF EXISTS engineers;
 DROP TABLE IF EXISTS projects;
-DROP TABLE IF EXISTS contract_forms;
 DROP TABLE IF EXISTS companies;
 DROP TABLE IF EXISTS skills;
 DROP TABLE IF EXISTS business_categories;
 DROP TABLE IF EXISTS departments;
-DROP TABLE IF EXISTS statuses;
 DROP TABLE IF EXISTS banks;
 DROP TABLE IF EXISTS client_flags;
 DROP TABLE IF EXISTS company_client_flags;
@@ -115,17 +113,28 @@ CREATE TABLE IF NOT EXISTS companies (
 CREATE TABLE IF NOT EXISTS projects (
   id INT NOT NULL AUTO_INCREMENT,
   project_name VARCHAR(128) NOT NULL ,
-  end_user VARCHAR(128) ,
-  client_company_id INT NOT NULL ,
-  start_date DATE NOT NULL ,
-  end_date DATE NOT NULL ,
-  recorded_department_id INT NOT NULL ,
-  over_time_calculation_id INT NOT NULL ,
-  contract_form_id INT ,
+  status VARCHAR(128) NOT NULL ,
+  recorded_department_id INT ,
+  sales_person VARCHAR(128) ,
   estimation_no VARCHAR(64) ,
-  status_id INT NOT NULL,
-  billing_timing CHAR(1) ,
+  end_user_company_id INT ,
+  client_company_id INT ,
+  start_date DATE ,
+  end_date DATE ,
+  contract_form VARCHAR(128) ,
+  billing_timing VARCHAR(128) ,
+  estimated_total_amount INT ,
+  deposit_date DATE ,
+  scope VARCHAR(1024) ,
+  contents VARCHAR(1024) ,
+  delivery_place VARCHAR(1024) ,
+  deliverables VARCHAR(1024) ,
+  inspection_date DATE ,
+  responsible_person VARCHAR(128) ,
+  quality_control VARCHAR(128) ,
+  subcontractor VARCHAR(128) ,
   remarks VARCHAR(1024) ,
+  client_order_no VARCHAR(64) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
@@ -305,28 +314,6 @@ CREATE TABLE IF NOT EXISTS attachments (
   storage_filename VARCHAR(256) NOT NULL ,
   size INT NOT NULL ,
   content_type VARCHAR(256) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS statuses (
-  id INT NOT NULL ,
-  status_name VARCHAR(32) NOT NULL ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS contract_forms (
-  id INT NOT NULL ,
-  contract_form_name VARCHAR(32) NOT NULL ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
