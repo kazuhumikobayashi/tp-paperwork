@@ -6,6 +6,7 @@ from application.domain.model.attachment import Attachment
 from application.domain.model.billing import Billing
 from application.domain.model.company import Company
 from application.domain.model.department import Department
+from application.domain.model.destination import Destination
 from application.domain.model.engineer import Engineer
 from application.domain.model.engineer_actual_result import EngineerActualResult
 from application.domain.model.estimation_remarks import EstimationRemarks
@@ -33,6 +34,7 @@ def init_data():
     create_banks()
     create_client_flags()
     create_company_client_flags()
+    create_destinations()
 
 
 def create_user():
@@ -372,4 +374,18 @@ def create_company_client_flags():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company_client_flag)    
+    db.session.commit()
+
+
+def create_destinations():
+    for num in range(12):
+        destination = Destination(
+            company_id=1,
+            destination_name='test' + str(num),
+            destination_department='test' + str(num),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(destination)
     db.session.commit()
