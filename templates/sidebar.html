@@ -22,7 +22,6 @@
         <li><a href="#"><i class="fa fa-calculator fa-fw"></i> <span>請求</span></a></li>
         <li><a href="#"><i class="fa fa-file-text-o fa-fw"></i> <span>弥生I/F出力</span></a></li>
         <li class="treeview{% if request.path.count('/company/') or
-                                 request.path.count('/destination/') or
                                  request.path.count('/engineer/') or
                                  request.path.count('/skill/') or
                                  request.path.count('/business_category/') or
@@ -36,9 +35,6 @@
           <ul class="treeview-menu">
             <li{% if request.path.count('/company/') %} class="active"{% endif %}>
                 <a href="{{ url_for('company.index') }}"><i class="fa fa-building fa-fw"></i> 会社</a>
-            </li>
-            <li{% if request.path.count('/destination/') %} class="active"{% endif %}>
-                <a href="{{ url_for('destination.index') }}"><i class="fa fa-envelope-o fa-fw"></i> 宛先</a>
             </li>
             <li{% if request.path.count('/engineer/') %} class="active"{% endif %}>
                 <a href="{{ url_for('engineer.index') }}"><i class="fa fa-users fa-fw"></i> 技術者</a>
