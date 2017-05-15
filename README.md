@@ -30,8 +30,8 @@ grant all on tp_paperwork_test.* to 'admin_user_test'@'localhost';
 
 ② passwordの桁数エラーだったら、以下のSQLを実行
 ```mysql
-SET GLOBAL validate_password_length=4;
-SET GLOBAL validate_password_policy=LOW;
+mysql> SET GLOBAL validate_password_length=4;
+mysql> SET GLOBAL validate_password_policy=LOW;
 ```
 
 
@@ -57,7 +57,6 @@ mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/18-data-payments.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/19-data-business_categories.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/20-data-engineer_business_categories.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/21-data-company_client_flags.sql
-mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/23-data-destinations.sql
 ```
 
 

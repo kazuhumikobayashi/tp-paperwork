@@ -6,7 +6,6 @@ from application import db
 from application.domain.model.bank import Bank
 from application.domain.model.base_model import BaseModel
 from application.domain.model.company_client_flag import CompanyClientFlag
-from application.domain.model.destination import Destination
 
 
 class Company(BaseModel, db.Model):
@@ -30,7 +29,6 @@ class Company(BaseModel, db.Model):
 
     bank = relationship(Bank, lazy='joined')
     company_client_flags = relationship(CompanyClientFlag, cascade='all, delete-orphan')
-    destinations = relationship(Destination, cascade='all, delete-orphan')
 
     def __init__(self,
                  company_name=None,
@@ -85,7 +83,6 @@ class Company(BaseModel, db.Model):
                 "', bank='{}".format(self.bank) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', company_client_flags='{}".format(self.company_client_flags) + \
-                "', destinations='{}".format(self.destinations) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \
                 "', updated_at='{}".format(self.updated_at) + \
