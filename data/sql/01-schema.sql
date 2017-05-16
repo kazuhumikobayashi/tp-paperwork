@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS banks;
 DROP TABLE IF EXISTS client_flags;
 DROP TABLE IF EXISTS company_client_flags;
+DROP TABLE IF EXISTS holidays;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -361,6 +362,18 @@ CREATE TABLE IF NOT EXISTS company_client_flags (
   id INT NOT NULL AUTO_INCREMENT ,
   company_id INT NOT NULL ,
   client_flag_id INT NOT NULL ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS holidays (
+  id INT NOT NULL AUTO_INCREMENT ,
+  holiday DATE NOT NULL ,
+  holiday_name VARCHAR(128) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

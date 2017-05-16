@@ -22,3 +22,6 @@ SECRET_KEY = 'production key'
 CLOUD_STORAGE_BUCKET = 'tp-paperwork-bucket'
 MAX_CONTENT_LENGTH = 8 * 1024 * 1024
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls'}
+
+# Google Cloud Service Account Key File
+CLIENT_SECRET_FILE = 'tp-paperwork-221d27c465d1.json'
