@@ -4,12 +4,11 @@ from httplib2 import Http
 from oauth2client.service_account import ServiceAccountCredentials
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
-CLIENT_SECRET_FILE = current_app.config['CLIENT_SECRET_FILE']
 JAPANESE_HOLIDAY_CALENDAR_ID = "ja.japanese#holiday@group.v.calendar.google.com"
 
 
 def _get_credentials():
-    credentials = ServiceAccountCredentials.from_json_keyfile_name(CLIENT_SECRET_FILE, SCOPES)
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(current_app.config['CLIENT_SECRET_FILE'], SCOPES)
     return credentials
 
 
