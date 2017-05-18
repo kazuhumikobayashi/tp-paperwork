@@ -106,17 +106,21 @@ class CompanyTests(BaseTestCase):
             'company_name': company.company_name,
             'company_name_kana': expected,
             'contract_date': datetime.today().strftime('%Y/%m/%d'),
-            'client_flag': [ClientFlag.BP.value , ClientFlag.CLIENT.value],
+            'client_flag': [ClientFlag.BP.value, ClientFlag.CLIENT.value],
             'postal_code': company.postal_code,
             'address': company.address,
             'phone': company.phone,
             'fax': company.fax,
+            'client_code': company.client_code,
+            'bp_code': company.bp_code,
             'payment_site': company.payment_site,
             'receipt_site': company.receipt_site,
             'payment_tax': company.payment_tax,
             'receipt_tax': company.receipt_tax,
             'bank_id': '1',
-            'remarks': company.remarks
+            'bank_holiday_flag': company.bank_holiday_flag,
+            'remarks': company.remarks,
+            'print_name': company.print_name
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -175,7 +179,7 @@ class CompanyTests(BaseTestCase):
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
 
-    # 会社が顧客の場合、「入金サイト」「入金消費税区分」「振込先銀行」が必須
+    # 会社が顧客の場合、「顧客コード」「入金サイト」「入金消費税区分」「振込先銀行」「振込先銀行休日時フラグ」が必須
     def test_not_null_by_client(self):
         # ログイン
         self.app.post('/login', data={
@@ -189,19 +193,23 @@ class CompanyTests(BaseTestCase):
         result = self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_client',
             'client_flag': [ClientFlag.CLIENT.value],
+            'client_code': '',
             'payment_site': '',
             'payment_tax': '',
-            'bank_id': ''
+            'bank_id': '',
+            'bank_holiday_flag': ''
         })
         self.assertEqual(result.status_code, 200)
         
         # nullで更新出来なかったことを確認する。
         company_after = self.company_repository.find_by_id(company_id)
+        self.assertEqual(company_before.client_code, company_after.client_code)
         self.assertEqual(company_before.payment_site, company_after.payment_site)
         self.assertEqual(company_before.payment_tax, company_after.payment_tax)
         self.assertEqual(company_before.bank_id, company_after.bank_id)
+        self.assertEqual(company_before.bank_holiday_flag, company_after.bank_holiday_flag)
 
-    # 会社がBP所属の場合、「支払サイト」「支払消費税区分」が必須
+    # 会社がBP所属の場合、「協力会社コード」「支払サイト」「支払消費税区分」が必須
     def test_not_null_by_BP(self):
         # ログイン
         self.app.post('/login', data={
@@ -211,7 +219,8 @@ class CompanyTests(BaseTestCase):
         company_id = 3
         company_before = self.company_repository.find_by_id(company_id)
         
-        # 「支払サイト」「支払消費税区分」に値を入れておく
+        # 「協力会社コード」「支払サイト」「支払消費税区分」に値を入れておく
+        company_before.bp_code = '9999'
         company_before.receipt_site = 5
         company_before.receipt_tax = 100
         db.session.commit()
@@ -220,12 +229,14 @@ class CompanyTests(BaseTestCase):
         self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_BP',
             'client_flag': [ClientFlag.BP.value],
+            'bp_code': '',
             'receipt_site': '',
             'receipt_tax': ''
         })
 
         # nullで更新出来なかったことを確認する。
         company_after = self.company_repository.find_by_id(company_id)
+        self.assertEqual(company_before.bp_code, company_after.bp_code)
         self.assertEqual(company_before.receipt_site, company_after.receipt_site)
         self.assertEqual(company_before.receipt_tax, company_after.receipt_tax)
 
@@ -246,12 +257,16 @@ class CompanyTests(BaseTestCase):
             'address': '住所２',
             'phone': '111-1111',
             'fax': '111-1111',
-            'payment_site': 15,
+            'client_code': '0001',
+            'bp_code': '9999',
+            'payment_site': 30,
             'receipt_site': 25,
             'payment_tax': 0,
             'receipt_tax': 10,
             'bank_id': '1',
-            'remarks': '備考'
+            'bank_holiday_flag': 1,
+            'remarks': '備考',
+            'print_name': '印刷用宛名',
         })
         self.assertEqual(result.status_code, 302)
 
@@ -275,9 +290,11 @@ class CompanyTests(BaseTestCase):
         result = self.app.post('/company/create', data={
             'company_name': 'test_only_one_our_company',
             'client_flag': [ClientFlag.OUR_COMPANY.value],
+            'client_code': '',
             'payment_tax': '',
             'receipt_tax': '',
-            'bank_id': ''
+            'bank_id': '',
+            'bank_holiday_flag': ''
         })
         self.assertEqual(result.status_code, 200)
         

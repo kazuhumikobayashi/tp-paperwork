@@ -51,14 +51,6 @@ def detail(company_id=None):
     form.bank_id.choices = bank_service.find_all_for_select()
     form.client_flag.choices = client_flag_service.find_all_for_multi_select()
     
-    # 顧客ではない場合、validationチェックをスルーする。
-    if ClientFlag.CLIENT.value not in form.client_flag.data:
-        form.payment_tax.validators = [validators.optional()]
-        form.bank_id.validators = [validators.optional()]
-    # BP所属ではない場合、validationチェックをスルーする。
-    if ClientFlag.BP.value not in form.client_flag.data:
-        form.receipt_tax.validators = [validators.optional()]
-    
     if form.validate_on_submit():
         company.company_name = form.company_name.data
         company.company_name_kana = form.company_name_kana.data
@@ -68,12 +60,16 @@ def detail(company_id=None):
         company.address = form.address.data
         company.phone = form.phone.data
         company.fax = form.fax.data
-        company.payment_site = form.payment_site.data
-        company.receipt_site = form.receipt_site.data
+        company.client_code = form.client_code.data
+        company.bp_code = form.bp_code.data
+        company.payment_site = form.payment_site.data or None
+        company.receipt_site = form.receipt_site.data or None
         company.payment_tax = form.payment_tax.data or None
         company.receipt_tax = form.receipt_tax.data or None
         company.bank_id = form.bank_id.data or None
+        company.bank_holiday_flag = form.bank_holiday_flag.data
         company.remarks = form.remarks.data
+        company.print_name = form.print_name.data
         client_flags = []
         for client_flag_id in form.client_flag.data:
             client_flags.extend([CompanyClientFlag(company.id, client_flag_id)])

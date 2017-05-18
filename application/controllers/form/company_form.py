@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, SelectMultipleField, validators
+from wtforms import StringField, SelectField, TextAreaField, SelectMultipleField, validators, RadioField
 from wtforms.validators import ValidationError
 
-from application.const import TAX_CLASSIFICATION, ClientFlag
-from application.controllers.form.fields import IntegerField, DateField
+from application.const import TAX_CLASSIFICATION, ClientFlag, SITE_CODE, HOLIDAY_FLAG
+from application.controllers.form.fields import IntegerField, DateField, RadioField
 from application.controllers.form.validators import Length, DataRequired
 from application.service.company_service import CompanyService
 
@@ -26,13 +26,25 @@ class CompanyForm(FlaskForm):
     company_name_kana = StringField('会社名称カナ', [Length(max=128)], filters=[lambda x: x or None])
     company_short_name = StringField('会社略称', [Length(max=32)], filters=[lambda x: x or None])
     client_flag = SelectMultipleField('顧客フラグ（必須）', [DataRequired(), Length(max=2048)], coerce=int)
-    contract_date = DateField('基本契約日', [validators.optional()], format='%Y/%m/%d')
+    contract_date = DateField('基本契約日', [validators.optional()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     postal_code = StringField('郵便番号', [Length(max=32)], filters=[lambda x: x or None])
     address = StringField('住所', [Length(max=1024)], filters=[lambda x: x or None])
     phone = StringField('電話番号', [Length(max=32)], filters=[lambda x: x or None])
     fax = StringField('Fax番号', [Length(max=32)], filters=[lambda x: x or None])
-    payment_site = IntegerField('入金サイト（顧客フラグ＝顧客の時、必須）', [required_if_client])
-    receipt_site = IntegerField('支払サイト（顧客フラグ＝BP所属の時、必須）', [required_if_bp])
+    client_code = StringField('顧客コード（顧客フラグ＝顧客の時、必須）',
+                              [Length(max=128), required_if_client],
+                              filters=[lambda x: x or None])
+    bp_code = StringField('協力会社コード（顧客フラグ＝BP所属の時、必須）', 
+                          [Length(max=128), required_if_bp], 
+                          filters=[lambda x: x or None])
+    payment_site = SelectField('入金サイト（顧客フラグ＝顧客の時、必須）',
+                               [required_if_client],
+                               choices=SITE_CODE,
+                               render_kw={"data-minimum-results-for-search": "Infinity"})
+    receipt_site = SelectField('支払サイト（顧客フラグ＝BP所属の時、必須）',
+                               [required_if_bp],
+                               choices=SITE_CODE,
+                               render_kw={"data-minimum-results-for-search": "Infinity"})
     payment_tax = SelectField('入金消費税（顧客フラグ＝顧客の時、必須）',
                               [Length(max=8), required_if_client],
                               choices=TAX_CLASSIFICATION,
@@ -44,7 +56,11 @@ class CompanyForm(FlaskForm):
     bank_id = SelectField('振込先銀行（顧客フラグ＝顧客の時、必須）',
                           [required_if_client],
                           render_kw={"data-minimum-results-for-search": "Infinity"})
+    bank_holiday_flag = RadioField('振込先銀行休日時フラグ（顧客フラグ＝顧客の時、必須）', 
+                                   [required_if_client],
+                                   choices=HOLIDAY_FLAG)
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
+    print_name = TextAreaField('印刷用宛名', [Length(max=1024)], filters=[lambda x: x or None])
     
     def validate_client_flag(self, field):
         companies = service.find_by_client_flag_id([ClientFlag.OUR_COMPANY.value])
