@@ -378,5 +378,6 @@ CREATE TABLE IF NOT EXISTS holidays (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  UNIQUE KEY (holiday)
 ) ENGINE = INNODB;

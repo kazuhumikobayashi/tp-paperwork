@@ -7,7 +7,7 @@ from application.domain.model.base_model import BaseModel
 class Holiday(BaseModel, db.Model):
     __tablename__ = 'holidays'
 
-    holiday = Column(Date, nullable=False)
+    holiday = Column(Date, nullable=False, unique=True)
     holiday_name = Column(String(128))
 
     def __init__(self,
