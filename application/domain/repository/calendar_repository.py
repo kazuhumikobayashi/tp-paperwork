@@ -25,8 +25,6 @@ class CalendarRepository(object):
         ).execute()
         # APIの実行結果からイベントを取り出す
         events = events_results.get('items', [])
-        holidays = []
-        for event in events:
-            holidays.append(Holiday(event["start"]["date"], event["summary"]))
+        holidays = [Holiday(event["start"]["date"], event["summary"]) for event in events]
         current_app.logger.debug(holidays)
         return holidays
