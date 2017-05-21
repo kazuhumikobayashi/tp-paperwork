@@ -275,7 +275,7 @@ CREATE TABLE IF NOT EXISTS project_attachments (
   id INT NOT NULL AUTO_INCREMENT,
   project_id INT NOT NULL ,
   attachment_id INT NOT NULL ,
-  type CHAR(1) NOT NULL ,
+  type INT NOT NULL ,
   remarks VARCHAR(256) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,

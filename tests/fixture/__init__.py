@@ -9,6 +9,7 @@ from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
 from application.domain.model.engineer_actual_result import EngineerActualResult
 from application.domain.model.estimation_remarks import EstimationRemarks
+from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.domain.model.order_remarks import OrderRemarks
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
@@ -314,7 +315,7 @@ def create_attachments():
     project_attachment = ProjectAttachment(
         project_id=1,
         attachment_id=attachment.id,
-        type=1,
+        type=ProjectAttachmentType.parse(1),
         remarks='remarks',
         created_at=datetime.today(),
         created_user='test',
