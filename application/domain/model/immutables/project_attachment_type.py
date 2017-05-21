@@ -26,8 +26,6 @@ class ProjectAttachmentType(Enum):
             return 'BP請求書'
         elif self._value_ == self.other.value:
             return 'その他'
-        else:
-            return None
 
     @staticmethod
     def get_type_for_select():
