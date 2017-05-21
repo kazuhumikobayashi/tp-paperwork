@@ -3,7 +3,6 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 from application import db
-from application.const import PROJECT_ATTACHMENT_TYPE
 from application.domain.model.assigned_members import AssignedMember
 from application.domain.model.base_model import BaseModel
 from application.domain.model.billing import Billing
@@ -194,14 +193,14 @@ class Project(BaseModel, db.Model):
 
     def get_project_attachments(self):
         tmp = sorted(self.project_attachments,
-                     key=lambda project_attachment: project_attachment.type)
+                     key=lambda project_attachment: project_attachment.type.value)
         project_attachments = attachments = []
         old_type = None
         for attachment in tmp:
-            if old_type == attachment.type:
+            if old_type == attachment.type.value:
                 attachments += [attachment]
             else:
                 attachments = [attachment]
-                project_attachments += [{"type": PROJECT_ATTACHMENT_TYPE[attachment.type], "attachments": attachments}]
-                old_type = attachment.type
+                project_attachments += [{"type": attachment.type.name, "attachments": attachments}]
+                old_type = attachment.type.value
         return project_attachments
