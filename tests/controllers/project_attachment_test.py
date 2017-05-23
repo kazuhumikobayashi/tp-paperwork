@@ -5,6 +5,7 @@ from nose.tools import ok_
 
 from application import db
 from application.domain.model.attachment import Attachment
+from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.repository.project_attachment_repository import ProjectAttachmentRepository
 from tests import BaseTestCase
@@ -201,7 +202,7 @@ class ProjectAttachmentTests(BaseTestCase):
         project_attachment = ProjectAttachment(
             project_id=1,
             attachment_id=attachment.id,
-            type=1,
+            type=ProjectAttachmentType.parse(1),
             remarks='remarks',
             created_at=datetime.today(),
             created_user='test',

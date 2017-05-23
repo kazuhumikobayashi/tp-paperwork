@@ -11,7 +11,7 @@
       {{ render_field(form.project_name, "col-xs-6", "required") }}
     </div>
     <div class="row">
-      {{ render_field(form.end_user, "col-xs-6") }}
+      {{ render_field(form.end_user_company_id, "col-xs-6", "required", input_class="select2") }}
       {{ render_field(form.client_company_id, "col-xs-6", "required", input_class="select2") }}
     </div>
     <div class="row">
@@ -23,14 +23,14 @@
       {{ render_field(form.over_time_calculation_id, "col-xs-6", "required", input_class="select2") }}
     </div>
     <div class="row">
-      {{ render_field(form.contract_form_id, "col-xs-6", input_class="select2") }}
+      {{ render_field(form.contract_form, "col-xs-6", input_class="select2") }}
       <div class="col-xs-6">
         {{ form.estimation_no.label(class_="control-label no-margin") }}
         {{ form.estimation_no(class_="form-control", placeholder="自動発番", disabled="disabled", style="width: 100%;") }}
       </div>
     </div>
     <div class="row">
-      {{ render_field(form.status_id, "col-xs-6", "required", input_class="select2") }}
+      {{ render_field(form.status, "col-xs-6", "required", input_class="select2") }}
       {{ render_field(form.billing_timing, "col-xs-6", input_class="select2") }}
     </div>
     <div class="row">

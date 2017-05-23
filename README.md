@@ -40,7 +40,6 @@ Initialize Data
 ```
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/01-schema.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/02-data-users.sql
-mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/03-data-statuses.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/04-data-skills.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/05-data-departments.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/06-data-bank.sql
@@ -48,7 +47,6 @@ mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/07-data-engineers.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/08-data-companies.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/09-data-engineer_skills.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/10-data-projects.sql
-mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/11-data-contract_forms.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/12-data-client_flags.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/13-data-engineer_actual_results.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/14-data-estimation_sequence.sql

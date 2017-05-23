@@ -8,6 +8,7 @@ from flask import request
 from flask import url_for
 
 from application.controllers.form.project_attachment_form import ProjectAttachmentForm, FileForm
+from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.service.attachment_service import AttachmentService
 from application.service.project_attachment_service import ProjectAttachmentService
 
@@ -38,7 +39,7 @@ def detail(project_attachment_id=None):
 
         project_attachment.project_id = form.project_id.data
         project_attachment.attachment_id = attachment.id or file_form.attachment_id.data
-        project_attachment.type = form.type.data
+        project_attachment.type = ProjectAttachmentType.parse(form.type.data)
         project_attachment.remarks = form.remarks.data
         service.save(project_attachment)
         flash('保存しました。')

@@ -5,17 +5,16 @@ from application.domain.model.assigned_members import AssignedMember
 from application.domain.model.attachment import Attachment
 from application.domain.model.billing import Billing
 from application.domain.model.company import Company
-from application.domain.model.contract_form import ContractForm
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
 from application.domain.model.engineer_actual_result import EngineerActualResult
 from application.domain.model.estimation_remarks import EstimationRemarks
+from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.domain.model.order_remarks import OrderRemarks
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.skill import Skill
 from application.domain.model.business_category import BusinessCategory
-from application.domain.model.status import Status
 from application.domain.model.user import User
 from application.domain.model.bank import Bank
 from application.domain.model.client_flag import ClientFlag
@@ -30,8 +29,6 @@ def init_data():
     create_companies()
     create_engineers()
     create_departments()
-    create_statuses()
-    create_contract_forms()
     create_projects()
     create_attachments()
     create_business_categories()
@@ -120,47 +117,31 @@ def create_departments():
     db.session.commit()
 
 
-def create_statuses():
-    statuses = ['見積り中', '受注済', '完了', '失注']
-    for status_name in statuses:
-        status = Status(
-            status_name=status_name,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-        db.session.add(status)
-    db.session.commit()
-
-
-def create_contract_forms():
-    contract_forms = ['一括', '準委任', '派遣']
-    for contract_form_name in contract_forms:
-        contract_form = ContractForm(
-            contract_form_name=contract_form_name,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-        db.session.add(contract_form)
-    db.session.commit()
-
-
 def create_projects():
     for num in range(12):
         project = Project(
             project_name='単体テスト' + str(num),
-            end_user='test',
-            client_company_id=1,
+            status='01:契約開始',
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no='test' + str(num),
+            end_user_company_id=1,
+            client_company_id=5,
             start_date=date.today(),
             end_date='2099/12/31',
-            recorded_department_id=1,
-            over_time_calculation_id=1,
-            contract_form_id=1,
-            estimation_no='test' + str(num),
-            status_id=1,
-            billing_timing='1',
-            remarks='test',
+            contract_form='請負契約（一括契約）',
+            billing_timing='契約期間末1回',
+            estimated_total_amount=1000000,
+            deposit_date='2099/12/31',
+            scope='test',
+            contents=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -336,7 +317,7 @@ def create_attachments():
     project_attachment = ProjectAttachment(
         project_id=1,
         attachment_id=attachment.id,
-        type=1,
+        type=ProjectAttachmentType.parse(1),
         remarks='remarks',
         created_at=datetime.today(),
         created_user='test',

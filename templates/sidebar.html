@@ -26,6 +26,7 @@
                                  request.path.count('/skill/') or
                                  request.path.count('/business_category/') or
                                  request.path.count('/department/') or
+                                 request.path.count('/holiday/') or
                                  request.path.count('/user/') %} active{% endif %}">
           <a href="#"><i class="fa fa-database fa-fw"></i> <span>マスタ管理</span>
             <span class="pull-right-container">
@@ -47,6 +48,9 @@
             </li>
             <li{% if request.path.count('/department/') %} class="active"{% endif %}>
                 <a href="{{ url_for('department.index') }}"><i class="fa fa-briefcase fa-fw"></i> 部署</a>
+            </li>
+            <li{% if request.path.count('/holiday/') %} class="active"{% endif %}>
+                <a href="{{ url_for('holiday.index') }}"><i class="fa fa-calendar fa-fw"></i> 祝日</a>
             </li>
             <li{% if request.path.count('/user/') %} class="active"{% endif %}>
                 <a href="{{ url_for('user.index') }}"><i class="fa fa-user-o fa-fw"></i> ユーザー</a>
