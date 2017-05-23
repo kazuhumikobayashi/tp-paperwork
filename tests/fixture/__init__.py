@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from application import bcrypt, db
 from application.domain.model.assigned_members import AssignedMember
@@ -20,6 +20,7 @@ from application.domain.model.user import User
 from application.domain.model.bank import Bank
 from application.domain.model.client_flag import ClientFlag
 from application.domain.model.company_client_flag import CompanyClientFlag
+from application.domain.model.engineer_history import EngineerHistory
 
 
 def init_data():
@@ -37,6 +38,7 @@ def init_data():
     create_banks()
     create_client_flags()
     create_company_client_flags()
+    create_engineer_histories()
 
 
 def create_user():
@@ -392,4 +394,31 @@ def create_company_client_flags():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company_client_flag)    
+    db.session.commit()
+
+
+def create_engineer_histories():
+    for num in range(5):
+        engineer_history = EngineerHistory(
+            engineer_id=1,
+            receipt_start_day=date(2016, 2*num+1, 1),
+            receipt_end_day=date(2016, 2*num+3, 1)-timedelta(days=1),
+            receipt_per_month=num+1,
+            receipt_rule=1,
+            receipt_bottom_base_hour=num+1,
+            receipt_top_base_hour=num+2,
+            receipt_free_base_hour='',
+            receipt_per_hour='1/100, 1/150',
+            receipt_per_bottom_hour=num+1,
+            receipt_per_top_hour=num+2,
+            receipt_fraction=100,
+            receipt_fraction_calculation1=1,
+            receipt_fraction_calculation2=1,
+            receipt_condition='test' + str(num),
+            remarks='test' + str(num),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer_history)    
     db.session.commit()

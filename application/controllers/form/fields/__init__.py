@@ -1,10 +1,11 @@
 import decimal
-from datetime import datetime
+import time
+from datetime import datetime, timedelta, date
 
-from wtforms import IntegerField, DecimalField, DateField
+import wtforms
 
 
-class IntegerField(IntegerField):
+class IntegerField(wtforms.IntegerField):
 
     def process_formdata(self, valuelist):
         if valuelist:
@@ -17,7 +18,7 @@ class IntegerField(IntegerField):
                     raise ValueError(self.gettext('{}は数値で入力してください'.format(self.label.text)))
 
 
-class DecimalField(DecimalField):
+class DecimalField(wtforms.DecimalField):
 
     def process_formdata(self, valuelist):
         if valuelist:
@@ -33,7 +34,7 @@ class DecimalField(DecimalField):
                     raise ValueError(self.gettext('{}は数値で入力してください'.format(self.label.text)))
 
 
-class DateField(DateField):
+class DateField(wtforms.DateField):
 
     def process_formdata(self, valuelist):
         if valuelist:
@@ -42,3 +43,27 @@ class DateField(DateField):
                 self.data = datetime.strptime(date_str, self.format).date()
             except ValueError:
                 raise ValueError(self.gettext('{}はyyyy/mm/dd形式で入力してください'.format(self.label.text)))
+
+
+class BeginningOfMonthField(wtforms.DateField):
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            date_str = ' '.join(valuelist)
+            try:
+                tmp_data = datetime.strptime(date_str, self.format).date()
+                self.data = date(tmp_data.year, tmp_data.month, 1)
+            except ValueError:
+                raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
+
+
+class EndOfMonthField(wtforms.DateField):
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            date_str = ' '.join(valuelist)
+            try:
+                tmp_data = datetime.strptime(date_str, self.format).date()
+                self.data = date.fromtimestamp(time.mktime((tmp_data.year, tmp_data.month + 1, 1, 0, 0, 0, 0, 0, 0))) - timedelta(days=1)
+            except ValueError:
+                raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
