@@ -38,7 +38,10 @@ class DateField(DateField):
     def process_formdata(self, valuelist):
         if valuelist:
             date_str = ' '.join(valuelist)
-            try:
-                self.data = datetime.strptime(date_str, self.format).date()
-            except ValueError:
-                raise ValueError(self.gettext('{}はyyyy/mm/dd形式で入力してください'.format(self.label.text)))
+            if date_str == '':
+                self.data = None
+            else:
+                try:
+                    self.data = datetime.strptime(date_str, self.format).date()
+                except ValueError:
+                    raise ValueError(self.gettext('{}はyyyy/mm/dd形式で入力してください'.format(self.label.text)))
