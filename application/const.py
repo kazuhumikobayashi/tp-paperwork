@@ -18,12 +18,31 @@ TAX_CLASSIFICATION = [('', ''),
 GENDER = [('男性', '男性'),
           ('女性', '女性')]
 
+RECEIPT_RULE = [('1', '固定'),
+                ('2', '変動')]
+
+FRACTION_CALCULATION1 = [('', ''),
+                         ('1', '以上'),
+                         ('2', 'より大きい'),
+                         ('3', '以下'),
+                         ('4', '未満')]
+
+FRACTION_CALCULATION2 = [('', ''),
+                         ('1', '切り捨て'),
+                         ('2', '繰り上げ'),
+                         ('3', '四捨五入')]
+
 
 class ClientFlag(Enum):
     OUR_COMPANY = 1
     BP = 2
     CLIENT = 3
     END_USER = 4
+
+
+class ReceiptRule(Enum):
+    FIXED = '1'
+    VARIABLE = '2'
 
 
 def get_billing_status_for_select():

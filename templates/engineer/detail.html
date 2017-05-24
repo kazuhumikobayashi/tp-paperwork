@@ -42,7 +42,7 @@
           {{ render_field(form.engineer_name_kana, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.birthday, "col-sm-6", input_class="date") }}
+          {{ render_field(form.birthday, "col-sm-6", input_class="date-yearstart") }}
           {{ render_field(form.gender, "col-sm-6") }}
         </div>
         <div class="row">
@@ -52,13 +52,54 @@
           {{ render_field(form.business_category, "col-sm-6", input_class="select2") }}
           {{ render_field(form.skill, "col-sm-6", input_class="select2") }}
         </div>
-        <!-- /.row -->
+       
+       <hr /> 
+       
+	  {% if form.id.data %}
+        <div class="box-header with-border">
+	      {% if not engineer_histories|length %}
+	        <a href="{{ url_for('engineer_history.create', engineer_id=form.id.data) }}" class="btn btn-sm btn-success pull-left">
+  	          <i class="fa fa-plus"></i> 支払情報作成
+	        </a>
+          {% endif %}
+        </div>
+	    <div class="box box-primary">
+	    <div class="box-body table-responsive no-padding">
+	      <table class="table table-hover">
+	        <tr>
+	          <th width="250px">支払契約開始年月</th>
+	          <th width="300px">支払契約終了年月</th>
+	          <th>支払単価</th>
+	          <th width="70px" class="center"></th>
+	        </tr>
+		  {% for engineer_history in engineer_histories %}
+		    <tr>
+	          <td>
+	            <a href="{{ url_for('engineer_history.history', engineer_history_id=engineer_history.id) }}">
+	              {{ engineer_history.receipt_start_day.strftime('%Y/%m/%d')|filter_suppress_none }}
+	            </a>
+	          </td>
+	          <td>{{ engineer_history.receipt_end_day.strftime('%Y/%m/%d')|filter_suppress_none }}</td>
+	          <td>{{ engineer_history.receipt_per_month|filter_suppress_none }}</td>
+	          <td>
+	            {% if engineer_history == latest_engineer_history %}
+	              <a class="btn btn-sm btn-danger" href="{{ url_for('engineer_history.delete', engineer_id=form.id.data, engineer_history_id=engineer_history.id) }}">
+	                <i class="fa fa-trash"></i> 削除
+	              </a>
+	            {% endif %}
+	          </td>
+	        </tr>
+		  {% endfor %}
+	      </table>
+	    </div>
+	   </div>
+	 {% endif %}
       </div>
-      <!-- /.box-body -->
-      <div class="box-footer">
-        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> 保存</button>
-      </div>
+      <!-- /.box -->      
+	  <div class="box-footer">
+	    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> 保存</button>
+	  </div>
     </form>
   </div>
-  <!-- /.box -->
+  
 {% endblock %}

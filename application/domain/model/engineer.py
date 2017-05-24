@@ -5,8 +5,9 @@ from sqlalchemy.orm import relationship
 from application import db
 from application.domain.model.base_model import BaseModel
 from application.domain.model.company import Company
-from application.domain.model.engineer_skill import EngineerSkill
 from application.domain.model.engineer_business_category import EngineerBusinessCategory
+from application.domain.model.engineer_history import EngineerHistory
+from application.domain.model.engineer_skill import EngineerSkill
 
 
 class Engineer(BaseModel, db.Model):
@@ -22,6 +23,7 @@ class Engineer(BaseModel, db.Model):
     company = relationship(Company, lazy='joined')
     engineer_skills = relationship(EngineerSkill, cascade='all, delete-orphan')
     engineer_business_categories = relationship(EngineerBusinessCategory, cascade='all, delete-orphan')
+    engineer_histories = relationship(EngineerHistory, cascade='all, delete-orphan')
 
     def __init__(self,
                  engineer_name=None,

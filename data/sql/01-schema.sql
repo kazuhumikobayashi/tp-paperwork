@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS banks;
 DROP TABLE IF EXISTS client_flags;
 DROP TABLE IF EXISTS company_client_flags;
+DROP TABLE IF EXISTS engineer_histories;
 DROP TABLE IF EXISTS holidays;
 
 
@@ -362,6 +363,32 @@ CREATE TABLE IF NOT EXISTS company_client_flags (
   id INT NOT NULL AUTO_INCREMENT ,
   company_id INT NOT NULL ,
   client_flag_id INT NOT NULL ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS engineer_histories (
+  id INT NOT NULL AUTO_INCREMENT,
+  engineer_id INT NOT NULL ,
+  receipt_start_day DATE NOT NULL ,
+  receipt_end_day DATE NOT NULL ,
+  receipt_per_month INT NOT NULL ,
+  receipt_rule INT NOT NULL ,
+  receipt_bottom_base_hour INT ,
+  receipt_top_base_hour INT ,
+  receipt_free_base_hour VARCHAR(128) ,
+  receipt_per_hour VARCHAR(128) ,
+  receipt_per_bottom_hour INT ,
+  receipt_per_top_hour INT ,
+  receipt_fraction INT ,
+  receipt_fraction_calculation1 INT ,
+  receipt_fraction_calculation2 INT ,
+  receipt_condition VARCHAR(1024) ,
+  remarks VARCHAR(1024) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

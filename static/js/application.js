@@ -55,6 +55,21 @@ $(function () {
     autoclose: true,
     todayHighlight: true
   });
+
+  $('.date-yearstart').datepicker({
+    format: "yyyy/mm/dd",
+    startView: 3,
+    language: "ja",
+    autoclose: true
+  });
+
+  $('.date-yyyymm').datepicker({
+    format: "yyyy/mm",
+    startView: 1,
+    minViewMode: 1,
+    language: "ja",
+    autoclose: true
+  });
 });
 
 $(function () {
@@ -194,4 +209,24 @@ $(function () {
   if (activeProjectTab) {
     $('.nav-tabs a[href="' + activeProjectTab + '"]').tab('show');
   }
+});
+
+
+// 「支払いのルール」表示・非表示コントロール
+$(function() {
+  var FIXED = 1;
+  var VARIABLE = 2;
+  
+  $('input').on('ifChecked', function(event){
+    if ($('input[name="receipt_rule"]:checked').val() == FIXED) {
+      // 固定のため、非表示
+      $('#variable-area').hide('slow');
+    } else if ($('input[name="receipt_rule"]:checked').val() == VARIABLE) {
+      // 変動のため、表示
+      $('#variable-area').show('slow');
+	} else {
+      // 未入力のため、非表示
+      $('#variable-area').hide();
+    }
+  });
 });

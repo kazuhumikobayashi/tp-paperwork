@@ -14,9 +14,9 @@
   </div>
   {% else %}
     {% if required %}
-      {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;") }}
+      {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;", **kwargs) }}
     {% else %}
-      {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;") }}
+      {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;", **kwargs) }}
     {% endif %}
   {% endif %}
   <span class="help-block no-margin">
