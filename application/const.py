@@ -45,13 +45,6 @@ class ReceiptRule(Enum):
     VARIABLE = '2'
 
 
-def get_type_for_select():
-    ret = [('', '')]
-    type_list = [(key, value) for key, value in sorted(PROJECT_ATTACHMENT_TYPE.items())]
-    ret.extend(type_list)
-    return ret
-
-
 def get_billing_status_for_select():
     ret = [('', '')]
     type_list = [(key, value) for key, value in sorted(BILLING_STATUS.items())]
