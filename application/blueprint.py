@@ -13,6 +13,8 @@ def register(app):
     from application.controllers import project_attachment
     from application.controllers import attachment
     from application.controllers import billing
+    from application.controllers import engineer_history
+    from application.controllers import holiday
 
     app.register_blueprint(company.bp)
     app.register_blueprint(department.bp)
@@ -28,3 +30,5 @@ def register(app):
     app.register_blueprint(project_attachment.bp)
     app.register_blueprint(attachment.bp)
     app.register_blueprint(billing.bp)
+    app.register_blueprint(engineer_history.bp)
+    app.register_blueprint(holiday.bp)

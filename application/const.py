@@ -8,14 +8,6 @@ FORMULA = [('', ''),
            ('4', '以上切り上げ'),
            ('5', '単位四捨五入')]
 
-PROJECT_ATTACHMENT_TYPE = {'1': '見積書',
-                           '2': '顧客注文書',
-                           '3': 'BP注文書',
-                           '4': '注文請書',
-                           '5': '顧客請求書',
-                           '6': 'BP請求書',
-                           '9': 'その他'}
-
 BILLING_STATUS = {'1': '請求済み'}
 
 TAX_CLASSIFICATION = [('', ''),
@@ -38,6 +30,20 @@ SITE_CODE = [('', ''),
 HOLIDAY_FLAG = [('1', '前倒し'),
                 ('2', '後ろ倒し')]
 
+RECEIPT_RULE = [('1', '固定'),
+                ('2', '変動')]
+
+FRACTION_CALCULATION1 = [('', ''),
+                         ('1', '以上'),
+                         ('2', 'より大きい'),
+                         ('3', '以下'),
+                         ('4', '未満')]
+
+FRACTION_CALCULATION2 = [('', ''),
+                         ('1', '切り捨て'),
+                         ('2', '繰り上げ'),
+                         ('3', '四捨五入')]
+
 
 class ClientFlag(Enum):
     OUR_COMPANY = 1
@@ -46,11 +52,9 @@ class ClientFlag(Enum):
     END_USER = 4
 
 
-def get_type_for_select():
-    ret = [('', '')]
-    type_list = [(key, value) for key, value in sorted(PROJECT_ATTACHMENT_TYPE.items())]
-    ret.extend(type_list)
-    return ret
+class ReceiptRule(Enum):
+    FIXED = '1'
+    VARIABLE = '2'
 
 
 def get_billing_status_for_select():

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from nose.tools import ok_
 
@@ -184,3 +184,42 @@ class EngineerTests(BaseTestCase):
         after = len(self.engineer_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
+
+    # 生年月日をブランクで更新できることを確認
+    def test_update_blank_birthday(self):
+        # 更新用の技術者を登録
+        engineer = Engineer(
+            engineer_name='テスト技術者',
+            engineer_name_kana='テストギジュツシャ',
+            birthday=date.today(),
+            gender='男性',
+            company_id='1',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        engineer_id = engineer.id
+
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/engineer/detail/' + str(engineer_id), data={
+            'engineer_name': 'テスト技術者',
+            'engineer_name_kana': 'テストギジュツシャ',
+            'birthday': '',
+            'gender': '男性',
+            'company_id': 1,
+            'skill': ['1', '2'],
+            'business_category': ['1', '2']
+        })
+        self.assertEqual(result.status_code, 302)
+
+        sut = self.engineer_repository.find_by_id(engineer_id)
+        # ブランクに更新されていることを確認
+        self.assertIsNone(sut.birthday)

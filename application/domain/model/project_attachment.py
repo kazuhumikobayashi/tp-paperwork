@@ -5,6 +5,8 @@ from sqlalchemy.orm import relationship
 from application import db
 from application.domain.model.attachment import Attachment
 from application.domain.model.base_model import BaseModel
+from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
+from application.domain.model.sqlalchemy.types import EnumType
 
 
 class ProjectAttachment(BaseModel, db.Model):
@@ -13,7 +15,7 @@ class ProjectAttachment(BaseModel, db.Model):
 
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
     attachment_id = Column(Integer, ForeignKey("attachments.id"), nullable=False)
-    type = Column(String(1), nullable=False)
+    type = Column(EnumType(enum_class=ProjectAttachmentType), nullable=False)
     remarks = Column(String(256))
 
     attachment = relationship(Attachment, lazy='subquery')
@@ -38,7 +40,7 @@ class ProjectAttachment(BaseModel, db.Model):
                 "'id='{}".format(self.id) + \
                 "', project_id='{}".format(self.project_id) + \
                 "', attachment_id='{}".format(self.attachment_id) + \
-                "', type='{}".format(self.type) + \
+                "', type='{}".format(self.type.name) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \

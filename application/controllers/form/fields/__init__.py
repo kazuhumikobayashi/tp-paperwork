@@ -1,5 +1,6 @@
 import decimal
-from datetime import datetime
+import time
+from datetime import datetime, timedelta, date
 
 import wtforms
 
@@ -38,11 +39,38 @@ class DateField(wtforms.DateField):
     def process_formdata(self, valuelist):
         if valuelist:
             date_str = ' '.join(valuelist)
+            if date_str == '':
+                self.data = None
+            else:
+                try:
+                    self.data = datetime.strptime(date_str, self.format).date()
+                except ValueError:
+                    raise ValueError(self.gettext('{}はyyyy/mm/dd形式で入力してください'.format(self.label.text)))
+
+
+class BeginningOfMonthField(wtforms.DateField):
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            date_str = ' '.join(valuelist)
             try:
-                self.data = datetime.strptime(date_str, self.format).date()
+                tmp_data = datetime.strptime(date_str, self.format).date()
+                self.data = date(tmp_data.year, tmp_data.month, 1)
             except ValueError:
-                raise ValueError(self.gettext('{}はyyyy/mm/dd形式で入力してください'.format(self.label.text)))
-            
+                raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
+
+
+class EndOfMonthField(wtforms.DateField):
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            date_str = ' '.join(valuelist)
+            try:
+                tmp_data = datetime.strptime(date_str, self.format).date()
+                self.data = date.fromtimestamp(time.mktime((tmp_data.year, tmp_data.month + 1, 1, 0, 0, 0, 0, 0, 0))) - timedelta(days=1)
+            except ValueError:
+                raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
+
 
 class RadioField(wtforms.RadioField):
     
