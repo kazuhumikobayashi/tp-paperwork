@@ -8,8 +8,6 @@ FORMULA = [('', ''),
            ('4', '以上切り上げ'),
            ('5', '単位四捨五入')]
 
-BILLING_STATUS = {'1': '請求済み'}
-
 TAX_CLASSIFICATION = [('', ''),
                       ('0', 'なし'),
                       ('8', '8%'),
@@ -43,10 +41,3 @@ class ClientFlag(Enum):
 class ReceiptRule(Enum):
     FIXED = '1'
     VARIABLE = '2'
-
-
-def get_billing_status_for_select():
-    ret = [('', '')]
-    type_list = [(key, value) for key, value in sorted(BILLING_STATUS.items())]
-    ret.extend(type_list)
-    return ret

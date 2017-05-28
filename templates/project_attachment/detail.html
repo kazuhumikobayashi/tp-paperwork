@@ -14,7 +14,7 @@
     {% if form.id.data %}
     <a href="{{ url_for('project.detail', project_id=form.project_id.data) }}" class="btn btn-default">
     {% else %}
-    <a href="{{ url_for('project.detail', project_id=request.args.get('project_id')) }}" class="btn btn-default">
+    <a href="#" class="btn btn-default">
     {% endif %}
       <i class="fa fa-arrow-left"></i> 一覧に戻る
     </a>

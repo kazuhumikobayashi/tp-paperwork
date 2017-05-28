@@ -1,16 +1,11 @@
 from datetime import datetime, date, timedelta
 
 from application import bcrypt, db
-from application.domain.model.assigned_members import AssignedMember
 from application.domain.model.attachment import Attachment
-from application.domain.model.billing import Billing
 from application.domain.model.company import Company
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
-from application.domain.model.engineer_actual_result import EngineerActualResult
-from application.domain.model.estimation_remarks import EstimationRemarks
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
-from application.domain.model.order_remarks import OrderRemarks
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.skill import Skill
@@ -146,156 +141,6 @@ def create_projects():
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
-
-        estimation_remarks = EstimationRemarks(
-            project_id=project.id,
-            scope='scope',
-            contents='contents',
-            deliverables='deliverables',
-            delivery_place='delivery_place',
-            inspection_date='2017/1/1',
-            responsible_person='responsible_person',
-            quality_control='quality_control',
-            subcontractor='subcontractor',
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-
-        order_remarks = OrderRemarks(
-            project_id=project.id,
-            order_no='1',
-            order_amount=1,
-            contents='contents',
-            responsible_person='responsible_person',
-            subcontractor='subcontractor',
-            scope='scope',
-            work_place='work_place',
-            delivery_place='delivery_place',
-            deliverables='deliverables',
-            inspection_date='2017/1/1',
-            payment_terms='payment_terms',
-            billing_company_id=1,
-            remarks='remarks',
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-
-        assigned_members = \
-            [
-                AssignedMember(
-                    project_id=project.id,
-                    seq_no=1,
-                    engineer_id=1,
-                    sales_unit_price=1,
-                    payment_unit_price=1,
-                    start_date=date.today().strftime('%Y/%m/%d'),
-                    end_date='2099/12/31',
-                    created_at=datetime.today(),
-                    created_user='test',
-                    updated_at=datetime.today(),
-                    updated_user='test'),
-                AssignedMember(
-                    project_id=project.id,
-                    seq_no=1,
-                    engineer_id=2,
-                    sales_unit_price=1,
-                    payment_unit_price=1,
-                    start_date=date.today().strftime('%Y/%m/%d'),
-                    end_date='2099/12/31',
-                    created_at=datetime.today(),
-                    created_user='test',
-                    updated_at=datetime.today(),
-                    updated_user='test')
-            ]
-
-        # 請求を登録
-        billings = \
-            [
-                Billing(
-                    project_id=project.id,
-                    billing_month=date.today().strftime('%Y/%m/%d'),
-                    billing_amount=1,
-                    billing_adjustment_amount=1,
-                    tax=1,
-                    carfare=1,
-                    scheduled_billing_date=date.today().strftime('%Y/%m/%d'),
-                    billing_date=date.today().strftime('%Y/%m/%d'),
-                    bill_output_date=date.today().strftime('%Y/%m/%d'),
-                    scheduled_payment_date=date.today().strftime('%Y/%m/%d'),
-                    payment_date=date.today().strftime('%Y/%m/%d'),
-                    status=1,
-                    remarks='remarks',
-                    created_at=datetime.today(),
-                    created_user='test',
-                    updated_at=datetime.today(),
-                    updated_user='test'),
-                Billing(
-                    project_id=project.id,
-                    billing_month=date.today().strftime('%Y/%m/%d'),
-                    billing_amount=2,
-                    billing_adjustment_amount=2,
-                    tax=2,
-                    carfare=2,
-                    scheduled_billing_date=date.today().strftime('%Y/%m/%d'),
-                    billing_date=date.today().strftime('%Y/%m/%d'),
-                    bill_output_date=date.today().strftime('%Y/%m/%d'),
-                    scheduled_payment_date=date.today().strftime('%Y/%m/%d'),
-                    payment_date=date.today().strftime('%Y/%m/%d'),
-                    status=None,
-                    remarks='remarks',
-                    created_at=datetime.today(),
-                    created_user='test',
-                    updated_at=datetime.today(),
-                    updated_user='test')
-            ]
-
-        engineer_actual_results = \
-            [
-                EngineerActualResult(
-                    project_id=1,
-                    result_month=date.today().strftime('%Y/%m/%d'),
-                    seq_no=1,
-                    engineer_id=1,
-                    fixed_flg='1',
-                    working_hours=1,
-                    adjustment_hours=1,
-                    billing_amount=1,
-                    billing_adjustment_amount=1,
-                    payment_amount=1,
-                    payment_adjustment_amount=1,
-                    carfare=1,
-                    remarks='remarks',
-                    created_at=datetime.today(),
-                    created_user='test',
-                    updated_at=datetime.today(),
-                    updated_user='test'),
-                EngineerActualResult(
-                    project_id=project.id,
-                    result_month=date.today().strftime('%Y/%m/%d'),
-                    seq_no=2,
-                    engineer_id=2,
-                    fixed_flg='2',
-                    working_hours=2,
-                    adjustment_hours=2,
-                    billing_amount=2,
-                    billing_adjustment_amount=2,
-                    payment_amount=2,
-                    payment_adjustment_amount=2,
-                    carfare=2,
-                    remarks=None,
-                    created_at=datetime.today(),
-                    created_user='test',
-                    updated_at=datetime.today(),
-                    updated_user='test')
-            ]
-
-        project.estimation_remarks = estimation_remarks
-        project.order_remarks = order_remarks
-        project.assigned_members = assigned_members
-        project.billings = billings
-        project.engineer_actual_results = engineer_actual_results
 
         db.session.add(project)
     db.session.commit()

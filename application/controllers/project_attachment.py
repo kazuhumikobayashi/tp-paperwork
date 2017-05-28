@@ -66,4 +66,4 @@ def delete(project_attachment_id):
         attachment = attachment_service.find_by_id(project_attachment.attachment_id)
         attachment_service.destroy(attachment)
         flash('削除しました。')
-    return redirect(url_for('project.detail', project_id=project_attachment.project_id))
+    return redirect('/')
