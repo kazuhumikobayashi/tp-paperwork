@@ -1,15 +1,9 @@
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS estimation_sequence;
-DROP TABLE IF EXISTS billings;
-DROP TABLE IF EXISTS payments;
 DROP TABLE IF EXISTS project_attachments;
 DROP TABLE IF EXISTS attachments;
 DROP TABLE IF EXISTS engineer_skills;
 DROP TABLE IF EXISTS engineer_business_categories;
-DROP TABLE IF EXISTS assigned_members;
-DROP TABLE IF EXISTS estimation_remarks;
-DROP TABLE IF EXISTS order_remarks;
-DROP TABLE IF EXISTS engineer_actual_results;
 DROP TABLE IF EXISTS engineers;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS companies;
@@ -137,133 +131,6 @@ CREATE TABLE IF NOT EXISTS projects (
   subcontractor VARCHAR(128) ,
   remarks VARCHAR(1024) ,
   client_order_no VARCHAR(64) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS engineer_actual_results (
-  id INT NOT NULL AUTO_INCREMENT,
-  project_id INT NOT NULL ,
-  result_month DATE NOT NULL ,
-  seq_no INT NOT NULL ,
-  engineer_id INT NOT NULL ,
-  fixed_flg CHAR(1) NOT NULL DEFAULT '0',
-  working_hours DECIMAL(5,2) ,
-  adjustment_hours DECIMAL(5,2) ,
-  billing_amount INT ,
-  billing_adjustment_amount INT ,
-  payment_amount INT ,
-  payment_adjustment_amount INT ,
-  carfare INT ,
-  remarks VARCHAR(1024) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS billings (
-  id INT NOT NULL AUTO_INCREMENT,
-  project_id INT NOT NULL ,
-  billing_month DATE NOT NULL ,
-  billing_amount INT ,
-  billing_adjustment_amount INT ,
-  tax INT ,
-  carfare INT ,
-  scheduled_billing_date DATE ,
-  billing_date DATE ,
-  bill_output_date DATE ,
-  scheduled_payment_date DATE ,
-  payment_date DATE ,
-  status INT ,
-  remarks VARCHAR(1024) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS payments (
-  id INT NOT NULL AUTO_INCREMENT,
-  project_id INT NOT NULL ,
-  payment_month DATE NOT NULL ,
-  engineer_id INT ,
-  payment_amount INT ,
-  payment_adjustment_amount INT ,
-  tax INT ,
-  carfare INT ,
-  scheduled_payment_date DATE ,
-  payment_date DATE ,
-  status INT ,
-  remarks VARCHAR(1024) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS assigned_members (
-  id INT NOT NULL AUTO_INCREMENT,
-  project_id INT NOT NULL ,
-  seq_no INT NOT NULL ,
-  engineer_id INT NOT NULL ,
-  sales_unit_price INT NOT NULL ,
-  payment_unit_price INT NOT NULL ,
-  start_date DATE NOT NULL ,
-  end_date DATE NOT NULL ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS estimation_remarks (
-  id INT NOT NULL AUTO_INCREMENT,
-  project_id INT NOT NULL ,
-  scope VARCHAR(1024) ,
-  contents VARCHAR(1024) ,
-  deliverables VARCHAR(1024) ,
-  delivery_place VARCHAR(1024) ,
-  inspection_date DATE ,
-  responsible_person VARCHAR(128) ,
-  quality_control VARCHAR(128) ,
-  subcontractor VARCHAR(128) ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS order_remarks (
-  id INT NOT NULL AUTO_INCREMENT,
-  project_id INT NOT NULL ,
-  order_no VARCHAR(64) ,
-  order_amount INT ,
-  contents VARCHAR(1024) ,
-  responsible_person VARCHAR(128) ,
-  subcontractor VARCHAR(128) ,
-  scope VARCHAR(1024) ,
-  work_place VARCHAR(1024) ,
-  delivery_place VARCHAR(1024) ,
-  deliverables VARCHAR(1024) ,
-  inspection_date DATE ,
-  payment_terms VARCHAR(1024) ,
-  billing_company_id INT ,
-  remarks VARCHAR(1024) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
