@@ -5,7 +5,10 @@ from application.domain.model.attachment import Attachment
 from application.domain.model.company import Company
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
+from application.domain.model.immutables.billing_timing import BillingTiming
+from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
+from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.skill import Skill
@@ -116,7 +119,8 @@ def create_projects():
     for num in range(12):
         project = Project(
             project_name='単体テスト' + str(num),
-            status='01:契約開始',
+            project_name_for_bp='テスト' + str(num),
+            status=Status.start,
             recorded_department_id=1,
             sales_person='営業担当',
             estimation_no='test' + str(num),
@@ -124,12 +128,13 @@ def create_projects():
             client_company_id=5,
             start_date=date.today(),
             end_date='2099/12/31',
-            contract_form='請負契約（一括契約）',
-            billing_timing='契約期間末1回',
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.payment_at_last,
             estimated_total_amount=1000000,
             deposit_date='2099/12/31',
             scope='test',
             contents=None,
+            working_place=None,
             delivery_place=None,
             deliverables=None,
             inspection_date=None,
