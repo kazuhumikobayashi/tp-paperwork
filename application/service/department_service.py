@@ -10,12 +10,6 @@ class DepartmentService(object):
     def find_all(self, page=None):
         return self.repository.find_all(page)
 
-    def find_all_for_select(self):
-        ret = [('', '')]
-        department_list = self.find_all_for_multi_select()
-        ret.extend(department_list)
-        return ret
-
     def find_all_for_multi_select(self):
         department_list = [(str(h.id), h.department_name) for h in self.find_all()]
         return department_list

@@ -3,15 +3,9 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 from application import db
-from application.domain.model.assigned_members import AssignedMember
 from application.domain.model.base_model import BaseModel
-from application.domain.model.billing import Billing
 from application.domain.model.company import Company
 from application.domain.model.department import Department
-from application.domain.model.engineer_actual_result import EngineerActualResult
-from application.domain.model.estimation_remarks import EstimationRemarks
-from application.domain.model.order_remarks import OrderRemarks
-from application.domain.model.payment import Payment
 from application.domain.model.project_attachment import ProjectAttachment
 
 
@@ -46,13 +40,7 @@ class Project(BaseModel, db.Model):
     end_user_company = relationship(Company, lazy='joined', foreign_keys=[end_user_company_id])
     client_company = relationship(Company, lazy='joined', foreign_keys=[client_company_id])
     recorded_department = relationship(Department, lazy='joined')
-    assigned_members = relationship(AssignedMember, cascade='all, delete-orphan')
-    estimation_remarks = relationship(EstimationRemarks, cascade='all, delete-orphan', uselist=False)
-    order_remarks = relationship(OrderRemarks, cascade='all, delete-orphan', uselist=False)
-    engineer_actual_results = relationship(EngineerActualResult, cascade='all, delete-orphan')
     project_attachments = relationship(ProjectAttachment, cascade='all, delete-orphan')
-    billings = relationship(Billing, cascade='all, delete-orphan')
-    payments = relationship(Payment, cascade='all, delete-orphan')
 
     is_start_date_change = False
 
@@ -136,13 +124,7 @@ class Project(BaseModel, db.Model):
                 "', subcontractor='{}".format(self.subcontractor) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', client_order_no='{}".format(self.client_order_no) + \
-                "', assigned_members='{}".format(self.assigned_members) + \
-                "', estimation_remarks='{}".format(self.estimation_remarks) + \
-                "', order_remarks='{}".format(self.order_remarks) + \
-                "', engineer_actual_results='{}".format(self.engineer_actual_results) + \
                 "', project_attachments='{}".format(self.project_attachments) + \
-                "', billings='{}".format(self.billings) + \
-                "', payments='{}".format(self.payments) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \
                 "', updated_at='{}".format(self.updated_at) + \
@@ -157,50 +139,8 @@ class Project(BaseModel, db.Model):
                 arguments[name] = getattr(self, name)
         return copy.__class__(**arguments)
 
-    def get_engineer_actual_results(self):
-        tmp = sorted(self.engineer_actual_results,
-                     key=lambda engineer_actual_result: engineer_actual_result.result_month)
-        engineer_actual_results = results = []
-        old_month = None
-        for result in tmp:
-            if old_month == result.result_month:
-                results += [result]
-            else:
-                results = [result]
-                engineer_actual_results += [(result.result_month, results)]
-            old_month = result.result_month
-        return engineer_actual_results
-
-    def get_billings(self):
-        tmp = sorted(self.billings,
-                     key=lambda billing: billing.billing_month)
-        billings = results = []
-        old_month = None
-        for result in tmp:
-            if old_month == result.billing_month:
-                results += [result]
-            else:
-                results = [result]
-                billings += [(result.billing_month, results)]
-            old_month = result.billing_month
-        return billings
-
     def get_fiscal_year(self):
         if int(self.start_date.strftime('%m')) >= 10:
             return int(self.start_date.strftime('%y')) + 1
         else:
             return int(self.start_date.strftime('%y'))
-
-    def get_project_attachments(self):
-        tmp = sorted(self.project_attachments,
-                     key=lambda project_attachment: project_attachment.type.value)
-        project_attachments = attachments = []
-        old_type = None
-        for attachment in tmp:
-            if old_type == attachment.type.value:
-                attachments += [attachment]
-            else:
-                attachments = [attachment]
-                project_attachments += [{"type": attachment.type.name, "attachments": attachments}]
-                old_type = attachment.type.value
-        return project_attachments

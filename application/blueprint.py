@@ -8,11 +8,8 @@ def register(app):
     from application.controllers import skill
     from application.controllers import business_category
     from application.controllers import pwchange
-    from application.controllers import assigned_member
-    from application.controllers import engineer_actual_result
     from application.controllers import project_attachment
     from application.controllers import attachment
-    from application.controllers import billing
     from application.controllers import engineer_history
     from application.controllers import holiday
 
@@ -25,10 +22,7 @@ def register(app):
     app.register_blueprint(skill.bp)
     app.register_blueprint(business_category.bp)
     app.register_blueprint(pwchange.bp)
-    app.register_blueprint(assigned_member.bp)
-    app.register_blueprint(engineer_actual_result.bp)
     app.register_blueprint(project_attachment.bp)
     app.register_blueprint(attachment.bp)
-    app.register_blueprint(billing.bp)
     app.register_blueprint(engineer_history.bp)
     app.register_blueprint(holiday.bp)
