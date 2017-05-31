@@ -6,9 +6,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
-from wtforms import validators
 
-from application.const import ClientFlag
 from application.controllers.form.company_form import CompanyForm
 from application.controllers.form.company_search_form import CompanySearchForm
 from application.domain.model.company_client_flag import CompanyClientFlag
