@@ -70,3 +70,22 @@ class EndOfMonthField(wtforms.DateField):
                 self.data = date.fromtimestamp(time.mktime((tmp_data.year, tmp_data.month + 1, 1, 0, 0, 0, 0, 0, 0))) - timedelta(days=1)
             except ValueError:
                 raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
+
+
+class RadioField(wtforms.RadioField):
+    
+    def process_data(self, value):
+        try:
+            if value:
+                self.data = self.coerce(value)
+            else:
+                self.data = None
+        except (ValueError, TypeError):
+            self.data = None
+            
+    def pre_validate(self, form):
+        for v, _ in self.choices:
+            if self.data == v or self.data is None:
+                break
+            else:
+                raise ValueError(self.gettext('Not a valid choice'))

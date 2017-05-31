@@ -20,12 +20,16 @@ class Company(BaseModel, db.Model):
     address = Column(String(1024))
     phone = Column(String(32))
     fax = Column(String(32))
+    client_code = Column(String(128))
+    bp_code = Column(String(128))
     payment_site = Column(Integer)
     receipt_site = Column(Integer)
     payment_tax = Column(Integer)
     receipt_tax = Column(Integer)
     bank_id = Column(Integer, ForeignKey("banks.id"))
-    remarks = Column(String(1024))
+    bank_holiday_flag = Column(String(128))
+    remarks = Column(String(1024)) 
+    print_name = Column(String(1024))
 
     bank = relationship(Bank, lazy='joined')
     company_client_flags = relationship(CompanyClientFlag, cascade='all, delete-orphan')
@@ -39,12 +43,16 @@ class Company(BaseModel, db.Model):
                  address=None,
                  phone=None,
                  fax=None,
+                 client_code=None,
+                 bp_code=None,
                  payment_site=None,
                  receipt_site=None,
                  payment_tax=None,
                  receipt_tax=None,
                  bank_id=None,
+                 bank_holiday_flag=None,
                  remarks=None,
+                 print_name=None,
                  created_at=None,
                  created_user=None,
                  updated_at=None,
@@ -58,12 +66,16 @@ class Company(BaseModel, db.Model):
         self.address = address
         self.phone = phone
         self.fax = fax
+        self.client_code = client_code
+        self.bp_code = bp_code
         self.payment_site = payment_site
         self.receipt_site = receipt_site
         self.payment_tax = payment_tax
         self.receipt_tax = receipt_tax
         self.bank_id = bank_id
+        self.bank_holiday_flag = bank_holiday_flag
         self.remarks = remarks
+        self.print_name = print_name
 
     def __repr__(self):
         return "<Company:" + \
@@ -76,12 +88,16 @@ class Company(BaseModel, db.Model):
                 "', address='{}".format(self.address) + \
                 "', phone='{}".format(self.phone) + \
                 "', fax='{}".format(self.fax) + \
+                "', client_code='{}".format(self.client_code) + \
+                "', bp_code='{}".format(self.bp_code) + \
                 "', payment_site='{}".format(self.payment_site) + \
                 "', receipt_site='{}".format(self.receipt_site) + \
                 "', payment_tax='{}".format(self.receipt_tax) + \
                 "', receipt_tax='{}".format(self.receipt_tax) + \
                 "', bank='{}".format(self.bank) + \
+                "', bank_holiday_flag='{}".format(self.bank_holiday_flag) + \
                 "', remarks='{}".format(self.remarks) + \
+                "', print_name='{}".format(self.print_name) + \
                 "', company_client_flags='{}".format(self.company_client_flags) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \

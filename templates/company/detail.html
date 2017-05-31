@@ -6,6 +6,8 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
   <!-- bootstrap datepicker -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
 {% endblock %}
 {% block include_js %}
   <!-- Select2 -->
@@ -13,6 +15,8 @@
   <!-- bootstrap datepicker -->
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
 {% endblock %}
 {% block content_header %}
   <h1>
@@ -64,9 +68,11 @@
 	           			<h3 class="box-title">＜請求情報＞</h3>
 	           		  </div>
 	           		  <div class="box-body">
-			            {{ render_field(form.payment_site, "col-xs-12") }}
+	           		    {{ render_field(form.client_code, "col-xs-12") }}
+			            {{ render_field(form.payment_site, "col-xs-12", input_class="select2") }}
 			            {{ render_field(form.payment_tax, "col-xs-12", input_class="select2") }}
 			            {{ render_field(form.bank_id, "col-xs-12", input_class="select2") }}
+			            {{ render_field(form.bank_holiday_flag, "col-xs-12") }}
 				      </div><!-- /.box-body -->
 				    </div><!-- /.box -->
 			      </div><!-- /.col -->
@@ -80,13 +86,17 @@
 	           			<h3 class="box-title">＜支払情報＞</h3>
 	           		  </div>
 	           		  <div class="box-body">
-			            {{ render_field(form.receipt_site, "col-xs-12") }}
+	           		    {{ render_field(form.bp_code, "col-xs-12") }}
+			            {{ render_field(form.receipt_site, "col-xs-12", input_class="select2") }}
 			            {{ render_field(form.receipt_tax, "col-xs-12", input_class="select2") }}
 				      </div><!-- /.box-body -->
 				    </div><!-- /.box -->
 			      </div><!-- /.col -->
 		        </div><!-- /.row -->
 	        </div>
+        </div>
+        <div class="row">
+          {{ render_field(form.print_name, "col-sm-6") }}
         </div>
         <div class="row">
           {{ render_field(form.remarks, "col-xs-12") }}
