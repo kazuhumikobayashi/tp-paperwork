@@ -21,33 +21,25 @@ class ContractForm(FlaskForm):
                          choices=Status.get_status_for_select(),
                          render_kw={"data-minimum-results-for-search": "Infinity"})
     recorded_department_id = SelectField('計上部署（必須）',
-                                         filters=[lambda x: x or None],
                                          render_kw={"data-minimum-results-for-search": "Infinity"})
     sales_person = StringField('営業担当者名称', [Length(max=128)], filters=[lambda x: x or None])
     estimation_no = StringField('見積No（必須）', [DataRequired(), Length(max=64)])
-    end_user_company_id = SelectField('エンドユーザー（必須）',
-                                      filters=[lambda x: x or None],
-                                      render_kw={"data-minimum-results-for-search": "Infinity"})
-    client_company_id = SelectField('顧客会社（必須）',
-                                    filters=[lambda x: x or None],
-                                    render_kw={"data-minimum-results-for-search": "Infinity"})
+    end_user_company_id = SelectField('エンドユーザー（必須）')
+    client_company_id = SelectField('顧客会社（必須）')
     start_date = DateField('プロジェクト開始日（必須）', [DataRequired()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     end_date = DateField('プロジェクト終了日（必須）', [DataRequired()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     contract_form = SelectField('契約形態（必須）',
                                 [Length(max=128)],
                                 choices=Contract.get_type_for_select(),
-                                filters=[lambda x: x or None],
                                 render_kw={"data-minimum-results-for-search": "Infinity"})
     billing_timing = SelectField('請求タイミング（必須）',
                                  [Length(max=128)],
                                  choices=BillingTiming.get_type_for_select(),
-                                 filters=[lambda x: x or None],
                                  render_kw={"data-minimum-results-for-search": "Infinity"})
     estimated_total_amount = IntegerField('見積金額合計', filters=[lambda x: x or None])
     payment_site = IntegerField('入金サイト', filters=[lambda x: x or None])
     payment_tax = SelectField('入金消費税区分',
                               choices=Tax.get_type_for_select(),
-                              filters=[lambda x: x or None],
                               render_kw={"data-minimum-results-for-search": "Infinity"})
     deposit_date = DateField('単月入金予定日', [validators.Optional()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     scope = StringField('委託範囲', [Length(max=1024)], filters=[lambda x: x or None])

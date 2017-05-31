@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy import ForeignKey
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from application import db
@@ -25,7 +26,7 @@ class Project(BaseModel, db.Model):
     estimation_no = Column(String(64), unique=True)
     end_user_company_id = Column(Integer, ForeignKey("companies.id"))
     client_company_id = Column(Integer, ForeignKey("companies.id"))
-    start_date = Column(Date)
+    _start_date = Column('start_date', Date)
     end_date = Column(Date)
     contract_form = Column(EnumType(enum_class=Contract))
     billing_timing = Column(EnumType(enum_class=BillingTiming))
@@ -48,7 +49,21 @@ class Project(BaseModel, db.Model):
     recorded_department = relationship(Department, lazy='joined')
     project_attachments = relationship(ProjectAttachment, cascade='all, delete-orphan')
 
-    is_start_date_change = False
+    _is_start_date_change = False
+
+    @hybrid_property
+    def start_date(self):
+        return self._start_date
+
+    @start_date.setter
+    def start_date(self, value):
+        if self.start_date and self.start_date != value:
+            self._is_start_date_change = True
+        self._start_date = value
+
+    @property
+    def is_start_date_change(self):
+        return self._is_start_date_change
 
     def __init__(self,
                  project_name=None,
@@ -89,7 +104,7 @@ class Project(BaseModel, db.Model):
         self.estimation_no = estimation_no
         self.end_user_company_id = end_user_company_id
         self.client_company_id = client_company_id
-        self.start_date = start_date
+        self._start_date = start_date
         self.end_date = end_date
         self.contract_form = contract_form
         self.billing_timing = billing_timing
@@ -106,7 +121,6 @@ class Project(BaseModel, db.Model):
         self.subcontractor = subcontractor
         self.remarks = remarks
         self.client_order_no = client_order_no
-        self.is_start_date_change = True
 
     def __repr__(self):
         return "<Project:" + \
@@ -147,6 +161,8 @@ class Project(BaseModel, db.Model):
         arguments = dict()
         copy = Project()
         for name, column in self.__mapper__.columns.items():
+            if name[0:1] == '_':
+                name = name[1:]
             if not (column.primary_key or column.unique):
                 arguments[name] = getattr(self, name)
         return copy.__class__(**arguments)

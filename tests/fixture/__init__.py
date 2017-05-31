@@ -157,29 +157,30 @@ def create_projects():
 
 
 def create_attachments():
-    attachment = Attachment(
-        filename='見積書.pdf',
-        storage_filename='#',
-        size='10',
-        content_type='pdf',
-        created_at=datetime.today(),
-        created_user='test',
-        updated_at=datetime.today(),
-        updated_user='test')
-    db.session.add(attachment)
-    db.session.commit()
+    for num in range(2):
+        attachment = Attachment(
+            filename='見積書' + str(num) + '.pdf',
+            storage_filename='#',
+            size='10',
+            content_type='pdf',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(attachment)
+        db.session.commit()
 
-    project_attachment = ProjectAttachment(
-        project_id=1,
-        attachment_id=attachment.id,
-        type=ProjectAttachmentType.parse(1),
-        remarks='remarks',
-        created_at=datetime.today(),
-        created_user='test',
-        updated_at=datetime.today(),
-        updated_user='test')
-    db.session.add(project_attachment)
-    db.session.commit()
+        project_attachment = ProjectAttachment(
+            project_id=1,
+            attachment_id=attachment.id,
+            type=ProjectAttachmentType.parse(1),
+            remarks='remarks' + str(num),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_attachment)
+        db.session.commit()
 
 
 def create_business_categories():

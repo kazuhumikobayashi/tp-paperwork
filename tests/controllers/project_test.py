@@ -76,31 +76,6 @@ class ProjectTests(BaseTestCase):
         result = self.app.get('/project/create')
         self.assertEqual(result.status_code, 200)
 
-    # 次の期の基本情報を保存できる
-    def test_create_project_second_basic(self):
-        shain_number = 'test1'
-        self.app.post('/login', data={
-            'shain_number': shain_number,
-            'password': 'test'
-        })
-
-        result = self.app.post('/project/create', data={
-            'project_name': 'test_create_project_basic',
-            'end_user_company_id': '1',
-            'client_company_id': '1',
-            'start_date': str(int(datetime.today().strftime('%Y')) + 1) + '/4/1',
-            'end_date': '2099/12/31',
-            'recorded_department_id': '1',
-            'over_time_calculation_id': '1',
-            'contract_form_id': '1',
-            'status_id': '1',
-            'billing_timing': '1',
-            'remarks': 'test',
-            'save': 'basic'
-        })
-        # プロジェクトが保存できることを確認
-        self.assertEqual(result.status_code, 302)
-
     # プロジェクトをコピーできる
     def test_copy_project(self):
         # コピー用のプロジェクトを登録
