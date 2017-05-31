@@ -14,15 +14,6 @@
   <!-- bootstrap datepicker -->
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
-  <script>
-  // project詳細のタブ情報をクリア
-  $(function () {
-    var activeProjectTab = localStorage.getItem('activeProjectTab');
-    if (activeProjectTab) {
-      localStorage.removeItem('activeProjectTab');
-    }
-  });
-  </script>
 {% endblock %}
 {% block content_header %}
   <h1>プロジェクト</h1>
@@ -111,10 +102,10 @@
               <td>{{ project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ project.client_company.company_name }}</td>
               <td>{{ project.recorded_department.department_name }}</td>
-              <td>{{ project.status }}</td>
+              <td>{{ project.status.name }}</td>
               <td>{{ project.estimation_no|filter_suppress_none }}</td>
               <td>
-                <a class="btn btn-sm btn-default" href="#">
+                <a class="btn btn-sm btn-default" href="{{ url_for('contract.index', project_id=project.id) }}">
                    詳細 <i class="fa fa-navicon"></i>
                 </a>
               </td>

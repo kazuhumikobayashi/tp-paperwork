@@ -4,6 +4,7 @@ from flask import flash
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import url_for
 
 from application.controllers.form.project_create_form import ProjectCreateForm
 from application.controllers.form.project_search_form import ProjectSearchForm
@@ -50,7 +51,7 @@ def create():
 
         service.save(project)
         flash('保存しました。')
-        return redirect('/')
+        return redirect(url_for('contract.index', project_id=project.id))
     current_app.logger.debug(form.errors)
     return render_template('project/create.html', form=form)
 
@@ -60,7 +61,7 @@ def copy(project_id):
     project = service.clone(project_id)
 
     flash('コピーしました。')
-    return redirect('/project')
+    return redirect(url_for('contract.index', project_id=project.id))
 
 
 @bp.route('/delete/<project_id>', methods=['GET'])

@@ -17,3 +17,9 @@ input,textarea {
 .datepicker.datepicker-dropdown.dropdown-menu {
     z-index: 1050;
 }
+
+.part-title {
+    margin: 20px 0 5px 0;
+    font-size: 17px;
+    border-bottom: 2px solid #d2d6de;
+}
