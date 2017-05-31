@@ -24,13 +24,13 @@ def init_data():
     # マスターデータの作成
     create_user()
     create_skills()
+    create_banks()
     create_companies()
     create_engineers()
     create_departments()
     create_projects()
     create_attachments()
     create_business_categories()
-    create_banks()
     create_client_flags()
     create_company_client_flags()
     create_engineer_histories()
@@ -73,11 +73,16 @@ def create_companies():
                  address='住所',
                  phone='000-0000',
                  fax='000-0000',
-                 payment_site='10',
+                 client_code='0001',
+                 bp_code='9999',
+                 payment_site='25',
                  receipt_site='30',
                  payment_tax='0',
                  receipt_tax='8',
+                 bank_id='2',
+                 bank_holiday_flag='1',
                  remarks='備考',
+                 print_name='印刷用宛名',
                  created_at=datetime.today(),
                  created_user='test',
                  updated_at=datetime.today(),
