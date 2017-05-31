@@ -87,5 +87,5 @@ class RadioField(wtforms.RadioField):
         for v, _ in self.choices:
             if self.data == v or self.data is None:
                 break
-            else:
-                raise ValueError(self.gettext('Not a valid choice'))
+        else:
+            raise ValueError(self.gettext('Not a valid choice'))
