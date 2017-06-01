@@ -1,0 +1,217 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}プロジェクト登録{% endblock %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="{{ url_for('project.index') }}" class="btn btn-default">
+        <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+{% endblock %}
+{% block main_content %}
+<div class="row">
+  <div class="col-lg-9">
+    <div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">
+          {% if form.project_name.data %}{{ form.project_name.data }}
+          <small> 見積No : {{ form.estimation_no.data|filter_suppress_none }}</small>
+          {% endif %}
+        </h3>
+        <div class="box-tools">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#" data-toggle="tab">契約</a></li>
+            <li><a href="#">実績</a></li>
+            <li><a href="#">請求</a></li>
+            <li><a href="#">支払</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="text-right" style="padding-bottom: 10px;">
+              <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 見積書出力</button>
+              <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 注文書出力</button>
+            </div>
+            <form class="form-horizontal" method="post">
+            {{ form.hidden_tag() }}
+              <div class="box box-success color-palette-box">
+                <div class="box-header with-border">
+                  <h3 class="box-title"> 見積書詳細</h3>
+                  <div class="box-tools">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    {{ render_field(form.status, "col-sm-6", input_class="select2") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.recorded_department_id, "col-sm-6", "required", input_class="select2") }}
+                    {{ render_field(form.sales_person, "col-sm-6") }}
+                  </div>
+                  <div class="part-title"> 見積情報</div>
+                  <div class="row">
+                    {{ render_field(form.estimation_no, "col-sm-6", "required") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.project_name, "col-sm-6", "required") }}
+                    {{ render_field(form.project_name_for_bp, "col-sm-6") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.end_user_company_id, "col-sm-6", "required", input_class="select2") }}
+                    {{ render_field(form.client_company_id, "col-sm-6", "required", input_class="select2") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.start_date, "col-sm-6", "required", input_class="date") }}
+                    {{ render_field(form.end_date, "col-sm-6", "required", input_class="date") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.contract_form, "col-sm-6", "required", input_class="select2") }}
+                    {{ render_field(form.billing_timing, "col-sm-6", "required", input_class="select2") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.estimated_total_amount, "col-sm-6") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.payment_site, "col-sm-6") }}
+                    {{ render_field(form.payment_tax, "col-sm-6", input_class="select2") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.deposit_date, "col-sm-6", input_class="date") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.scope, "col-sm-12") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.working_place, "col-sm-6") }}
+                    {{ render_field(form.delivery_place, "col-sm-6") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.deliverables, "col-sm-12") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.inspection_date, "col-sm-6", input_class="date") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.responsible_person, "col-sm-6") }}
+                    {{ render_field(form.quality_control, "col-sm-6") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.subcontractor, "col-sm-6") }}
+                  </div>
+                  <div class="row">
+                    {{ render_field(form.remarks, "col-sm-12") }}
+                  </div>
+                  <!-- /.row -->
+                  <div class="footer text-right" style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
+                  </div>
+                </div>
+              </div>
+              <!-- /.box box-success -->
+              <div class="box box-success color-palette-box">
+                <!-- /.box-body -->
+                <div class="box-header with-border">
+                  <h3 class="box-title"> 注文書詳細</h3>
+                  <div class="box-tools">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                  </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                  <div class="row">
+                    {{ render_field(form.client_order_no, "col-sm-6") }}
+                  </div>
+                  <!-- /.row -->
+                  <div class="footer text-right" style="margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
+                  </div>
+                </div>
+                <!-- /.box-body -->
+              </div>
+              <!-- box box-default -->
+            </form>
+          </div><!-- /.tab-content -->
+        </div>
+        <!-- /.nav-tabs-custom -->
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+  {% if form.id.data %}
+  <div class="col-lg-3">
+    <div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title"><i class="icon-paper-clip"></i> 添付</h3>
+
+        <div class="box-tools">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+              <i class="fa fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        {% for attachment in project_attachments %}
+          <strong><i class="fa fa-file-text-o fa-fw"></i> {{ attachment.type }}</strong>
+          <div class="table-responsive no-padding">
+            <table class="table small no-margin">
+              {% for project_attachment in attachment.attachments %}
+              <tr>
+              <td width="20px" style="padding-right: 0;">
+                <a style="font-size: xx-small;" href="{{ url_for('project_attachment.detail', project_attachment_id=project_attachment.id) }}">
+                    <i class="fa fa-edit"></i>
+                </a>
+              </td>
+              <td width="100px">
+                  <a href="{{ url_for('attachment.download', attachment_id = project_attachment.attachment_id) }}">
+                      {{ project_attachment.attachment.filename }}
+                  </a>
+              </td>
+              <td>{{ project_attachment.remarks|filter_suppress_none }}</td>
+              <td width="20px" style="padding-right: 0;">
+                <a class="" style="font-size: xx-small;" href="{{ url_for('project_attachment.delete', project_attachment_id=project_attachment.id) }}">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+              </tr>
+             {% endfor %}
+            </table>
+          </div>
+          <hr style="margin-top: 0;" />
+        {% endfor %}
+        <div class="footer">
+          <a href="{{ url_for('project_attachment.create', project_id=form.id.data, _external=True) }}" class="btn btn-sm btn-default pull-right">
+              <i class="fa fa-file-text-o"></i> ファイル添付画面
+          </a>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+  {% endif %}
+</div>
+<!-- /.row -->
+{% endblock %}

@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, SelectField, SelectMultipleField, \
-    RadioField
+from wtforms import validators, StringField, SelectField, SelectMultipleField, RadioField
 
 from application.const import GENDER
 from application.controllers.form.fields import IntegerField, DateField
@@ -20,6 +19,5 @@ class EngineerForm(FlaskForm):
                         choices=GENDER,
                         filters=[lambda x: x or None])
     company_id = SelectField('所属会社（必須）', filters=[lambda x: x or None])
-    business_category = SelectMultipleField(
-        '業種', [Length(max=2048)], coerce=int)
+    business_category = SelectMultipleField('業種', [Length(max=2048)], coerce=int)
     skill = SelectMultipleField('スキル', [Length(max=2048)], coerce=int)
