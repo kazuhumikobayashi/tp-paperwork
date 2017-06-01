@@ -1,3 +1,4 @@
+from datetime import date
 from nose.tools import ok_
 
 from application.domain.model.immutables.tax import Tax
@@ -99,7 +100,9 @@ class ContractTests(BaseTestCase):
         })
 
         result = self.app.post('/project/create', data={
-            'project_name': '重複テスト'
+            'project_name': '重複テスト',
+            'start_date': date.today().strftime('%Y/%m/%d'),
+            'end_date': '2099/12/31'
         })
         self.assertEqual(result.status_code, 302)
         project_id = result.headers['Location'][-1:]
@@ -136,7 +139,9 @@ class ContractTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
 
         result = self.app.post('/project/create', data={
-            'project_name': '重複テスト'
+            'project_name': '重複テスト',
+            'start_date': date.today().strftime('%Y/%m/%d'),
+            'end_date': '2099/12/31'
         })
         self.assertEqual(result.status_code, 302)
         project_id = result.headers['Location'][-1:]

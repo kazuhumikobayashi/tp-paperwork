@@ -57,12 +57,14 @@ class Project(BaseModel, db.Model):
 
     @start_date.setter
     def start_date(self, value):
-        if self.start_date and self.start_date != value:
+        if self.start_date != value:
             self._is_start_date_change = True
         self._start_date = value
 
     @property
     def is_start_date_change(self):
+        if not self.id:
+            return True
         return self._is_start_date_change
 
     def __init__(self,
