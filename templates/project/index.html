@@ -35,19 +35,19 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="row">
+        {{ render_search_field(form.project_name, "col-md-12") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.recorded_department_id, "col-md-6", input_class="select2") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.end_user_company_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.client_company_id, "col-md-6", input_class="select2") }}
+      </div>
+      <div class="row">
         {{ render_search_field(form.start_date, "col-md-6", input_class="date") }}
         {{ render_search_field(form.end_date, "col-md-6", input_class="date") }}
       </div>
-      <div class="row">
-        {{ render_search_field(form.project_name, "col-md-6") }}
-        {{ render_search_field(form.end_user_company_id, "col-md-6", input_class="select2") }}
-      </div>
-      <!-- /.row -->
-      <div class="row">
-        {{ render_search_field(form.client_company_id, "col-md-6", input_class="select2") }}
-        {{ render_search_field(form.recorded_department_id, "col-md-6", input_class="select2") }}
-      </div>
-      <!-- /.row -->
     </div>
     <!-- /.box-body -->
     <div class="box-footer">
@@ -65,12 +65,12 @@
           {% if pagination %}
             {% if pagination.total > pagination.per_page %}
               {{ p.pagination_widget(pagination,'.project_page',
-              start_date=form.start_date.data,
-              end_date=form.end_date.data,
               project_name=form.project_name.data,
+              recorded_department_id=form.recorded_department_id.data,
               end_user_company_id=form.end_user_company_id.data,
               client_company_id=form.client_company_id.data,
-              recorded_department_id=form.recorded_department_id.data) }}
+              start_date=form.start_date.data,
+              end_date=form.end_date.data) }}
             {% endif %}
           {% endif %}
           <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
@@ -83,32 +83,24 @@
           <table class="table table-hover">
             <tr>
               <th width="50px">#</th>
-              <th>プロジェクトコード</th>
-              <th>プロジェクト名</th>
               <th>エンドユーザー</th>
-              <th>顧客</th>
+              <th>顧客会社</th>
               <th>計上部署</th>
-              <th>ステータス</th>
-              <th>見積りNo.</th>
-              <th width="70px" class="center"></th>
+              <th>プロジェクト名</th>
+              <th>開始日</th>
+              <th>終了日</th>
               <th width="70px" class="center"></th>
               <th width="70px" class="center"></th>
             </tr>
             {% for project in pagination.items %}
             <tr>
               <td>{{ (pagination.prev_num * pagination.per_page) + loop.index }}</td>
-              <td>{{ project.id }}</td>
-              <td>{{ project.project_name }}</td>
               <td>{{ project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ project.client_company.company_name }}</td>
               <td>{{ project.recorded_department.department_name }}</td>
-              <td>{{ project.status.name }}</td>
-              <td>{{ project.estimation_no|filter_suppress_none }}</td>
-              <td>
-                <a class="btn btn-sm btn-default" href="{{ url_for('contract.index', project_id=project.id) }}">
-                   詳細 <i class="fa fa-navicon"></i>
-                </a>
-              </td>
+              <td><a href="{{ url_for('contract.index', project_id=project.id) }}">{{ project.project_name }}</a></td>
+              <td>{{ project.start_date|datetime_format("%Y/%m/%d") }}</td>
+              <td>{{ project.end_date|datetime_format("%Y/%m/%d") }}</td>
               <td>
                 <a class="btn btn-sm btn-default" href="{{ url_for('.copy', project_id=project.id) }}">
                    <i class="fa fa-copy"></i> コピー

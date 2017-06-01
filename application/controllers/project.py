@@ -26,12 +26,12 @@ def index(page=1):
     form.end_user_company_id.choices = company_service.find_all_for_multi_select()
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = service.find(page,
-                              form.start_date.data,
-                              form.end_date.data,
                               form.project_name.data,
                               form.end_user_company_id.data,
                               form.client_company_id.data,
-                              form.recorded_department_id.data)
+                              form.recorded_department_id.data,                              
+                              form.start_date.data,
+                              form.end_date.data)
     return render_template('project/index.html', pagination=pagination, form=form)
 
 

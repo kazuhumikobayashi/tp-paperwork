@@ -55,12 +55,12 @@ class ProjectTests(BaseTestCase):
             'password': 'test'
         })
 
-        query_string = urlencode({'start_date': "2016/1/1",
-                                  'end_date': '2017/1/1',
-                                  'project_name': 'test',
+        query_string = urlencode({'project_name': 'test',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',
-                                  'recorded_department_id': '1'})
+                                  'recorded_department_id': '1', 
+                                  'start_date': '2016/1/1',                                  
+                                  'end_date': '2017/1/1'})
         result = self.app.get('/project/?' + query_string)
 
         self.assertEqual(result.status_code, 200)

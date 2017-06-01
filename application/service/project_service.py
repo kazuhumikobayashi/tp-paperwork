@@ -6,10 +6,10 @@ class ProjectService(object):
     repository = ProjectRepository()
     estimation_sequence_repository = EstimationSequenceRepository()
 
-    def find(self, page, start_date, end_date, project_name, end_user_company_id, client_company_id,
-             recorded_department_id):
-        return self.repository.find(page, start_date, end_date, project_name, end_user_company_id, client_company_id,
-                                    recorded_department_id)
+    def find(self, page, project_name, end_user_company_id,
+             client_company_id, recorded_department_id, start_date, end_date):
+        return self.repository.find(page, project_name, end_user_company_id,
+                                    client_company_id, recorded_department_id, start_date, end_date)
 
     def find_by_id(self, project_id):
         return self.repository.find_by_id(project_id)
