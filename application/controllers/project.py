@@ -6,6 +6,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
+from application.const import ClientFlag
 from application.controllers.form.project_create_form import ProjectCreateForm
 from application.controllers.form.project_search_form import ProjectSearchForm
 from application.domain.model.project import Project
@@ -22,11 +23,14 @@ company_service = CompanyService()
 @bp.route('/', methods=['GET'])
 def index(page=1):
     form = ProjectSearchForm(request.values)
-    form.client_company_id.choices = company_service.find_all_for_multi_select()
-    form.end_user_company_id.choices = company_service.find_all_for_multi_select()
+    form.client_company_id.choices = company_service.find_for_select_by_client_flag_id(
+        [ClientFlag.CLIENT.value])
+    form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id(
+        [ClientFlag.END_USER.value])
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = service.find(page,
                               form.project_name.data,
+                              form.status.data,
                               form.end_user_company_id.data,
                               form.client_company_id.data,
                               form.recorded_department_id.data,                              
