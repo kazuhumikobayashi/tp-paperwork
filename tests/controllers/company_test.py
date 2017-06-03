@@ -1,10 +1,13 @@
 from datetime import datetime
 
 from nose.tools import ok_
+
+from application.domain.model.immutables.client_flag import ClientFlag
+from application.domain.model.immutables.site import Site
+from application.domain.model.immutables.tax import Tax
 from tests import BaseTestCase
 
 from application import db
-from application.const import ClientFlag
 from application.domain.model.company import Company
 from application.domain.repository.company_repository import CompanyRepository
 
@@ -106,7 +109,7 @@ class CompanyTests(BaseTestCase):
             'company_name': company.company_name,
             'company_name_kana': expected,
             'contract_date': datetime.today().strftime('%Y/%m/%d'),
-            'client_flag': [ClientFlag.BP.value, ClientFlag.CLIENT.value],
+            'client_flag': [ClientFlag.bp.value, ClientFlag.client.value],
             'postal_code': company.postal_code,
             'address': company.address,
             'phone': company.phone,
@@ -192,7 +195,7 @@ class CompanyTests(BaseTestCase):
         # 顧客の場合に、nullで更新。
         result = self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_client',
-            'client_flag': [ClientFlag.CLIENT.value],
+            'client_flag': [ClientFlag.client.value],
             'client_code': '',
             'payment_site': '',
             'payment_tax': '',
@@ -221,14 +224,14 @@ class CompanyTests(BaseTestCase):
         
         # 「協力会社コード」「支払サイト」「支払消費税区分」に値を入れておく
         company_before.bp_code = '9999'
-        company_before.receipt_site = 5
-        company_before.receipt_tax = 100
+        company_before.receipt_site = Site.twenty_five
+        company_before.receipt_tax = Tax.eight
         db.session.commit()
 
         # BPの場合に、nullで更新。
         self.app.post('/company/detail/' + str(company_id), data={
             'company_name': 'test_not_null_by_BP',
-            'client_flag': [ClientFlag.BP.value],
+            'client_flag': [ClientFlag.bp.value],
             'bp_code': '',
             'receipt_site': '',
             'receipt_tax': ''
@@ -252,7 +255,7 @@ class CompanyTests(BaseTestCase):
             'company_name': 'test99',
             'company_name_kana': 'テスト99',
             'contract_date': datetime.today().strftime('%Y/%m/%d'),
-            'client_flag': [ClientFlag.BP.value],
+            'client_flag': [ClientFlag.bp.value],
             'postal_code': '111-1111',
             'address': '住所２',
             'phone': '111-1111',
@@ -277,7 +280,7 @@ class CompanyTests(BaseTestCase):
     # client_flag「自社」は一社のみ
     def test_only_one_our_company(self):
         # 「自社」の会社を抽出
-        before = len(self.company_repository.find_by_client_flag_id([ClientFlag.OUR_COMPANY.value]))
+        before = len(self.company_repository.find_by_client_flag([ClientFlag.our_company.value]))
         # 「自社」の会社が1件あることを確認
         self.assertEqual(before, 1)
 
@@ -289,7 +292,7 @@ class CompanyTests(BaseTestCase):
 
         result = self.app.post('/company/create', data={
             'company_name': 'test_only_one_our_company',
-            'client_flag': [ClientFlag.OUR_COMPANY.value],
+            'client_flag': [ClientFlag.our_company.value],
             'client_code': '',
             'payment_tax': '',
             'receipt_tax': '',
@@ -299,5 +302,5 @@ class CompanyTests(BaseTestCase):
         self.assertEqual(result.status_code, 200)
         
         # 件数が変わっていないことを確認する。
-        after = len(self.company_repository.find_by_client_flag_id([ClientFlag.OUR_COMPANY.value]))
+        after = len(self.company_repository.find_by_client_flag([ClientFlag.our_company.value]))
         self.assertEqual(before, after)

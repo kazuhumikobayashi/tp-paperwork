@@ -73,7 +73,7 @@
             <tr>
               <td>
                 {% for company_client_flag in company.company_client_flags %}
-                  <label class="label label-primary">{{ company_client_flag.client_flag.client_flag_name }}</label>
+                  <label class="label label-primary">{{ company_client_flag.client_flag.name }}</label>
                 {% endfor %}
               </td>
               <td>
@@ -82,8 +82,8 @@
                 </a>
               </td>
               <td>{{ company.company_short_name|filter_suppress_none }}</td>
-              <td>{{ company.payment_site|filter_suppress_none }}</td>
-              <td>{{ company.receipt_site|filter_suppress_none }}</td>
+              <td>{{ company.payment_site.name|filter_suppress_none }}</td>
+              <td>{{ company.receipt_site.name|filter_suppress_none }}</td>
               <td>{{ company.bank.bank_name|filter_suppress_none }}</td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', company_id=company.id) }}">

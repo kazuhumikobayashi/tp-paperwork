@@ -4,6 +4,9 @@ from sqlalchemy.orm import relationship
 
 from application import db
 from application.domain.model.base_model import BaseModel
+from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.round import Round
+from application.domain.model.sqlalchemy.types import EnumType
 
 
 class EngineerHistory(BaseModel, db.Model):
@@ -22,8 +25,8 @@ class EngineerHistory(BaseModel, db.Model):
     receipt_per_bottom_hour = Column(Integer)
     receipt_per_top_hour = Column(Integer)
     receipt_fraction = Column(Integer)
-    receipt_fraction_calculation1 = Column(Integer)
-    receipt_fraction_calculation2 = Column(Integer)
+    receipt_fraction_calculation1 = Column(EnumType(enum_class=Expression))
+    receipt_fraction_calculation2 = Column(EnumType(enum_class=Round))
     receipt_condition = Column(String(1024))
     remarks = Column(String(1024))
 
