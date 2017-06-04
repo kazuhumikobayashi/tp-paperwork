@@ -49,7 +49,7 @@
           {{ render_field(form.receipt_per_month, "col-sm-6", "required") }}
           {{ render_field(form.receipt_rule, "col-sm-6", "required") }}
         </div>
-        <div id="variable-area" {% if form.receipt_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
+        <div id="receipt-variable-area" {% if form.receipt_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
           <div class="row">
             {{ render_field(form.receipt_bottom_base_hour, "col-sm-6") }}
             {{ render_field(form.receipt_top_base_hour, "col-sm-6") }}

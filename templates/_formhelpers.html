@@ -5,9 +5,9 @@
   <div class="no-padding">
     {% for subfield in field %}
       {% if required %}
-        {{ subfield(required="required") }}
+        {{ subfield(required="required", **kwargs) }}
       {% else %}
-        {{ subfield }}
+        {{ subfield(**kwargs) }}
       {% endif %}
       {{ subfield.label(style="margin: 5px 20px 15px 5px; cursor: pointer;") }}
     {% endfor %}

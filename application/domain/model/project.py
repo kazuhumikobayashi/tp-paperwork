@@ -7,6 +7,7 @@ from application.domain.model.base_model import BaseModel
 from application.domain.model.company import Company
 from application.domain.model.department import Department
 from application.domain.model.project_attachment import ProjectAttachment
+from application.domain.model.project_detail import ProjectDetail
 
 
 class Project(BaseModel, db.Model):
@@ -41,6 +42,7 @@ class Project(BaseModel, db.Model):
     client_company = relationship(Company, lazy='joined', foreign_keys=[client_company_id])
     recorded_department = relationship(Department, lazy='joined')
     project_attachments = relationship(ProjectAttachment, cascade='all, delete-orphan')
+    project_details = relationship(ProjectDetail, cascade='all, delete-orphan')
 
     is_start_date_change = False
 

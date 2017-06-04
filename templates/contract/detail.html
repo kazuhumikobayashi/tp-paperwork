@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}技術者{% endblock %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
+ {% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="#" class="btn btn-default">
+      <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 詳細情報</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="post">
+    {{ form.hidden_tag() }}
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          {% if form.id.data %}
+              {{ render_field(form.detail_type, "col-sm-6", "required", disabled="disabled") }}
+          {% else %}
+              {{ render_field(form.detail_type, "col-sm-6", "required") }}
+          {% endif %}
+        </div>
+        <div class="engineer-variable-area" {% if form.detail_type.data != '1' %}hidden{% endif %}{# '1'=ENGINEER #}>
+          <div class="row">
+            {{ render_field(form.engineer_id, "col-sm-6", input_class="select2") }}
+            {{ render_field(form.company, "col-sm-6") }}
+          </div>
+        </div>
+        <div class="work-variable-area" {% if form.detail_type.data != '2' %}hidden{% endif %}{# '2'=WORK #}>
+          <div class="row">
+            {{ render_field(form.work_name, "col-sm-6") }}
+          </div>
+        </div>
+        <div class="common-variable-area" {% if not form.detail_type.data %}hidden{% endif %}>
+          <div class="row">
+            {{ render_field(form.payment_money, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(form.remarks, "col-sm-6") }}
+          </div>
+        </div>
+        <div class="engineer-variable-area" {% if form.detail_type.data != '1' %}hidden{% endif %}{# '1'=ENGINEER #}>
+          <div class="part-title">請求情報</div>
+          <div class="row">
+            {{ render_field(form.payment_start_day, "col-sm-6", input_class="date-yyyymm") }}
+            {{ render_field(form.payment_end_day, "col-sm-6", input_class="date-yyyymm") }}
+          </div>
+          <div class="row">
+            {{ render_field(form.payment_per_month, "col-sm-6") }}
+            {{ render_field(form.payment_rule, "col-sm-6") }}
+          </div>
+          <div id="payment-variable-area" {% if form.payment_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
+            <div class="row">
+              {{ render_field(form.payment_bottom_base_hour, "col-sm-6") }}
+              {{ render_field(form.payment_top_base_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              {{ render_field(form.payment_free_base_hour, "col-sm-6") }}
+              {{ render_field(form.payment_per_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              {{ render_field(form.payment_per_bottom_hour, "col-sm-6") }}
+              {{ render_field(form.payment_per_top_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="row">
+                  {{ render_field(form.payment_fraction, "col-xs-4") }}
+                  {{ render_field(form.payment_fraction_calculation1, "col-xs-4", input_class="select2") }}
+                  {{ render_field(form.payment_fraction_calculation2, "col-xs-4", input_class="select2") }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="part-title">支払情報</div>
+          <div class="row">
+            {{ render_field(form.receipt_start_day, "col-sm-6", input_class="date-yyyymm") }}
+            {{ render_field(form.receipt_end_day, "col-sm-6", input_class="date-yyyymm") }}
+          </div>
+          <div class="row">
+            {{ render_field(form.receipt_per_month, "col-sm-6") }}
+            {{ render_field(form.receipt_rule, "col-sm-6", disabled="disabled") }}
+          </div>
+          <div id="receipt-variable-area" {% if form.receipt_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
+            <div class="row">
+              {{ render_field(form.receipt_bottom_base_hour, "col-sm-6") }}
+              {{ render_field(form.receipt_top_base_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              {{ render_field(form.receipt_free_base_hour, "col-sm-6") }}
+              {{ render_field(form.receipt_per_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              {{ render_field(form.receipt_per_bottom_hour, "col-sm-6") }}
+              {{ render_field(form.receipt_per_top_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="row">
+                  {{ render_field(form.receipt_fraction, "col-xs-4") }}
+                  {{ render_field(form.receipt_fraction_calculation1, "col-xs-4", input_class="select2") }}
+                  {{ render_field(form.receipt_fraction_calculation2, "col-xs-4", input_class="select2") }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="part-title">注文書番号</div>
+          <div class="row">
+            {{ render_field(form.bp_order_no, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(form.client_order_no_for_bp, "col-sm-6") }}
+          </div>
+        </div>
+      </div>
+      <!-- /.box -->
+	  <div class="box-footer">
+	    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> 保存</button>
+	  </div>
+    </form>
+  </div>
+  
+{% endblock %}

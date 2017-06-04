@@ -220,13 +220,52 @@ $(function() {
   $('input').on('ifChecked', function(event){
     if ($('input[name="receipt_rule"]:checked').val() == FIXED) {
       // 固定のため、非表示
-      $('#variable-area').hide('slow');
+      $('#receipt-variable-area').hide('slow');
     } else if ($('input[name="receipt_rule"]:checked').val() == VARIABLE) {
       // 変動のため、表示
-      $('#variable-area').show('slow');
+      $('#receipt-variable-area').show('slow');
+	} else {
+      // 未入力のため、非表示
+      $('#receipt-variable-area').hide();
+    }
+  });
+});
+
+
+// 「請求のルール」表示・非表示コントロール
+$(function() {
+  var FIXED = 1;
+  var VARIABLE = 2;
+
+  $('input').on('ifChecked', function(event){
+    if ($('input[name="payment_rule"]:checked').val() == FIXED) {
+      // 固定のため、非表示
+      $('#payment-variable-area').hide('slow');
+    } else if ($('input[name="payment_rule"]:checked').val() == VARIABLE) {
+      // 変動のため、表示
+      $('#payment-variable-area').show('slow');
 	} else {
       // 未入力のため、非表示
       $('#variable-area').hide();
     }
+  });
+});
+
+
+// 「明細区分」表示・非表示コントロール
+$(function() {
+  var ENGINEER = 1;
+  var WORK = 2;
+
+  $('input').on('ifChecked', function(event){
+    if ($('input[name="detail_type"]:checked').val() == ENGINEER) {
+      $('.engineer-variable-area').show('slow');
+      $('.work-variable-area').hide('slow');
+      $('.common-variable-area').show('slow');
+    } else if ($('input[name="detail_type"]:checked').val() == WORK) {
+      $('.engineer-variable-area').hide('slow');
+      $('.work-variable-area').show('slow');
+      $('.common-variable-area').show('slow');
+	}
   });
 });
