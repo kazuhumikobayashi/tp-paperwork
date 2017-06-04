@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS banks (
 CREATE TABLE IF NOT EXISTS company_client_flags (
   id INT NOT NULL AUTO_INCREMENT ,
   company_id INT NOT NULL ,
-  client_flag_id INT NOT NULL ,
+  client_flag INT NOT NULL ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
