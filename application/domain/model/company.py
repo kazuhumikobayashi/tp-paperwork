@@ -6,6 +6,10 @@ from application import db
 from application.domain.model.bank import Bank
 from application.domain.model.base_model import BaseModel
 from application.domain.model.company_client_flag import CompanyClientFlag
+from application.domain.model.immutables.holiday_flag import HolidayFlag
+from application.domain.model.immutables.site import Site
+from application.domain.model.immutables.tax import Tax
+from application.domain.model.sqlalchemy.types import EnumType
 
 
 class Company(BaseModel, db.Model):
@@ -22,12 +26,12 @@ class Company(BaseModel, db.Model):
     fax = Column(String(32))
     client_code = Column(String(128))
     bp_code = Column(String(128))
-    payment_site = Column(Integer)
-    receipt_site = Column(Integer)
-    payment_tax = Column(Integer)
-    receipt_tax = Column(Integer)
+    payment_site = Column(EnumType(enum_class=Site))
+    receipt_site = Column(EnumType(enum_class=Site))
+    payment_tax = Column(EnumType(enum_class=Tax))
+    receipt_tax = Column(EnumType(enum_class=Tax))
     bank_id = Column(Integer, ForeignKey("banks.id"))
-    bank_holiday_flag = Column(String(128))
+    bank_holiday_flag = Column(EnumType(enum_class=HolidayFlag))
     remarks = Column(String(1024)) 
     print_name = Column(String(1024))
 

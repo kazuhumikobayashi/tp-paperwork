@@ -9,7 +9,7 @@ class BillingTiming(Enum):
     def name(self):
         if self._value_ == self.payment_at_last.value:
             return '契約期間末1回'
-        elif self._value_ == self.payment_by_month.value:
+        else:
             return 'その他（毎月・複数月）'
 
     @staticmethod

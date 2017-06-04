@@ -6,16 +6,22 @@ from application.domain.model.company import Company
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
 from application.domain.model.immutables.billing_timing import BillingTiming
+from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
+from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.gender import Gender
+from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
+from application.domain.model.immutables.round import Round
+from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.status import Status
+from application.domain.model.immutables.tax import Tax
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.skill import Skill
 from application.domain.model.business_category import BusinessCategory
 from application.domain.model.user import User
 from application.domain.model.bank import Bank
-from application.domain.model.client_flag import ClientFlag
 from application.domain.model.company_client_flag import CompanyClientFlag
 from application.domain.model.engineer_history import EngineerHistory
 
@@ -31,7 +37,6 @@ def init_data():
     create_projects()
     create_attachments()
     create_business_categories()
-    create_client_flags()
     create_company_client_flags()
     create_engineer_histories()
 
@@ -75,12 +80,12 @@ def create_companies():
                  fax='000-0000',
                  client_code='0001',
                  bp_code='9999',
-                 payment_site='25',
-                 receipt_site='30',
-                 payment_tax='0',
-                 receipt_tax='8',
+                 payment_site=Site.twenty_five,
+                 receipt_site=Site.thirty,
+                 payment_tax=Tax.zero,
+                 receipt_tax=Tax.eight,
                  bank_id='2',
-                 bank_holiday_flag='1',
+                 bank_holiday_flag=HolidayFlag.before,
                  remarks='備考',
                  print_name='印刷用宛名',
                  created_at=datetime.today(),
@@ -97,7 +102,7 @@ def create_engineers():
                 engineer_name='test' + str(num),
                 engineer_name_kana='テスト' + str(num),
                 birthday=date.today(),
-                gender='男性',
+                gender=Gender.male,
                 company_id='1',
                 created_at=datetime.today(),
                 created_user='test',
@@ -208,24 +213,11 @@ def create_banks():
     db.session.commit()
 
 
-def create_client_flags():
-    client_flag_names = ['自社', 'BP所属', '顧客', 'エンドユーザー']
-    for client_flag_name in client_flag_names:
-        client_flag = ClientFlag(
-            client_flag_name=client_flag_name,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-        db.session.add(client_flag)
-    db.session.commit()
-
-
 def create_company_client_flags():
     for num in range(4):
         company_client_flag = CompanyClientFlag(
             company_id=num+1,
-            client_flag_id=num+1,
+            client_flag=ClientFlag.parse(num+1),
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -249,8 +241,8 @@ def create_engineer_histories():
             receipt_per_bottom_hour=num+1,
             receipt_per_top_hour=num+2,
             receipt_fraction=100,
-            receipt_fraction_calculation1=1,
-            receipt_fraction_calculation2=1,
+            receipt_fraction_calculation1=Expression.more,
+            receipt_fraction_calculation2=Round.up,
             receipt_condition='test' + str(num),
             remarks='test' + str(num),
             created_at=datetime.today(),

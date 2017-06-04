@@ -18,7 +18,7 @@ class Status(Enum):
             return '03:受注完了'
         elif self._value_ == self.done.value:
             return '04:契約完了'
-        elif self._value_ == self.failure.value:
+        else:
             return '99:失注'
 
     @staticmethod

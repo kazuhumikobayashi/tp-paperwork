@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS skills;
 DROP TABLE IF EXISTS business_categories;
 DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS banks;
-DROP TABLE IF EXISTS client_flags;
 DROP TABLE IF EXISTS company_client_flags;
 DROP TABLE IF EXISTS engineer_histories;
 DROP TABLE IF EXISTS holidays;
@@ -36,7 +35,7 @@ CREATE TABLE IF NOT EXISTS engineers (
   engineer_name VARCHAR(128) NOT NULL,
   engineer_name_kana VARCHAR(128),
   birthday DATE,
-  gender VARCHAR(4),
+  gender INT,
   company_id INT NOT NULL,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
@@ -99,7 +98,7 @@ CREATE TABLE IF NOT EXISTS companies (
   payment_tax INT ,
   receipt_tax INT ,
   bank_id INT,
-  bank_holiday_flag VARCHAR(128) ,
+  bank_holiday_flag INT ,
   remarks VARCHAR(1024) ,
   print_name VARCHAR(1024) ,
   created_at DATETIME NOT NULL ,
@@ -213,17 +212,6 @@ CREATE TABLE IF NOT EXISTS banks (
   id INT NOT NULL AUTO_INCREMENT ,
   bank_name VARCHAR(32) NOT NULL ,
   text_for_document VARCHAR(128) NOT NULL ,
-  created_at DATETIME NOT NULL ,
-  created_user VARCHAR(128) NOT NULL ,
-  updated_at DATETIME NOT NULL ,
-  updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
-) ENGINE = INNODB;
-
-
-CREATE TABLE IF NOT EXISTS client_flags (
-  id INT NOT NULL AUTO_INCREMENT ,
-  client_flag_name VARCHAR(32) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

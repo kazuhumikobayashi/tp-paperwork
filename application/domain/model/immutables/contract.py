@@ -12,7 +12,7 @@ class Contract(Enum):
             return '請負契約（一括契約）'
         elif self._value_ == self.time_and_material.value:
             return '準委任契約'
-        elif self._value_ == self.dispatch.value:
+        else:
             return '派遣契約'
 
     @staticmethod

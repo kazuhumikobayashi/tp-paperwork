@@ -7,11 +7,12 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
-from application.const import ClientFlag
 from application.controllers.form.engineer_form import EngineerForm
 from application.controllers.form.engineer_search_form import EngineerSearchForm
 from application.domain.model.engineer_business_category import EngineerBusinessCategory
 from application.domain.model.engineer_skill import EngineerSkill
+from application.domain.model.immutables.client_flag import ClientFlag
+from application.domain.model.immutables.gender import Gender
 from application.service.business_category_service import BusinessCategoryService
 from application.service.company_service import CompanyService
 from application.service.engineer_history_service import EngineerHistoryService
@@ -30,7 +31,7 @@ business_category_service = BusinessCategoryService()
 def index(page=1):
     form = EngineerSearchForm(request.values)
     form.company_id.choices = company_service.find_for_select_by_client_flag_id(
-        [ClientFlag.OUR_COMPANY.value, ClientFlag.BP.value])
+        [ClientFlag.our_company.value, ClientFlag.bp.value])
     form.skill_id.choices = skill_service.find_all_for_multi_select()
     form.business_category_id.choices = business_category_service.find_all_for_multi_select()
 
@@ -60,7 +61,7 @@ def detail(engineer_id=None):
         h.business_category_id for h in engineer.engineer_business_categories]
     form = EngineerForm(request.form, engineer)
     form.company_id.choices = company_service.find_for_select_by_client_flag_id(
-        [ClientFlag.OUR_COMPANY.value, ClientFlag.BP.value])
+        [ClientFlag.our_company.value, ClientFlag.bp.value])
     form.skill.choices = skill_service.find_all_for_multi_select()
     form.business_category.choices = business_category_service.find_all_for_multi_select()
 
@@ -74,7 +75,7 @@ def detail(engineer_id=None):
         engineer.engineer_name = form.engineer_name.data
         engineer.engineer_name_kana = form.engineer_name_kana.data
         engineer.birthday = form.birthday.data
-        engineer.gender = form.gender.data
+        engineer.gender = Gender.parse(form.gender.data)
         if engineer.id is None:
             engineer.company_id = form.company_id.data
         skills = []
