@@ -200,18 +200,6 @@ var MessageBox = (function () {
   return that;
 }());
 
-// project詳細のタブ情報を保存しておく
-$(function () {
-  $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
-    localStorage.setItem('activeProjectTab', $(e.target).attr('href'));
-  });
-  var activeProjectTab = localStorage.getItem('activeProjectTab');
-  if (activeProjectTab) {
-    $('.nav-tabs a[href="' + activeProjectTab + '"]').tab('show');
-  }
-});
-
-
 // 「支払いのルール」表示・非表示コントロール
 $(function() {
   var FIXED = 1;

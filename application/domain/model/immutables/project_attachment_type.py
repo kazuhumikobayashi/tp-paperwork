@@ -24,7 +24,7 @@ class ProjectAttachmentType(Enum):
             return '顧客請求書'
         elif self._value_ == self.bp_invoice.value:
             return 'BP請求書'
-        elif self._value_ == self.other.value:
+        else:
             return 'その他'
 
     @staticmethod

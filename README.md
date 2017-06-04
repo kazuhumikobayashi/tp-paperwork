@@ -47,7 +47,6 @@ mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/07-data-engineers.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/08-data-companies.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/09-data-engineer_skills.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/10-data-projects.sql
-mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/12-data-client_flags.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/14-data-estimation_sequence.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/15-data-attachments.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/16-data-project_attachments.sql

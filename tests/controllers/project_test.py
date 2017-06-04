@@ -4,6 +4,9 @@ from datetime import date, datetime
 from nose.tools import ok_
 
 from application import db
+from application.domain.model.immutables.billing_timing import BillingTiming
+from application.domain.model.immutables.contract import Contract
+from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
 from application.domain.repository.project_repository import ProjectRepository
 from tests import BaseTestCase
@@ -52,12 +55,12 @@ class ProjectTests(BaseTestCase):
             'password': 'test'
         })
 
-        query_string = urlencode({'start_date': "2016/1/1",
-                                  'end_date': '2017/1/1',
-                                  'project_name': 'test',
+        query_string = urlencode({'project_name': 'test',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',
-                                  'recorded_department_id': '1'})
+                                  'recorded_department_id': '1', 
+                                  'start_date': '2016/1/1',                                  
+                                  'end_date': '2017/1/1'})
         result = self.app.get('/project/?' + query_string)
 
         self.assertEqual(result.status_code, 200)
@@ -73,37 +76,13 @@ class ProjectTests(BaseTestCase):
         result = self.app.get('/project/create')
         self.assertEqual(result.status_code, 200)
 
-    # 次の期の基本情報を保存できる
-    def test_create_project_second_basic(self):
-        shain_number = 'test1'
-        self.app.post('/login', data={
-            'shain_number': shain_number,
-            'password': 'test'
-        })
-
-        result = self.app.post('/project/create', data={
-            'project_name': 'test_create_project_basic',
-            'end_user_company_id': '1',
-            'client_company_id': '1',
-            'start_date': str(int(datetime.today().strftime('%Y')) + 1) + '/4/1',
-            'end_date': '2099/12/31',
-            'recorded_department_id': '1',
-            'over_time_calculation_id': '1',
-            'contract_form_id': '1',
-            'status_id': '1',
-            'billing_timing': '契約期間末1回',
-            'remarks': 'test',
-            'save': 'basic'
-        })
-        # プロジェクトが保存できることを確認
-        self.assertEqual(result.status_code, 302)
-
     # プロジェクトをコピーできる
     def test_copy_project(self):
         # コピー用のプロジェクトを登録
         project = Project(
             project_name='test_copy_project',
-            status='01:契約開始',
+            project_name_for_bp='copy_project',
+            status=Status.start,
             recorded_department_id=1,
             sales_person='営業担当',
             estimation_no='test_copy_project',
@@ -111,12 +90,13 @@ class ProjectTests(BaseTestCase):
             client_company_id=5,
             start_date=date.today(),
             end_date='2099/12/31',
-            contract_form='請負契約（一括契約）',
-            billing_timing='契約期間末1回',
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.payment_at_last,
             estimated_total_amount=1000000,
             deposit_date='2099/12/31',
             scope='test',
             contents=None,
+            working_place=None,
             delivery_place=None,
             deliverables=None,
             inspection_date=None,
@@ -144,20 +124,21 @@ class ProjectTests(BaseTestCase):
         result = self.app.get('/project/copy/' + str(original.id))
         # コピーできることを確認
         self.assertEqual(result.status_code, 302)
-        # ok_('/project/detail' in result.headers['Location'])
+        ok_('/contract' in result.headers['Location'])
 
-        # copy_project_id = result.headers['Location'][-1:]
+        copy_project_id = result.headers['Location'][-1:]
 
         # コピーしたプロジェクトが存在することを確認
-        # copy = self.project_repository.find_by_id(copy_project_id)
-        # self.assertIsNotNone(copy.id)
+        copy = self.project_repository.find_by_id(copy_project_id)
+        self.assertIsNotNone(copy.id)
 
     # プロジェクトを削除できる
     def test_delete_project(self):
         # 削除用のプロジェクトを登録
         project = Project(
             project_name='test_delete_project',
-            status='01:契約開始',
+            project_name_for_bp='delete_project',
+            status=Status.start,
             recorded_department_id=1,
             sales_person='営業担当',
             estimation_no='test_delete_project',
@@ -165,12 +146,13 @@ class ProjectTests(BaseTestCase):
             client_company_id=5,
             start_date=date.today(),
             end_date='2099/12/31',
-            contract_form='請負契約（一括契約）',
-            billing_timing='契約期間末1回',
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.payment_at_last,
             estimated_total_amount=1000000,
             deposit_date='2099/12/31',
             scope='test',
             contents=None,
+            working_place=None,
             delivery_place=None,
             deliverables=None,
             inspection_date=None,

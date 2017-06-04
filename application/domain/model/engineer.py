@@ -9,6 +9,8 @@ from application.domain.model.engineer_business_category import EngineerBusiness
 from application.domain.model.engineer_history import EngineerHistory
 from application.domain.model.engineer_skill import EngineerSkill
 from application.domain.model.project_detail import ProjectDetail
+from application.domain.model.immutables.gender import Gender
+from application.domain.model.sqlalchemy.types import EnumType
 
 
 class Engineer(BaseModel, db.Model):
@@ -18,7 +20,7 @@ class Engineer(BaseModel, db.Model):
     engineer_name = Column(String(128), nullable=False)
     engineer_name_kana = Column(String(128))
     birthday = Column(Date)
-    gender = Column(String(4))
+    gender = Column(EnumType(enum_class=Gender))
     company_id = Column(Integer, ForeignKey("companies.id"))
 
     company = relationship(Company, lazy='joined')

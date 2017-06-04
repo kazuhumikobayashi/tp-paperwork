@@ -21,13 +21,13 @@ class BankTests(BaseTestCase):
                  updated_user='test')
 
         expected = "<Bank:" + \
-                "'id='{}".format(bank.id) + \
-                "', bank_name='{}".format(bank.bank_name) + \
-                "', text_for_document='{}".format(bank.text_for_document) + \
-                "', created_at='{}".format(bank.created_at) + \
-                "', created_user='{}".format(bank.created_user) + \
-                "', updated_at='{}".format(bank.updated_at) + \
-                "', updated_user='{}".format(bank.updated_user) + \
-                "'>"
+                   "'id='{}".format(bank.id) + \
+                   "', bank_name='{}".format(bank.bank_name) + \
+                   "', text_for_document='{}".format(bank.text_for_document) + \
+                   "', created_at='{}".format(bank.created_at) + \
+                   "', created_user='{}".format(bank.created_user) + \
+                   "', updated_at='{}".format(bank.updated_at) + \
+                   "', updated_user='{}".format(bank.updated_user) + \
+                   "'>"
         actual = str(bank)
         self.assertEqual(actual, expected)

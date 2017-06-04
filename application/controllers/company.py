@@ -10,21 +10,23 @@ from flask import url_for
 from application.controllers.form.company_form import CompanyForm
 from application.controllers.form.company_search_form import CompanySearchForm
 from application.domain.model.company_client_flag import CompanyClientFlag
+from application.domain.model.immutables.client_flag import ClientFlag
+from application.domain.model.immutables.holiday_flag import HolidayFlag
+from application.domain.model.immutables.site import Site
+from application.domain.model.immutables.tax import Tax
 from application.service.bank_service import BankService
-from application.service.client_flag_service import ClientFlagService
 from application.service.company_service import CompanyService
 
 
 bp = Blueprint('company', __name__, url_prefix='/company')
 service = CompanyService()
 bank_service = BankService()
-client_flag_service = ClientFlagService()
 
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
     form = CompanySearchForm(request.values)
-    form.client_flag_id.choices = client_flag_service.find_all_for_multi_select()
+    form.client_flag_id.choices = ClientFlag.get_flag_for_multi_select()
     form.bank_id.choices = bank_service.find_all_for_multi_select()
 
     pagination = service.find(page, form.company_name.data, form.client_flag_id.data,
@@ -44,10 +46,10 @@ def detail(company_id=None):
 
     if company.id is None and company_id is not None:
         return abort(404)
-    company.client_flag = [h.client_flag_id for h in company.company_client_flags]
+    company.client_flag = [h.client_flag for h in company.company_client_flags]
     form = CompanyForm(request.form, company)
     form.bank_id.choices = bank_service.find_all_for_select()
-    form.client_flag.choices = client_flag_service.find_all_for_multi_select()
+    form.client_flag.choices = ClientFlag.get_flag_for_multi_select()
     
     if form.validate_on_submit():
         company.company_name = form.company_name.data
@@ -60,17 +62,17 @@ def detail(company_id=None):
         company.fax = form.fax.data
         company.client_code = form.client_code.data
         company.bp_code = form.bp_code.data
-        company.payment_site = form.payment_site.data or None
-        company.receipt_site = form.receipt_site.data or None
-        company.payment_tax = form.payment_tax.data or None
-        company.receipt_tax = form.receipt_tax.data or None
+        company.payment_site = Site.parse(form.payment_site.data)
+        company.receipt_site = Site.parse(form.receipt_site.data)
+        company.payment_tax = Tax.parse(form.payment_tax.data)
+        company.receipt_tax = Tax.parse(form.receipt_tax.data)
         company.bank_id = form.bank_id.data or None
-        company.bank_holiday_flag = form.bank_holiday_flag.data
+        company.bank_holiday_flag = HolidayFlag.parse(form.bank_holiday_flag.data)
         company.remarks = form.remarks.data
         company.print_name = form.print_name.data
         client_flags = []
-        for client_flag_id in form.client_flag.data:
-            client_flags.extend([CompanyClientFlag(company.id, client_flag_id)])
+        for client_flag in form.client_flag.data:
+            client_flags.extend([CompanyClientFlag(company.id, ClientFlag.parse(client_flag))])
         company.company_client_flags = client_flags
 
         service.save(company)

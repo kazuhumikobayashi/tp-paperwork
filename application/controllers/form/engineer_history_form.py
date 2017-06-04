@@ -2,10 +2,12 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextAreaField, RadioField, validators
 from wtforms.validators import ValidationError
 
-from application.const import TAX_CLASSIFICATION, RECEIPT_RULE, ReceiptRule, \
-                              FRACTION_CALCULATION1, FRACTION_CALCULATION2
+from application.const import RECEIPT_RULE, ReceiptRule
 from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField
 from application.controllers.form.validators import Length, DataRequired, LessThan
+from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.round import Round
+from application.domain.model.immutables.tax import Tax
 from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
 
 repository = EngineerHistoryRepository()
@@ -29,7 +31,7 @@ class EngineerHistoryForm(FlaskForm):
     receipt_site = IntegerField('支払サイト', [validators.optional()], render_kw={"disabled": "disabled"})
     receipt_tax = SelectField('支払消費税区分',
                               [validators.optional()],
-                              choices=TAX_CLASSIFICATION,
+                              choices=Tax.get_type_for_select(),
                               filters=[lambda x: x or None],
                               render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
     receipt_per_month = IntegerField('支払単価（必須）', [DataRequired()])
@@ -50,12 +52,12 @@ class EngineerHistoryForm(FlaskForm):
     receipt_fraction = IntegerField('支払端数金額')
     receipt_fraction_calculation1 = SelectField('支払端数計算式１',
                                                 [validators.Optional()],
-                                                choices=FRACTION_CALCULATION1,
+                                                choices=Expression.get_type_for_select(),
                                                 filters=[lambda x: x or None],
                                                 render_kw={"data-minimum-results-for-search": "Infinity"})
     receipt_fraction_calculation2 = SelectField('支払端数計算式２',
                                                 [validators.Optional()],
-                                                choices=FRACTION_CALCULATION2,
+                                                choices=Round.get_round_for_select(),
                                                 filters=[lambda x: x or None],
                                                 render_kw={"data-minimum-results-for-search": "Infinity"})
     receipt_condition = TextAreaField('支払条件', [Length(max=1024)])

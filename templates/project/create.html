@@ -1,6 +1,15 @@
 {% extends "layout.html" %}
 {% from "_formhelpers.html" import render_field %}
 {% block title %}プロジェクト登録{% endblock %}
+{% block include_css %}
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+{% endblock %}
 {% block content_header %}
   <h1>
     <a href="{{ url_for('.index') }}" class="btn btn-default">
@@ -21,7 +30,12 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          {{ render_field(form.project_name, "col-lg-6", "required") }}
+          {{ render_field(form.project_name, "col-sm-6", "required") }}
+          {{ render_field(form.project_name_for_bp, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.start_date, "col-sm-6", "required", input_class="date") }}
+          {{ render_field(form.end_date, "col-sm-6", "required", input_class="date") }}
         </div>
         <!-- /.row -->
       </div>
