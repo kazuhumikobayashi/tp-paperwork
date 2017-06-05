@@ -1,6 +1,8 @@
 from datetime import date
 from nose.tools import ok_
 
+from application.domain.model.immutables.billing_timing import BillingTiming
+from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.tax import Tax
 from tests import BaseTestCase
 
@@ -105,7 +107,7 @@ class ContractTests(BaseTestCase):
             'end_date': '2099/12/31'
         })
         self.assertEqual(result.status_code, 302)
-        project_id = result.headers['Location'][-1:]
+        project_id = result.headers['Location'].split('/')[-1]
         project = self.project_repository.find_by_id(project_id)
 
         duplicate_estimation_no = 'duplicate_estimation_no'
@@ -113,17 +115,17 @@ class ContractTests(BaseTestCase):
             'project_name': 'project_name',
             'project_name_for_bp': project.project_name_for_bp,
             'status': project.status,
-            'recorded_department_id': project.recorded_department_id,
+            'recorded_department_id': '1',
             'sales_person': project.sales_person,
             'estimation_no': duplicate_estimation_no,
-            'end_user_company_id': project.end_user_company_id,
-            'client_company_id': project.client_company_id,
+            'end_user_company_id': '1',
+            'client_company_id': '1',
             'start_date': project.start_date.strftime('%Y/%m/%d'),
             'end_date': project.end_date.strftime('%Y/%m/%d'),
-            'contract_form': project.contract_form,
-            'billing_timing': project.billing_timing,
+            'contract_form': Contract.blanket,
+            'billing_timing': BillingTiming.payment_at_last,
             'estimated_total_amount': project.estimated_total_amount,
-            'deposit_date': project.deposit_date.strftime('%Y/%m/%d'),
+            'deposit_date': date.today().strftime('%Y/%m/%d'),
             'payment_tax': Tax.eight,
             'scope': project.scope,
             'contents': project.contents,
@@ -144,24 +146,24 @@ class ContractTests(BaseTestCase):
             'end_date': '2099/12/31'
         })
         self.assertEqual(result.status_code, 302)
-        project_id = result.headers['Location'][-1:]
+        project_id = result.headers['Location'].split('/')[-1]
         project = self.project_repository.find_by_id(project_id)
 
         result = self.app.post('/contract/' + str(project_id), data={
             'project_name': 'project_name',
             'project_name_for_bp': project.project_name_for_bp,
             'status': project.status,
-            'recorded_department_id': project.recorded_department_id,
+            'recorded_department_id': '1',
             'sales_person': project.sales_person,
             'estimation_no': duplicate_estimation_no,
-            'end_user_company_id': project.end_user_company_id,
-            'client_company_id': project.client_company_id,
+            'end_user_company_id': '1',
+            'client_company_id': '1',
             'start_date': project.start_date.strftime('%Y/%m/%d'),
             'end_date': project.end_date.strftime('%Y/%m/%d'),
-            'contract_form': project.contract_form,
-            'billing_timing': project.billing_timing,
+            'contract_form': Contract.blanket,
+            'billing_timing': BillingTiming.payment_at_last,
             'estimated_total_amount': project.estimated_total_amount,
-            'deposit_date': project.deposit_date.strftime('%Y/%m/%d'),
+            'deposit_date': date.today().strftime('%Y/%m/%d'),
             'payment_tax': Tax.eight,
             'scope': project.scope,
             'contents': project.contents,
