@@ -83,7 +83,7 @@ class ProjectTests(BaseTestCase):
         project = Project(
             project_name='test_copy_project',
             project_name_for_bp='copy_project',
-            status=Status.start,
+            status=Status.done,
             recorded_department_id=1,
             sales_person='営業担当',
             estimation_no='test_copy_project',
@@ -127,11 +127,14 @@ class ProjectTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
         ok_('/contract' in result.headers['Location'])
 
-        copy_project_id = result.headers['Location'][-1:]
+        copy_project_id = result.headers['Location'].split('/')[-1]
 
         # コピーしたプロジェクトが存在することを確認
         copy = self.project_repository.find_by_id(copy_project_id)
         self.assertIsNotNone(copy.id)
+
+        # コピーしたプロジェクトのステータスが「01:契約開始」に戻っていることを確認
+        self.assertEqual(copy.status, Status.start)
 
     # プロジェクトを削除できる
     def test_delete_project(self):
