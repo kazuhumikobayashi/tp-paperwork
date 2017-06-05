@@ -2,11 +2,11 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, TextAreaField, RadioField, validators
 from wtforms.validators import ValidationError
 
-from application.const import RECEIPT_RULE, ReceiptRule
 from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField
 from application.controllers.form.validators import Length, DataRequired, LessThan
 from application.domain.model.immutables.expression import Expression
 from application.domain.model.immutables.round import Round
+from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.tax import Tax
 from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
 
@@ -14,7 +14,7 @@ repository = EngineerHistoryRepository()
 
 
 def required_if_variable(form, field):
-    if form.receipt_rule.data == ReceiptRule.VARIABLE.value and field.data is None:
+    if form.receipt_rule.data == str(Rule.variable) and field.data is None:
         raise ValidationError('支払いのルールが変動の場合、入力必須です。')
 
 
@@ -37,7 +37,7 @@ class EngineerHistoryForm(FlaskForm):
     receipt_per_month = IntegerField('支払単価（必須）', [DataRequired()])
     receipt_rule = RadioField('支払ルール（必須）',
                               [DataRequired()],
-                              choices=RECEIPT_RULE,
+                              choices=Rule.get_rule_for_select(),
                               filters=[lambda x: x or None])
     receipt_bottom_base_hour = IntegerField('支払下限基準時間（必須）')
     receipt_top_base_hour = IntegerField('支払上限基準時間（必須）')
@@ -73,19 +73,19 @@ class EngineerHistoryForm(FlaskForm):
 
     def validate_receipt_bottom_base_hour(self, field):
         # 支払いのルールが変動の時、フリー時間が空ならエラー
-        if self.receipt_rule.data == ReceiptRule.VARIABLE.value and field.data is None \
+        if self.receipt_rule.data == str(Rule.variable) and field.data is None \
                 and self.receipt_free_base_hour.data is None:
             raise ValidationError('支払いのルールが変動の場合、入力必須です。')
 
     def validate_receipt_top_base_hour(self, field):
         # 支払いのルールが変動の時、フリー時間が空ならエラー
-        if self.receipt_rule.data == ReceiptRule.VARIABLE.value and field.data is None \
+        if self.receipt_rule.data == str(Rule.variable) and field.data is None \
                 and self.receipt_free_base_hour.data is None:
             raise ValidationError('支払いのルールが変動の場合、入力必須です。')
 
     def validate_receipt_free_base_hour(self, field):
         # 支払いのルールが変動の時、下限時間または上限時間が空ならエラー
-        if self.receipt_rule.data == ReceiptRule.VARIABLE.value and field.data is None \
+        if self.receipt_rule.data == str(Rule.variable) and field.data is None \
                 and self.receipt_bottom_base_hour.data is None \
                 and self.receipt_top_base_hour.data is None:
             raise ValidationError('支払いのルールが変動の場合、入力必須です。')

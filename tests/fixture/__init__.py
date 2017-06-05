@@ -237,7 +237,7 @@ def create_engineer_histories():
             receipt_start_day=date(2016, 2*num+1, 1),
             receipt_end_day=date(2016, 2*num+3, 1)-timedelta(days=1),
             receipt_per_month=num+1,
-            receipt_rule=1,
+            receipt_rule=Rule.fixed,
             receipt_bottom_base_hour=num+1,
             receipt_top_base_hour=num+2,
             receipt_free_base_hour='',

@@ -1,12 +1,12 @@
-from datetime import datetime, date
+from datetime import date, datetime
 
 from nose.tools import ok_
-from tests import BaseTestCase
 
 from application import db
 from application.domain.model.engineer_history import EngineerHistory
+from application.domain.model.immutables.rule import Rule
 from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
-from application.const import ReceiptRule
+from tests import BaseTestCase
 
 
 class EngineerHistoryTests(BaseTestCase):
@@ -49,7 +49,7 @@ class EngineerHistoryTests(BaseTestCase):
             'receipt_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'receipt_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'receipt_per_month': '100000',
-            'receipt_rule': ReceiptRule.FIXED.value,
+            'receipt_rule': str(Rule.fixed),
             'receipt_fraction_calculation1': '',
             'receipt_fraction_calculation2': ''
         })
@@ -123,7 +123,7 @@ class EngineerHistoryTests(BaseTestCase):
             receipt_start_day=date(2017, 1, 1),
             receipt_end_day=date(2017, 2, 28),
             receipt_per_month=100000,
-            receipt_rule=ReceiptRule.FIXED.value,
+            receipt_rule=Rule.fixed,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -187,7 +187,7 @@ class EngineerHistoryTests(BaseTestCase):
             'receipt_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'receipt_end_day': date(2017, 5, 31).strftime('%Y/%m'),
             'receipt_per_month': '100000',
-            'receipt_rule': ReceiptRule.FIXED.value,
+            'receipt_rule': str(Rule.fixed),
             'receipt_fraction_calculation1': '',
             'receipt_fraction_calculation2': ''
         })
@@ -246,7 +246,7 @@ class EngineerHistoryTests(BaseTestCase):
             'receipt_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'receipt_end_day': date(2017, 5, 31).strftime('%Y/%m'),
             'receipt_per_month': '100000',
-            'receipt_rule': ReceiptRule.FIXED.value,
+            'receipt_rule': str(Rule.fixed),
             'receipt_fraction_calculation1': '',
             'receipt_fraction_calculation2': ''
         })
@@ -291,7 +291,7 @@ class EngineerHistoryTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
 
     # 支払いのルールが変動の場合、validationチェックが働くことを確認
-    def test_required_if_VARIABLE(self):
+    def test_required_if_variable(self):
         before = len(self.engineer_history_repository.find_all())
         # ログインする
         self.app.post('/login', data={
@@ -305,7 +305,7 @@ class EngineerHistoryTests(BaseTestCase):
             'receipt_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'receipt_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'receipt_per_month': '100000',
-            'receipt_rule': ReceiptRule.VARIABLE.value,
+            'receipt_rule': str(Rule.variable),
             'receipt_fraction_calculation1': '',
             'receipt_fraction_calculation2': ''
         })
@@ -331,7 +331,7 @@ class EngineerHistoryTests(BaseTestCase):
             'receipt_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'receipt_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'receipt_per_month': '100000',
-            'receipt_rule': ReceiptRule.VARIABLE.value,
+            'receipt_rule': str(Rule.variable),
             # 'receipt_bottom_base_hour': 1,
             # 'receipt_top_base_hour': 2,
             'receipt_free_base_hour': '8h×100',
@@ -372,7 +372,7 @@ class EngineerHistoryTests(BaseTestCase):
             'receipt_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'receipt_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'receipt_per_month': '100000',
-            'receipt_rule': ReceiptRule.VARIABLE.value,
+            'receipt_rule': str(Rule.variable),
             'receipt_bottom_base_hour': 1,
             'receipt_top_base_hour': 2,
             # 'receipt_free_base_hour': '',
