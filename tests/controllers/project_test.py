@@ -56,6 +56,7 @@ class ProjectTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'status': '99',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',
                                   'recorded_department_id': '1', 
