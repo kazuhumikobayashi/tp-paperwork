@@ -116,3 +116,6 @@ class ProjectDetail(BaseModel, db.Model):
                 "', updated_at='{}".format(self.updated_at) + \
                 "', updated_user='{}".format(self.updated_user) + \
                 "'>"
+
+    def is_engineer(self):
+        return self.detail_type == DetailType.engineer

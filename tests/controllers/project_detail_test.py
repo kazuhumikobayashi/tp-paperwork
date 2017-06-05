@@ -102,7 +102,7 @@ class ProjectDetailTests(BaseTestCase):
         # プロジェクトが保存できることを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
-            'engineer_id': '1',
+            'engineer_id': '2',
             'payment_money': '100000000',
             'payment_start_day': '2016/1',
             'payment_end_day': '2016/12',
@@ -142,6 +142,7 @@ class ProjectDetailTests(BaseTestCase):
         db.session.commit()
 
         delete_project_detail_id = project_detail.id
+        project_id = project_detail.project.id
 
         # ログイン
         self.app.post('/login', data={
@@ -153,7 +154,7 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.get('/project_detail/delete/' + str(project_detail.id))
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/project' in result.headers['Location'])
+        ok_('/contract/' + str(project_id) in result.headers['Location'])
 
         # 削除したプロジェクトが存在しないことを確認
         project_detail = self.project_detail_repository.find_by_id(delete_project_detail_id)

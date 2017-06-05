@@ -10,6 +10,7 @@ from flask import url_for
 from application.controllers.form.contract_form import ContractForm
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
+from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.status import Status
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
@@ -67,4 +68,4 @@ def index(project_id=None):
 
     return render_template('contract/index.html',
                            form=form,
-                           project_attachments=project.get_project_attachments())
+                           project=project)

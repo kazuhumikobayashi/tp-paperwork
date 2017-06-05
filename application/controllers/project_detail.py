@@ -86,7 +86,7 @@ def detail(project_detail_id=None):
         return redirect(url_for('.detail', project_detail_id=project_detail.id))
 
     current_app.logger.debug(form.errors)
-    return render_template('contract/detail.html', form=form)
+    return render_template('contract/detail.html', form=form, project_detail=project_detail)
 
 
 @bp.route('/create', methods=['GET', 'POST'])
@@ -98,7 +98,9 @@ def create():
 def delete(project_detail_id):
     project_detail = service.find_by_id(project_detail_id)
     if project_detail.id is not None:
+        project_id = project_detail.project_id
         service.destroy(project_detail)
         flash('削除しました。')
-    # TODO 本来は契約タブの画面に遷移する。
-    return redirect(url_for('project.index'))
+        return redirect(url_for('contract.index', project_id=project_id))
+    else:
+        return redirect('/project')

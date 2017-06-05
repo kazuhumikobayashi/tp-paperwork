@@ -107,7 +107,7 @@ def create_engineers():
                 engineer_name_kana='テスト' + str(num),
                 birthday=date.today(),
                 gender=Gender.male,
-                company_id='1',
+                company_id=num+1,
                 created_at=datetime.today(),
                 created_user='test',
                 updated_at=datetime.today(),
