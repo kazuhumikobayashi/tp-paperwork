@@ -6,9 +6,9 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
-from application.const import ClientFlag
 from application.controllers.form.project_create_form import ProjectCreateForm
 from application.controllers.form.project_search_form import ProjectSearchForm
+from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.project import Project
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
@@ -24,9 +24,9 @@ company_service = CompanyService()
 def index(page=1):
     form = ProjectSearchForm(request.values)
     form.client_company_id.choices = company_service.find_for_select_by_client_flag_id(
-        [ClientFlag.CLIENT.value])
+        [ClientFlag.client.value])
     form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id(
-        [ClientFlag.END_USER.value])
+        [ClientFlag.end_user.value])
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = service.find(page,
                               form.project_name.data,
