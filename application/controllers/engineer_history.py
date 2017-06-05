@@ -10,6 +10,7 @@ from flask import url_for
 from application.controllers.form.engineer_history_form import EngineerHistoryForm
 from application.domain.model.immutables.expression import Expression
 from application.domain.model.immutables.round import Round
+from application.domain.model.immutables.rule import Rule
 from application.service.business_category_service import BusinessCategoryService
 from application.service.company_service import CompanyService
 from application.service.engineer_history_service import EngineerHistoryService
@@ -52,7 +53,7 @@ def history(engineer_history_id=None):
         engineer_history.receipt_start_day = form.receipt_start_day.data
         engineer_history.receipt_end_day = form.receipt_end_day.data
         engineer_history.receipt_per_month = form.receipt_per_month.data
-        engineer_history.receipt_rule = form.receipt_rule.data
+        engineer_history.receipt_rule = Rule.parse(form.receipt_rule.data)
         engineer_history.receipt_bottom_base_hour = form.receipt_bottom_base_hour.data
         engineer_history.receipt_top_base_hour = form.receipt_top_base_hour.data
         engineer_history.receipt_free_base_hour = form.receipt_free_base_hour.data

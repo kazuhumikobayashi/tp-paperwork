@@ -6,6 +6,7 @@ from application import db
 from application.domain.model.base_model import BaseModel
 from application.domain.model.immutables.expression import Expression
 from application.domain.model.immutables.round import Round
+from application.domain.model.immutables.rule import Rule
 from application.domain.model.sqlalchemy.types import EnumType
 
 
@@ -17,7 +18,7 @@ class EngineerHistory(BaseModel, db.Model):
     receipt_start_day = Column(Date, nullable=False)
     receipt_end_day = Column(Date, nullable=False)
     receipt_per_month = Column(Integer, nullable=False)
-    receipt_rule = Column(Integer, nullable=False)
+    receipt_rule = Column(EnumType(enum_class=Rule), nullable=False)
     receipt_bottom_base_hour = Column(Integer)
     receipt_top_base_hour = Column(Integer)
     receipt_free_base_hour = Column(String(128))
