@@ -52,6 +52,9 @@ def create():
     form = ProjectCreateForm(request.form, project)
     if form.validate_on_submit():
         project.project_name = form.project_name.data
+        project.project_name_for_bp = form.project_name_for_bp.data
+        project.start_date = form.start_date.data
+        project.end_date = form.end_date.data
 
         service.save(project)
         flash('保存しました。')

@@ -12,7 +12,7 @@ class Tax(Enum):
             return 'なし'
         elif self._value_ == self.eight.value:
             return '8％'
-        elif self._value_ == self.ten.value:
+        else:
             return '10％'
 
     @staticmethod

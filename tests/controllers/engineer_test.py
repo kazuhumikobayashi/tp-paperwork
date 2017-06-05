@@ -4,6 +4,7 @@ from nose.tools import ok_
 
 from application import db
 from application.domain.model.engineer import Engineer
+from application.domain.model.immutables.gender import Gender
 from application.domain.repository.engineer_repository import EngineerRepository
 from tests import BaseTestCase
 
@@ -78,7 +79,7 @@ class EngineerTests(BaseTestCase):
             'engineer_name': 'テスト登録',
             'engineer_name_kana': 'テストトウロク',
             'birthday': datetime.today().strftime('%Y/%m/%d'),
-            'gender': '男性',
+            'gender': '1',
             'company_id': '2',
             'skill': ['1', '2'],
             'business_category': ['1', '2']
@@ -192,7 +193,7 @@ class EngineerTests(BaseTestCase):
             engineer_name='テスト技術者',
             engineer_name_kana='テストギジュツシャ',
             birthday=date.today(),
-            gender='男性',
+            gender=Gender.male,
             company_id='1',
             created_at=datetime.today(),
             created_user='test',
@@ -213,7 +214,7 @@ class EngineerTests(BaseTestCase):
             'engineer_name': 'テスト技術者',
             'engineer_name_kana': 'テストギジュツシャ',
             'birthday': '',
-            'gender': '男性',
+            'gender': '1',
             'company_id': 1,
             'skill': ['1', '2'],
             'business_category': ['1', '2']

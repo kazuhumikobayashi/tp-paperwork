@@ -1,3 +1,4 @@
+from application.domain.model.immutables.status import Status
 from application.domain.repository.estimation_sequence_repository import EstimationSequenceRepository
 from application.domain.repository.project_repository import ProjectRepository
 
@@ -18,14 +19,14 @@ class ProjectService(object):
 
         project = self.find_by_id(project_id)
         project_clone = project.clone()
-        project_clone.status_id = 1
+        project_clone.status_id = Status.start
 
         self.save(project_clone)
 
         return self.find_by_id(project_clone.id)
 
     def save(self, project):
-        if project.start_date and project.is_start_date_change:
+        if project.is_start_date_change:
             fiscal_year = project.get_fiscal_year()
             estimation_sequence = self.estimation_sequence_repository.take_a_sequence(fiscal_year)
             project.estimation_no = estimation_sequence.get_estimation_no()
