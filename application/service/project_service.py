@@ -19,7 +19,7 @@ class ProjectService(object):
 
         project = self.find_by_id(project_id)
         project_clone = project.clone()
-        project_clone.status_id = Status.start
+        project_clone.status = Status.start
 
         self.save(project_clone)
 
