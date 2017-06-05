@@ -58,7 +58,7 @@ $(function () {
 
   $('.date-yearstart').datepicker({
     format: "yyyy/mm/dd",
-    startView: 3,
+    startView: 2,
     language: "ja",
     autoclose: true
   });
