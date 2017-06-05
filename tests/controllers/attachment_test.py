@@ -29,7 +29,7 @@ class AttachmentTests(BaseTestCase):
             'remarks': 'remarks'
         })
         self.assertEqual(result.status_code, 302)
-        download_project_attachment_id = result.headers['Location'][-1:]
+        download_project_attachment_id = result.headers['Location'].split('/')[-1]
         project_attachment = self.project_attachment_repository.find_by_id(download_project_attachment_id)
 
         result = self.app.get('/attachment/download/' + str(project_attachment.attachment_id))

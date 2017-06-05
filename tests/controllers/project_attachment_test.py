@@ -146,13 +146,14 @@ class ProjectAttachmentTests(BaseTestCase):
             'remarks': 'remarks'
         })
         self.assertEqual(result.status_code, 302)
-        delete_project_attachment_id = result.headers['Location'][-1:]
+        delete_project_attachment_id = result.headers['Location'].split('/')[-1]
         project_attachment = self.project_attachment_repository.find_by_id(delete_project_attachment_id)
 
         result = self.app.get('/project_attachment/delete/' + str(project_attachment.id))
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
-        # ok_('/project/detail/' + str(project_attachment.project_id) in result.headers['Location'])
+        print(result.headers['Location'])
+        ok_('/contract/' + str(project_attachment.project_id) in result.headers['Location'])
 
         # 削除した添付文書が存在しないことを確認
         project_attachment = self.project_attachment_repository.find_by_id(delete_project_attachment_id)
