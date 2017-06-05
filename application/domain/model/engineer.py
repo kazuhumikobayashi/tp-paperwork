@@ -8,6 +8,7 @@ from application.domain.model.company import Company
 from application.domain.model.engineer_business_category import EngineerBusinessCategory
 from application.domain.model.engineer_history import EngineerHistory
 from application.domain.model.engineer_skill import EngineerSkill
+from application.domain.model.project_detail import ProjectDetail
 from application.domain.model.immutables.gender import Gender
 from application.domain.model.sqlalchemy.types import EnumType
 
@@ -26,6 +27,7 @@ class Engineer(BaseModel, db.Model):
     engineer_skills = relationship(EngineerSkill, cascade='all, delete-orphan')
     engineer_business_categories = relationship(EngineerBusinessCategory, cascade='all, delete-orphan')
     engineer_histories = relationship(EngineerHistory, cascade='all, delete-orphan')
+    project_details = relationship(ProjectDetail, cascade='all, delete-orphan')
 
     def __init__(self,
                  engineer_name=None,

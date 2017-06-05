@@ -11,6 +11,8 @@ from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.expression import Expression
 from application.domain.model.immutables.gender import Gender
 from application.domain.model.immutables.holiday_flag import HolidayFlag
+from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.site import Site
@@ -18,6 +20,7 @@ from application.domain.model.immutables.status import Status
 from application.domain.model.immutables.tax import Tax
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
+from application.domain.model.project_detail import ProjectDetail
 from application.domain.model.skill import Skill
 from application.domain.model.business_category import BusinessCategory
 from application.domain.model.user import User
@@ -39,6 +42,7 @@ def init_data():
     create_business_categories()
     create_company_client_flags()
     create_engineer_histories()
+    create_project_details()
 
 
 def create_user():
@@ -103,7 +107,7 @@ def create_engineers():
                 engineer_name_kana='テスト' + str(num),
                 birthday=date.today(),
                 gender=Gender.male,
-                company_id='1',
+                company_id=num+1,
                 created_at=datetime.today(),
                 created_user='test',
                 updated_at=datetime.today(),
@@ -250,4 +254,36 @@ def create_engineer_histories():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer_history)    
+    db.session.commit()
+
+
+def create_project_details():
+    for num in range(5):
+        project_detail = ProjectDetail(
+            project_id=1,
+            detail_type=DetailType.engineer,
+            work_name=None,
+            engineer_id=num+1,
+            payment_money=1000000,
+            remarks='テスト',
+            payment_start_day=date(2016, 7, 1),
+            payment_end_day=date(2016, 12, 1),
+            payment_per_month=700000,
+            payment_rule=Rule.fixed,
+            payment_bottom_base_hour=num+2,
+            payment_top_base_hour=100,
+            payment_free_base_hour='1/100, 1/150',
+            payment_per_hour=1,
+            payment_per_bottom_hour=num+1,
+            payment_per_top_hour=num+1,
+            payment_fraction=100,
+            payment_fraction_calculation1=1,
+            payment_fraction_calculation2=1,
+            bp_order_no=None,
+            client_order_no_for_bp=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_detail)
     db.session.commit()

@@ -87,6 +87,56 @@
                     {{ render_field(form.contract_form, "col-sm-6", "required", input_class="select2") }}
                     {{ render_field(form.billing_timing, "col-sm-6", "required", input_class="select2") }}
                   </div>
+                  <div class="box-frame">
+                    <div class="box-header with-border">
+                      <a href="{{ url_for('project_detail.create', project_id=project.id) }}"
+                          class="btn btn-sm btn-success pull-left">
+                        <i class="fa fa-plus"></i> 明細登録
+                      </a>
+                    </div>
+                    <div class="box box-primary">
+                      <div class="box-body table-responsive no-padding">
+                        <table class="table table-hover">
+                          <tr>
+                            <th width="150px">作業名称</th>
+                            <th class="text-right" width="85px">請求金額</th>
+                            <th>備考</th>
+                            <th width="70px" class="center"></th>
+                            <th width="70px" class="center"></th>
+                          </tr>
+                          {% for project_detail in project.project_details %}
+                            <tr>
+                              <td>
+                                <a href="{{ url_for('project_detail.detail', project_detail_id=project_detail.id) }}">
+                                  {% if project_detail.is_engineer() %}
+                                    {{ project_detail.engineer.engineer_name|filter_suppress_none }}
+                                  {% else %}
+                                    {{ project_detail.work_name|filter_suppress_none }}
+                                  {% endif %}
+                                </a>
+                              </td>
+                              <td class="text-right">&yen{{ project_detail.payment_money|number_with_commas }}</td>
+                              <td>{{ project_detail.remarks|filter_suppress_none }}</td>
+                              <td>
+                                {% if project_detail.is_engineer() and project_detail.engineer.company.is_bp() %}
+                                  <a class="btn btn-sm btn-success">
+                                    <i class="fa fa-file-text-o"></i> 注文書・請書作成
+                                  </a>
+                                {% endif %}
+                              </td>
+                              <td>
+                                <a class="btn btn-sm btn-danger"
+                                    href="{{ url_for('project_detail.delete', project_detail_id=project_detail.id) }}">
+                                  <i class="fa fa-trash"></i> 削除
+                                </a>
+                              </td>
+                            </tr>
+                          {% endfor %}
+                        </table>
+                      </div>
+                    </div>
+                  </div><!-- /.box-frame -->
+                                        
                   <div class="row">
                     {{ render_field(form.estimated_total_amount, "col-sm-6") }}
                   </div>
@@ -172,7 +222,7 @@
       </div>
       <!-- /.box-header -->
       <div class="box-body">
-        {% for attachment in project_attachments %}
+        {% for attachment in project.get_project_attachments() %}
           <strong><i class="fa fa-file-text-o fa-fw"></i> {{ attachment.type }}</strong>
           <div class="table-responsive no-padding">
             <table class="table small no-margin">

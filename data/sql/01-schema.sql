@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS banks;
 DROP TABLE IF EXISTS company_client_flags;
 DROP TABLE IF EXISTS engineer_histories;
 DROP TABLE IF EXISTS holidays;
+DROP TABLE IF EXISTS project_details;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -136,6 +137,37 @@ CREATE TABLE IF NOT EXISTS projects (
   subcontractor VARCHAR(128) ,
   remarks VARCHAR(1024) ,
   client_order_no VARCHAR(64) ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS project_details (
+  id INT NOT NULL AUTO_INCREMENT,
+  project_id INT NOT NULL ,
+  detail_type INT NOT NULL,
+  work_name VARCHAR(128) ,
+  engineer_id INT ,
+  payment_money INT ,
+  remarks VARCHAR(1024) ,
+  payment_start_day DATE ,
+  payment_end_day DATE ,
+  payment_per_month INT ,
+  payment_rule INT ,
+  payment_bottom_base_hour INT ,
+  payment_top_base_hour INT ,
+  payment_free_base_hour VARCHAR(128) ,
+  payment_per_hour VARCHAR(128) ,
+  payment_per_bottom_hour INT ,
+  payment_per_top_hour INT ,
+  payment_fraction INT ,
+  payment_fraction_calculation1 INT ,
+  payment_fraction_calculation2 INT ,
+  bp_order_no VARCHAR(64) ,
+  client_order_no_for_bp VARCHAR(64) ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

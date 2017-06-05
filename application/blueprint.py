@@ -13,6 +13,7 @@ def register(app):
     from application.controllers import engineer_history
     from application.controllers import holiday
     from application.controllers import contract
+    from application.controllers import project_detail
 
     app.register_blueprint(company.bp)
     app.register_blueprint(department.bp)
@@ -28,3 +29,4 @@ def register(app):
     app.register_blueprint(engineer_history.bp)
     app.register_blueprint(holiday.bp)
     app.register_blueprint(contract.bp)
+    app.register_blueprint(project_detail.bp)

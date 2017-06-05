@@ -6,6 +6,7 @@ from application import db
 from application.domain.model.bank import Bank
 from application.domain.model.base_model import BaseModel
 from application.domain.model.company_client_flag import CompanyClientFlag
+from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.tax import Tax
@@ -108,3 +109,9 @@ class Company(BaseModel, db.Model):
                 "', updated_at='{}".format(self.updated_at) + \
                 "', updated_user='{}".format(self.updated_user) + \
                 "'>"
+
+    def is_bp(self):
+        for company_client_flag in self.company_client_flags:
+            if company_client_flag.client_flag == ClientFlag.bp:
+                return True
+        return False
