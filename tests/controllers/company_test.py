@@ -116,10 +116,10 @@ class CompanyTests(BaseTestCase):
             'fax': company.fax,
             'client_code': company.client_code,
             'bp_code': company.bp_code,
+            'billing_site': company.billing_site,
             'payment_site': company.payment_site,
-            'receipt_site': company.receipt_site,
+            'billing_tax': company.billing_tax,
             'payment_tax': company.payment_tax,
-            'receipt_tax': company.receipt_tax,
             'bank_id': '1',
             'bank_holiday_flag': company.bank_holiday_flag,
             'remarks': company.remarks,
@@ -197,8 +197,8 @@ class CompanyTests(BaseTestCase):
             'company_name': 'test_not_null_by_client',
             'client_flag': [ClientFlag.client.value],
             'client_code': '',
-            'payment_site': '',
-            'payment_tax': '',
+            'billing_site': '',
+            'billing_tax': '',
             'bank_id': '',
             'bank_holiday_flag': ''
         })
@@ -207,8 +207,8 @@ class CompanyTests(BaseTestCase):
         # nullで更新出来なかったことを確認する。
         company_after = self.company_repository.find_by_id(company_id)
         self.assertEqual(company_before.client_code, company_after.client_code)
-        self.assertEqual(company_before.payment_site, company_after.payment_site)
-        self.assertEqual(company_before.payment_tax, company_after.payment_tax)
+        self.assertEqual(company_before.billing_site, company_after.billing_site)
+        self.assertEqual(company_before.billing_tax, company_after.billing_tax)
         self.assertEqual(company_before.bank_id, company_after.bank_id)
         self.assertEqual(company_before.bank_holiday_flag, company_after.bank_holiday_flag)
 
@@ -224,8 +224,8 @@ class CompanyTests(BaseTestCase):
         
         # 「協力会社コード」「支払サイト」「支払消費税区分」に値を入れておく
         company_before.bp_code = '9999'
-        company_before.receipt_site = Site.twenty_five
-        company_before.receipt_tax = Tax.eight
+        company_before.payment_site = Site.twenty_five
+        company_before.payment_tax = Tax.eight
         db.session.commit()
 
         # BPの場合に、nullで更新。
@@ -233,15 +233,15 @@ class CompanyTests(BaseTestCase):
             'company_name': 'test_not_null_by_BP',
             'client_flag': [ClientFlag.bp.value],
             'bp_code': '',
-            'receipt_site': '',
-            'receipt_tax': ''
+            'payment_site': '',
+            'payment_tax': ''
         })
 
         # nullで更新出来なかったことを確認する。
         company_after = self.company_repository.find_by_id(company_id)
         self.assertEqual(company_before.bp_code, company_after.bp_code)
-        self.assertEqual(company_before.receipt_site, company_after.receipt_site)
-        self.assertEqual(company_before.receipt_tax, company_after.receipt_tax)
+        self.assertEqual(company_before.payment_site, company_after.payment_site)
+        self.assertEqual(company_before.payment_tax, company_after.payment_tax)
 
     # 会社情報を新規登録できる
     def test_create_company(self):
@@ -262,10 +262,10 @@ class CompanyTests(BaseTestCase):
             'fax': '111-1111',
             'client_code': '0001',
             'bp_code': '9999',
-            'payment_site': 30,
-            'receipt_site': 25,
-            'payment_tax': 0,
-            'receipt_tax': 10,
+            'billing_site': 30,
+            'payment_site': 25,
+            'billing_tax': 0,
+            'payment_tax': 10,
             'bank_id': '1',
             'bank_holiday_flag': 1,
             'remarks': '備考',
@@ -294,8 +294,8 @@ class CompanyTests(BaseTestCase):
             'company_name': 'test_only_one_our_company',
             'client_flag': [ClientFlag.our_company.value],
             'client_code': '',
+            'billing_tax': '',
             'payment_tax': '',
-            'receipt_tax': '',
             'bank_id': '',
             'bank_holiday_flag': ''
         })

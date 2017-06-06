@@ -76,11 +76,11 @@
 		    <tr>
 	          <td>
 	            <a href="{{ url_for('engineer_history.history', engineer_history_id=engineer_history.id) }}">
-	              {{ engineer_history.receipt_start_day.strftime('%Y/%m/%d')|filter_suppress_none }}
+	              {{ engineer_history.payment_start_day.strftime('%Y/%m/%d')|filter_suppress_none }}
 	            </a>
 	          </td>
-	          <td>{{ engineer_history.receipt_end_day.strftime('%Y/%m/%d')|filter_suppress_none }}</td>
-	          <td>{{ engineer_history.receipt_per_month|filter_suppress_none }}</td>
+	          <td>{{ engineer_history.payment_end_day.strftime('%Y/%m/%d')|filter_suppress_none }}</td>
+	          <td>{{ engineer_history.payment_per_month|filter_suppress_none }}</td>
 	          <td>
 	            {% if engineer_history == latest_engineer_history %}
 	              <a class="btn btn-sm btn-danger" href="{{ url_for('engineer_history.delete', engineer_id=form.id.data, engineer_history_id=engineer_history.id) }}">

@@ -37,8 +37,8 @@ class ContractForm(FlaskForm):
                                  choices=BillingTiming.get_type_for_select(),
                                  render_kw={"data-minimum-results-for-search": "Infinity"})
     estimated_total_amount = IntegerField('見積金額合計', filters=[lambda x: x or None])
-    payment_site = IntegerField('入金サイト', filters=[lambda x: x or None])
-    payment_tax = SelectField('入金消費税区分',
+    billing_site = IntegerField('入金サイト', filters=[lambda x: x or None])
+    billing_tax = SelectField('入金消費税区分',
                               choices=Tax.get_type_for_select(),
                               render_kw={"data-minimum-results-for-search": "Infinity"})
     deposit_date = DateField('単月入金予定日', [validators.Optional()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})

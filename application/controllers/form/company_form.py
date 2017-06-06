@@ -40,19 +40,19 @@ class CompanyForm(FlaskForm):
     bp_code = StringField('協力会社コード（顧客フラグ＝BP所属の時、必須）', 
                           [Length(max=128), required_if_bp], 
                           filters=[lambda x: x or None])
-    payment_site = SelectField('入金サイト（顧客フラグ＝顧客の時、必須）',
+    billing_site = SelectField('入金サイト（顧客フラグ＝顧客の時、必須）',
                                [required_if_client],
                                choices=Site.get_site_for_select(),
                                render_kw={"data-minimum-results-for-search": "Infinity"})
-    receipt_site = SelectField('支払サイト（顧客フラグ＝BP所属の時、必須）',
+    payment_site = SelectField('支払サイト（顧客フラグ＝BP所属の時、必須）',
                                [required_if_bp],
                                choices=Site.get_site_for_select(),
                                render_kw={"data-minimum-results-for-search": "Infinity"})
-    payment_tax = SelectField('入金消費税（顧客フラグ＝顧客の時、必須）',
+    billing_tax = SelectField('入金消費税（顧客フラグ＝顧客の時、必須）',
                               [Length(max=8), required_if_client],
                               choices=Tax.get_type_for_select(),
                               render_kw={"data-minimum-results-for-search": "Infinity"})
-    receipt_tax = SelectField('支払消費税（顧客フラグ＝BP所属の時、必須）',
+    payment_tax = SelectField('支払消費税（顧客フラグ＝BP所属の時、必須）',
                               [Length(max=8), required_if_bp],
                               choices=Tax.get_type_for_select(),
                               render_kw={"data-minimum-results-for-search": "Infinity"})

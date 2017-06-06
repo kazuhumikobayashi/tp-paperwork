@@ -82,8 +82,8 @@
                 </a>
               </td>
               <td>{{ company.company_short_name|filter_suppress_none }}</td>
+              <td>{{ company.billing_site.name|filter_suppress_none }}</td>
               <td>{{ company.payment_site.name|filter_suppress_none }}</td>
-              <td>{{ company.receipt_site.name|filter_suppress_none }}</td>
               <td>{{ company.bank.bank_name|filter_suppress_none }}</td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', company_id=company.id) }}">
