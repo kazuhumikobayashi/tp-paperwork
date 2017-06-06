@@ -2,12 +2,12 @@ from enum import Enum
 
 
 class BillingTiming(Enum):
-    payment_at_last = 1
-    payment_by_month = 2
+    billing_at_last = 1
+    billing_by_month = 2
 
     @property
     def name(self):
-        if self._value_ == self.payment_at_last.value:
+        if self._value_ == self.billing_at_last.value:
             return '契約期間末1回'
         else:
             return 'その他（毎月・複数月）'

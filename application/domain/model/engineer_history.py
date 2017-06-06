@@ -15,40 +15,40 @@ class EngineerHistory(BaseModel, db.Model):
     PER_PAGE = 10
 
     engineer_id = Column(Integer, ForeignKey("engineers.id"))
-    receipt_start_day = Column(Date, nullable=False)
-    receipt_end_day = Column(Date, nullable=False)
-    receipt_per_month = Column(Integer, nullable=False)
-    receipt_rule = Column(EnumType(enum_class=Rule), nullable=False)
-    receipt_bottom_base_hour = Column(Integer)
-    receipt_top_base_hour = Column(Integer)
-    receipt_free_base_hour = Column(String(128))
-    receipt_per_hour = Column(String(128))
-    receipt_per_bottom_hour = Column(Integer)
-    receipt_per_top_hour = Column(Integer)
-    receipt_fraction = Column(Integer)
-    receipt_fraction_calculation1 = Column(EnumType(enum_class=Expression))
-    receipt_fraction_calculation2 = Column(EnumType(enum_class=Round))
-    receipt_condition = Column(String(1024))
+    payment_start_day = Column(Date, nullable=False)
+    payment_end_day = Column(Date, nullable=False)
+    payment_per_month = Column(Integer, nullable=False)
+    payment_rule = Column(EnumType(enum_class=Rule), nullable=False)
+    payment_bottom_base_hour = Column(Integer)
+    payment_top_base_hour = Column(Integer)
+    payment_free_base_hour = Column(String(128))
+    payment_per_hour = Column(String(128))
+    payment_per_bottom_hour = Column(Integer)
+    payment_per_top_hour = Column(Integer)
+    payment_fraction = Column(Integer)
+    payment_fraction_calculation1 = Column(EnumType(enum_class=Expression))
+    payment_fraction_calculation2 = Column(EnumType(enum_class=Round))
+    payment_condition = Column(String(1024))
     remarks = Column(String(1024))
 
     engineer = relationship("Engineer", lazy='joined')
 
     def __init__(self,
                  engineer_id=None,
-                 receipt_start_day=None,
-                 receipt_end_day=None,
-                 receipt_per_month=None,
-                 receipt_rule=None,
-                 receipt_bottom_base_hour=None,
-                 receipt_top_base_hour=None,
-                 receipt_free_base_hour=None,
-                 receipt_per_hour=None,
-                 receipt_per_bottom_hour=None,
-                 receipt_per_top_hour=None,
-                 receipt_fraction=None,
-                 receipt_fraction_calculation1=None,
-                 receipt_fraction_calculation2=None,
-                 receipt_condition=None,
+                 payment_start_day=None,
+                 payment_end_day=None,
+                 payment_per_month=None,
+                 payment_rule=None,
+                 payment_bottom_base_hour=None,
+                 payment_top_base_hour=None,
+                 payment_free_base_hour=None,
+                 payment_per_hour=None,
+                 payment_per_bottom_hour=None,
+                 payment_per_top_hour=None,
+                 payment_fraction=None,
+                 payment_fraction_calculation1=None,
+                 payment_fraction_calculation2=None,
+                 payment_condition=None,
                  remarks=None,
                  created_at=None,
                  created_user=None,
@@ -56,40 +56,40 @@ class EngineerHistory(BaseModel, db.Model):
                  updated_user=None):
         super(EngineerHistory, self).__init__(created_at, created_user, updated_at, updated_user)
         self.engineer_id = engineer_id
-        self.receipt_start_day = receipt_start_day
-        self.receipt_end_day = receipt_end_day
-        self.receipt_per_month = receipt_per_month
-        self.receipt_rule = receipt_rule
-        self.receipt_bottom_base_hour = receipt_bottom_base_hour
-        self.receipt_top_base_hour = receipt_top_base_hour
-        self.receipt_free_base_hour = receipt_free_base_hour
-        self.receipt_per_hour = receipt_per_hour
-        self.receipt_per_bottom_hour = receipt_per_bottom_hour
-        self.receipt_per_top_hour = receipt_per_top_hour
-        self.receipt_fraction = receipt_fraction
-        self.receipt_fraction_calculation1 = receipt_fraction_calculation1
-        self.receipt_fraction_calculation2 = receipt_fraction_calculation2
-        self.receipt_condition = receipt_condition
+        self.payment_start_day = payment_start_day
+        self.payment_end_day = payment_end_day
+        self.payment_per_month = payment_per_month
+        self.payment_rule = payment_rule
+        self.payment_bottom_base_hour = payment_bottom_base_hour
+        self.payment_top_base_hour = payment_top_base_hour
+        self.payment_free_base_hour = payment_free_base_hour
+        self.payment_per_hour = payment_per_hour
+        self.payment_per_bottom_hour = payment_per_bottom_hour
+        self.payment_per_top_hour = payment_per_top_hour
+        self.payment_fraction = payment_fraction
+        self.payment_fraction_calculation1 = payment_fraction_calculation1
+        self.payment_fraction_calculation2 = payment_fraction_calculation2
+        self.payment_condition = payment_condition
         self.remarks = remarks
 
     def __repr__(self):
         return "<EngineerHistory:" + \
                 "'id='{}".format(self.id) + \
                 "', engineer='{}".format(self.engineer) + \
-                "', receipt_start_day='{}".format(self.receipt_start_day) + \
-                "', receipt_end_day='{}".format(self.receipt_end_day) + \
-                "', receipt_per_month='{}".format(self.receipt_per_month) + \
-                "', receipt_rule='{}".format(self.receipt_rule) + \
-                "', receipt_bottom_base_hour='{}".format(self.receipt_bottom_base_hour) + \
-                "', receipt_top_base_hour='{}".format(self.receipt_top_base_hour) + \
-                "', receipt_free_base_hour='{}".format(self.receipt_free_base_hour) + \
-                "', receipt_per_hour='{}".format(self.receipt_per_hour) + \
-                "', receipt_per_bottom_hour='{}".format(self.receipt_per_bottom_hour) + \
-                "', receipt_per_top_hour='{}".format(self.receipt_per_top_hour) + \
-                "', receipt_fraction='{}".format(self.receipt_fraction) + \
-                "', receipt_fraction_calculation1='{}".format(self.receipt_fraction_calculation1) + \
-                "', receipt_fraction_calculation2='{}".format(self.receipt_fraction_calculation2) + \
-                "', receipt_condition='{}".format(self.receipt_condition) + \
+                "', payment_start_day='{}".format(self.payment_start_day) + \
+                "', payment_end_day='{}".format(self.payment_end_day) + \
+                "', payment_per_month='{}".format(self.payment_per_month) + \
+                "', payment_rule='{}".format(self.payment_rule) + \
+                "', payment_bottom_base_hour='{}".format(self.payment_bottom_base_hour) + \
+                "', payment_top_base_hour='{}".format(self.payment_top_base_hour) + \
+                "', payment_free_base_hour='{}".format(self.payment_free_base_hour) + \
+                "', payment_per_hour='{}".format(self.payment_per_hour) + \
+                "', payment_per_bottom_hour='{}".format(self.payment_per_bottom_hour) + \
+                "', payment_per_top_hour='{}".format(self.payment_per_top_hour) + \
+                "', payment_fraction='{}".format(self.payment_fraction) + \
+                "', payment_fraction_calculation1='{}".format(self.payment_fraction_calculation1) + \
+                "', payment_fraction_calculation2='{}".format(self.payment_fraction_calculation2) + \
+                "', payment_condition='{}".format(self.payment_condition) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \

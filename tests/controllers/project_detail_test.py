@@ -76,10 +76,10 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work,
             'work_name': '作業',
-            'payment_money': '100000',
+            'billing_money': '100000',
             'engineer_id': '',
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': ''
 })
         self.assertEqual(result.status_code, 302)
         ok_('/project_detail/' in result.headers['Location'])
@@ -103,20 +103,20 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '2',
-            'payment_money': '100000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.variable,
-            'payment_bottom_base_hour': 100,
-            'payment_top_base_hour': 200,
-            'payment_free_base_hour': '1/100, 1/200',
-            'payment_per_hour': '1000',
-            'payment_per_bottom_hour': '1000',
-            'payment_per_top_hour': '1000',
-            'payment_fraction': '1000',
-            'payment_fraction_calculation1': '1',
-            'payment_fraction_calculation2': '1',
+            'billing_money': '100000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': 100,
+            'billing_top_base_hour': 200,
+            'billing_free_base_hour': '1/100, 1/200',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '1000',
+            'billing_fraction': '1000',
+            'billing_fraction_calculation1': '1',
+            'billing_fraction_calculation2': '1',
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project_detail/' in result.headers['Location'])
@@ -133,7 +133,7 @@ class ProjectDetailTests(BaseTestCase):
             project_id=1,
             detail_type=DetailType.work,
             work_name='delete_project_detail_test',
-            payment_money='100000',
+            billing_money='100000',
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -192,10 +192,10 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work,
             'work_name': '',
-            'payment_money': '100000',
+            'billing_money': '100000',
             'engineer_id': '',
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': ''
         })
         self.assertEqual(result.status_code, 200)
 
@@ -203,7 +203,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_money_if_work(self):
+    def test_required_billing_money_if_work(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -217,10 +217,10 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work,
             'work_name': 'test_project_detail',
-            'payment_money': '',
+            'billing_money': '',
             'engineer_id': '',
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': ''
         })
         self.assertEqual(result.status_code, 200)
 
@@ -242,11 +242,11 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '',
-            'payment_money': '100000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.fixed,
+            'billing_money': '100000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
         })
         self.assertEqual(result.status_code, 200)
 
@@ -254,7 +254,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_money_id_if_engineer(self):
+    def test_required_billing_money_id_if_engineer(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -268,11 +268,11 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.fixed,
+            'billing_money': '',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
         })
         self.assertEqual(result.status_code, 200)
 
@@ -280,7 +280,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_start_day_if_engineer(self):
+    def test_required_billing_start_day_if_engineer(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -294,11 +294,11 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.fixed,
+            'billing_money': '1000000',
+            'billing_start_day': '',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
         })
         self.assertEqual(result.status_code, 200)
 
@@ -306,7 +306,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_end_day_if_engineer(self):
+    def test_required_billing_end_day_if_engineer(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -320,11 +320,11 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.fixed,
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
         })
         self.assertEqual(result.status_code, 200)
 
@@ -332,7 +332,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_per_month_if_engineer(self):
+    def test_required_billing_per_month_if_engineer(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -346,11 +346,11 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '',
-            'payment_rule': Rule.fixed,
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '',
+            'billing_rule': Rule.fixed,
         })
         self.assertEqual(result.status_code, 200)
 
@@ -358,7 +358,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_rule_if_engineer(self):
+    def test_required_billing_rule_if_engineer(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -372,11 +372,11 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': '',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': '',
         })
         self.assertEqual(result.status_code, 200)
 
@@ -384,7 +384,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_bottom_base_hour_if_payment_rule_variable(self):
+    def test_required_billing_bottom_base_hour_if_billing_rule_variable(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -398,20 +398,20 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.variable,
-            'payment_bottom_base_hour': '',
-            'payment_top_base_hour': '200',
-            'payment_free_base_hour': '',
-            'payment_per_hour': '1000',
-            'payment_per_bottom_hour': '1000',
-            'payment_per_top_hour': '1000',
-            'payment_fraction': '1000',
-            'payment_fraction_calculation1': '1',
-            'payment_fraction_calculation2': '1',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '',
+            'billing_top_base_hour': '200',
+            'billing_free_base_hour': '',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '1000',
+            'billing_fraction': '1000',
+            'billing_fraction_calculation1': '1',
+            'billing_fraction_calculation2': '1',
 
         })
         self.assertEqual(result.status_code, 200)
@@ -420,7 +420,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_top_base_hour_if_payment_rule_variable(self):
+    def test_required_billing_top_base_hour_if_billing_rule_variable(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -434,20 +434,20 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.variable,
-            'payment_bottom_base_hour': '100',
-            'payment_top_base_hour': '',
-            'payment_free_base_hour': '',
-            'payment_per_hour': '1000',
-            'payment_per_bottom_hour': '1000',
-            'payment_per_top_hour': '1000',
-            'payment_fraction': '1000',
-            'payment_fraction_calculation1': '1',
-            'payment_fraction_calculation2': '1',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '100',
+            'billing_top_base_hour': '',
+            'billing_free_base_hour': '',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '1000',
+            'billing_fraction': '1000',
+            'billing_fraction_calculation1': '1',
+            'billing_fraction_calculation2': '1',
 
         })
         self.assertEqual(result.status_code, 200)
@@ -456,7 +456,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_free_base_hour_if_payment_rule_variable(self):
+    def test_required_billing_free_base_hour_if_billing_rule_variable(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -470,20 +470,20 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.variable,
-            'payment_bottom_base_hour': '',
-            'payment_top_base_hour': '',
-            'payment_free_base_hour': '',
-            'payment_per_hour': '1000',
-            'payment_per_bottom_hour': '1000',
-            'payment_per_top_hour': '1000',
-            'payment_fraction': '1000',
-            'payment_fraction_calculation1': '1',
-            'payment_fraction_calculation2': '1',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '',
+            'billing_top_base_hour': '',
+            'billing_free_base_hour': '',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '1000',
+            'billing_fraction': '1000',
+            'billing_fraction_calculation1': '1',
+            'billing_fraction_calculation2': '1',
 
         })
         self.assertEqual(result.status_code, 200)
@@ -492,7 +492,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_per_hour_if_payment_rule_variable(self):
+    def test_required_billing_per_hour_if_billing_rule_variable(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -506,20 +506,20 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.variable,
-            'payment_bottom_base_hour': '100',
-            'payment_top_base_hour': '200',
-            'payment_free_base_hour': '1/100、1/200',
-            'payment_per_hour': '',
-            'payment_per_bottom_hour': '1000',
-            'payment_per_top_hour': '1000',
-            'payment_fraction': '1000',
-            'payment_fraction_calculation1': '1',
-            'payment_fraction_calculation2': '1',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '100',
+            'billing_top_base_hour': '200',
+            'billing_free_base_hour': '1/100、1/200',
+            'billing_per_hour': '',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '1000',
+            'billing_fraction': '1000',
+            'billing_fraction_calculation1': '1',
+            'billing_fraction_calculation2': '1',
 
         })
         self.assertEqual(result.status_code, 200)
@@ -528,7 +528,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_per_bottom_hour_if_payment_rule_variable(self):
+    def test_required_billing_per_bottom_hour_if_billing_rule_variable(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -542,20 +542,20 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.variable,
-            'payment_bottom_base_hour': '100',
-            'payment_top_base_hour': '200',
-            'payment_free_base_hour': '1/100、1/200',
-            'payment_per_hour': '1000',
-            'payment_per_bottom_hour': '',
-            'payment_per_top_hour': '1000',
-            'payment_fraction': '1000',
-            'payment_fraction_calculation1': '1',
-            'payment_fraction_calculation2': '1',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '100',
+            'billing_top_base_hour': '200',
+            'billing_free_base_hour': '1/100、1/200',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '',
+            'billing_per_top_hour': '1000',
+            'billing_fraction': '1000',
+            'billing_fraction_calculation1': '1',
+            'billing_fraction_calculation2': '1',
 
         })
         self.assertEqual(result.status_code, 200)
@@ -564,7 +564,7 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
-    def test_required_payment_per_top_hour_if_payment_rule_variable(self):
+    def test_required_billing_per_top_hour_if_billing_rule_variable(self):
         before = len(self.project_detail_repository.find_all())
         # ログイン
         self.app.post('/login', data={
@@ -578,20 +578,20 @@ class ProjectDetailTests(BaseTestCase):
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
-            'payment_money': '1000000',
-            'payment_start_day': '2016/1',
-            'payment_end_day': '2016/12',
-            'payment_per_month': '100000',
-            'payment_rule': Rule.variable,
-            'payment_bottom_base_hour': '100',
-            'payment_top_base_hour': '200',
-            'payment_free_base_hour': '1/100、1/200',
-            'payment_per_hour': '1000',
-            'payment_per_bottom_hour': '1000',
-            'payment_per_top_hour': '',
-            'payment_fraction': '1000',
-            'payment_fraction_calculation1': '1',
-            'payment_fraction_calculation2': '1',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/1',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '100',
+            'billing_top_base_hour': '200',
+            'billing_free_base_hour': '1/100、1/200',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '',
+            'billing_fraction': '1000',
+            'billing_fraction_calculation1': '1',
+            'billing_fraction_calculation2': '1',
 
         })
         self.assertEqual(result.status_code, 200)

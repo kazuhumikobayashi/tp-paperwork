@@ -27,10 +27,10 @@ class Company(BaseModel, db.Model):
     fax = Column(String(32))
     client_code = Column(String(128))
     bp_code = Column(String(128))
+    billing_site = Column(EnumType(enum_class=Site))
     payment_site = Column(EnumType(enum_class=Site))
-    receipt_site = Column(EnumType(enum_class=Site))
+    billing_tax = Column(EnumType(enum_class=Tax))
     payment_tax = Column(EnumType(enum_class=Tax))
-    receipt_tax = Column(EnumType(enum_class=Tax))
     bank_id = Column(Integer, ForeignKey("banks.id"))
     bank_holiday_flag = Column(EnumType(enum_class=HolidayFlag))
     remarks = Column(String(1024)) 
@@ -50,10 +50,10 @@ class Company(BaseModel, db.Model):
                  fax=None,
                  client_code=None,
                  bp_code=None,
+                 billing_site=None,
                  payment_site=None,
-                 receipt_site=None,
+                 billing_tax=None,
                  payment_tax=None,
-                 receipt_tax=None,
                  bank_id=None,
                  bank_holiday_flag=None,
                  remarks=None,
@@ -73,10 +73,10 @@ class Company(BaseModel, db.Model):
         self.fax = fax
         self.client_code = client_code
         self.bp_code = bp_code
+        self.billing_site = billing_site
         self.payment_site = payment_site
-        self.receipt_site = receipt_site
+        self.billing_tax = billing_tax
         self.payment_tax = payment_tax
-        self.receipt_tax = receipt_tax
         self.bank_id = bank_id
         self.bank_holiday_flag = bank_holiday_flag
         self.remarks = remarks
@@ -95,10 +95,10 @@ class Company(BaseModel, db.Model):
                 "', fax='{}".format(self.fax) + \
                 "', client_code='{}".format(self.client_code) + \
                 "', bp_code='{}".format(self.bp_code) + \
+                "', billing_site='{}".format(self.billing_site) + \
                 "', payment_site='{}".format(self.payment_site) + \
-                "', receipt_site='{}".format(self.receipt_site) + \
-                "', payment_tax='{}".format(self.receipt_tax) + \
-                "', receipt_tax='{}".format(self.receipt_tax) + \
+                "', billing_tax='{}".format(self.payment_tax) + \
+                "', payment_tax='{}".format(self.payment_tax) + \
                 "', bank='{}".format(self.bank) + \
                 "', bank_holiday_flag='{}".format(self.bank_holiday_flag) + \
                 "', remarks='{}".format(self.remarks) + \

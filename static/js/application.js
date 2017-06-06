@@ -206,15 +206,15 @@ $(function() {
   var VARIABLE = 2;
   
   $('input').on('ifChecked', function(event){
-    if ($('input[name="receipt_rule"]:checked').val() == FIXED) {
+    if ($('input[name="payment_rule"]:checked').val() == FIXED) {
       // 固定のため、非表示
-      $('#receipt-variable-area').hide('slow');
-    } else if ($('input[name="receipt_rule"]:checked').val() == VARIABLE) {
+      $('#payment-variable-area').hide('slow');
+    } else if ($('input[name="payment_rule"]:checked').val() == VARIABLE) {
       // 変動のため、表示
-      $('#receipt-variable-area').show('slow');
+      $('#payment-variable-area').show('slow');
 	} else {
       // 未入力のため、非表示
-      $('#receipt-variable-area').hide();
+      $('#payment-variable-area').hide();
     }
   });
 });
@@ -226,12 +226,12 @@ $(function() {
   var VARIABLE = 2;
 
   $('input').on('ifChecked', function(event){
-    if ($('input[name="payment_rule"]:checked').val() == FIXED) {
+    if ($('input[name="billing_rule"]:checked').val() == FIXED) {
       // 固定のため、非表示
-      $('#payment-variable-area').hide('slow');
-    } else if ($('input[name="payment_rule"]:checked').val() == VARIABLE) {
+      $('#billing-variable-area').hide('slow');
+    } else if ($('input[name="billing_rule"]:checked').val() == VARIABLE) {
       // 変動のため、表示
-      $('#payment-variable-area').show('slow');
+      $('#billing-variable-area').show('slow');
 	} else {
       // 未入力のため、非表示
       $('#variable-area').hide();

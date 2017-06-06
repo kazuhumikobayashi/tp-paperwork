@@ -57,7 +57,7 @@
         </div>
         <div class="common-variable-area" {% if not form.detail_type.data %}hidden{% endif %}>
           <div class="row">
-            {{ render_field(form.payment_money, "col-sm-6") }}
+            {{ render_field(form.billing_money, "col-sm-6") }}
           </div>
           <div class="row">
             {{ render_field(form.remarks, "col-sm-6") }}
@@ -66,12 +66,44 @@
         <div class="engineer-variable-area" {% if form.detail_type.data != '1' %}hidden{% endif %}{# '1'=ENGINEER #}>
           <div class="part-title">請求情報</div>
           <div class="row">
+            {{ render_field(form.billing_start_day, "col-sm-6", input_class="date-yyyymm") }}
+            {{ render_field(form.billing_end_day, "col-sm-6", input_class="date-yyyymm") }}
+          </div>
+          <div class="row">
+            {{ render_field(form.billing_per_month, "col-sm-6") }}
+            {{ render_field(form.billing_rule, "col-sm-6") }}
+          </div>
+          <div id="billing-variable-area" {% if form.billing_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
+            <div class="row">
+              {{ render_field(form.billing_bottom_base_hour, "col-sm-6") }}
+              {{ render_field(form.billing_top_base_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              {{ render_field(form.billing_free_base_hour, "col-sm-6") }}
+              {{ render_field(form.billing_per_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              {{ render_field(form.billing_per_bottom_hour, "col-sm-6") }}
+              {{ render_field(form.billing_per_top_hour, "col-sm-6") }}
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="row">
+                  {{ render_field(form.billing_fraction, "col-xs-4") }}
+                  {{ render_field(form.billing_fraction_calculation1, "col-xs-4", input_class="select2") }}
+                  {{ render_field(form.billing_fraction_calculation2, "col-xs-4", input_class="select2") }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="part-title">支払情報</div>
+          <div class="row">
             {{ render_field(form.payment_start_day, "col-sm-6", input_class="date-yyyymm") }}
             {{ render_field(form.payment_end_day, "col-sm-6", input_class="date-yyyymm") }}
           </div>
           <div class="row">
             {{ render_field(form.payment_per_month, "col-sm-6") }}
-            {{ render_field(form.payment_rule, "col-sm-6") }}
+            {{ render_field(form.payment_rule, "col-sm-6", disabled="disabled") }}
           </div>
           <div id="payment-variable-area" {% if form.payment_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
             <div class="row">
@@ -92,38 +124,6 @@
                   {{ render_field(form.payment_fraction, "col-xs-4") }}
                   {{ render_field(form.payment_fraction_calculation1, "col-xs-4", input_class="select2") }}
                   {{ render_field(form.payment_fraction_calculation2, "col-xs-4", input_class="select2") }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="part-title">支払情報</div>
-          <div class="row">
-            {{ render_field(form.receipt_start_day, "col-sm-6", input_class="date-yyyymm") }}
-            {{ render_field(form.receipt_end_day, "col-sm-6", input_class="date-yyyymm") }}
-          </div>
-          <div class="row">
-            {{ render_field(form.receipt_per_month, "col-sm-6") }}
-            {{ render_field(form.receipt_rule, "col-sm-6", disabled="disabled") }}
-          </div>
-          <div id="receipt-variable-area" {% if form.receipt_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
-            <div class="row">
-              {{ render_field(form.receipt_bottom_base_hour, "col-sm-6") }}
-              {{ render_field(form.receipt_top_base_hour, "col-sm-6") }}
-            </div>
-            <div class="row">
-              {{ render_field(form.receipt_free_base_hour, "col-sm-6") }}
-              {{ render_field(form.receipt_per_hour, "col-sm-6") }}
-            </div>
-            <div class="row">
-              {{ render_field(form.receipt_per_bottom_hour, "col-sm-6") }}
-              {{ render_field(form.receipt_per_top_hour, "col-sm-6") }}
-            </div>
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="row">
-                  {{ render_field(form.receipt_fraction, "col-xs-4") }}
-                  {{ render_field(form.receipt_fraction_calculation1, "col-xs-4", input_class="select2") }}
-                  {{ render_field(form.receipt_fraction_calculation2, "col-xs-4", input_class="select2") }}
                 </div>
               </div>
             </div>
