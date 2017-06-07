@@ -1,4 +1,5 @@
 def register(app):
+    from application.controllers import dashboard
     from application.controllers import company
     from application.controllers import department
     from application.controllers import project
@@ -15,6 +16,7 @@ def register(app):
     from application.controllers import contract
     from application.controllers import project_detail
 
+    app.register_blueprint(dashboard.bp)
     app.register_blueprint(company.bp)
     app.register_blueprint(department.bp)
     app.register_blueprint(engineer.bp)
