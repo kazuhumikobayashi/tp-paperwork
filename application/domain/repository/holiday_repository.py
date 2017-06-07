@@ -18,5 +18,10 @@ class HolidayRepository(BaseRepository):
     def find_by_date(self, date):
         return self.model.query.filter(self.model.holiday == date).first()
 
+    def is_holiday(self, date):
+        fil = self.model.query
+        fil = fil.filter(self.model.holiday == date).first()
+        return True if fil else False
+
     def create(self):
         return Holiday()

@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class HolidayFlag(Enum):
-    before = 1
-    after = 2
+    before = -1
+    after = 1
 
     @property
     def name(self):
