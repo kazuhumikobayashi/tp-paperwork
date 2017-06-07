@@ -24,9 +24,13 @@ class Status(Enum):
     @staticmethod
     def get_status_for_select():
         ret = [('', '')]
-        type_list = [(str(status.value), status.name) for status in Status]
+        type_list = Status.get_status_for_multi_select()
         ret.extend(type_list)
         return ret
+
+    @staticmethod
+    def get_status_for_multi_select():
+        return [(str(status.value), status.name) for status in Status]
 
     @staticmethod
     def parse(value):
