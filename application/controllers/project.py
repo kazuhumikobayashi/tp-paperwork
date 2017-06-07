@@ -45,9 +45,12 @@ def project_page(page=1):
 
 
 @bp.route('/create', methods=['GET', 'POST'])
-def create():
+def create(project_id=None):
 
-    project = Project()
+    if project_id:
+        project = service.clone(project_id)
+    else:
+        project = Project()
 
     form = ProjectCreateForm(request.form, project)
     if form.validate_on_submit():
@@ -63,12 +66,13 @@ def create():
     return render_template('project/create.html', form=form)
 
 
-@bp.route('/copy/<project_id>', methods=['GET'])
+@bp.route('/copy/<project_id>', methods=['GET', 'POST'])
 def copy(project_id):
-    project = service.clone(project_id)
-
-    flash('コピーしました。')
-    return redirect(url_for('contract.index', project_id=project.id))
+    return create(project_id)
+    # project = service.clone(project_id)
+    #
+    # flash('コピーしました。')
+    # return redirect(url_for('contract.index', project_id=project.id))
 
 
 @bp.route('/delete/<project_id>', methods=['GET'])
