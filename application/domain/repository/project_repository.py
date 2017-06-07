@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
 from application.domain.repository.base_repository import BaseRepository
@@ -32,6 +34,21 @@ class ProjectRepository(BaseRepository):
 
     def find_by_estimation_no(self, estimation_no):
         return self.model.query.filter(self.model.estimation_no == estimation_no).first()
+
+    def find_incomplete_estimates(self):
+        return self.model.query.filter(self.model.status == Status.start).all()
+
+    def find_incomplete_billings(self):
+        next_month = date(date.today().year, date.today().month + 1, date.today().day)
+        return self.model.query\
+                         .filter(self.model.status == Status.received)\
+                         .filter(self.model.end_date <= next_month).all()
+
+    def find_incomplete_payments(self):
+        next_month = date(date.today().year, date.today().month + 1, date.today().day)
+        return self.model.query\
+                         .filter(self.model.status == Status.received)\
+                         .filter(self.model.end_date <= next_month).all()
 
     def create(self):
         return Project()
