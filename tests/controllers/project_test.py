@@ -122,7 +122,11 @@ class ProjectTests(BaseTestCase):
         })
         original = self.project_repository.find_by_id(original_project_id)
 
-        result = self.app.get('/project/copy/' + str(original.id))
+        result = self.app.post('/project/copy/' + str(original.id), data={
+            'project_name': 'test_copy_project_after',
+            'start_date': date.today().strftime('%Y/%m/%d'),
+            'end_date': '2099/12/31'
+        })
         # コピーできることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/contract' in result.headers['Location'])

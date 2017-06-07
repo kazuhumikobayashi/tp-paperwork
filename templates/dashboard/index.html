@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% import "_pagination.html" as p %}
+{% block title %}ダッシュボード{% endblock %}
+{% block include_css %}
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/DataTables-1.10.13/media/css/dataTables.bootstrap.css') }}">
+{% endblock %}
+{% block include_js %}
+<!-- DataTables -->
+<script src="{{ url_for('static', filename='vendor/DataTables-1.10.13/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/DataTables-1.10.13/media/js/dataTables.bootstrap.min.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>ダッシュボード</h1>
+{% endblock %}
+{% block main_content %}
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="box box-danger">
+        <div class="box-header">
+          <h3 class="box-title">
+              未完了の見積書
+            <small class="hidden-xs">（現在、見積中のプロジェクトを表示）</small>
+          </h3>
+          <div class="box-tools">
+            <span data-toggle="tooltip" title="{{ incomplete_estimates|length }}件 未完了" class="badge bg-red">{{ incomplete_estimates|length }}</span>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive">
+          <table class="table table-bordered table-hover data-table">
+            <thead>
+            <tr>
+              <th width="80px">計上部署</th>
+              <th>プロジェクト名</th>
+              <th width="60px" class="hidden-xs">開始日</th>
+              <th width="60px" class="hidden-xs">終了日</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for estimate in incomplete_estimates %}
+            <tr>
+              <td>{{ estimate.recorded_department.department_name }}</td>
+              <td><a href="{{ url_for('contract.index', project_id=estimate.id) }}">{{ estimate.project_name }}</a></td>
+              <td class="hidden-xs">{{ estimate.start_date|datetime_format('%Y/%m/%d') }}</td>
+              <td class="hidden-xs">{{ estimate.end_date|datetime_format('%Y/%m/%d') }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-lg-6">
+      <div class="box box-danger">
+        <div class="box-header">
+          <h3 class="box-title">
+            未完了の請求書
+            <small class="hidden-xs">（終了日が１か月以内で請求済みでないプロジェクトを表示）</small>
+          </h3>
+          <div class="box-tools">
+            <span data-toggle="tooltip" title="{{ incomplete_billings|length }}件 未完了" class="badge bg-red">{{ incomplete_billings|length }}</span>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive">
+          <table class="table table-bordered table-hover data-table">
+            <thead>
+            <tr>
+              <th class="hidden-xs" width="60px">見積りNo</th>
+              <th width="80px">計上部署</th>
+              <th>プロジェクト名</th>
+              <th class="hidden-xs" width="60px">入金日</th>
+            </tr>
+            </thead>
+            <tbody>
+              {% for billing in incomplete_billings %}
+              <tr>
+                <td class="hidden-xs">{{ billing.estimation_no }}</td>
+                <td>{{ billing.recorded_department.department_name }}</td>
+                <td><a href="{{ url_for('contract.index', project_id=billing.id) }}">{{ billing.project_name }}</a></td>
+                <td class="hidden-xs">{{ billing.deposit_date|datetime_format('%Y/%m/%d') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="box box-danger">
+        <div class="box-header">
+          <h3 class="box-title">
+            未完了の支払
+            <small class="hidden-xs">（終了日が１か月以内で支払済みでないプロジェクトを表示）</small>
+          </h3>
+          <div class="box-tools">
+            <span data-toggle="tooltip" title="{{ incomplete_payments|length }}件 未完了" class="badge bg-red">{{ incomplete_payments|length }}</span>
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive">
+          <table class="table table-bordered table-hover data-table">
+            <thead>
+            <tr>
+              <th class="hidden-xs" width="60px">見積りNo</th>
+              <th width="80px">計上部署</th>
+              <th>プロジェクト名</th>
+              <th class="hidden-xs" width="60px">支払日</th>
+            </tr>
+            </thead>
+            <tbody>
+              {% for payment in incomplete_payments %}
+              <tr>
+                <td class="hidden-xs">{{ payment.estimation_no }}</td>
+                <td>{{ payment.recorded_department.department_name }}</td>
+                <td><a href="{{ url_for('contract.index', project_id=payment.id) }}">{{ payment.project_name }}</a></td>
+                <td class="hidden-xs">{{ payment.deposit_date|datetime_format('%Y/%m/%d') }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+{% endblock %}

@@ -61,7 +61,10 @@ class Project(BaseModel, db.Model):
 
     @start_date.setter
     def start_date(self, value):
-        if self.start_date != value:
+        old = self._get_fiscal_year(self._start_date)
+        new = self._get_fiscal_year(value)
+
+        if old != new:
             self._is_start_date_change = True
         self._start_date = value
 
@@ -175,10 +178,7 @@ class Project(BaseModel, db.Model):
         return copy.__class__(**arguments)
 
     def get_fiscal_year(self):
-        if int(self.start_date.strftime('%m')) >= 10:
-            return int(self.start_date.strftime('%y')) + 1
-        else:
-            return int(self.start_date.strftime('%y'))
+        return self._get_fiscal_year(self.start_date)
 
     def get_project_attachments(self):
         tmp = sorted(self.project_attachments,
@@ -193,3 +193,12 @@ class Project(BaseModel, db.Model):
                 project_attachments += [{"type": attachment.type.name, "attachments": attachments}]
                 old_type = attachment.type.value
         return project_attachments
+
+    @staticmethod
+    def _get_fiscal_year(date):
+        if not date:
+            return None
+        if int(date.strftime('%m')) >= 10:
+            return int(date.strftime('%y')) + 1
+        else:
+            return int(date.strftime('%y'))
