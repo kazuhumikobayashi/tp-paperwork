@@ -71,10 +71,6 @@ def create(project_id=None):
 @bp.route('/copy/<project_id>', methods=['GET', 'POST'])
 def copy(project_id):
     return create(project_id)
-    # project = service.clone(project_id)
-    #
-    # flash('コピーしました。')
-    # return redirect(url_for('contract.index', project_id=project.id))
 
 
 @bp.route('/delete/<project_id>', methods=['GET'])
