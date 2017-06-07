@@ -11,6 +11,7 @@ from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.status import Status
 from application.domain.model.project_attachment import ProjectAttachment
+from application.domain.model.project_month import ProjectMonth
 from application.domain.model.sqlalchemy.types import EnumType
 from application.domain.model.project_detail import ProjectDetail
 
@@ -50,6 +51,7 @@ class Project(BaseModel, db.Model):
     recorded_department = relationship(Department, lazy='joined')
     project_attachments = relationship(ProjectAttachment, cascade='all, delete-orphan')
     project_details = relationship(ProjectDetail, cascade='all, delete-orphan')
+    project_months = relationship(ProjectMonth, cascade='all, delete-orphan')
 
     _is_start_date_change = False
 
@@ -158,6 +160,7 @@ class Project(BaseModel, db.Model):
                 "', remarks='{}".format(self.remarks) + \
                 "', client_order_no='{}".format(self.client_order_no) + \
                 "', project_attachments='{}".format(self.project_attachments) + \
+                "', project_months='{}".format(self.project_months) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \
                 "', updated_at='{}".format(self.updated_at) + \

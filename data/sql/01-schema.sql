@@ -15,6 +15,8 @@ DROP TABLE IF EXISTS company_client_flags;
 DROP TABLE IF EXISTS engineer_histories;
 DROP TABLE IF EXISTS holidays;
 DROP TABLE IF EXISTS project_details;
+DROP TABLE IF EXISTS project_billings;
+DROP TABLE IF EXISTS project_months;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -300,4 +302,39 @@ CREATE TABLE IF NOT EXISTS holidays (
   updated_user VARCHAR(128) NOT NULL ,
   PRIMARY KEY (id) ,
   UNIQUE KEY (holiday)
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS project_billings (
+  id INT NOT NULL AUTO_INCREMENT,
+  project_detail_id INT NOT NULL ,
+  billing_month DATE NOT NULL ,
+  billing_content VARCHAR(128) ,
+  billing_amount VARCHAR(128) ,
+  billing_confirmation_money INT ,
+  remarks VARCHAR(1024) ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+CREATE TABLE IF NOT EXISTS project_months (
+  id INT NOT NULL AUTO_INCREMENT,
+  project_id INT NOT NULL ,
+  project_month DATE NOT NULL ,
+  result_input_flag INT ,
+  billing_input_flag INT ,
+  payment_input_flag INT ,
+  payment_date DATE ,
+  billing_estimated_money INT ,
+  billing_confirmation_money  INT ,
+  billing_transportation INT ,
+  remarks VARCHAR(1024) ,
+  client_billing_no VARCHAR(64) ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
 ) ENGINE = INNODB;
