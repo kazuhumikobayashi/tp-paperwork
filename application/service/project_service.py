@@ -15,15 +15,22 @@ class ProjectService(object):
     def find_by_id(self, project_id):
         return self.repository.find_by_id(project_id)
 
+    def find_incomplete_estimates(self):
+        return self.repository.find_incomplete_estimates()
+
+    def find_incomplete_billings(self):
+        return self.repository.find_incomplete_billings()
+
+    def find_incomplete_payments(self):
+        return self.repository.find_incomplete_payments()
+
     def clone(self, project_id):
 
         project = self.find_by_id(project_id)
         project_clone = project.clone()
         project_clone.status = Status.start
 
-        self.save(project_clone)
-
-        return self.find_by_id(project_clone.id)
+        return project_clone
 
     def save(self, project):
         if project.is_start_date_change:

@@ -23,9 +23,9 @@ company_service = CompanyService()
 @bp.route('/', methods=['GET'])
 def index(page=1):
     form = ProjectSearchForm(request.values)
-    form.client_company_id.choices = company_service.find_for_select_by_client_flag_id(
+    form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])
-    form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id(
+    form.end_user_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.end_user.value])
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = service.find(page,
@@ -45,12 +45,17 @@ def project_page(page=1):
 
 
 @bp.route('/create', methods=['GET', 'POST'])
-def create():
+def create(project_id=None):
 
-    project = Project()
+    if project_id:
+        project = service.find_by_id(project_id)
+    else:
+        project = Project()
 
     form = ProjectCreateForm(request.form, project)
     if form.validate_on_submit():
+        if project_id:
+            project = service.clone(project_id)
         project.project_name = form.project_name.data
         project.project_name_for_bp = form.project_name_for_bp.data
         project.start_date = form.start_date.data
@@ -63,12 +68,9 @@ def create():
     return render_template('project/create.html', form=form)
 
 
-@bp.route('/copy/<project_id>', methods=['GET'])
+@bp.route('/copy/<project_id>', methods=['GET', 'POST'])
 def copy(project_id):
-    project = service.clone(project_id)
-
-    flash('コピーしました。')
-    return redirect(url_for('contract.index', project_id=project.id))
+    return create(project_id)
 
 
 @bp.route('/delete/<project_id>', methods=['GET'])

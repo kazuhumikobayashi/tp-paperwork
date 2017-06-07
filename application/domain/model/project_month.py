@@ -1,0 +1,72 @@
+from sqlalchemy import Column, Integer, Date, ForeignKey
+from sqlalchemy.orm import relationship
+
+from application import db
+from application.domain.model.base_model import BaseModel
+
+
+class ProjectMonth(BaseModel, db.Model):
+    __tablename__ = 'project_months'
+
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    project_month = Column(Date, nullable=False)
+    result_input_flag = Column(Integer)
+    billing_input_flag = Column(Integer)
+    payment_input_flag = Column(Integer)
+    payment_date = Column(Date)
+    billing_estimated_money = Column(Integer)
+    billing_confirmation_money = Column(Integer)
+    billing_transportation = Column(Integer)
+    remarks = Column(Integer)
+    client_billing_no = Column(Integer)
+
+    project = relationship("Project", lazy='joined')
+
+    def __init__(self,
+                 project_id=None,
+                 project_month=None,
+                 result_input_flag=None,
+                 billing_input_flag=None,
+                 payment_input_flag=None,
+                 payment_date=None,
+                 billing_estimated_money=None,
+                 billing_confirmation_money=None,
+                 billing_transportation=None,
+                 remarks=None,
+                 client_billing_no=None,
+                 created_at=None,
+                 created_user=None,
+                 updated_at=None,
+                 updated_user=None):
+        super(ProjectMonth, self).__init__(created_at, created_user, updated_at, updated_user)
+        self.project_id = project_id
+        self.project_month = project_month
+        self.result_input_flag = result_input_flag
+        self.billing_input_flag = billing_input_flag
+        self.payment_input_flag = payment_input_flag
+        self.payment_date = payment_date
+        self.billing_estimated_money = billing_estimated_money
+        self.billing_confirmation_money = billing_confirmation_money
+        self.billing_transportation = billing_transportation
+        self.remarks = remarks
+        self.client_billing_no = client_billing_no
+
+    def __repr__(self):
+        return "<ProjectMonth:" + \
+                "'id='{}".format(self.id) + \
+                "', project_id='{}".format(self.project_id) + \
+                "', project_month='{}".format(self.project_month) + \
+                "', result_input_flag='{}".format(self.result_input_flag) + \
+                "', billing_input_flag='{}".format(self.billing_input_flag) + \
+                "', payment_input_flag='{}".format(self.payment_input_flag) + \
+                "', payment_date='{}".format(self.payment_date) + \
+                "', billing_estimated_money='{}".format(self.billing_estimated_money) + \
+                "', billing_confirmation_money='{}".format(self.billing_confirmation_money) + \
+                "', billing_transportation='{}".format(self.billing_transportation) + \
+                "', remarks='{}".format(self.remarks) + \
+                "', client_billing_no='{}".format(self.client_billing_no) + \
+                "', created_at='{}".format(self.created_at) + \
+                "', created_user='{}".format(self.created_user) + \
+                "', updated_at='{}".format(self.updated_at) + \
+                "', updated_user='{}".format(self.updated_user) + \
+                "'>"
