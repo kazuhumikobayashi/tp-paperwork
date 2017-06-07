@@ -30,9 +30,7 @@ class ProjectService(object):
         project_clone = project.clone()
         project_clone.status = Status.start
 
-        self.save(project_clone)
-
-        return self.find_by_id(project_clone.id)
+        return project_clone
 
     def save(self, project):
         if project.is_start_date_change:

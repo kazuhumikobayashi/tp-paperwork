@@ -48,12 +48,14 @@ def project_page(page=1):
 def create(project_id=None):
 
     if project_id:
-        project = service.clone(project_id)
+        project = service.find_by_id(project_id)
     else:
         project = Project()
 
     form = ProjectCreateForm(request.form, project)
     if form.validate_on_submit():
+        if project_id:
+            project = service.clone(project_id)
         project.project_name = form.project_name.data
         project.project_name_for_bp = form.project_name_for_bp.data
         project.start_date = form.start_date.data
