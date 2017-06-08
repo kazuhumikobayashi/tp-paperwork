@@ -12,8 +12,8 @@ class ProjectMonth(BaseModel, db.Model):
     project_month = Column(Date, nullable=False)
     result_input_flag = Column(Integer)
     billing_input_flag = Column(Integer)
-    payment_input_flag = Column(Integer)
-    payment_date = Column(Date)
+    deposit_input_flag = Column(Integer)
+    deposit_date = Column(Date)
     billing_estimated_money = Column(Integer)
     billing_confirmation_money = Column(Integer)
     billing_transportation = Column(Integer)
@@ -27,8 +27,8 @@ class ProjectMonth(BaseModel, db.Model):
                  project_month=None,
                  result_input_flag=None,
                  billing_input_flag=None,
-                 payment_input_flag=None,
-                 payment_date=None,
+                 deposit_input_flag=None,
+                 deposit_date=None,
                  billing_estimated_money=None,
                  billing_confirmation_money=None,
                  billing_transportation=None,
@@ -43,8 +43,8 @@ class ProjectMonth(BaseModel, db.Model):
         self.project_month = project_month
         self.result_input_flag = result_input_flag
         self.billing_input_flag = billing_input_flag
-        self.payment_input_flag = payment_input_flag
-        self.payment_date = payment_date
+        self.deposit_input_flag = deposit_input_flag
+        self.deposit_date = deposit_date
         self.billing_estimated_money = billing_estimated_money
         self.billing_confirmation_money = billing_confirmation_money
         self.billing_transportation = billing_transportation
@@ -58,8 +58,8 @@ class ProjectMonth(BaseModel, db.Model):
                 "', project_month='{}".format(self.project_month) + \
                 "', result_input_flag='{}".format(self.result_input_flag) + \
                 "', billing_input_flag='{}".format(self.billing_input_flag) + \
-                "', payment_input_flag='{}".format(self.payment_input_flag) + \
-                "', payment_date='{}".format(self.payment_date) + \
+                "', deposit_input_flag='{}".format(self.deposit_input_flag) + \
+                "', deposit_date='{}".format(self.deposit_date) + \
                 "', billing_estimated_money='{}".format(self.billing_estimated_money) + \
                 "', billing_confirmation_money='{}".format(self.billing_confirmation_money) + \
                 "', billing_transportation='{}".format(self.billing_transportation) + \
