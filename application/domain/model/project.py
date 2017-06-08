@@ -12,8 +12,9 @@ from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.status import Status
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.project_month import ProjectMonth
-from application.domain.model.sqlalchemy.types import EnumType
 from application.domain.model.project_detail import ProjectDetail
+from application.domain.model.sqlalchemy.types import EnumType
+from application.service.calculator import Calculator
 
 
 class Project(BaseModel, db.Model):
@@ -202,3 +203,25 @@ class Project(BaseModel, db.Model):
             return int(date.strftime('%y')) + 1
         else:
             return int(date.strftime('%y'))
+
+    def get_total_moeny(self):
+        total_money = 0
+        for project_detail in self.project_details:
+            total_money = total_money + project_detail.billing_money
+        return total_money
+
+    # 入金予定日を計算するメソッド
+    def get_deposit_date(self):
+        billing_site = self.client_company.billing_site.value
+        bank_holiday_flag = self.client_company.bank_holiday_flag  # 前倒し・後ろ倒しフラグ
+
+        # 入金サイトから支払日を選定
+        deposit_date = Calculator.calculate_deposit_date_from_site(self.end_date, billing_site)
+
+        # 土日の場合、前倒し・後ろ倒しの日付に変更。
+        deposit_date = Calculator.to_weekday_if_on_weekend(deposit_date, bank_holiday_flag)
+
+        # 祝日の場合、前倒し・後ろ倒しの日付に変更。
+        deposit_date = Calculator.to_weekday_if_on_holiday(deposit_date, bank_holiday_flag)
+
+        return deposit_date

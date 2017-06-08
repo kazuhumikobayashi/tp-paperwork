@@ -47,7 +47,7 @@
           <div class="tab-content">
             <div class="text-right" style="padding-bottom: 10px;">
               <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 見積書出力</button>
-              <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 注文書出力</button>
+              <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 注文請書出力</button>
             </div>
             <form class="form-horizontal" method="post">
             {{ form.hidden_tag() }}
@@ -136,7 +136,6 @@
                       </div>
                     </div>
                   </div><!-- /.box-frame -->
-                                        
                   <div class="row">
                     {{ render_field(form.estimated_total_amount, "col-sm-6") }}
                   </div>
@@ -144,8 +143,10 @@
                     {{ render_field(form.billing_site, "col-sm-6") }}
                     {{ render_field(form.billing_tax, "col-sm-6", input_class="select2") }}
                   </div>
-                  <div class="row">
-                    {{ render_field(form.deposit_date, "col-sm-6", input_class="date") }}
+                  <div class="show-if-blanket" {% if form.contract_form.data != '1' %}hidden{% endif %}{# '1'=請負 #}>
+                    <div class="row">
+                      {{ render_field(form.deposit_date, "col-sm-6", input_class="date") }}
+                    </div>
                   </div>
                   <div class="row">
                     {{ render_field(form.scope, "col-sm-12") }}

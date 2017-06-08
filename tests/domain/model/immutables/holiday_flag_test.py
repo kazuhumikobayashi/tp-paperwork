@@ -15,8 +15,8 @@ class HolidayFlagTests(BaseTestCase):
         self.assertEqual(HolidayFlag.after.name, '後ろ倒し')
 
     def test_parse(self):
-        before = 1
-        after = 2
+        before = -1
+        after = 1
 
         self.assertEquals(HolidayFlag.parse(before), HolidayFlag.before)
         self.assertEquals(HolidayFlag.parse(after), HolidayFlag.after)
@@ -26,8 +26,8 @@ class HolidayFlagTests(BaseTestCase):
         self.assertIsNone(HolidayFlag.parse('a'))
 
     def test_str(self):
-        before = '1'
-        after = '2'
+        before = '-1'
+        after = '1'
 
         self.assertEqual(str(HolidayFlag.before), before)
         self.assertEqual(str(HolidayFlag.after), after)

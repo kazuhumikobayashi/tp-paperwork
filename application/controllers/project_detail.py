@@ -81,6 +81,10 @@ def detail(project_detail_id=None):
         project_detail.bp_order_no = form.bp_order_no.data
         project_detail.client_order_no_for_bp = form.client_order_no_for_bp.data
 
+        # 見積もり合計金額も明細登録時に保存する。
+        project_detail.project.estimated_total_amount = project_detail.project.get_total_moeny()\
+                                                        + project_detail.billing_money
+
         service.save(project_detail)
         flash('保存しました。')
         return redirect(url_for('.detail', project_detail_id=project_detail.id))

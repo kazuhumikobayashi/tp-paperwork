@@ -5,6 +5,7 @@ from application.domain.model.attachment import Attachment
 from application.domain.model.company import Company
 from application.domain.model.department import Department
 from application.domain.model.engineer import Engineer
+from application.domain.model.holiday import Holiday
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
@@ -43,6 +44,7 @@ def init_data():
     create_company_client_flags()
     create_engineer_histories()
     create_project_details()
+    create_holiday()
 
 
 def create_user():
@@ -286,4 +288,25 @@ def create_project_details():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(project_detail)
+    db.session.commit()
+
+
+def create_holiday():
+    holiday = Holiday(
+        holiday=date(2015, 12, 21),
+        holiday_name='祝日20151221',
+        created_at=datetime.today(),
+        created_user='test',
+        updated_at=datetime.today(),
+        updated_user='test')
+    db.session.add(holiday)
+    holiday = Holiday(
+        holiday=date(2015, 12, 25),
+        holiday_name='祝日20151225',
+        created_at=datetime.today(),
+        created_user='test',
+        updated_at=datetime.today(),
+        updated_user='test')
+    db.session.add(holiday)
+
     db.session.commit()
