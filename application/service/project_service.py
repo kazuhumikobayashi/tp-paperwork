@@ -18,12 +18,6 @@ class ProjectService(object):
     def find_incomplete_estimates(self):
         return self.repository.find_incomplete_estimates()
 
-    def find_incomplete_billings(self):
-        return self.repository.find_incomplete_billings()
-
-    def find_incomplete_payments(self):
-        return self.repository.find_incomplete_payments()
-
     def clone(self, project_id):
 
         project = self.find_by_id(project_id)

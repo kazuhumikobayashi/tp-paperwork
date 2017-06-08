@@ -7,6 +7,9 @@ class ProjectDetailService(object):
     def find_by_id(self, project_detail_id):
         return self.repository.find_by_id(project_detail_id)
 
+    def find_incomplete_payments(self):
+        return self.repository.find_incomplete_payments()
+
     def save(self, project_detail):
         return self.repository.save(project_detail)
 
