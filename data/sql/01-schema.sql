@@ -143,7 +143,8 @@ CREATE TABLE IF NOT EXISTS projects (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  UNIQUE KEY (estimation_no)
 ) ENGINE = INNODB;
 
 
