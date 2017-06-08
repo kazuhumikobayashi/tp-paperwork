@@ -8,7 +8,7 @@ from application.domain.repository.holiday_repository import HolidayRepository
 holiday_repository = HolidayRepository()
 
 
-class Calculation(object):
+class Calculator(object):
 
     # 入金・支払サイトから支払日を計算して返すメソッド
     @staticmethod
@@ -46,6 +46,6 @@ class Calculation(object):
             date += timedelta(days=bank_holiday_flag.value)
 
             # 前倒し・後ろ倒しした結果、土日になった場合はさらに前倒し・後ろ倒しにする。
-            date = Calculation.to_weekday_if_on_weekend(date, bank_holiday_flag)
+            date = Calculator.to_weekday_if_on_weekend(date, bank_holiday_flag)
 
         return date

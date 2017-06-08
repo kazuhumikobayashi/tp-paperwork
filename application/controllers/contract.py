@@ -35,7 +35,6 @@ def index(project_id=None):
     form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.end_user.value])
 
     if project.client_company_id:
-        project.client_company = company_service.find_by_id(project.client_company_id)
         form.billing_site.data = project.client_company.billing_site
         form.billing_tax.data = str(project.client_company.billing_tax)
 
