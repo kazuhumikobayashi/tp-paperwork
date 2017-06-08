@@ -16,8 +16,8 @@ class ProjectMonthTests(BaseTestCase):
             project_month='2017/1/1',
             result_input_flag=0,
             billing_input_flag=0,
-            payment_input_flag=0,
-            payment_date='2017/1/1',
+            deposit_input_flag=0,
+            deposit_date='2017/1/1',
             billing_estimated_money=10000,
             billing_confirmation_money=10000,
             billing_transportation=100,
@@ -34,8 +34,8 @@ class ProjectMonthTests(BaseTestCase):
                    "', project_month='{}".format(project_month.project_month) + \
                    "', result_input_flag='{}".format(project_month.result_input_flag) + \
                    "', billing_input_flag='{}".format(project_month.billing_input_flag) + \
-                   "', payment_input_flag='{}".format(project_month.payment_input_flag) + \
-                   "', payment_date='{}".format(project_month.payment_date) + \
+                   "', deposit_input_flag='{}".format(project_month.deposit_input_flag) + \
+                   "', deposit_date='{}".format(project_month.deposit_date) + \
                    "', billing_estimated_money='{}".format(project_month.billing_estimated_money) + \
                    "', billing_confirmation_money='{}".format(project_month.billing_confirmation_money) + \
                    "', billing_transportation='{}".format(project_month.billing_transportation) + \
