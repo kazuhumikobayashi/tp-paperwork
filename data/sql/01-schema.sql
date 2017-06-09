@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS project_attachments (
 CREATE TABLE IF NOT EXISTS project_results (
   id INT NOT NULL AUTO_INCREMENT ,
   project_detail_id INT NOT NULL ,
-  years_month DATE ,
+  result_month DATE ,
   work_time DECIMAL ,
   billing_transportation INT ,
   billing_adjustments INT ,
@@ -329,6 +329,7 @@ CREATE TABLE IF NOT EXISTS holidays (
   UNIQUE KEY (holiday)
 ) ENGINE = INNODB;
 
+
 CREATE TABLE IF NOT EXISTS project_billings (
   id INT NOT NULL AUTO_INCREMENT,
   project_detail_id INT NOT NULL ,
@@ -343,6 +344,7 @@ CREATE TABLE IF NOT EXISTS project_billings (
   updated_user VARCHAR(128) NOT NULL ,
   PRIMARY KEY (id)
 ) ENGINE = INNODB;
+
 
 CREATE TABLE IF NOT EXISTS project_months (
   id INT NOT NULL AUTO_INCREMENT,
