@@ -54,6 +54,10 @@ mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/19-data-business_categ
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/20-data-engineer_business_categories.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/21-data-company_client_flags.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/22-data-engineer_histories.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/23-data-project_details.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/24-data-project_results.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/25-data-project_billings.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/26-data-project_months.sql
 ```
 
 
