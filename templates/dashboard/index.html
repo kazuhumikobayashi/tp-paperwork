@@ -209,10 +209,14 @@
                 <tbody>
                   {% for payment in incomplete_payments %}
                   <tr>
-                    <td class="hidden-xs">{{ payment.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('contract.index', project_id=payment.project.id) }}">{{ payment.project.project_name }}</a></td>
-                    <td>{{ payment.engineer.engineer_name }}</td>
-                    <td class="hidden-xs">{{ payment.project.deposit_date|datetime_format('%Y/%m/%d') }}</td>
+                    <td class="hidden-xs">{{ payment.project_detail.project.estimation_no }}</td>
+                    <td>
+                        <a href="{{ url_for('contract.index', project_id=payment.project_detail.project_id) }}">
+                            {{ payment.project_detail.project.project_name }}
+                        </a>
+                    </td>
+                    <td>{{ payment.project_detail.engineer.engineer_name }}</td>
+                    <td class="hidden-xs">{{ payment.payment_expected_date|datetime_format('%Y/%m/%d') }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
