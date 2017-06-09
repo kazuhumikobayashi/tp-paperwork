@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS company_client_flags;
 DROP TABLE IF EXISTS engineer_histories;
 DROP TABLE IF EXISTS holidays;
 DROP TABLE IF EXISTS project_details;
+DROP TABLE IF EXISTS project_results;
 DROP TABLE IF EXISTS project_billings;
 DROP TABLE IF EXISTS project_months;
 
@@ -185,6 +186,29 @@ CREATE TABLE IF NOT EXISTS project_attachments (
   attachment_id INT NOT NULL ,
   type INT NOT NULL ,
   remarks VARCHAR(256) ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
+CREATE TABLE IF NOT EXISTS project_results (
+  id INT NOT NULL AUTO_INCREMENT ,
+  project_detail_id INT NOT NULL ,
+  years_month DATE ,
+  work_time DECIMAL ,
+  billing_transportation INT ,
+  billing_adjustments INT ,
+  billing_confirmation_number INT ,
+  billing_confirmation_money INT ,
+  payment_transportation INT ,
+  payment_adjustments INT ,
+  payment_confirmation_money INT ,
+  remarks VARCHAR(1024) ,
+  payment_expected_date DATE ,
+  payment_flag INT NOT NULL ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
