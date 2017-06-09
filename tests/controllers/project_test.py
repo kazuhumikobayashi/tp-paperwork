@@ -8,6 +8,7 @@ from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
+from application.domain.repository.estimation_sequence_repository import EstimationSequenceRepository
 from application.domain.repository.project_repository import ProjectRepository
 from tests import BaseTestCase
 
@@ -21,6 +22,7 @@ class ProjectTests(BaseTestCase):
     def setUp(self):
         super(ProjectTests, self).setUp()
         self.project_repository = ProjectRepository()
+        self.estimation_sequence_repository = EstimationSequenceRepository()
 
     def tearDown(self):
         super(ProjectTests, self).tearDown()
@@ -210,3 +212,80 @@ class ProjectTests(BaseTestCase):
         after = len(self.project_repository.find_all())
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
+
+    # コピー時に見積番号が重複しない
+    def test_duplicate_copy_project(self):
+        # 2017年度のシーケンスを取得
+        estimation_sequence = self.estimation_sequence_repository.find_by_fiscal_year(17)
+        # これから作成される見積番号を作成
+        estimation_no = 'M' + str(estimation_sequence.fiscal_year)\
+                        + '-'\
+                        + str(estimation_sequence.fiscal_year)\
+                        + '{0:03d}'.format(estimation_sequence.sequence + 1)
+
+        # コピー時に発番が期待される見積番号
+        expected = 'M' + str(estimation_sequence.fiscal_year)\
+                   + '-'\
+                   + str(estimation_sequence.fiscal_year)\
+                   + '{0:03d}'.format(estimation_sequence.sequence + 2)
+
+        # コピー用のプロジェクトを登録
+        project = Project(
+            project_name='test_copy_project',
+            project_name_for_bp='copy_project',
+            status=Status.done,
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no=estimation_no,
+            end_user_company_id=1,
+            client_company_id=5,
+            start_date=date.today(),
+            end_date='2099/12/31',
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.billing_at_last,
+            estimated_total_amount=1000000,
+            deposit_date='2099/12/31',
+            scope='test',
+            contents=None,
+            working_place=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+
+        db.session.add(project)
+        db.session.commit()
+
+        original_project_id = project.id
+
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+        original = self.project_repository.find_by_id(original_project_id)
+
+        result = self.app.post('/project/copy/' + str(original.id), data={
+            'project_name': 'test_copy_project_after',
+            'start_date': date.today().strftime('%Y/%m/%d'),
+            'end_date': '2099/12/31'
+        })
+        # コピーできることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/contract' in result.headers['Location'])
+
+        copy_project_id = result.headers['Location'].split('/')[-1]
+
+        # コピーしたプロジェクトが存在することを確認
+        copy = self.project_repository.find_by_id(copy_project_id)
+        self.assertIsNotNone(copy.id)
+
+        # コピーしたプロジェクトの見積番号を確認
+        self.assertEqual(copy.estimation_no, expected)

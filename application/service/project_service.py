@@ -29,8 +29,15 @@ class ProjectService(object):
     def save(self, project):
         if project.is_start_date_change:
             fiscal_year = project.get_fiscal_year()
-            estimation_sequence = self.estimation_sequence_repository.take_a_sequence(fiscal_year)
-            project.estimation_no = estimation_sequence.get_estimation_no()
+
+            while True:
+                estimation_sequence = self.estimation_sequence_repository.take_a_sequence(fiscal_year)
+                estimation_no = estimation_sequence.get_estimation_no()
+
+                if not self.repository.find_by_estimation_no(estimation_no):
+                    project.estimation_no = estimation_no
+                    break
+
         self.repository.save(project)
 
     def destroy(self, project):
