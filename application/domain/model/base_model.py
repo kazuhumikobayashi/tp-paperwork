@@ -21,5 +21,15 @@ class BaseModel(object):
         self.updated_at = updated_at
         self.updated_user = updated_user
 
+    def clone(self):
+        arguments = dict()
+        copy = type(self)()
+        for name, column in self.__mapper__.columns.items():
+            if name[0:1] == '_':
+                name = name[1:]
+            if not (column.primary_key or column.unique):
+                arguments[name] = getattr(self, name)
+        return copy.__class__(**arguments)
+
     def __repr__(self):
         pass
