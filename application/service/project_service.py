@@ -22,6 +22,8 @@ class ProjectService(object):
 
         project = self.find_by_id(project_id)
         project_clone = project.clone()
+        project_details_clone = [detail.clone() for detail in project.project_details]
+        project_clone.project_details = project_details_clone
         project_clone.status = Status.start
 
         return project_clone

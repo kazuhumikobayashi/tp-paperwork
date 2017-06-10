@@ -168,16 +168,6 @@ class Project(BaseModel, db.Model):
                 "', updated_user='{}".format(self.updated_user) + \
                 "'>"
 
-    def clone(self):
-        arguments = dict()
-        copy = Project()
-        for name, column in self.__mapper__.columns.items():
-            if name[0:1] == '_':
-                name = name[1:]
-            if not (column.primary_key or column.unique):
-                arguments[name] = getattr(self, name)
-        return copy.__class__(**arguments)
-
     def get_fiscal_year(self):
         return self._get_fiscal_year(self.start_date)
 
