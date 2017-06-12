@@ -14,7 +14,7 @@ class ProjectResult(BaseModel, db.Model):
 
     project_detail_id = Column(Integer, ForeignKey("project_details.id"), nullable=False)
     result_month = Column(Date)
-    work_time = Column(DECIMAL)
+    work_time = Column(DECIMAL(6, 2))
     billing_transportation = Column(Integer)
     billing_adjustments = Column(Integer)
     billing_confirmation_number = Column(String(128))
