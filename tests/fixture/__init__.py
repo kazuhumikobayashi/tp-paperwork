@@ -332,7 +332,6 @@ def create_project_results():
             payment_confirmation_money=701000,
             remarks='テスト',
             payment_expected_date=datetime.today().date(),
-            payment_flag=InputFlag.yet,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
@@ -346,9 +345,6 @@ def create_project_months():
         project_month = ProjectMonth(
             project_id=1,
             project_month=date(2017, num+1, 1),
-            result_input_flag=InputFlag.yet,
-            billing_input_flag=InputFlag.yet,
-            deposit_input_flag=InputFlag.yet,
             deposit_date=date(2017, 7, 31),
             billing_estimated_money=100000,
             billing_confirmation_money=100100,

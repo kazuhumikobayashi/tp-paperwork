@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS project_results (
   payment_confirmation_money INT ,
   remarks VARCHAR(1024) ,
   payment_expected_date DATE ,
-  payment_flag INT NOT NULL ,
+  payment_flag INT NOT NULL DEFAULT 0 ,
   created_at DATETIME NOT NULL ,
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,

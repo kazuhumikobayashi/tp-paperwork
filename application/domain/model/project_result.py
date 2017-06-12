@@ -24,7 +24,7 @@ class ProjectResult(BaseModel, db.Model):
     payment_confirmation_money = Column(Integer)
     remarks = Column(String(1024))
     payment_expected_date = Column(Date)
-    payment_flag = Column(EnumType(enum_class=InputFlag))
+    payment_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
 
     project_detail = relationship("ProjectDetail", lazy='joined')
 
@@ -41,7 +41,7 @@ class ProjectResult(BaseModel, db.Model):
                  payment_confirmation_money=None,
                  remarks=None,
                  payment_expected_date=None,
-                 payment_flag=None,
+                 payment_flag=InputFlag.yet,
                  created_at=None,
                  created_user=None,
                  updated_at=None,
