@@ -13,6 +13,7 @@ from application.domain.model.immutables.expression import Expression
 from application.domain.model.immutables.gender import Gender
 from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.domain.model.immutables.round import Round
@@ -22,12 +23,14 @@ from application.domain.model.immutables.tax import Tax
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.project_detail import ProjectDetail
+from application.domain.model.project_month import ProjectMonth
 from application.domain.model.skill import Skill
 from application.domain.model.business_category import BusinessCategory
 from application.domain.model.user import User
 from application.domain.model.bank import Bank
 from application.domain.model.company_client_flag import CompanyClientFlag
 from application.domain.model.engineer_history import EngineerHistory
+from application.domain.model.project_result import ProjectResult
 
 
 def init_data():
@@ -45,6 +48,8 @@ def init_data():
     create_engineer_histories()
     create_project_details()
     create_holiday()
+    create_project_months()
+    create_project_results()
 
 
 def create_user():
@@ -309,4 +314,48 @@ def create_holiday():
         updated_user='test')
     db.session.add(holiday)
 
+    db.session.commit()
+
+
+def create_project_results():
+    for num in range(5):
+        project_result = ProjectResult(
+            project_detail_id=1,
+            result_month=date(2016, num+1, 1),
+            work_time=160.5,
+            billing_transportation=0,
+            billing_confirmation_number=1,
+            billing_confirmation_money=1000000,
+            payment_transportation=1000,
+            payment_confirmation_money=701000,
+            remarks='テスト',
+            payment_expected_date=datetime.today().date(),
+            payment_flag=InputFlag.yet,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_result)
+    db.session.commit()
+
+
+def create_project_months():
+    for num in range(5):
+        project_month = ProjectMonth(
+            project_id=1,
+            project_month=date(2017, num+1, 1),
+            result_input_flag=InputFlag.yet,
+            billing_input_flag=InputFlag.yet,
+            deposit_input_flag=InputFlag.yet,
+            deposit_date=date(2017, 7, 31),
+            billing_estimated_money=100000,
+            billing_confirmation_money=100100,
+            billing_transportation=100,
+            remarks=None,
+            client_billing_no='1000',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_month)
     db.session.commit()

@@ -15,6 +15,7 @@ def register(app):
     from application.controllers import holiday
     from application.controllers import contract
     from application.controllers import project_detail
+    from application.controllers import project_result
 
     app.register_blueprint(dashboard.bp)
     app.register_blueprint(company.bp)
@@ -32,3 +33,4 @@ def register(app):
     app.register_blueprint(holiday.bp)
     app.register_blueprint(contract.bp)
     app.register_blueprint(project_detail.bp)
+    app.register_blueprint(project_result.bp)

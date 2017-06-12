@@ -6,8 +6,8 @@ from application import db
 from application.domain.model.base_model import BaseModel
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.rule import Rule
-from application.domain.model.project_result import ProjectResult
 from application.domain.model.project_billing import ProjectBilling
+from application.domain.model.project_result import ProjectResult
 from application.domain.model.sqlalchemy.types import EnumType
 
 
@@ -39,8 +39,8 @@ class ProjectDetail(BaseModel, db.Model):
 
     engineer = relationship("Engineer", lazy='joined')
     project = relationship("Project", lazy='joined')
-    project_results = relationship(ProjectResult, cascade='all, delete-orphan')
     project_billings = relationship(ProjectBilling, cascade='all, delete-orphan')
+    project_results = relationship(ProjectResult, cascade='all, delete-orphan')
 
     def __init__(self,
                  project_id=None,
