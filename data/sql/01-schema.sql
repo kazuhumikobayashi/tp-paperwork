@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS project_results (
   id INT NOT NULL AUTO_INCREMENT ,
   project_detail_id INT NOT NULL ,
   result_month DATE ,
-  work_time DECIMAL ,
+  work_time DECIMAL(6,2) ,
   billing_transportation INT ,
   billing_adjustments INT ,
   billing_confirmation_number VARCHAR(128) ,
