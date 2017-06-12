@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}請求一覧{% endblock %}
+{% block include_css %}
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="{{ url_for('project.index') }}" class="btn btn-default">
+        <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+{% endblock %}
+{% block main_content %}
+<div class="row">
+  <div class="col-lg-9">
+    <div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">
+          {% if project.project_name %}{{ project.project_name }}
+          <small> 見積No : {{ project.estimation_no|filter_suppress_none }}</small>
+          {% endif %}
+        </h3>
+        <div class="box-tools">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+            <li><a href="{{ url_for('contract.index', project_id=project.id) }}">契約</a></li>
+            <li><a href="{{ url_for('project_result.index', project_id=project.id) }}">実績</a></li>
+            <li class="active"><a href="#">請求</a></li>
+            <li><a href="#">支払</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="table-responsive no-padding">
+              <table class="table table-hover">
+                <tr>
+                  <th width="150px"></th>
+                  <th>顧客請求書No</th>
+                  <th class="text-right">予定請求金額</th>
+                  <th class="text-right">確定請求金額</th>
+                  <th class="text-center">実績入力</th>
+                  <th class="text-center">請求済</th>
+                  <th class="text-center">入金済</th>
+                  <th width="50px" class="ri"></th>
+                  <th width="50px" class="center"></th>
+                </tr>
+                {% for project_month in project.project_months %}
+                  <tr>
+                    <td>
+                      <a href="{{ url_for('project_billing.detail', project_month_id=project_month.id) }}">
+                        {{ project_month.project_month|datetime_format("%Y年%m月") }}請求書
+                      </a>
+                    </td>
+                    <td>{{ project_month.client_billing_no|filter_suppress_none }}</td>
+                    <td class="text-right">&yen{{ project_month.billing_estimated_money|number_with_commas }}</td>
+                    <td class="text-right">&yen{{ project_month.billing_confirmation_money|number_with_commas }}</td>
+                    <td class="text-center">
+                      {% if project_month.result_input_flag.value %}
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                      {% endif %}
+                    <td class="text-center">
+                      <div class="form-group no-margin">
+                        <label>
+                          <input type="checkbox" class="flat-red" name="billing_input_flag" value="input">
+                        </label>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                      {% if project_month.deposit_input_flag.value %}
+                        <i class="fa fa-check" aria-hidden="true"></i>
+                      {% endif %}
+                    <td>
+                      <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 請求書出力</button>
+                    </td>
+                    <td>
+                      <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 納品書出力</button>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div><!-- /.tab-content -->
+        </div>
+        <!-- /.nav-tabs-custom -->
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+
+  {% if project.id %}
+    {% include "attachment.html" %}
+  {% endif %}
+</div>
+<!-- /.row -->
+{% endblock %}

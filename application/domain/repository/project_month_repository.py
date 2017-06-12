@@ -16,6 +16,12 @@ class ProjectMonthRepository(BaseRepository):
 
         return [ProjectResultForm(m.project_id, m.id, m.project_month, m.result_input_flag) for m in project_months]
 
+    def find_project_month_at_a_month(self, project_id, project_month):
+        project_month = self.model.query\
+                    .filter(self.model.project_id == project_id)\
+                    .filter(self.model.project_month == project_month).first()
+        return project_month
+
     def find_incomplete_results(self):
         return self.model.query\
                          .filter(self.model.result_input_flag == InputFlag.yet) \
@@ -30,3 +36,6 @@ class ProjectMonthRepository(BaseRepository):
         return self.model.query\
                          .filter(self.model.deposit_input_flag == InputFlag.yet) \
                          .filter(self.model.deposit_date <= date.today()).all()
+
+    def create(self):
+        return ProjectMonth()

@@ -12,6 +12,12 @@ class ProjectMonthService(object):
             self.result_repository.get_project_results(project_result_form)
         return project_result_forms
 
+    def find_by_id(self, project_month_id):
+        return self.repository.find_by_id(project_month_id)
+
+    def find_project_month_at_a_month(self, project_id, project_month):
+        return self.repository.find_project_month_at_a_month(project_id, project_month)
+
     def find_incomplete_results(self):
         return self.repository.find_incomplete_results()
 
@@ -20,3 +26,6 @@ class ProjectMonthService(object):
 
     def find_incomplete_deposits(self):
         return self.repository.find_incomplete_deposits()
+
+    def save(self, project_month):
+        return self.repository.save(project_month)

@@ -22,6 +22,7 @@ from application.domain.model.immutables.status import Status
 from application.domain.model.immutables.tax import Tax
 from application.domain.model.project import Project
 from application.domain.model.project_attachment import ProjectAttachment
+from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_detail import ProjectDetail
 from application.domain.model.project_month import ProjectMonth
 from application.domain.model.skill import Skill
@@ -50,6 +51,7 @@ def init_data():
     create_holiday()
     create_project_months()
     create_project_results()
+    create_project_billing()
 
 
 def create_user():
@@ -358,4 +360,22 @@ def create_project_months():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(project_month)
+    db.session.commit()
+
+
+def create_project_billing():
+    for num in range(5):
+        billing = ProjectBilling(
+            project_detail_id=1,
+            billing_month=date(2017, num+1, 1),
+            billing_content='テスト作業',
+            billing_amount='1人月',
+            billing_confirmation_money=100100,
+            billing_transportation=100,
+            remarks=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(billing)
     db.session.commit()

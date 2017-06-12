@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Date, ForeignKey
+from sqlalchemy import Column, Integer, Date, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from application import db
@@ -12,24 +12,24 @@ class ProjectMonth(BaseModel, db.Model):
 
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
     project_month = Column(Date, nullable=False)
-    result_input_flag = Column(EnumType(enum_class=InputFlag))
-    billing_input_flag = Column(EnumType(enum_class=InputFlag))
-    deposit_input_flag = Column(EnumType(enum_class=InputFlag))
+    result_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
+    billing_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
+    deposit_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
     deposit_date = Column(Date)
     billing_estimated_money = Column(Integer)
     billing_confirmation_money = Column(Integer)
     billing_transportation = Column(Integer)
-    remarks = Column(Integer)
-    client_billing_no = Column(Integer)
+    remarks = Column(String(1024))
+    client_billing_no = Column(String(64))
 
     project = relationship("Project", lazy='joined')
 
     def __init__(self,
                  project_id=None,
                  project_month=None,
-                 result_input_flag=None,
-                 billing_input_flag=None,
-                 deposit_input_flag=None,
+                 result_input_flag=0,
+                 billing_input_flag=0,
+                 deposit_input_flag=0,
                  deposit_date=None,
                  billing_estimated_money=None,
                  billing_confirmation_money=None,
