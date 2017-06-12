@@ -17,6 +17,7 @@ class ProjectBillingTests(BaseTestCase):
             billing_content='billing_content',
             billing_amount='billing_amount',
             billing_confirmation_money=10000,
+            billing_transportation=10000,
             remarks='remarks',
             created_at=None,
             created_user=None,
@@ -30,6 +31,7 @@ class ProjectBillingTests(BaseTestCase):
                    "', billing_content='{}".format(project_billing.billing_content) + \
                    "', billing_amount='{}".format(project_billing.billing_amount) + \
                    "', billing_confirmation_money='{}".format(project_billing.billing_confirmation_money) + \
+                   "', billing_transportation='{}".format(project_billing.billing_transportation) + \
                    "', remarks='{}".format(project_billing.remarks) + \
                    "', created_at='{}".format(project_billing.created_at) + \
                    "', created_user='{}".format(project_billing.created_user) + \

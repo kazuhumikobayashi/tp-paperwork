@@ -41,7 +41,7 @@
           <ul class="nav nav-tabs">
             <li class="active"><a href="#" data-toggle="tab">契約</a></li>
             <li><a href="{{ url_for('project_result.index', project_id=form.id.data) }}">実績</a></li>
-            <li><a href="#">請求</a></li>
+            <li><a href="{{ url_for('project_billing.index', project_id=form.id.data) }}">請求</a></li>
             <li><a href="#">支払</a></li>
           </ul>
           <div class="tab-content">
@@ -209,59 +209,8 @@
     <!-- /.box -->
   </div>
   <!-- /.col -->
-  {% if form.id.data %}
-  <div class="col-lg-3">
-    <div class="box box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title"><i class="icon-paper-clip"></i> 添付</h3>
-
-        <div class="box-tools">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse">
-              <i class="fa fa-minus"></i>
-          </button>
-        </div>
-      </div>
-      <!-- /.box-header -->
-      <div class="box-body">
-        {% for attachment in project.get_project_attachments() %}
-          <strong><i class="fa fa-file-text-o fa-fw"></i> {{ attachment.type }}</strong>
-          <div class="table-responsive no-padding">
-            <table class="table small no-margin">
-              {% for project_attachment in attachment.attachments %}
-              <tr>
-              <td width="20px" style="padding-right: 0;">
-                <a style="font-size: xx-small;" href="{{ url_for('project_attachment.detail', project_attachment_id=project_attachment.id) }}">
-                    <i class="fa fa-edit"></i>
-                </a>
-              </td>
-              <td width="100px">
-                  <a href="{{ url_for('attachment.download', attachment_id = project_attachment.attachment_id) }}">
-                      {{ project_attachment.attachment.filename }}
-                  </a>
-              </td>
-              <td>{{ project_attachment.remarks|filter_suppress_none }}</td>
-              <td width="20px" style="padding-right: 0;">
-                <a class="" style="font-size: xx-small;" href="{{ url_for('project_attachment.delete', project_attachment_id=project_attachment.id) }}">
-                  <i class="fa fa-trash"></i>
-                </a>
-              </td>
-              </tr>
-             {% endfor %}
-            </table>
-          </div>
-          <hr style="margin-top: 0;" />
-        {% endfor %}
-        <div class="footer">
-          <a href="{{ url_for('project_attachment.create', project_id=form.id.data, _external=True) }}" class="btn btn-sm btn-default pull-right">
-              <i class="fa fa-file-text-o"></i> ファイル添付画面
-          </a>
-        </div>
-      </div>
-      <!-- /.box-body -->
-    </div>
-    <!-- /.box -->
-  </div>
-  <!-- /.col -->
+  {% if project.id %}
+    {% include "attachment.html" %}
   {% endif %}
 </div>
 <!-- /.row -->

@@ -12,7 +12,8 @@ class ProjectBilling(BaseModel, db.Model):
     billing_month = Column(Date, nullable=False)
     billing_content = Column(String(128))
     billing_amount = Column(String(128))
-    billing_confirmation_money = Column(String(128))
+    billing_confirmation_money = Column(Integer)
+    billing_transportation = Column(Integer)
     remarks = Column(String(128))
 
     project_detail = relationship("ProjectDetail", lazy='joined')
@@ -23,6 +24,7 @@ class ProjectBilling(BaseModel, db.Model):
                  billing_content=None,
                  billing_amount=None,
                  billing_confirmation_money=None,
+                 billing_transportation=None,
                  remarks=None,
                  created_at=None,
                  created_user=None,
@@ -34,6 +36,7 @@ class ProjectBilling(BaseModel, db.Model):
         self.billing_content = billing_content
         self.billing_amount = billing_amount
         self.billing_confirmation_money = billing_confirmation_money
+        self.billing_transportation = billing_transportation
         self.remarks = remarks
 
     def __repr__(self):
@@ -44,6 +47,7 @@ class ProjectBilling(BaseModel, db.Model):
                 "', billing_content='{}".format(self.billing_content) + \
                 "', billing_amount='{}".format(self.billing_amount) + \
                 "', billing_confirmation_money='{}".format(self.billing_confirmation_money) + \
+                "', billing_transportation='{}".format(self.billing_transportation) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', created_at='{}".format(self.created_at) + \
                 "', created_user='{}".format(self.created_user) + \

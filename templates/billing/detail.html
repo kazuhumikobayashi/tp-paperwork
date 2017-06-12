@@ -1,37 +1,18 @@
 {% extends "layout.html" %}
 {% from "_formhelpers.html" import render_field %}
-{% block include_css %}
-  <!-- Select2 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
-  <!-- bootstrap datepicker -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
-{% endblock %}
-{% block include_js %}
-  <!-- Select2 -->
-  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
-  <!-- bootstrap datepicker -->
-  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
-{% endblock %}
 {% block title %}請求情報登録{% endblock %}
 {% block content_header %}
   <h1>
-    <a href="{{ url_for('project.detail', project_id=form.project_id.data) }}?month={{ form.billing_month.data|datetime_format("%Y%m") }}" class="btn btn-default">
+    <a href="{{ url_for('project_billing.detail', project_month_id=project_month.id) }}" class="btn btn-default">
       <i class="fa fa-arrow-left"></i> 一覧に戻る
     </a>
   </h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li>プロジェクト</li>
-    <li><span class="fa fa-edit"></span> 技術者実績</li>
-    <li class="active">請求情報登録</li>
-  </ol>
 {% endblock %}
 {% block main_content %}
   <div class="box box-success">
     <div class="box-header with-border">
       <h3 class="box-title"><i class="fa fa-search"></i>
-          {{ form.billing_month.data|datetime_format("%Y年%m月") }}請求
+          {{ project_month.project_month|datetime_format("%Y年%m月") }}請求
       </h3>
       <div class="box-tools">
         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
@@ -42,24 +23,16 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
+          {{ render_field(form.billing_content, "col-xs-6", "required") }}
+        </div>
+        <div class="row">
           {{ render_field(form.billing_amount, "col-xs-6") }}
-          {{ render_field(form.billing_adjustment_amount, "col-xs-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.tax, "col-xs-6") }}
-          {{ render_field(form.carfare, "col-xs-6") }}
+          {{ render_field(form.billing_confirmation_money, "col-xs-6", "required") }}
         </div>
         <div class="row">
-          {{ render_field(form.scheduled_billing_date, "col-xs-6", input_class="date") }}
-          {{ render_field(form.billing_date, "col-xs-6", input_class="date") }}
-        </div>
-        <div class="row">
-          {{ render_field(form.bill_output_date, "col-xs-6", input_class="date") }}
-          {{ render_field(form.scheduled_billing_date, "col-xs-6", input_class="date") }}
-        </div>
-        <div class="row">
-          {{ render_field(form.billing_date, "col-xs-6", input_class="date") }}
-          {{ render_field(form.status, "col-xs-6", input_class="select2") }}
+          {{ render_field(form.billing_transportation, "col-xs-6") }}
         </div>
         <div class="row">
           {{ render_field(form.remarks, "col-xs-12") }}

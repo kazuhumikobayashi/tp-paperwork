@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy import ForeignKey
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from application import db
@@ -19,7 +20,7 @@ class ProjectDetail(BaseModel, db.Model):
     detail_type = Column(EnumType(enum_class=DetailType), nullable=False)
     work_name = Column(String(128))
     engineer_id = Column(Integer, ForeignKey("engineers.id"))
-    billing_money = Column(Integer)
+    _billing_money = Column('billing_money', Integer)
     remarks = Column(String(1024))
     billing_start_day = Column(Date)
     billing_end_day = Column(Date)
@@ -41,6 +42,17 @@ class ProjectDetail(BaseModel, db.Model):
     project = relationship("Project", lazy='joined')
     project_billings = relationship(ProjectBilling, cascade='all, delete-orphan')
     project_results = relationship(ProjectResult, cascade='all, delete-orphan')
+
+    @hybrid_property
+    def billing_money(self):
+        return self._billing_money
+
+    @billing_money.setter
+    def billing_money(self, value):
+        self.project.estimated_total_amount = (self.project.estimated_total_amount or 0)\
+                                              + (value or 0) \
+                                              - (self._billing_money or 0)
+        self._billing_money = value
 
     def __init__(self,
                  project_id=None,
@@ -73,7 +85,7 @@ class ProjectDetail(BaseModel, db.Model):
         self.detail_type = detail_type
         self.work_name = work_name
         self.engineer_id = engineer_id
-        self.billing_money = billing_money
+        self._billing_money = billing_money
         self.remarks = remarks
         self.billing_start_day = billing_start_day
         self.billing_end_day = billing_end_day
