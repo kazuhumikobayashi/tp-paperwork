@@ -52,7 +52,9 @@ class Project(BaseModel, db.Model):
     recorded_department = relationship(Department, lazy='joined')
     project_attachments = relationship(ProjectAttachment, cascade='all, delete-orphan')
     project_details = relationship(ProjectDetail, cascade='all, delete-orphan')
-    project_months = relationship(ProjectMonth, cascade='all, delete-orphan')
+    project_months = relationship(ProjectMonth,
+                                  order_by="desc(ProjectMonth.deposit_date)",
+                                  cascade='all, delete-orphan')
 
     _is_start_date_change = False
 
@@ -193,12 +195,6 @@ class Project(BaseModel, db.Model):
             return int(date.strftime('%y')) + 1
         else:
             return int(date.strftime('%y'))
-
-    def get_total_moeny(self):
-        total_money = 0
-        for project_detail in self.project_details:
-            total_money = total_money + project_detail.billing_money
-        return total_money
 
     # 入金予定日を計算するメソッド
     def get_deposit_date(self):

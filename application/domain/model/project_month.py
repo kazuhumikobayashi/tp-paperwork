@@ -3,6 +3,8 @@ from sqlalchemy.orm import relationship
 
 from application import db
 from application.domain.model.base_model import BaseModel
+from application.domain.model.immutables.input_flag import InputFlag
+from application.domain.model.sqlalchemy.types import EnumType
 
 
 class ProjectMonth(BaseModel, db.Model):
@@ -10,9 +12,9 @@ class ProjectMonth(BaseModel, db.Model):
 
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
     project_month = Column(Date, nullable=False)
-    result_input_flag = Column(Integer)
-    billing_input_flag = Column(Integer)
-    deposit_input_flag = Column(Integer)
+    result_input_flag = Column(EnumType(enum_class=InputFlag))
+    billing_input_flag = Column(EnumType(enum_class=InputFlag))
+    deposit_input_flag = Column(EnumType(enum_class=InputFlag))
     deposit_date = Column(Date)
     billing_estimated_money = Column(Integer)
     billing_confirmation_money = Column(Integer)
