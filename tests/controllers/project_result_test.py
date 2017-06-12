@@ -3,8 +3,6 @@ from tests import BaseTestCase
 
 from application.domain.repository.project_result_repository import ProjectResultRepository
 
-project_repository = ProjectRepository()
-
 
 class ProjectResultTests(BaseTestCase):
 
@@ -15,6 +13,7 @@ class ProjectResultTests(BaseTestCase):
     def setUp(self):
         super(ProjectResultTests, self).setUp()
         self.project_result_repository = ProjectResultRepository()
+        self.project_repository = ProjectRepository()
 
     def tearDown(self):
         super(ProjectResultTests, self).tearDown()
@@ -27,7 +26,7 @@ class ProjectResultTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_by_id(1)
+        project = self.project_repository.find_by_id(1)
 
         result = self.app.get('/project_result/' + str(project.id))
         self.assertEqual(result.status_code, 200)

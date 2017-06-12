@@ -9,8 +9,6 @@ from application.domain.repository.project_detail_repository import ProjectDetai
 from application.domain.repository.project_repository import ProjectRepository
 from tests import BaseTestCase
 
-project_repository = ProjectRepository()
-
 
 class ProjectDetailTests(BaseTestCase):
 
@@ -20,6 +18,7 @@ class ProjectDetailTests(BaseTestCase):
 
     def setUp(self):
         super(ProjectDetailTests, self).setUp()
+        self.project_repository = ProjectRepository()
         self.project_detail_repository = ProjectDetailRepository()
 
     def tearDown(self):
@@ -57,7 +56,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         result = self.app.get('/project_detail/create?project_id=' + str(project.id))
         self.assertEqual(result.status_code, 200)
@@ -70,7 +69,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # プロジェクトが保存できることを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -80,7 +79,7 @@ class ProjectDetailTests(BaseTestCase):
             'engineer_id': '',
             'billing_fraction_calculation1': '',
             'billing_fraction_calculation2': ''
-})
+        })
         self.assertEqual(result.status_code, 302)
         ok_('/project_detail/' in result.headers['Location'])
 
@@ -97,7 +96,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # プロジェクトが保存できることを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -186,7 +185,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 作業名が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -211,7 +210,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求金額が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -236,7 +235,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 技術者が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -262,7 +261,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求金額が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -288,7 +287,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求開始年月が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -314,7 +313,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求終了年月が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -340,7 +339,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求単価が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -366,7 +365,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求単価が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -392,7 +391,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求フリー入力時間が空の場合、請求下限時間が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -428,7 +427,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求フリー入力時間が空の場合、請求上限時間が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -464,7 +463,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求下限・上限時間が空の場合、請求フリー入力時間が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -500,7 +499,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求時間単価が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -536,7 +535,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求△下限時間単価が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -572,7 +571,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = project_repository.find_all()[0]
+        project = self.project_repository.find_all()[0]
 
         # 請求＋上限時間単価が空だと明細を新規作成できないことを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
