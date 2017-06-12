@@ -15,9 +15,9 @@ DROP TABLE IF EXISTS company_client_flags;
 DROP TABLE IF EXISTS engineer_histories;
 DROP TABLE IF EXISTS holidays;
 DROP TABLE IF EXISTS project_details;
-DROP TABLE IF EXISTS project_results;
 DROP TABLE IF EXISTS project_billings;
 DROP TABLE IF EXISTS project_months;
+DROP TABLE IF EXISTS project_results;
 
 
 CREATE TABLE IF NOT EXISTS users (
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS project_results (
   work_time DECIMAL ,
   billing_transportation INT ,
   billing_adjustments INT ,
-  billing_confirmation_number INT ,
+  billing_confirmation_number VARCHAR(128) ,
   billing_confirmation_money INT ,
   payment_transportation INT ,
   payment_adjustments INT ,

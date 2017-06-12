@@ -320,11 +320,11 @@ def create_holiday():
 def create_project_results():
     for num in range(5):
         project_result = ProjectResult(
-            project_detail_id=1,
+            project_detail_id=num+1,
             result_month=date(2016, num+1, 1),
             work_time=160.5,
             billing_transportation=0,
-            billing_confirmation_number=1,
+            billing_confirmation_number='1人月',
             billing_confirmation_money=1000000,
             payment_transportation=1000,
             payment_confirmation_money=701000,

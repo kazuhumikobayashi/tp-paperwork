@@ -32,5 +32,12 @@ class EngineerHistoryRepository(BaseRepository):
             current_engineer_history = self.create()
         return current_engineer_history
 
+    def get_history_at_result_month(self, engineer_id, month):
+        fil = self.model.query
+        engineer_history = fil.filter(self.model.engineer_id == engineer_id,
+                                      self.model.payment_start_day <= month, month <= self.model.payment_end_day
+                                      ).first()
+        return engineer_history
+
     def create(self):
         return EngineerHistory()

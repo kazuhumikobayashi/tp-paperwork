@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}実績登録{% endblock %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="{{ url_for('project_result.index', project_id=result.project_detail.project.id) }}" class="btn btn-default">
+      <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i>{{ form.result_month.data|datetime_format("%Y年%m月") }}</h3>
+      <div class="box-tools">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="post">
+    {{ form.hidden_tag() }}
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          {{ render_field(form.engineer_name, "col-sm-6") }}
+          {{ render_field(form.work_time, "col-sm-6") }}
+        </div>
+        <div class="part-title"> 請求情報</div>
+        <div class="row">
+          {{ render_field(project_detail_form.billing_per_month, "col-sm-6") }}
+          {{ render_field(project_detail_form.billing_rule, "col-sm-6", disabled="disabled") }}
+        </div>
+        <div class="row">
+          {{ render_field(project_detail_form.billing_bottom_base_hour, "col-sm-6") }}
+          {{ render_field(project_detail_form.billing_top_base_hour, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(project_detail_form.billing_free_base_hour, "col-sm-6") }}
+          {{ render_field(project_detail_form.billing_per_hour, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(project_detail_form.billing_per_bottom_hour, "col-sm-6") }}
+          {{ render_field(project_detail_form.billing_per_top_hour, "col-sm-6") }}
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              {{ render_field(project_detail_form.billing_fraction, "col-xs-4") }}
+              {{ render_field(project_detail_form.billing_fraction_calculation1, "col-xs-4", input_class="select2") }}
+              {{ render_field(project_detail_form.billing_fraction_calculation2, "col-xs-4", input_class="select2") }}
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          {{ render_field(form.billing_subtraction_hours, "col-sm-6") }}
+          {{ render_field(form.billing_subtraction_money, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.billing_estimated_money, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.billing_transportation, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.billing_adjustments, "col-sm-6") }}
+          {{ render_field(form.billing_confirmation_number, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.billing_confirmation_money, "col-sm-6") }}
+        </div>
+        <div class="row">
+          <div class="col-sm-6" style="margin-top: 10px">
+            <div class="btn btn-sm btn-success pull-left" id="cal-billing">
+              <i class="fa fa-plus"></i> 請求金額計算
+            </div>
+          </div>
+        </div>
+        <div class="part-title"> 支払情報</div>
+        <div class="row">
+          {{ render_field(engineer_history_form.payment_per_month, "col-sm-6") }}
+          {{ render_field(engineer_history_form.payment_rule, "col-sm-6", disabled="disabled") }}
+        </div>
+        <div class="row">
+          {{ render_field(engineer_history_form.payment_bottom_base_hour, "col-sm-6") }}
+          {{ render_field(engineer_history_form.payment_top_base_hour, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(engineer_history_form.payment_free_base_hour, "col-sm-6") }}
+          {{ render_field(engineer_history_form.payment_per_hour, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(engineer_history_form.payment_per_bottom_hour, "col-sm-6") }}
+          {{ render_field(engineer_history_form.payment_per_top_hour, "col-sm-6") }}
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="row">
+              {{ render_field(engineer_history_form.payment_fraction, "col-xs-4") }}
+              {{ render_field(engineer_history_form.payment_fraction_calculation1, "col-xs-4", input_class="select2") }}
+              {{ render_field(engineer_history_form.payment_fraction_calculation2, "col-xs-4", input_class="select2") }}
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          {{ render_field(form.payment_subtraction_hours, "col-sm-6") }}
+          {{ render_field(form.payment_subtraction_money, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.payment_estimated_money, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.payment_transportation, "col-sm-6") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.payment_adjustments, "col-sm-6") }}
+          {{ render_field(form.payment_expected_date, "col-sm-6", input_class="date") }}
+        </div>
+        <div class="row">
+          {{ render_field(form.payment_confirmation_money, "col-sm-6") }}
+        </div>
+        <div class="row">
+          <div class="col-sm-6" style="margin-top: 10px">
+            <div class="btn btn-sm btn-success pull-left" id="cal-billing">
+              <i class="fa fa-plus"></i> 請求金額計算
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div class="row">
+          {{ render_field(form.remarks, "col-xs-12", rows="3") }}
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> 保存</button>
+      </div>
+    </form>
+  </div>
+  <!-- /.box -->
+{% endblock %}

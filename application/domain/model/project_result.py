@@ -17,7 +17,7 @@ class ProjectResult(BaseModel, db.Model):
     work_time = Column(DECIMAL)
     billing_transportation = Column(Integer)
     billing_adjustments = Column(Integer)
-    billing_confirmation_number = Column(Integer)
+    billing_confirmation_number = Column(String(128))
     billing_confirmation_money = Column(Integer)
     payment_transportation = Column(Integer)
     payment_adjustments = Column(Integer)

@@ -16,6 +16,9 @@ class EngineerHistoryService(object):
     def get_current_history(self, engineer_id):
         return self.repository.get_current_history(engineer_id)
 
+    def get_history_at_result_month(self, engineer_id, month):
+        return self.repository.get_history_at_result_month(engineer_id, month)
+
     def save(self, engineer_history):
         return self.repository.save(engineer_history)
 
