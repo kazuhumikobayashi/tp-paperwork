@@ -19,6 +19,7 @@ def register(app):
     from application.controllers import result
     from application.controllers import project_billing
     from application.controllers import billing
+    from application.controllers import project_payment
 
     app.register_blueprint(dashboard.bp)
     app.register_blueprint(company.bp)
@@ -40,3 +41,4 @@ def register(app):
     app.register_blueprint(result.bp)
     app.register_blueprint(project_billing.bp)
     app.register_blueprint(billing.bp)
+    app.register_blueprint(project_payment.bp)

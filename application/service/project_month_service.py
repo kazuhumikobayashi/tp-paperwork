@@ -12,6 +12,12 @@ class ProjectMonthService(object):
             self.result_repository.get_project_results(project_result_form)
         return project_result_forms
 
+    def get_project_payment_form(self, project_id):
+        project_payment_forms = self.repository.get_project_payment_form(project_id)
+        for project_payment_form in project_payment_forms:
+            self.result_repository.get_project_payments(project_payment_form)
+        return project_payment_forms
+
     def find_by_id(self, project_month_id):
         return self.repository.find_by_id(project_month_id)
 

@@ -1,5 +1,6 @@
 from datetime import date
 
+from application.domain.model.form.project_payment_form import ProjectPaymentForm
 from application.domain.model.form.project_result_form import ProjectResultForm
 from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.project_month import ProjectMonth
@@ -15,6 +16,12 @@ class ProjectMonthRepository(BaseRepository):
                                           .filter(self.model.project_id == project_id).all()
 
         return [ProjectResultForm(m.project_id, m.id, m.project_month, m.result_input_flag) for m in project_months]
+
+    def get_project_payment_form(self, project_id):
+        project_months = self.model.query.order_by(self.model.project_month.desc())\
+                                          .filter(self.model.project_id == project_id).all()
+
+        return [ProjectPaymentForm(m.project_id, m.id, m.project_month) for m in project_months]
 
     def find_project_month_at_a_month(self, project_id, project_month):
         project_month = self.model.query\
