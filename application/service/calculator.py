@@ -1,5 +1,6 @@
-import time
-from datetime import datetime, timedelta
+from datetime import timedelta, date
+
+from dateutil.relativedelta import relativedelta
 
 from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.week import Week
@@ -12,16 +13,14 @@ class Calculator(object):
 
     # 入金・支払サイトから支払日を計算して返すメソッド
     @staticmethod
-    def calculate_deposit_date_from_site(date, site):
+    def calculate_deposit_date_from_site(date_, site):
         delta_month = (site // 30) + 1
         day = site % 30  # 0の時末月
 
         if day == 0:
-            deposit_date = datetime.fromtimestamp(time.mktime(
-                (date.year, date.month + delta_month, 1, 0, 0, 0, 0, 0, 0))) - timedelta(days=1)
+            deposit_date = date(date_.year, date_.month, 1) + relativedelta(months=delta_month, days=-1)
         else:
-            deposit_date = datetime.fromtimestamp(time.mktime(
-                (date.year, date.month + delta_month, day, 0, 0, 0, 0, 0, 0)))
+            deposit_date = date(date_.year, date_.month, day) + relativedelta(months=delta_month)
 
         return deposit_date
 

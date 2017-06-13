@@ -1,8 +1,8 @@
 import decimal
-import time
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
 
 import wtforms
+from dateutil.relativedelta import relativedelta
 
 
 class IntegerField(wtforms.IntegerField):
@@ -66,8 +66,8 @@ class EndOfMonthField(wtforms.DateField):
         if valuelist:
             date_str = ' '.join(valuelist)
             try:
-                tmp_data = datetime.strptime(date_str, self.format).date()
-                self.data = date.fromtimestamp(time.mktime((tmp_data.year, tmp_data.month + 1, 1, 0, 0, 0, 0, 0, 0))) - timedelta(days=1)
+                d = datetime.strptime(date_str, self.format).date()
+                self.data = d + relativedelta(months=1, days=-1)
             except ValueError:
                 raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
 
