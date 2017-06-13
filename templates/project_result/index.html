@@ -37,7 +37,7 @@
             <li><a href="{{ url_for('contract.index', project_id=project.id) }}">契約</a></li>
             <li class="active"><a href="#">実績</a></li>
             <li><a href="{{ url_for('project_billing.index', project_id=project.id) }}">請求</a></li>
-            <li><a href="#">支払</a></li>
+            <li><a href="{{ url_for('project_payment.index', project_id=project.id) }}">支払</a></li>
           </ul>
           <div class="tab-content">
 
