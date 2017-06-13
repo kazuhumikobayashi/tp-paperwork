@@ -1,4 +1,4 @@
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 
 from application import bcrypt, db
 from application.domain.model.attachment import Attachment
@@ -243,8 +243,8 @@ def create_engineer_histories():
     for num in range(5):
         engineer_history = EngineerHistory(
             engineer_id=1,
-            payment_start_day=date(2016, 2*num+1, 1),
-            payment_end_day=date(2016, 2*num+3, 1)-timedelta(days=1),
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(9999, 12, 31),
             payment_per_month=num+1,
             payment_rule=Rule.fixed,
             payment_bottom_base_hour=num+1,

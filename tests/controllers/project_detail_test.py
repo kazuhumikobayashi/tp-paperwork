@@ -2,8 +2,12 @@ from datetime import datetime
 from nose.tools import ok_
 
 from application import db
+from application.domain.model.immutables.billing_timing import BillingTiming
+from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.rule import Rule
+from application.domain.model.immutables.status import Status
+from application.domain.model.project import Project
 from application.domain.model.project_detail import ProjectDetail
 from application.domain.repository.project_detail_repository import ProjectDetailRepository
 from application.domain.repository.project_repository import ProjectRepository
@@ -96,7 +100,23 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        project = self.project_repository.find_all()[0]
+        # setup
+        project = Project(
+                    status=Status.done,
+                    recorded_department_id=1,
+                    estimation_no='M0001',
+                    project_name='validation_test',
+                    end_user_company_id=4,
+                    client_company_id=3, start_date='2016/1/1',
+                    end_date='2016/12/31',
+                    contract_form=Contract.blanket,
+                    billing_timing=BillingTiming.billing_at_last,
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+        db.session.add(project)
+        db.session.commit()
 
         # プロジェクトが保存できることを確認
         result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
@@ -124,6 +144,10 @@ class ProjectDetailTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         # 件数が1件増えていることを確認
         self.assertEqual(before+1, after)
+
+        # teardown
+        db.session.delete(project)
+        db.session.commit()
 
     # プロジェクト明細を削除できる
     def test_delete_project_detail(self):

@@ -1,3 +1,6 @@
+from datetime import date
+
+from dateutil.relativedelta import relativedelta
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -214,3 +217,28 @@ class Project(BaseModel, db.Model):
         deposit_date = Calculator.to_weekday_if_on_holiday(deposit_date, bank_holiday_flag)
 
         return deposit_date
+
+    # 開始・終了日のそれぞれの年月をリストで返すメソッド
+    def get_project_month_list(self):
+        project_month_list = []
+        i = 0
+        start = self.start_date
+        while (date(start.year, start.month, 1) + relativedelta(months=i)) <= self.end_date:
+            project_month_list.append(date(start.year, start.month, 1) + relativedelta(months=i))
+            i += 1
+        return project_month_list
+
+    def has_not_project_results(self):
+        for project_detail in self.project_details:
+            if project_detail.project_results:
+                return False
+        return True
+
+    def has_not_project_billings(self):
+        for project_detail in self.project_details:
+            if project_detail.project_billings:
+                return False
+        return True
+
+    def has_not_project_months(self):
+        return not self.project_months
