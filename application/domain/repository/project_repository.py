@@ -1,5 +1,12 @@
+from datetime import datetime
+
+from flask import session
+
 from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
+from application.domain.model.project_billing import ProjectBilling
+from application.domain.model.project_month import ProjectMonth
+from application.domain.model.project_result import ProjectResult
 from application.domain.repository.base_repository import BaseRepository
 
 
@@ -35,6 +42,40 @@ class ProjectRepository(BaseRepository):
 
     def find_incomplete_estimates(self):
         return self.model.query.filter(self.model.status <= Status.received).all()
+
+    def save(self, project):
+        if project.status == Status.done and project.has_not_project_results and project.has_not_project_billings\
+                and project.has_not_project_months:
+
+            contract_dates = project.get_project_month_list()
+            for date in contract_dates:
+                project_month = ProjectMonth(
+                                        project_month=date,
+                                        created_at=datetime.today(),
+                                        created_user=session['user']['user_name'],
+                                        updated_at=datetime.today(),
+                                        updated_user=session['user']['user_name'])
+                project.project_months.append(project_month)
+
+            for project_detail in project.project_details:
+                for date in contract_dates:
+                    project_result = ProjectResult(
+                                        result_month=date,
+                                        created_at=datetime.today(),
+                                        created_user=session['user']['user_name'],
+                                        updated_at=datetime.today(),
+                                        updated_user=session['user']['user_name'])
+                    project_detail.project_results.append(project_result)
+
+                    project_billing = ProjectBilling(
+                                        billing_month=date,
+                                        created_at=datetime.today(),
+                                        created_user=session['user']['user_name'],
+                                        updated_at=datetime.today(),
+                                        updated_user=session['user']['user_name'])
+                    project_detail.project_billings.append(project_billing)
+
+        super(ProjectRepository, self).save(project)
 
     def create(self):
         return Project()

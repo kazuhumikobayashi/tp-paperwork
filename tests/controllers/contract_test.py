@@ -9,6 +9,7 @@ from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.status import Status
 from application.domain.model.immutables.tax import Tax
 from application.domain.model.project import Project
+from application.domain.repository.project_detail_repository import ProjectDetailRepository
 from tests import BaseTestCase
 
 from application.domain.repository.project_repository import ProjectRepository
@@ -23,6 +24,7 @@ class ContractTests(BaseTestCase):
     def setUp(self):
         super(ContractTests, self).setUp()
         self.project_repository = ProjectRepository()
+        self.project_detail_repository = ProjectDetailRepository()
 
     def tearDown(self):
         super(ContractTests, self).tearDown()
@@ -222,12 +224,13 @@ class ContractTests(BaseTestCase):
 
     # 10月以降の契約情報を保存できる
     def test_save_contract_october(self):
-        project = self.project_repository.find_all()[0]
+        project = self.project_repository.find_all()[10]
+        project.project_details.append(self.project_detail_repository.find_by_id(3))
 
         result = self.app.post('/contract/' + str(project.id), data={
             'project_name': project.project_name,
             'project_name_for_bp': project.project_name_for_bp,
-            'status': project.status,
+            'status': Status.done,
             'recorded_department_id': project.recorded_department_id,
             'sales_person': project.sales_person,
             'estimation_no': project.estimation_no,
