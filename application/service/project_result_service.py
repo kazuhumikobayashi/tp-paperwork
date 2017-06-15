@@ -1,8 +1,10 @@
+from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.domain.repository.project_result_repository import ProjectResultRepository
 
 
 class ProjectResultService(object):
     repository = ProjectResultRepository()
+    billing_repository = ProjectBillingRepository()
 
     def find_by_id(self, result_id):
         return self.repository.find_by_id(result_id)
@@ -10,5 +12,7 @@ class ProjectResultService(object):
     def find_incomplete_payments(self):
         return self.repository.find_incomplete_payments()
 
-    def save(self, project_detail):
-        return self.repository.save(project_detail)
+    def save(self, result):
+        self.billing_repository.copy_and_save(result)
+
+        return self.repository.save(result)
