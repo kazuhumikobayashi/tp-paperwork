@@ -64,6 +64,7 @@ class ProjectRepository(BaseRepository):
                     for date in contract_dates:
                         project_result = ProjectResult(
                                             result_month=date,
+                                            payment_expected_date=project_detail.get_payment_date(date),
                                             created_at=datetime.today(),
                                             created_user=session['user']['user_name'],
                                             updated_at=datetime.today(),

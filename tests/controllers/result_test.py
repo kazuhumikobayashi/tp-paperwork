@@ -12,6 +12,8 @@ from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.domain.repository.project_detail_repository import ProjectDetailRepository
+from application import db
+from application.domain.model.project_billing import ProjectBilling
 from tests import BaseTestCase
 
 from application.domain.repository.project_result_repository import ProjectResultRepository
@@ -86,7 +88,20 @@ class ResultTests(BaseTestCase):
             'shain_number': shain_number,
             'password': 'test'
         })
+
+        # set_up
         project_result = self.project_result_repository.find_all()[2]
+        project_billing = ProjectBilling(
+            project_detail_id = project_result.project_detail_id,
+            billing_month = project_result.result_month,
+            created_at = datetime.today(),
+            created_user = 'test',
+            updated_at = datetime.today(),
+            updated_user = 'test'
+
+        )
+        db.session.add(project_billing)
+        db.session.commit()
 
         # engineer_historyがないことを確認。
         self.assertEqual(project_result.project_detail.engineer.engineer_histories, [])

@@ -46,6 +46,9 @@ class Engineer(BaseModel, db.Model):
         self.gender = gender
         self.company_id = company_id
 
+    def is_bp(self):
+        return self.company.is_bp()
+
     def __repr__(self):
         return "<Engineer:" + \
                 "'id='{}".format(self.id) + \

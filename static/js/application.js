@@ -271,3 +271,91 @@ $(function() {
       }
   });
 });
+
+
+// 実績の請求計算
+$(function() {
+  $('#cal-billing').click(function() {
+      var FIXED = 1;
+      var sub_hours = 0;
+      var sub_money = 0;
+      var estimated_money = 0;
+      var carfare = 0;
+      var adjustment = 0;
+
+      var billing_rule = $("[name=billing_rule]:checked").val();
+      var work_time = parseInt($('#work_time').val());
+      var billing_bottom_base_hour = parseInt($('#billing_bottom_base_hour').val());
+      var billing_top_base_hour = parseInt($('#billing_top_base_hour').val());
+      var billing_per_bottom_hour = parseInt($('#billing_per_bottom_hour').val());
+      var billing_per_top_hour = parseInt($('#billing_per_top_hour').val());
+      var billing_per_month = parseInt($('#billing_per_month').val());
+
+      // 請求のルールが固定の場合、作業時間がいかなる場合でも請求単価が入る。
+      if (($.isNumeric(work_time) && work_time != 0) || (billing_rule == FIXED)) {
+
+          if (work_time < billing_bottom_base_hour) {
+              sub_hours = work_time - billing_bottom_base_hour;
+              sub_money = sub_hours * billing_per_bottom_hour;
+          } else if (billing_top_base_hour < work_time) {
+              sub_hours = work_time - billing_top_base_hour;
+              sub_money = sub_hours * billing_per_top_hour;
+          }
+          estimated_money = billing_per_month + sub_money;
+
+      }
+
+      $('#billing_subtraction_hours').val(sub_hours);
+      $('#billing_subtraction_money').val(sub_money);
+      $('#billing_estimated_money').val(estimated_money);
+
+      carfare = parseInt($('#billing_transportation').val()) || 0;
+      adjustment = parseInt($('#billing_adjustments').val()) || 0;
+      $('#billing_confirmation_money').val(estimated_money + carfare + adjustment);
+
+  });
+});
+
+
+// 実績の支払計算
+$(function() {
+  $('#cal-payment').click(function() {
+      var FIXED = 1;
+      var sub_hours = 0;
+      var sub_money = 0;
+      var estimated_money = 0;
+      var carfare = 0;
+      var adjustment = 0;
+
+      var payment_rule = $("[name=payment_rule]:checked").val();
+      var work_time = parseInt($('#work_time').val());
+      var payment_per_month = parseInt($('#payment_per_month').val());
+      var payment_bottom_base_hour = parseInt($('#payment_bottom_base_hour').val());
+      var payment_top_base_hour = parseInt($('#payment_top_base_hour').val());
+      var payment_per_bottom_hour = parseInt($('#payment_per_bottom_hour').val());
+      var payment_per_top_hour = parseInt($('#payment_per_top_hour').val());
+
+      if ((($.isNumeric(work_time) && work_time != 0) || (payment_rule == FIXED))
+              && $.isNumeric(payment_per_month)) {
+
+          if (work_time < payment_bottom_base_hour) {
+              sub_hours = work_time - payment_bottom_base_hour;
+              sub_money = sub_hours * payment_per_bottom_hour;
+          } else if (payment_top_base_hour < work_time) {
+              sub_hours = work_time - payment_top_base_hour;
+              sub_money = sub_hours * payment_per_top_hour;
+          }
+          estimated_money = payment_per_month + sub_money;
+
+      }
+
+      $('#payment_subtraction_hours').val(sub_hours);
+      $('#payment_subtraction_money').val(sub_money);
+      $('#payment_estimated_money').val(estimated_money);
+
+      carfare = parseInt($('#payment_transportation').val()) || 0;
+      adjustment = parseInt($('#payment_adjustments').val()) || 0;
+      $('#payment_confirmation_money').val(estimated_money + carfare + adjustment);
+
+  });
+});

@@ -23,7 +23,7 @@ class ResultForm(FlaskForm):
                                               [Length(max=128)],
                                               filters=[lambda x: x or None])
     billing_confirmation_money = IntegerField('請求確定金額_個別（予定金額と調整金額の合計）',
-                                              render_kw={"disabled": "disabled"})
+                                              render_kw={"readonly": "readonly"})
     payment_subtraction_hours = IntegerField('支払差分時間（基準時間と実稼働時間の差分）',
                                              render_kw={"disabled": "disabled"})
     payment_subtraction_money = IntegerField('支払差分金額（差分時間に時間単価を掛けた金額）',
@@ -36,7 +36,7 @@ class ResultForm(FlaskForm):
                                       format='%Y/%m/%d',
                                       render_kw={"autocomplete": "off"})
     payment_confirmation_money = DecimalField('支払確定金額_個別（予定金額と調整金額の合計）',
-                                              render_kw={"disabled": "disabled"})
+                                              render_kw={"readonly": "readonly"})
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
 
 
