@@ -9,10 +9,12 @@ from sqlalchemy.orm import relationship
 from application import db
 from application.domain.model.base_model import BaseModel
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_result import ProjectResult
 from application.domain.model.sqlalchemy.types import EnumType
+from application.service.calculator import Calculator
 
 
 class ProjectDetail(BaseModel, db.Model):
@@ -106,6 +108,49 @@ class ProjectDetail(BaseModel, db.Model):
         self.bp_order_no = bp_order_no
         self.client_order_no_for_bp = client_order_no_for_bp
 
+    def is_engineer(self):
+        return self.detail_type == DetailType.engineer
+
+    # 支払予定日を計算するメソッド
+    def get_payment_date(self, date):
+        # 支払予定日はBPのみ記述
+        if self.is_engineer() and self.engineer.is_bp():
+            payment_site = self.engineer.company.payment_site
+
+            # 支払いの場合、末日は前倒し、その他後ろ倒し
+            if payment_site.is_last_day():
+                bank_holiday_flag = HolidayFlag.before
+            else:
+                bank_holiday_flag = HolidayFlag.after
+
+            # 入金サイトから支払日を選定
+            deposit_date = Calculator.calculate_deposit_date_from_site(date, payment_site.value)
+
+            # 土日の場合、前倒し・後ろ倒しの日付に変更。
+            deposit_date = Calculator.to_weekday_if_on_weekend(deposit_date, bank_holiday_flag)
+
+            # 祝日の場合、前倒し・後ろ倒しの日付に変更。
+            deposit_date = Calculator.to_weekday_if_on_holiday(deposit_date, bank_holiday_flag)
+
+            return deposit_date
+        return None
+
+    # 開始・終了日のそれぞれの年月をリストで返すメソッド
+    def get_contract_month_list(self):
+        contract_month_list = []
+        i = 0
+        start = self.billing_start_day
+        while (date(start.year, start.month, 1) + relativedelta(months=i)) <= self.billing_end_day:
+            contract_month_list.append(date(start.year, start.month, 1) + relativedelta(months=i))
+            i += 1
+        return contract_month_list
+
+    # 作業の請求単価（ひと月当たりに請求する金額）を取得
+    def get_payment_per_month_by_work(self):
+        payment = self.billing_money / len(self.project.get_project_month_list())
+        # TODO 端数計算処理実行
+        return payment
+
     def __repr__(self):
         return "<ProjectDetails:" + \
                 "'id='{}".format(self.id) + \
@@ -135,22 +180,3 @@ class ProjectDetail(BaseModel, db.Model):
                 "', updated_at='{}".format(self.updated_at) + \
                 "', updated_user='{}".format(self.updated_user) + \
                 "'>"
-
-    def is_engineer(self):
-        return self.detail_type == DetailType.engineer
-
-    # 開始・終了日のそれぞれの年月をリストで返すメソッド
-    def get_contract_month_list(self):
-        contract_month_list = []
-        i = 0
-        start = self.billing_start_day
-        while (date(start.year, start.month, 1) + relativedelta(months=i)) <= self.billing_end_day:
-            contract_month_list.append(date(start.year, start.month, 1) + relativedelta(months=i))
-            i += 1
-        return contract_month_list
-
-    # 作業の請求単価（ひと月当たりに請求する金額）を取得
-    def get_payment_per_month_by_work(self):
-        payment = self.billing_money / len(self.project.get_project_month_list())
-        # TODO 端数計算処理実行
-        return payment

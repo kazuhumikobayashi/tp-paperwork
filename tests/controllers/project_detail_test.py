@@ -2,11 +2,17 @@ from datetime import datetime, date
 from nose.tools import ok_
 
 from application import db
+from application.domain.model.company import Company
+from application.domain.model.company_client_flag import CompanyClientFlag
+from application.domain.model.engineer import Engineer
 from application.domain.model.immutables.billing_timing import BillingTiming
+from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.rule import Rule
+from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.status import Status
+from application.domain.model.immutables.tax import Tax
 from application.domain.model.project import Project
 from application.domain.model.project_detail import ProjectDetail
 from application.domain.repository.project_detail_repository import ProjectDetailRepository
@@ -622,6 +628,176 @@ class ProjectDetailTests(BaseTestCase):
         # 件数が変わっていないことを確認。
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
+
+    # 支払い予定日を計算（支払いサイト30）
+    def test_get_payment_date_by_site_30(self):
+        # ログイン
+        self.app.post('/login', data={'shain_number': 'test1', 'password': 'test'})
+
+        # set_up
+        company = Company(
+            company_name='会社',
+            contract_date=datetime.today().strftime('%Y/%m/%d'),
+            payment_site=Site.thirty,
+            payment_tax=Tax.eight,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company)
+        db.session.commit()
+
+        company_client_flag = CompanyClientFlag(
+            company_id=company.id,
+            client_flag=ClientFlag.bp,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company_client_flag)
+        db.session.commit()
+
+        engineer = Engineer(
+            engineer_name='エンジニア',
+            company_id=company.id,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        project = Project(
+            project_name='プロジェクト',
+            status=Status.done,
+            end_user_company_id=4,
+            client_company_id=3,
+            start_date=date(2017, 1, 1).strftime('%Y/%m/%d'),
+            end_date=date(2017, 12, 31).strftime('%Y/%m/%d'),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project)
+        db.session.commit()
+
+        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': engineer.id,
+            'billing_money': '1000000',
+            'billing_start_day': '2017/3',
+            'billing_end_day': '2017/4',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': ''
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project_detail/' in result.headers['Location'])
+
+        # 契約期間は3月～4月で支払いサイトが30のため、
+        # 3月のpayment_dateには翌月末日（2017/4/30（日））だが月末は前倒しのため、2017/4/28（金曜）、
+        # 4月のpayment_dateには翌月末日（2017/5/31（水））が入る。
+        expected_in_march = date(2017, 4, 28)
+        expected_in_april = date(2017, 5, 31)
+
+        # 保存したproject_detailを取得
+        project_detail_id = result.headers['Location'].split('/')[-1]
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+
+        # 3月のpayment_dateには、2017/4/28が入っていることを確認。
+        actual_in_march = project_detail.project_results[0].payment_expected_date
+        self.assertEqual(actual_in_march, expected_in_march)
+
+        # 4月のpayment_dateには、2017/5/31が入っていることを確認。
+        actual_in_april = project_detail.project_results[1].payment_expected_date
+        self.assertEqual(actual_in_april, expected_in_april)
+
+    # 支払い予定日を計算（支払いサイト50）
+    def test_get_payment_date_by_site_50(self):
+        # ログイン
+        self.app.post('/login', data={'shain_number': 'test1', 'password': 'test'})
+
+        # set_up
+        company = Company(
+            company_name='会社',
+            contract_date=datetime.today().strftime('%Y/%m/%d'),
+            payment_site=Site.fifty,
+            payment_tax=Tax.eight,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company)
+        db.session.commit()
+
+        company_client_flag = CompanyClientFlag(
+            company_id=company.id,
+            client_flag=ClientFlag.bp,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company_client_flag)
+        db.session.commit()
+
+        engineer = Engineer(
+            engineer_name='エンジニア',
+            company_id=company.id,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        project = Project(
+            project_name='プロジェクト',
+            status=Status.done,
+            end_user_company_id=4,
+            client_company_id=3,
+            start_date=date(2017, 1, 1).strftime('%Y/%m/%d'),
+            end_date=date(2017, 12, 31).strftime('%Y/%m/%d'),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project)
+        db.session.commit()
+
+        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': engineer.id,
+            'billing_money': '1000000',
+            'billing_start_day': '2017/3',
+            'billing_end_day': '2017/4',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': ''
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project_detail/' in result.headers['Location'])
+
+        # 契約期間は3月～4月で支払いサイトが50のため、
+        # 3月のpayment_dateには翌月末日（2017/5/20（土））だが月末以外後ろ倒しのため、2017/4/22（月）、
+        # 4月のpayment_dateには翌月末日（2017/6/20（火））が入る。
+        expected_in_march = date(2017, 5, 22)
+        expected_in_april = date(2017, 6, 20)
+
+        # 保存したproject_detailを取得
+        project_detail_id = result.headers['Location'].split('/')[-1]
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+
+        # 3月のpayment_dateには、2017/4/28が入っていることを確認。
+        actual_in_march = project_detail.project_results[0].payment_expected_date
+        self.assertEqual(actual_in_march, expected_in_march)
+
+        # 4月のpayment_dateには、2017/5/31が入っていることを確認。
+        actual_in_april = project_detail.project_results[1].payment_expected_date
+        self.assertEqual(actual_in_april, expected_in_april)
 
     # ステータスが契約完了になった後でworkの明細を新規登録した場合、
     # プロジェクト開始～終了年月の請求レコードが作成される。

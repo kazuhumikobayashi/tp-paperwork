@@ -46,5 +46,8 @@ class Site(Enum):
                 return site
         return None
 
+    def is_last_day(self):
+        return self._value_ % 30 == 0
+
     def __str__(self):
         return str(self._value_)
