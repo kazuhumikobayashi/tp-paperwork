@@ -45,7 +45,8 @@ CREATE TABLE IF NOT EXISTS engineers (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (company_id)
 ) ENGINE = INNODB;
 
 
@@ -57,7 +58,9 @@ CREATE TABLE IF NOT EXISTS engineer_skills (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (engineer_id) ,
+  INDEX (skill_id)
 ) ENGINE = INNODB;
 
 
@@ -69,7 +72,9 @@ CREATE TABLE IF NOT EXISTS engineer_business_categories (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (business_category_id) ,
+  INDEX (engineer_id)
 ) ENGINE = INNODB;
 
 
@@ -109,7 +114,8 @@ CREATE TABLE IF NOT EXISTS companies (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (bank_id)
 ) ENGINE = INNODB;
 
 
@@ -145,7 +151,9 @@ CREATE TABLE IF NOT EXISTS projects (
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
   PRIMARY KEY (id) ,
-  UNIQUE KEY (estimation_no)
+  UNIQUE KEY (estimation_no) ,
+  INDEX (client_company_id) ,
+  INDEX (end_user_company_id)
 ) ENGINE = INNODB;
 
 
@@ -176,7 +184,9 @@ CREATE TABLE IF NOT EXISTS project_details (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (engineer_id) ,
+  INDEX (project_id)
 ) ENGINE = INNODB;
 
 
@@ -190,7 +200,9 @@ CREATE TABLE IF NOT EXISTS project_attachments (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (attachment_id) ,
+  INDEX (project_id)
 ) ENGINE = INNODB;
 
 
@@ -213,7 +225,8 @@ CREATE TABLE IF NOT EXISTS project_results (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (project_detail_id)
 ) ENGINE = INNODB;
 
 
@@ -287,7 +300,8 @@ CREATE TABLE IF NOT EXISTS company_client_flags (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (company_id)
 ) ENGINE = INNODB;
 
 
@@ -313,7 +327,8 @@ CREATE TABLE IF NOT EXISTS engineer_histories (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (engineer_id)
 ) ENGINE = INNODB;
 
 
@@ -343,7 +358,8 @@ CREATE TABLE IF NOT EXISTS project_billings (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (project_detail_id)
 ) ENGINE = INNODB;
 
 
@@ -364,5 +380,7 @@ CREATE TABLE IF NOT EXISTS project_months (
   created_user VARCHAR(128) NOT NULL ,
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id) ,
+  INDEX (project_id) ,
+  INDEX (project_month)
 ) ENGINE = INNODB;
