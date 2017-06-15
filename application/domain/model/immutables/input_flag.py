@@ -12,6 +12,17 @@ class InputFlag(Enum):
         else:
             return '済'
 
+    @property
+    def payment_name(self):
+        if self._value_ == self.yet.value:
+            return '未払い'
+        else:
+            return '支払済'        
+
+    @staticmethod
+    def get_flag_for_radio():
+        return [(str(flag.value), flag.payment_name) for flag in InputFlag]
+
     @staticmethod
     def parse(value):
         if isinstance(value, str):

@@ -18,7 +18,11 @@
                 <i class="fa fa-home fa-fw"></i> <span>プロジェクト</span>
             </a>
         </li>
-        <li><a href="#"><i class="fa fa-sign-out fa-fw"></i> <span>支払い</span></a></li>
+        <li{% if request.path.count('/search/payment/') %} class="active"{% endif %}>
+        	<a href="{{ url_for('payment.index') }}">
+        		<i class="fa fa-sign-out fa-fw"></i> <span>支払い</span>
+        	</a>
+        </li>
         <li><a href="#"><i class="fa fa-calculator fa-fw"></i> <span>請求</span></a></li>
         <li><a href="#"><i class="fa fa-file-text-o fa-fw"></i> <span>弥生I/F出力</span></a></li>
         <li class="treeview{% if request.path.count('/company/') or

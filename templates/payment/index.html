@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_search_field %}
+{% import "_pagination.html" as p %}
+{% block title %}支払情報{% endblock %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>支払情報</h1>
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+    <li class="active">支払情報</li>
+  </ol>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 検索条件</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="get" action="{{ url_for('.index') }}">
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row">
+        {{ render_search_field(form.project_name, "col-md-6") }}
+        {{ render_search_field(form.input_flag, "col-sm-6") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.end_user_company_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.client_company_id, "col-md-6", input_class="select2") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.recorded_department_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.engineer_name, "col-md-6") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.payment_expected_date_from, "col-md-6", input_class="date") }}
+        {{ render_search_field(form.payment_expected_date_to, "col-md-6", input_class="date") }}
+      </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <button type="submit" class="btn btn-sm btn-primary pull-right"><i class="fa fa-search"></i> 検索</button>
+    </div>
+    </form>
+  </div>
+  <!-- /.box -->
+
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          {% if pagination %}
+            {% if pagination.total > pagination.per_page %}
+              {{ p.pagination_widget(pagination,'.payment_page',
+              project_name=form.project_name.data,
+              input_flag=form.input_flag.data,
+              end_user_company_id=form.end_user_company_id.data,
+              client_company_id=form.client_company_id.data,
+              recorded_department_id=form.recorded_department_id.data,
+              engineer_name=form.engineer_name.data,
+              payment_expected_date_from=form.payment_expected_date_from.data,
+              payment_expected_date_to=form.payment_expected_date_to.data) }}
+            {% endif %}
+          {% endif %}
+
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover">
+            <tr>
+              <th>エンドユーザー</th>
+              <th>顧客会社</th>
+              <th>計上部署</th>
+              <th>プロジェクト名</th>
+              <th>技術者名称</th>
+              <th>支払予定日</th>
+              <th class="text-right" width="160px">支払確定金額</th>
+              <th class="text-center">支払済</th>
+            </tr>
+            {% for payment in pagination.items %}
+            <tr>
+              <td>{{ payment.project_detail.project.end_user_company.company_name|filter_suppress_none }}</td>
+              <td>{{ payment.project_detail.project.client_company.company_name }}</td>
+              <td>{{ payment.project_detail.project.recorded_department.department_name }}</td>
+              <td><a href="{{ url_for('contract.index', project_id=payment.project_detail.project.id) }}">{{ payment.project_detail.project.project_name }}</a></td>
+              <td>{{ payment.project_detail.engineer.engineer_name|filter_suppress_none }}</td>
+              <td>{{ payment.payment_expected_date|datetime_format("%Y/%m/%d") }}</td>
+              <td class="text-right">{{ payment.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>
+              <td class="text-center"><input type="checkbox" name="payment_input_flag" {% if payment.payment_flag.value %}checked{% endif %}></td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <!-- /.box-body -->
+        <!-- /.box-footer -->
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+{% endblock %}
