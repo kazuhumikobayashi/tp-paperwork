@@ -1,3 +1,6 @@
+from datetime import date
+
+from dateutil.relativedelta import relativedelta
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy import ForeignKey
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -135,3 +138,19 @@ class ProjectDetail(BaseModel, db.Model):
 
     def is_engineer(self):
         return self.detail_type == DetailType.engineer
+
+    # 開始・終了日のそれぞれの年月をリストで返すメソッド
+    def get_contract_month_list(self):
+        contract_month_list = []
+        i = 0
+        start = self.billing_start_day
+        while (date(start.year, start.month, 1) + relativedelta(months=i)) <= self.billing_end_day:
+            contract_month_list.append(date(start.year, start.month, 1) + relativedelta(months=i))
+            i += 1
+        return contract_month_list
+
+    # 作業の請求単価（ひと月当たりに請求する金額）を取得
+    def get_payment_per_month_by_work(self):
+        payment = self.billing_money / len(self.project.get_project_month_list())
+        # TODO 端数計算処理実行
+        return payment

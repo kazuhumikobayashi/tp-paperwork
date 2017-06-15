@@ -44,11 +44,11 @@ class ProjectRepository(BaseRepository):
         return self.model.query.filter(self.model.status <= Status.received).all()
 
     def save(self, project):
-        if project.status == Status.done and project.has_not_project_results and project.has_not_project_billings\
-                and project.has_not_project_months:
+        if project.status == Status.done and project.has_not_project_results() and project.has_not_project_billings()\
+                and project.has_not_project_months():
 
-            contract_dates = project.get_project_month_list()
-            for date in contract_dates:
+            project_dates = project.get_project_month_list()
+            for date in project_dates:
                 project_month = ProjectMonth(
                                         project_month=date,
                                         created_at=datetime.today(),
@@ -58,22 +58,29 @@ class ProjectRepository(BaseRepository):
                 project.project_months.append(project_month)
 
             for project_detail in project.project_details:
-                for date in contract_dates:
-                    project_result = ProjectResult(
-                                        result_month=date,
-                                        created_at=datetime.today(),
-                                        created_user=session['user']['user_name'],
-                                        updated_at=datetime.today(),
-                                        updated_user=session['user']['user_name'])
-                    project_detail.project_results.append(project_result)
-
-                    project_billing = ProjectBilling(
-                                        billing_month=date,
-                                        created_at=datetime.today(),
-                                        created_user=session['user']['user_name'],
-                                        updated_at=datetime.today(),
-                                        updated_user=session['user']['user_name'])
-                    project_detail.project_billings.append(project_billing)
+                # 明細がengineerの場合、明細に登録された契約期間を取得してその月々の実績レコードを作成する。
+                if project_detail.is_engineer():
+                    contract_dates = project_detail.get_contract_month_list()
+                    for date in contract_dates:
+                        project_result = ProjectResult(
+                                            result_month=date,
+                                            created_at=datetime.today(),
+                                            created_user=session['user']['user_name'],
+                                            updated_at=datetime.today(),
+                                            updated_user=session['user']['user_name'])
+                        project_detail.project_results.append(project_result)
+                # 明細がworkの場合、プロジェクト期間を取得してその月々の実績レコードを作成する。
+                else:
+                    for date in project_dates:
+                        project_billing = ProjectBilling(
+                                            billing_month=date,
+                                            billing_content=project_detail.work_name,
+                                            billing_confirmation_money=project_detail.get_payment_per_month_by_work(),
+                                            created_at=datetime.today(),
+                                            created_user=session['user']['user_name'],
+                                            updated_at=datetime.today(),
+                                            updated_user=session['user']['user_name'])
+                        project_detail.project_billings.append(project_billing)
 
         super(ProjectRepository, self).save(project)
 

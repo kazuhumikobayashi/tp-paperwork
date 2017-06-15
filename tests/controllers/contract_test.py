@@ -2,9 +2,12 @@ from datetime import date, datetime
 from nose.tools import ok_
 
 from application import db
+from application.domain.model.engineer import Engineer
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
+from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.holiday_flag import HolidayFlag
+from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.status import Status
 from application.domain.model.immutables.tax import Tax
@@ -1451,3 +1454,160 @@ class ContractTests(BaseTestCase):
         # プロジェクトを削除
         db.session.delete(project)
         db.session.commit()
+
+    # 明細がengineerの場合、ステータスを契約完了にして更新すると
+    # engineerの請求開始年月～請求終了年月の実績レコードが作成される。
+    def test_create_engineer_result_when_status_done(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # set_up
+        project = Project(
+            project_name='test_copy_project',
+            project_name_for_bp='copy_project',
+            status=Status.start,
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no='M0001-11',
+            end_user_company_id=4,
+            client_company_id=3,
+            start_date=date(2017, 1, 1),
+            end_date=date(2017, 12, 31),
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.billing_at_last,
+            estimated_total_amount=1000000,
+            deposit_date='20/12/31',
+            scope='test',
+            contents=None,
+            working_place=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project)
+        db.session.commit()
+
+        engineer = Engineer(
+            engineer_name='エンジニア',
+            company_id=5,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': engineer.id,
+            'billing_money': '100000000',
+            'billing_start_day': date(2017, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': '',
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/project_detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        result = self.app.post('/contract/' + str(project.id), data={
+            'status': Status.done.value,
+            'recorded_department_id': project.recorded_department_id,
+            'estimation_no': project.estimation_no,
+            'project_name': project.project_name,
+            'end_user_company_id': str(project.end_user_company_id),
+            'client_company_id': str(project.client_company_id),
+            'start_date': project.start_date.strftime('%Y/%m/%d'),
+            'end_date': project.end_date.strftime('%Y/%m/%d'),
+            'contract_form': project.contract_form.value,
+            'billing_timing': project.billing_timing.value,
+            'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/contract' in result.headers['Location'])
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+        # 明細（project_detail）の請求契約期間が2017年の1～3月のため、1～3月分の実績レコードが作成される。
+        expected_1 = date(2017, 1, 1)
+        expected_2 = date(2017, 2, 1)
+        expected_3 = date(2017, 3, 1)
+        actual_1 = project_detail.project_results[0].result_month
+        actual_2 = project_detail.project_results[1].result_month
+        actual_3 = project_detail.project_results[2].result_month
+
+        self.assertEqual(actual_1, expected_1)
+        self.assertEqual(actual_2, expected_2)
+        self.assertEqual(actual_3, expected_3)
+
+        # tear_down
+        self.app.get('/project_detail/delete/' + str(project_detail.id))
+        self.app.get('/project/delete/' + str(project.id))
+
+    # 明細がworkの場合、ステータスを契約完了にして更新すると
+    # プロジェクト開始～終了年月の請求レコードが作成される。
+    def test_create_work_billing_when_status_done(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # set_up
+        project = self.project_repository.find_by_id(6)
+
+        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.work.value,
+            'work_name': 'test',
+            'billing_money': '100000000',
+            'engineer_id': '',
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': ''
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/project_detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        result = self.app.post('/contract/' + str(project.id), data={
+            'status': Status.done.value,
+            'recorded_department_id': project.recorded_department_id,
+            'estimation_no': project.estimation_no,
+            'project_name': project.project_name,
+            'end_user_company_id': '4',
+            'client_company_id': '3',
+            'start_date': date(2017, 1, 1).strftime('%Y/%m/%d'),
+            'end_date': date(2017, 3, 31).strftime('%Y/%m/%d'),
+            'contract_form': project.contract_form.value,
+            'billing_timing': project.billing_timing.value,
+            'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/contract' in result.headers['Location'])
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+        # プロジェクト期間が2017年の1～3月のため、1～3月分の実績レコードが作成される。
+        expected_1 = date(2017, 1, 1)
+        expected_2 = date(2017, 2, 1)
+        expected_3 = date(2017, 3, 1)
+        actual_1 = project_detail.project_billings[0].billing_month
+        actual_2 = project_detail.project_billings[1].billing_month
+        actual_3 = project_detail.project_billings[2].billing_month
+
+        self.assertEqual(actual_1, expected_1)
+        self.assertEqual(actual_2, expected_2)
+        self.assertEqual(actual_3, expected_3)
+
+        # tear_down
+        self.app.get('/project_detail/delete/' + str(project_detail.id))
+        self.app.get('/project/delete/' + str(project.id))

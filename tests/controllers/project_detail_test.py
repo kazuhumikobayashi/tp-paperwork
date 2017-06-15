@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from nose.tools import ok_
 
 from application import db
@@ -622,3 +622,60 @@ class ProjectDetailTests(BaseTestCase):
         # 件数が変わっていないことを確認。
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
+
+    # ステータスが契約完了になった後でworkの明細を新規登録した場合、
+    # プロジェクト開始～終了年月の請求レコードが作成される。
+    def test_create_work_billing_when_status_done(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # set_up
+        project = self.project_repository.find_by_id(7)
+
+        result = self.app.post('/contract/' + str(project.id), data={
+            'status': Status.done.value,
+            'recorded_department_id': project.recorded_department_id,
+            'estimation_no': project.estimation_no,
+            'project_name': project.project_name,
+            'end_user_company_id': '4',
+            'client_company_id': '3',
+            'start_date': date(2017, 1, 1).strftime('%Y/%m/%d'),
+            'end_date': date(2017, 3, 31).strftime('%Y/%m/%d'),
+            'contract_form': project.contract_form.value,
+            'billing_timing': project.billing_timing.value,
+            'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/contract' in result.headers['Location'])
+
+        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.work.value,
+            'work_name': 'test',
+            'billing_money': '100000000',
+            'engineer_id': '',
+            'billing_fraction_calculation1': '',
+            'billing_fraction_calculation2': ''
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/project_detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+        # プロジェクト期間が2017年の1～3月のため、1～3月分の実績レコードが作成される。
+        expected_1 = date(2017, 1, 1)
+        expected_2 = date(2017, 2, 1)
+        expected_3 = date(2017, 3, 1)
+        actual_1 = project_detail.project_billings[0].billing_month
+        actual_2 = project_detail.project_billings[1].billing_month
+        actual_3 = project_detail.project_billings[2].billing_month
+
+        self.assertEqual(actual_1, expected_1)
+        self.assertEqual(actual_2, expected_2)
+        self.assertEqual(actual_3, expected_3)
+
+        # tear_down
+        self.app.get('/project_detail/delete/' + str(project_detail.id))
+        self.app.get('/project/delete/' + str(project.id))

@@ -13,5 +13,19 @@ class ProjectBillingRepository(BaseRepository):
                     .filter(self.model.billing_month == billing_month).all()
         return billings
 
+    def copy_and_save(self, result):
+        billing = self.model.query\
+                      .filter(self.model.project_detail_id == result.project_detail_id)\
+                      .filter(self.model.billing_month == result.result_month).first()
+        if billing is None:
+            billing = self.create()
+            billing.project_detail_id = result.project_detail_id
+            billing.billing_month = result.result_month
+        billing.billing_content = result.project_detail.engineer.engineer_name
+        billing.billing_amount = result.billing_confirmation_number
+        billing.billing_confirmation_money = result.billing_confirmation_money
+        billing.billing_transportation = result.billing_transportation
+        self.save(billing)
+
     def create(self):
         return ProjectBilling()

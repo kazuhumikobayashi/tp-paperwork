@@ -13,7 +13,6 @@ from application.domain.model.immutables.expression import Expression
 from application.domain.model.immutables.gender import Gender
 from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.detail_type import DetailType
-from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.domain.model.immutables.round import Round
@@ -149,8 +148,8 @@ def create_projects():
             estimation_no='test' + str(num),
             end_user_company_id=1,
             client_company_id=5,
-            start_date=date.today(),
-            end_date='2099/12/31',
+            start_date='2017/1/1',
+            end_date='2017/12/31',
             contract_form=Contract.blanket,
             billing_timing=BillingTiming.billing_at_last,
             estimated_total_amount=1000000,
