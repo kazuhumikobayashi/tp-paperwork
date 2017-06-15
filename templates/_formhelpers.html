@@ -27,11 +27,24 @@
 </div>
 {% endmacro %}
 {% macro render_search_field(field, group_class, required="", input_class="") %}
-<div class="{{ group_class }}" style="margin-bottom: 5px;">
-  {% if required %}
-    {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;") }}
-  {% else %}
-    {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;") }}
-  {% endif %}
-</div>
+{% if field.type == "RadioField" %}
+  <div class="{{ group_class }}" style="margin-bottom: 5px;">
+    {% for subfield in field %}
+      {% if required %}
+        {{ subfield(required="required", **kwargs) }}
+      {% else %}
+        {{ subfield(**kwargs) }}
+      {% endif %}
+      {{ subfield.label(style="margin: 5px 20px 15px 5px; cursor: pointer;") }}
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="{{ group_class }}" style="margin-bottom: 5px;">
+    {% if required %}
+      {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;", **kwargs) }}
+    {% else %}
+      {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;", **kwargs) }}
+    {% endif %}
+  </div>
+{% endif %}
 {% endmacro %}
