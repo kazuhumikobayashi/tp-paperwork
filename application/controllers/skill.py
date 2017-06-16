@@ -17,7 +17,7 @@ service = SkillService()
 def index(page=1):
     skill_name = request.args.get('skill_name', '')
     pagination = service.find(page, skill_name)
-    return render_template('skill/index.html', pagination=pagination)
+    return render_template('master/skill/index.html', pagination=pagination)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
@@ -39,7 +39,7 @@ def detail(skill_id=None):
         service.save(skill)
         flash('保存しました。')
         return redirect(url_for('.detail', skill_id=skill.id))
-    return render_template('skill/detail.html', form=form)
+    return render_template('master/skill/detail.html', form=form)
 
 
 @bp.route('/create', methods=['GET', 'POST'])

@@ -30,7 +30,7 @@ class EngineerHistoryTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer_history/create?engineer_id=1')
+        result = self.app.get('/engineer/history/create?engineer_id=1')
         self.assertEqual(result.status_code, 200)
 
     # 技術者履歴を登録する。
@@ -44,7 +44,7 @@ class EngineerHistoryTests(BaseTestCase):
 
         engineer_id = 2
 
-        result = self.app.post('/engineer_history/create?engineer_id=' + str(engineer_id), data={
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
             'engineer_id': engineer_id,
             'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
@@ -63,7 +63,7 @@ class EngineerHistoryTests(BaseTestCase):
         engineer_history = self.engineer_history_repository.find_by_id(
             len(self.engineer_history_repository.find_all()) - 1)
         result = self.app.get(
-            '/engineer_history/delete/' + str(engineer_history.id))
+            '/engineer/history/delete/' + str(engineer_history.id))
         # 削除できたことを確認
         self.assertEqual(result.status_code, 302)
 
@@ -77,7 +77,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         engineer_history = self.engineer_history_repository.find_all()[0]
 
-        result = self.app.get('/engineer_history/' + str(engineer_history.id))
+        result = self.app.get('/engineer/history/' + str(engineer_history.id))
         self.assertEqual(result.status_code, 200)
 
     # 存在しない技術者履歴の場合はnot_found
@@ -88,7 +88,7 @@ class EngineerHistoryTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer_history/0')
+        result = self.app.get('/engineer/history/0')
         self.assertEqual(result.status_code, 404)
 
     # 技術者履歴を保存できる
@@ -103,12 +103,12 @@ class EngineerHistoryTests(BaseTestCase):
         expected = 200000
         engineer_history_id = engineer_history.id
 
-        result = self.app.post('/engineer_history/' + str(engineer_history.id), data={
+        result = self.app.post('/engineer/history/' + str(engineer_history.id), data={
             'payment_per_month': expected
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/engineer_history/' + str(engineer_history.id) in result.headers['Location'])
+        ok_('/engineer/history/' + str(engineer_history.id) in result.headers['Location'])
 
         engineer_history_after_save = self.engineer_history_repository.find_by_id(
             engineer_history_id)
@@ -143,7 +143,7 @@ class EngineerHistoryTests(BaseTestCase):
             delete_engineer_history_id)
 
         result = self.app.get(
-            '/engineer_history/delete/' + str(engineer_history.id))
+            '/engineer/history/delete/' + str(engineer_history.id))
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/engineer/detail/' + str(engineer_id)
@@ -163,7 +163,7 @@ class EngineerHistoryTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer_history/delete/0')
+        result = self.app.get('/engineer/history/delete/0')
         self.assertEqual(result.status_code, 302)
         ok_('/engineer' in result.headers['Location'])
 
@@ -182,7 +182,7 @@ class EngineerHistoryTests(BaseTestCase):
         engineer_id = 3
 
         # 以下のデータを新規作成。
-        result = self.app.post('/engineer_history/create?engineer_id=' + str(engineer_id), data={
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
             'engineer_id': engineer_id,
             'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'payment_end_day': date(2017, 5, 31).strftime('%Y/%m'),
@@ -203,7 +203,7 @@ class EngineerHistoryTests(BaseTestCase):
         before_payment_start_day = before_engineer_history.payment_start_day
 
         # 前回の支払い終了年月が2017年5月のため、開始年月をその前の年月で登録できないことを確認する。
-        result = self.app.post('/engineer_history/' + str(before_engineer_history.id), data={
+        result = self.app.post('/engineer/history/' + str(before_engineer_history.id), data={
             'payment_start_day': date(2017, 3, 1).strftime('%Y/%m'),
             'payment_end_day': before_engineer_history.payment_end_day,
             'payment_per_month': before_engineer_history.payment_per_month,
@@ -226,7 +226,7 @@ class EngineerHistoryTests(BaseTestCase):
         self.assertEqual(before_payment_start_day, after_payment_start_day)
 
         # 追加したデータを削除
-        result = self.app.get('/engineer_history/delete/' +
+        result = self.app.get('/engineer/history/delete/' +
                               str(after_engineer_history.id))
         # 削除できたことを確認
         self.assertEqual(result.status_code, 302)
@@ -242,7 +242,7 @@ class EngineerHistoryTests(BaseTestCase):
         engineer_id = 4
 
         # 以下のデータを新規作成。
-        result = self.app.post('/engineer_history/create?engineer_id=' + str(engineer_id), data={
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
             'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'payment_end_day': date(2017, 5, 31).strftime('%Y/%m'),
             'payment_per_month': '100000',
@@ -262,7 +262,7 @@ class EngineerHistoryTests(BaseTestCase):
         before_payment_start_day = before_engineer_history.payment_start_day
 
         # 支払い終了年月が2017年8月のため、開始年月を2017年10月月で登録できないことを確認する。
-        result = self.app.post('/engineer_history/' + str(before_engineer_history.id), data={
+        result = self.app.post('/engineer/history/' + str(before_engineer_history.id), data={
             'payment_start_day': date(2017, 10, 1).strftime('%Y/%m'),
             'payment_end_day': date(2017, 8, 1).strftime('%Y/%m'),
             'payment_per_month': before_engineer_history.payment_per_month,
@@ -285,7 +285,7 @@ class EngineerHistoryTests(BaseTestCase):
         self.assertEqual(before_payment_start_day, after_payment_start_day)
 
         # 追加したデータを削除
-        result = self.app.get('/engineer_history/delete/' +
+        result = self.app.get('/engineer/history/delete/' +
                               str(after_engineer_history.id))
         # 削除できたことを確認
         self.assertEqual(result.status_code, 302)
@@ -301,7 +301,7 @@ class EngineerHistoryTests(BaseTestCase):
 
         engineer_id = 5
 
-        result = self.app.post('/engineer_history/create?engineer_id=' + str(engineer_id), data={
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
             'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'payment_per_month': '100000',
@@ -327,7 +327,7 @@ class EngineerHistoryTests(BaseTestCase):
         engineer_id = 5
 
         # 上限・下限時間を登録しなくてもデータが追加されることを確認する。
-        result = self.app.post('/engineer_history/create?engineer_id=' + str(engineer_id), data={
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
             'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'payment_per_month': '100000',
@@ -352,7 +352,7 @@ class EngineerHistoryTests(BaseTestCase):
         engineer_history = self.engineer_history_repository.find_by_id(
             len(self.engineer_history_repository.find_all()) - 1)
         result = self.app.get(
-            '/engineer_history/delete/' + str(engineer_history.id))
+            '/engineer/history/delete/' + str(engineer_history.id))
         # 削除できたことを確認
         self.assertEqual(result.status_code, 302)
 
@@ -368,7 +368,7 @@ class EngineerHistoryTests(BaseTestCase):
         engineer_id = 5
 
         # フリー時間を登録しなくてもデータが追加されることを確認する。
-        result = self.app.post('/engineer_history/create?engineer_id=' + str(engineer_id), data={
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
             'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'payment_per_month': '100000',
@@ -393,6 +393,6 @@ class EngineerHistoryTests(BaseTestCase):
         engineer_history = self.engineer_history_repository.find_by_id(
             len(self.engineer_history_repository.find_all()) - 1)
         result = self.app.get(
-            '/engineer_history/delete/' + str(engineer_history.id))
+            '/engineer/history/delete/' + str(engineer_history.id))
         # 削除できたことを確認
         self.assertEqual(result.status_code, 302)
