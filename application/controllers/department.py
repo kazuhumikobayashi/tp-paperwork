@@ -19,7 +19,7 @@ def index(page=1):
     group_name = request.args.get('group_name', '')
     department_name = request.args.get('department_name', '')
     pagination = service.find(page, group_name, department_name)
-    return render_template('department/index.html', pagination=pagination)
+    return render_template('master/department/index.html', pagination=pagination)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
@@ -43,7 +43,7 @@ def detail(department_id=None):
         flash('保存しました。')
         return redirect(url_for('.detail', department_id=department.id))
     current_app.logger.debug(form.errors)
-    return render_template('department/detail.html', form=form)
+    return render_template('master/department/detail.html', form=form)
 
 
 @bp.route('/create', methods=['GET', 'POST'])

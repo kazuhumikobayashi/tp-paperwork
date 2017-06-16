@@ -31,7 +31,7 @@ def index(page=1):
 
     pagination = service.find(page, form.company_name.data, form.client_flag_id.data,
                               form.bank_id.data)
-    return render_template('company/index.html', pagination=pagination, form=form)
+    return render_template('master/company/index.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
@@ -79,7 +79,7 @@ def detail(company_id=None):
         flash('保存しました。')
         return redirect(url_for('.detail', company_id=company.id))
     current_app.logger.debug(form.errors)
-    return render_template('company/detail.html', form=form)
+    return render_template('master/company/detail.html', form=form)
 
 
 @bp.route('/create', methods=['GET', 'POST'])

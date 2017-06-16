@@ -18,7 +18,7 @@ from application.service.engineer_service import EngineerService
 from application.service.skill_service import SkillService
 
 
-bp = Blueprint('engineer_history', __name__, url_prefix='/engineer_history')
+bp = Blueprint('engineer_history', __name__, url_prefix='/engineer/history')
 service = EngineerService()
 engineer_history_service = EngineerHistoryService()
 company_service = CompanyService()
@@ -70,7 +70,7 @@ def history(engineer_history_id=None):
         flash('保存しました。')
         return redirect(url_for('.history', engineer_history_id=engineer_history.id))
     current_app.logger.debug(form.errors)
-    return render_template('engineer/history.html',
+    return render_template('master/engineer/history.html',
                            form=form,
                            engineer_id=engineer_history.engineer.id,
                            latest_engineer_history=latest_engineer_history)

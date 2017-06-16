@@ -17,7 +17,7 @@ service = BusinessCategoryService()
 def index(page=1):
     business_category_name = request.args.get('business_category_name', '')
     pagination = service.find(page, business_category_name)
-    return render_template('business_category/index.html', pagination=pagination)
+    return render_template('master/business_category/index.html', pagination=pagination)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
@@ -39,7 +39,7 @@ def detail(business_category_id=None):
         service.save(business_category)
         flash('保存しました。')
         return redirect(url_for('.detail', business_category_id=business_category.id))
-    return render_template('business_category/detail.html', form=form)
+    return render_template('master/business_category/detail.html', form=form)
 
 
 @bp.route('/create', methods=['GET', 'POST'])

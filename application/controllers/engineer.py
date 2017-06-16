@@ -40,7 +40,7 @@ def index(page=1):
                               form.company_id.data,
                               form.skill_id.data,
                               form.business_category_id.data)
-    return render_template('engineer/index.html',
+    return render_template('master/engineer/index.html',
                            pagination=pagination,
                            form=form)
 
@@ -98,7 +98,7 @@ def detail(engineer_id=None):
     latest_engineer_history = engineer_history_service.get_latest_history(
         engineer.id)
     current_app.logger.debug(form.errors)
-    return render_template('engineer/detail.html',
+    return render_template('master/engineer/detail.html',
                            form=form,
                            engineer_histories=engineer_histories,
                            latest_engineer_history=latest_engineer_history)

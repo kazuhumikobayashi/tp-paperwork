@@ -26,7 +26,7 @@ def index(page=1):
     _save_holidays_when_no_data()
 
     pagination = service.find_by_year(form.year.data, page)
-    return render_template('holiday/index.html', pagination=pagination, form=form)
+    return render_template('master/holiday/index.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
@@ -50,7 +50,7 @@ def detail(holiday_id=None):
         flash('保存しました。')
         return redirect(url_for('.detail', holiday_id=holiday.id))
     current_app.logger.debug(form.errors)
-    return render_template('holiday/detail.html', form=form)
+    return render_template('master/holiday/detail.html', form=form)
 
 
 @bp.route('/create', methods=['GET', 'POST'])

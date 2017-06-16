@@ -19,7 +19,7 @@ def index(page=1):
     user_name = request.args.get('user_name','')
     shain_number = request.args.get('shain_number','')
     pagination = service.find(page, user_name, shain_number)
-    return render_template('user/index.html', pagination=pagination)
+    return render_template('master/user/index.html', pagination=pagination)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
@@ -49,7 +49,7 @@ def detail(user_id=None):
         flash('保存しました。')
         return redirect(url_for('.detail', user_id=user.id))
     current_app.logger.debug(form.errors)
-    return render_template('user/detail.html', form=form)
+    return render_template('master/user/detail.html', form=form)
 
 
 @bp.route('/create', methods=['GET', 'POST'])
