@@ -6,6 +6,12 @@ class ProjectPaymentForm(object):
         self.month = month
         self.project_results = None
 
+    def has_project_results(self):
+        return not self.has_not_project_results()
+
+    def has_not_project_results(self):
+        return not self.project_results
+
     def __repr__(self):
         return "<ProjectPaymentForm:" + \
                 "'project_id='{}".format(self.project_id) + \
