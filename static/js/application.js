@@ -49,26 +49,38 @@ $(function () {
     return;
   }
 
-  $('.date').datepicker({
-    format: "yyyy/mm/dd",
-    language: "ja",
-    autoclose: true,
-    todayHighlight: true
+  $('.date').each(function () {
+    $(this).datepicker({
+      format: "yyyy/mm/dd",
+      startDate: $(this).attr("data-date_start"),
+      endDate: $(this).attr("data-date_end"),
+      language: "ja",
+      autoclose: true,
+      todayHighlight: true
+    });
   });
 
-  $('.date-yearstart').datepicker({
-    format: "yyyy/mm/dd",
-    startView: 2,
-    language: "ja",
-    autoclose: true
+  $('.date-yearstart').each(function () {
+    $(this).datepicker({
+      format: "yyyy/mm/dd",
+      startDate: $(this).attr("data-date_start"),
+      endDate: $(this).attr("data-date_end"),
+      startView: 2,
+      language: "ja",
+      autoclose: true
+    });
   });
 
-  $('.date-yyyymm').datepicker({
-    format: "yyyy/mm",
-    startView: 1,
-    minViewMode: 1,
-    language: "ja",
-    autoclose: true
+  $('.date-yyyymm').each(function () {
+    $(this).datepicker({
+      format: "yyyy/mm",
+      startDate: $(this).attr("data-date_start"),
+      endDate: $(this).attr("data-date_end"),
+      startView: 1,
+      minViewMode: 1,
+      language: "ja",
+      autoclose: true
+    })
   });
 });
 
