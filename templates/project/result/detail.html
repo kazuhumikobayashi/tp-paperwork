@@ -20,7 +20,7 @@
 {% endblock %}
 {% block content_header %}
   <h1>
-    <a href="{{ request.referrer }}" class="btn btn-default">
+    <a href="{{ url_for('project_' + pre_page + '.index', project_id=project_detail_form.project_id.data) }}" class="btn btn-default">
       <i class="fa fa-arrow-left"></i> 一覧に戻る
     </a>
   </h1>

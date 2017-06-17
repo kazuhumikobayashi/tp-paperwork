@@ -66,7 +66,7 @@
                           {{ project_result.project_detail.engineer.company.company_name|filter_suppress_none }}
                         </td>
                         <td>
-                          <a href="{{ url_for('project_result.detail', result_id=project_result.id) }}">
+                          <a href="{{ url_for('project_result.detail', result_id=project_result.id) }}?pre_page=payment">
                             {{ project_result.project_detail.engineer.engineer_name|filter_suppress_none }}
                           </a>
                         </td>
