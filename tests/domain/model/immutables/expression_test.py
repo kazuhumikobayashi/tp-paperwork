@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.expression import Expression
-from tests import BaseTestCase
 
 
-class ExpressionTests(BaseTestCase):
-
-    def setUp(self):
-        super(ExpressionTests, self).setUp()
-
-    def tearDown(self):
-        super(ExpressionTests, self).tearDown()
+class ExpressionTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Expression.more.name, '以上')

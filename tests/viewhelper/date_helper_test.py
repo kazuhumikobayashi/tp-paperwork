@@ -1,16 +1,10 @@
 import datetime
+import unittest
 
 from application.viewhelper import datetime_format
-from tests import BaseTestCase
 
 
-class DateHelperTests(BaseTestCase):
-
-    def setUp(self):
-        super(DateHelperTests, self).setUp()
-
-    def tearDown(self):
-        super(DateHelperTests, self).tearDown()
+class DateHelperTests(unittest.TestCase):
 
     def test_datetime_format(self):
         expected = datetime.datetime.now().strftime('%Y/%m/%d')

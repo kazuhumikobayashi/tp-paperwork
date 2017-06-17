@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.week import Week
-from tests import BaseTestCase
 
 
-class WeekTests(BaseTestCase):
-
-    def setUp(self):
-        super(WeekTests, self).setUp()
-
-    def tearDown(self):
-        super(WeekTests, self).tearDown()
+class WeekTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Week.monday.name, '月曜日')

@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.rule import Rule
-from tests import BaseTestCase
 
 
-class RuleTests(BaseTestCase):
-
-    def setUp(self):
-        super(RuleTests, self).setUp()
-
-    def tearDown(self):
-        super(RuleTests, self).tearDown()
+class RuleTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Rule.fixed.name, '固定')

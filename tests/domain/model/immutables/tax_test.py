@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.tax import Tax
-from tests import BaseTestCase
 
 
-class TaxTests(BaseTestCase):
-
-    def setUp(self):
-        super(TaxTests, self).setUp()
-
-    def tearDown(self):
-        super(TaxTests, self).tearDown()
+class TaxTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Tax.zero.name, 'なし')

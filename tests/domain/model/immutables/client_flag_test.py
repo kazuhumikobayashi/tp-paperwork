@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.client_flag import ClientFlag
-from tests import BaseTestCase
 
 
-class ClientFlagTests(BaseTestCase):
-
-    def setUp(self):
-        super(ClientFlagTests, self).setUp()
-
-    def tearDown(self):
-        super(ClientFlagTests, self).tearDown()
+class ClientFlagTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(ClientFlag.our_company.name, '自社')

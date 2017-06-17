@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.billing_timing import BillingTiming
-from tests import BaseTestCase
 
 
-class BillingTimingTests(BaseTestCase):
-
-    def setUp(self):
-        super(BillingTimingTests, self).setUp()
-
-    def tearDown(self):
-        super(BillingTimingTests, self).tearDown()
+class BillingTimingTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(BillingTiming.billing_at_last.name, '契約期間末1回')

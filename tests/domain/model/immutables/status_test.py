@@ -1,14 +1,10 @@
+import unittest
+
 from application.domain.model.immutables.status import Status
 from tests import BaseTestCase
 
 
-class StatusTests(BaseTestCase):
-
-    def setUp(self):
-        super(StatusTests, self).setUp()
-
-    def tearDown(self):
-        super(StatusTests, self).tearDown()
+class StatusTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Status.start.name, '01:契約開始')
