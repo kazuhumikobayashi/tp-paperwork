@@ -186,7 +186,7 @@ class ProjectResultTests(BaseTestCase):
         db.session.add(engineer)
         db.session.commit()
 
-        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': engineer.id,
             'billing_money': '100000000',
@@ -198,7 +198,7 @@ class ProjectResultTests(BaseTestCase):
             'billing_fraction_calculation2': '',
         })
         self.assertEqual(result.status_code, 302)
-        ok_('/project/detail/' in result.headers['Location'])
+        ok_('/project/contract/detail/' in result.headers['Location'])
         project_detail_id = result.headers['Location'].split('/')[-1]
 
         result = self.app.post('/project/contract/' + str(project.id), data={

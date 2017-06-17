@@ -93,7 +93,7 @@
                   </div>
                   <div class="box-frame">
                     <div class="box-header with-border">
-                      <a href="{{ url_for('project_detail.create', project_id=project.id) }}"
+                      <a href="{{ url_for('.create', project_id=project.id) }}"
                           class="btn btn-sm btn-success pull-left">
                         <i class="fa fa-plus"></i> 明細登録
                       </a>
@@ -111,7 +111,7 @@
                           {% for project_detail in project.project_details %}
                             <tr>
                               <td>
-                                <a href="{{ url_for('project_detail.detail', project_detail_id=project_detail.id) }}">
+                                <a href="{{ url_for('.detail', project_detail_id=project_detail.id) }}">
                                   {% if project_detail.is_engineer() %}
                                     {{ project_detail.engineer.engineer_name|filter_suppress_none }}
                                   {% else %}
@@ -130,7 +130,7 @@
                               </td>
                               <td>
                                 <a class="btn btn-sm btn-danger"
-                                    href="{{ url_for('project_detail.delete', project_detail_id=project_detail.id) }}">
+                                    href="{{ url_for('.delete', project_detail_id=project_detail.id) }}">
                                   <i class="fa fa-trash"></i> 削除
                                 </a>
                               </td>
