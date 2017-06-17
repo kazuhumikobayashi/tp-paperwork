@@ -44,5 +44,8 @@ class Status(Enum):
                 return status
         return None
 
+    def is_done(self):
+        return self == Status.done
+
     def __str__(self):
         return str(self._value_)
