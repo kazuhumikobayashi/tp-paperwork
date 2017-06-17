@@ -37,8 +37,10 @@
             <li><a href="{{ url_for('project_contract.index', project_id=project.id) }}">契約</a></li>
             {% if project.status.is_done() %}
             <li><a href="{{ url_for('project_result.index', project_id=project.id) }}">実績</a></li>
-            <li class="active"><a href="#">請求</a></li>
-            <li><a href="{{ url_for('project_payment.index', project_id=project.id) }}">支払</a></li>
+            <li class="active"><a>請求</a></li>
+              {% if project.has_payment() %}
+              <li><a href="{{ url_for('project_payment.index', project_id=project.id) }}">支払</a></li>
+              {% endif %}
             {% endif %}
           </ul>
           <div class="tab-content">

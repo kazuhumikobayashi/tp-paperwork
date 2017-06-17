@@ -140,42 +140,6 @@ class Project(BaseModel, db.Model):
         self.remarks = remarks
         self.client_order_no = client_order_no
 
-    def __repr__(self):
-        return "<Project:" + \
-                "'id='{}".format(self.id) + \
-                "', project_name='{}".format(self.project_name) + \
-                "', project_name_for_bp='{}".format(self.project_name_for_bp) + \
-                "', status='{}".format(self.status) + \
-                "', recorded_department_id='{}".format(self.recorded_department_id) + \
-                "', sales_person='{}".format(self.sales_person) + \
-                "', estimation_no='{}".format(self.estimation_no) + \
-                "', end_user_company_id='{}".format(self.end_user_company_id) + \
-                "', client_company_id='{}".format(self.client_company_id) + \
-                "', start_date='{}".format(self.start_date) + \
-                "', end_date='{}".format(self.end_date) + \
-                "', contract_form='{}".format(self.contract_form) + \
-                "', billing_timing='{}".format(self.billing_timing) + \
-                "', estimated_total_amount='{}".format(self.estimated_total_amount) + \
-                "', deposit_date='{}".format(self.deposit_date) + \
-                "', scope='{}".format(self.scope) + \
-                "', contents='{}".format(self.contents) + \
-                "', working_place='{}".format(self.working_place) + \
-                "', delivery_place='{}".format(self.delivery_place) + \
-                "', deliverables='{}".format(self.deliverables) + \
-                "', inspection_date='{}".format(self.inspection_date) + \
-                "', responsible_person='{}".format(self.responsible_person) + \
-                "', quality_control='{}".format(self.quality_control) + \
-                "', subcontractor='{}".format(self.subcontractor) + \
-                "', remarks='{}".format(self.remarks) + \
-                "', client_order_no='{}".format(self.client_order_no) + \
-                "', project_attachments='{}".format(self.project_attachments) + \
-                "', project_months='{}".format(self.project_months) + \
-                "', created_at='{}".format(self.created_at) + \
-                "', created_user='{}".format(self.created_user) + \
-                "', updated_at='{}".format(self.updated_at) + \
-                "', updated_user='{}".format(self.updated_user) + \
-                "'>"
-
     def get_fiscal_year(self):
         return self._get_fiscal_year(self.start_date)
 
@@ -194,13 +158,13 @@ class Project(BaseModel, db.Model):
         return project_attachments
 
     @staticmethod
-    def _get_fiscal_year(date):
-        if not date:
+    def _get_fiscal_year(date_):
+        if not date_:
             return None
-        if int(date.strftime('%m')) >= 10:
-            return int(date.strftime('%y')) + 1
+        if int(date_.strftime('%m')) >= 10:
+            return int(date_.strftime('%y')) + 1
         else:
-            return int(date.strftime('%y'))
+            return int(date_.strftime('%y'))
 
     # 入金予定日を計算するメソッド
     def get_deposit_date(self):
@@ -242,3 +206,42 @@ class Project(BaseModel, db.Model):
 
     def has_not_project_months(self):
         return not self.project_months
+
+    def has_payment(self):
+        return True in [project_detail.has_payment() for project_detail in self.project_details]
+
+    def __repr__(self):
+        return "<Project:" + \
+                "'id='{}".format(self.id) + \
+                "', project_name='{}".format(self.project_name) + \
+                "', project_name_for_bp='{}".format(self.project_name_for_bp) + \
+                "', status='{}".format(self.status) + \
+                "', recorded_department_id='{}".format(self.recorded_department_id) + \
+                "', sales_person='{}".format(self.sales_person) + \
+                "', estimation_no='{}".format(self.estimation_no) + \
+                "', end_user_company_id='{}".format(self.end_user_company_id) + \
+                "', client_company_id='{}".format(self.client_company_id) + \
+                "', start_date='{}".format(self.start_date) + \
+                "', end_date='{}".format(self.end_date) + \
+                "', contract_form='{}".format(self.contract_form) + \
+                "', billing_timing='{}".format(self.billing_timing) + \
+                "', estimated_total_amount='{}".format(self.estimated_total_amount) + \
+                "', deposit_date='{}".format(self.deposit_date) + \
+                "', scope='{}".format(self.scope) + \
+                "', contents='{}".format(self.contents) + \
+                "', working_place='{}".format(self.working_place) + \
+                "', delivery_place='{}".format(self.delivery_place) + \
+                "', deliverables='{}".format(self.deliverables) + \
+                "', inspection_date='{}".format(self.inspection_date) + \
+                "', responsible_person='{}".format(self.responsible_person) + \
+                "', quality_control='{}".format(self.quality_control) + \
+                "', subcontractor='{}".format(self.subcontractor) + \
+                "', remarks='{}".format(self.remarks) + \
+                "', client_order_no='{}".format(self.client_order_no) + \
+                "', project_attachments='{}".format(self.project_attachments) + \
+                "', project_months='{}".format(self.project_months) + \
+                "', created_at='{}".format(self.created_at) + \
+                "', created_user='{}".format(self.created_user) + \
+                "', updated_at='{}".format(self.updated_at) + \
+                "', updated_user='{}".format(self.updated_user) + \
+                "'>"
