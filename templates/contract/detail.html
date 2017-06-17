@@ -66,8 +66,14 @@
         <div class="engineer-variable-area" {% if form.detail_type.data != '1' %}hidden{% endif %}{# '1'=ENGINEER #}>
           <div class="part-title">請求情報</div>
           <div class="row">
-            {{ render_field(form.billing_start_day, "col-sm-6", input_class="date-yyyymm") }}
-            {{ render_field(form.billing_end_day, "col-sm-6", input_class="date-yyyymm") }}
+            {{ render_field(form.billing_start_day, "col-sm-6",
+                        input_class="date-yyyymm",
+                        data_date_start=project_detail.project.start_date.strftime('%Y/%m'),
+                        data_date_end=project_detail.project.end_date.strftime('%Y/%m')) }}
+            {{ render_field(form.billing_end_day, "col-sm-6",
+                        input_class="date-yyyymm",
+                        data_date_start=project_detail.project.start_date.strftime('%Y/%m'),
+                        data_date_end=project_detail.project.end_date.strftime('%Y/%m')) }}
           </div>
           <div class="row">
             {{ render_field(form.billing_per_month, "col-sm-6") }}
