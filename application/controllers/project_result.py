@@ -26,6 +26,7 @@ def index(project_id):
 @bp.route('/detail/<result_id>', methods=['GET', 'POST'])
 def detail(result_id=None):
     result = project_result_service.find_by_id(result_id)
+    pre_page = request.args.get('pre_page', 'result')
 
     if result.id is None and result_id is not None:
         return abort(404)
@@ -53,10 +54,11 @@ def detail(result_id=None):
 
         project_result_service.save(result)
         flash('保存しました。')
-        return redirect(url_for('.detail', result_id=result.id))
+        query_strings = '' if pre_page == 'result' else '?pre_page=' + pre_page
+        return redirect(url_for('.detail', result_id=result.id) + query_strings)
     current_app.logger.debug(form.errors)
     return render_template('project/result/detail.html',
                            form=form,
                            project_detail_form=project_detail_form,
                            engineer_history_form=engineer_history_form,
-                           result=result)
+                           pre_page=pre_page)
