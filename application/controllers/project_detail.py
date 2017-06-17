@@ -15,7 +15,7 @@ from application.service.engineer_service import EngineerService
 from application.service.project_detail_service import ProjectDetailService
 from application.service.project_service import ProjectService
 
-bp = Blueprint('project_detail', __name__, url_prefix='/project_detail')
+bp = Blueprint('project_detail', __name__, url_prefix='/project/detail')
 service = ProjectDetailService()
 project_service = ProjectService()
 engineer_service = EngineerService()
@@ -86,7 +86,7 @@ def detail(project_detail_id=None):
         return redirect(url_for('.detail', project_detail_id=project_detail.id))
 
     current_app.logger.debug(form.errors)
-    return render_template('contract/detail.html', form=form, project_detail=project_detail)
+    return render_template('project/detail.html', form=form, project_detail=project_detail)
 
 
 @bp.route('/create', methods=['GET', 'POST'])
@@ -101,6 +101,6 @@ def delete(project_detail_id):
         project_id = project_detail.project_id
         service.destroy(project_detail)
         flash('削除しました。')
-        return redirect(url_for('contract.index', project_id=project_id))
+        return redirect(url_for('project_contract.index', project_id=project_id))
     else:
         return redirect('/project')

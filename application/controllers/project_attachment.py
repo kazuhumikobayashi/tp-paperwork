@@ -12,7 +12,7 @@ from application.domain.model.immutables.project_attachment_type import ProjectA
 from application.service.attachment_service import AttachmentService
 from application.service.project_attachment_service import ProjectAttachmentService
 
-bp = Blueprint('project_attachment', __name__, url_prefix='/project_attachment')
+bp = Blueprint('project_attachment', __name__, url_prefix='/project/attachment')
 service = ProjectAttachmentService()
 attachment_service = AttachmentService()
 
@@ -46,7 +46,7 @@ def detail(project_attachment_id=None):
         return redirect(url_for('.detail', project_attachment_id=project_attachment.id))
     current_app.logger.debug(form.errors)
     current_app.logger.debug(file_form.errors)
-    return render_template('project_attachment/detail.html', form=form, file_form=file_form)
+    return render_template('project/attachment.html', form=form, file_form=file_form)
 
 
 @bp.route('/create', methods=['GET', 'POST'])
@@ -66,4 +66,4 @@ def delete(project_attachment_id):
         attachment = attachment_service.find_by_id(project_attachment.attachment_id)
         attachment_service.destroy(attachment)
         flash('削除しました。')
-    return redirect(url_for('contract.index', project_id=project_attachment.project_id))
+    return redirect(url_for('project_contract.index', project_id=project_attachment.project_id))

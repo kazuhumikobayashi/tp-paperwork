@@ -63,7 +63,7 @@ def create(project_id=None):
 
         service.save(project)
         flash('保存しました。')
-        return redirect(url_for('contract.index', project_id=project.id))
+        return redirect(url_for('project_contract.index', project_id=project.id))
     current_app.logger.debug(form.errors)
     return render_template('project/create.html', form=form)
 

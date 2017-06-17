@@ -16,7 +16,7 @@ from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
 from application.service.project_service import ProjectService
 
-bp = Blueprint('contract', __name__, url_prefix='/contract')
+bp = Blueprint('project_contract', __name__, url_prefix='/project/contract')
 service = ProjectService()
 department_service = DepartmentService()
 company_service = CompanyService()
@@ -74,6 +74,6 @@ def index(project_id=None):
         return redirect(url_for('.index', project_id=project.id))
     current_app.logger.debug(form.errors)
 
-    return render_template('contract/index.html',
+    return render_template('project/contract/index.html',
                            form=form,
                            project=project)

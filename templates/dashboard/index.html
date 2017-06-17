@@ -44,7 +44,7 @@
                 {% for estimate in incomplete_estimates %}
                 <tr>
                   <td>{{ estimate.recorded_department.department_name }}</td>
-                  <td><a href="{{ url_for('contract.index', project_id=estimate.id) }}">{{ estimate.project_name }}</a></td>
+                  <td><a href="{{ url_for('project_contract.index', project_id=estimate.id) }}">{{ estimate.project_name }}</a></td>
                   <td class="hidden-xs">{{ estimate.start_date|datetime_format('%Y/%m/%d') }}</td>
                   <td class="hidden-xs">{{ estimate.end_date|datetime_format('%Y/%m/%d') }}</td>
                 </tr>
@@ -84,7 +84,7 @@
                   {% for billing in incomplete_billings %}
                   <tr>
                     <td class="hidden-xs">{{ billing.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('contract.index', project_id=billing.project.id) }}">{{ billing.project.project_name }}</a></td>
+                    <td><a href="{{ url_for('project_contract.index', project_id=billing.project.id) }}">{{ billing.project.project_name }}</a></td>
                     <td class="hidden-xs">{{ billing.project_month|datetime_format('%Y年%m月') }}</td>
                     <td>{{ billing.project.recorded_department.department_name }}</td>
                   </tr>
@@ -125,7 +125,7 @@
                   {% for deposit in incomplete_deposits %}
                   <tr>
                     <td class="hidden-xs">{{ deposit.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('contract.index', project_id=deposit.project.id) }}">{{ deposit.project.project_name }}</a></td>
+                    <td><a href="{{ url_for('project_contract.index', project_id=deposit.project.id) }}">{{ deposit.project.project_name }}</a></td>
                     <td class="hidden-xs">{{ deposit.deposit_date|datetime_format('%Y/%m/%d') }}</td>
                     <td>{{ deposit.project.recorded_department.department_name }}</td>
                   </tr>
@@ -169,7 +169,7 @@
                   {% for result in incomplete_results %}
                   <tr>
                     <td class="hidden-xs">{{ result.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('contract.index', project_id=result.project.id) }}">{{ result.project.project_name }}</a></td>
+                    <td><a href="{{ url_for('project_contract.index', project_id=result.project.id) }}">{{ result.project.project_name }}</a></td>
                     <td class="hidden-xs">{{ result.project_month|datetime_format('%Y年%m月') }}</td>
                     <td>{{ result.project.recorded_department.department_name }}</td>
                   </tr>
@@ -211,7 +211,7 @@
                   <tr>
                     <td class="hidden-xs">{{ payment.project_detail.project.estimation_no }}</td>
                     <td>
-                        <a href="{{ url_for('contract.index', project_id=payment.project_detail.project_id) }}">
+                        <a href="{{ url_for('project_contract.index', project_id=payment.project_detail.project_id) }}">
                             {{ payment.project_detail.project.project_name }}
                         </a>
                     </td>
