@@ -14,7 +14,6 @@ def register(app):
     from application.controllers import engineer_history
     from application.controllers import holiday
     from application.controllers import project_contract
-    from application.controllers import project_detail
     from application.controllers import project_result
     from application.controllers import project_billing
     from application.controllers import billing
@@ -36,7 +35,6 @@ def register(app):
     app.register_blueprint(engineer_history.bp)
     app.register_blueprint(holiday.bp)
     app.register_blueprint(project_contract.bp)
-    app.register_blueprint(project_detail.bp)
     app.register_blueprint(project_result.bp)
     app.register_blueprint(project_billing.bp)
     app.register_blueprint(billing.bp)
