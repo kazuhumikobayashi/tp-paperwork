@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.detail_type import DetailType
-from tests import BaseTestCase
 
 
-class DetailTypeTests(BaseTestCase):
-
-    def setUp(self):
-        super(DetailTypeTests, self).setUp()
-
-    def tearDown(self):
-        super(DetailTypeTests, self).tearDown()
+class DetailTypeTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(DetailType.engineer.name, '技術者')

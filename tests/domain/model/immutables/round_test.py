@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.round import Round
-from tests import BaseTestCase
 
 
-class RoundTests(BaseTestCase):
-
-    def setUp(self):
-        super(RoundTests, self).setUp()
-
-    def tearDown(self):
-        super(RoundTests, self).tearDown()
+class RoundTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Round.down.name, '切り捨て')

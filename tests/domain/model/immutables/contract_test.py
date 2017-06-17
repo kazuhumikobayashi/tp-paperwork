@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.contract import Contract
-from tests import BaseTestCase
 
 
-class ContractTests(BaseTestCase):
-
-    def setUp(self):
-        super(ContractTests, self).setUp()
-
-    def tearDown(self):
-        super(ContractTests, self).tearDown()
+class ContractTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Contract.blanket.name, '請負契約（一括契約）')

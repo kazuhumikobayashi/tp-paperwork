@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.site import Site
-from tests import BaseTestCase
 
 
-class SiteTests(BaseTestCase):
-
-    def setUp(self):
-        super(SiteTests, self).setUp()
-
-    def tearDown(self):
-        super(SiteTests, self).tearDown()
+class SiteTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Site.twenty_five.name, '25')

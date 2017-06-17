@@ -1,17 +1,12 @@
+import unittest
+
 from markupsafe import Markup
 
 from application.viewhelper import filter_suppress_none, with_yen
 from application.viewhelper import number_with_commas
-from tests import BaseTestCase
 
 
-class StringHelperTests(BaseTestCase):
-
-    def setUp(self):
-        super(StringHelperTests, self).setUp()
-
-    def tearDown(self):
-        super(StringHelperTests, self).tearDown()
+class StringHelperTests(unittest.TestCase):
 
     def test_filter_suppress_none(self):
         expected = ''

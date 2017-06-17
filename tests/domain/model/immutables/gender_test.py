@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.gender import Gender
-from tests import BaseTestCase
 
 
-class GenderTests(BaseTestCase):
-
-    def setUp(self):
-        super(GenderTests, self).setUp()
-
-    def tearDown(self):
-        super(GenderTests, self).tearDown()
+class GenderTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(Gender.male.name, '男性')

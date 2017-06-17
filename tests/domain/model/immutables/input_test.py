@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.input_flag import InputFlag
-from tests import BaseTestCase
 
 
-class InputFlagTests(BaseTestCase):
-
-    def setUp(self):
-        super(InputFlagTests, self).setUp()
-
-    def tearDown(self):
-        super(InputFlagTests, self).tearDown()
+class InputFlagTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(InputFlag.yet.name, '未')

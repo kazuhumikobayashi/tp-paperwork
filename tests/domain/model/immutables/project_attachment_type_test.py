@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
-from tests import BaseTestCase
 
 
-class ProjectAttachmentTypeTests(BaseTestCase):
-
-    def setUp(self):
-        super(ProjectAttachmentTypeTests, self).setUp()
-
-    def tearDown(self):
-        super(ProjectAttachmentTypeTests, self).tearDown()
+class ProjectAttachmentTypeTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(ProjectAttachmentType.estimate.name, '見積書')

@@ -1,14 +1,9 @@
+import unittest
+
 from application.domain.model.immutables.holiday_flag import HolidayFlag
-from tests import BaseTestCase
 
 
-class HolidayFlagTests(BaseTestCase):
-
-    def setUp(self):
-        super(HolidayFlagTests, self).setUp()
-
-    def tearDown(self):
-        super(HolidayFlagTests, self).tearDown()
+class HolidayFlagTests(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(HolidayFlag.before.name, '前倒し')
