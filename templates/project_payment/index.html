@@ -34,7 +34,7 @@
           <div class="tab-content">
 
           {% for datum in form_data %}
-
+            {% if datum.has_project_results() %}
             <div class="box box-success">
               <div class="box-header with-border">
                 <h3 class="box-title"><i class="fa fa-edit"></i> {{ datum.month|datetime_format("%Y年%m月") }}</h3>
@@ -82,6 +82,7 @@
               <!-- /.box-body -->
             </div>
             <!-- /.box -->
+            {% endif %}
           {% endfor %}
           </div>
           <!-- ./tab-content -->
