@@ -101,7 +101,7 @@
               <td>{{ payment.project_detail.project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ payment.project_detail.project.client_company.company_name }}</td>
               <td>{{ payment.project_detail.project.recorded_department.department_name }}</td>
-              <td><a href="{{ url_for('contract.index', project_id=payment.project_detail.project.id) }}">{{ payment.project_detail.project.project_name }}</a></td>
+              <td><a href="{{ url_for('project_contract.index', project_id=payment.project_detail.project.id) }}">{{ payment.project_detail.project.project_name }}</a></td>
               <td>{{ payment.project_detail.engineer.engineer_name|filter_suppress_none }}</td>
               <td>{{ payment.payment_expected_date|datetime_format("%Y/%m/%d") }}</td>
               <td class="text-right">{{ payment.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>
@@ -111,7 +111,6 @@
           </table>
         </div>
         <!-- /.box-body -->
-        <!-- /.box-footer -->
       </div>
       <!-- /.box -->
     </div>

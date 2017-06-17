@@ -44,7 +44,7 @@ class ProjectDetailTests(BaseTestCase):
 
         project_detail = self.project_detail_repository.find_all()[0]
 
-        result = self.app.get('/project_detail/' + str(project_detail.id))
+        result = self.app.get('/project/detail/' + str(project_detail.id))
         self.assertEqual(result.status_code, 200)
 
     # 存在しないプロジェクト明細画面には遷移できない。
@@ -55,7 +55,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/project_detail/0')
+        result = self.app.get('/project/detail/0')
         self.assertEqual(result.status_code, 404)
 
     # プロジェクト明細登録画面に遷移する。
@@ -68,7 +68,7 @@ class ProjectDetailTests(BaseTestCase):
 
         project = self.project_repository.find_all()[0]
 
-        result = self.app.get('/project_detail/create?project_id=' + str(project.id))
+        result = self.app.get('/project/detail/create?project_id=' + str(project.id))
         self.assertEqual(result.status_code, 200)
 
     # プロジェクト明細を作業で新規登録できることを確認。
@@ -82,7 +82,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # プロジェクトが保存できることを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work,
             'work_name': '作業',
             'billing_money': '100000',
@@ -91,7 +91,7 @@ class ProjectDetailTests(BaseTestCase):
             'billing_fraction_calculation2': ''
         })
         self.assertEqual(result.status_code, 302)
-        ok_('/project_detail/' in result.headers['Location'])
+        ok_('/project/detail/' in result.headers['Location'])
 
         # 件数が増えていることを確認。
         after = len(self.project_detail_repository.find_all())
@@ -125,7 +125,7 @@ class ProjectDetailTests(BaseTestCase):
         db.session.commit()
 
         # プロジェクトが保存できることを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '2',
             'billing_money': '100000000',
@@ -144,7 +144,7 @@ class ProjectDetailTests(BaseTestCase):
             'billing_fraction_calculation2': '1',
         })
         self.assertEqual(result.status_code, 302)
-        ok_('/project_detail/' in result.headers['Location'])
+        ok_('/project/detail/' in result.headers['Location'])
 
         # 件数が増えていることを確認。
         after = len(self.project_detail_repository.find_all())
@@ -180,7 +180,7 @@ class ProjectDetailTests(BaseTestCase):
         })
         project_detail = self.project_detail_repository.find_by_id(delete_project_detail_id)
 
-        result = self.app.get('/project_detail/delete/' + str(project_detail.id))
+        result = self.app.get('/project/detail/delete/' + str(project_detail.id))
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/contract/' + str(project_id) in result.headers['Location'])
@@ -198,7 +198,7 @@ class ProjectDetailTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/project_detail/delete/0')
+        result = self.app.get('/project/detail/delete/0')
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/project' in result.headers['Location'])
@@ -218,7 +218,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 作業名が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work,
             'work_name': '',
             'billing_money': '100000',
@@ -243,7 +243,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求金額が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work,
             'work_name': 'test_project_detail',
             'billing_money': '',
@@ -268,7 +268,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 技術者が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '',
             'billing_money': '100000000',
@@ -294,7 +294,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求金額が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '',
@@ -320,7 +320,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求開始年月が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -346,7 +346,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求終了年月が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -372,7 +372,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求単価が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -398,7 +398,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求単価が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -424,7 +424,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求フリー入力時間が空の場合、請求下限時間が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -460,7 +460,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求フリー入力時間が空の場合、請求上限時間が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -496,7 +496,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求下限・上限時間が空の場合、請求フリー入力時間が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -532,7 +532,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求時間単価が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -568,7 +568,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求△下限時間単価が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -604,7 +604,7 @@ class ProjectDetailTests(BaseTestCase):
         project = self.project_repository.find_all()[0]
 
         # 請求＋上限時間単価が空だと明細を新規作成できないことを確認
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': '1',
             'billing_money': '1000000',
@@ -681,7 +681,7 @@ class ProjectDetailTests(BaseTestCase):
         db.session.add(project)
         db.session.commit()
 
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': engineer.id,
             'billing_money': '1000000',
@@ -694,7 +694,7 @@ class ProjectDetailTests(BaseTestCase):
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/project_detail/' in result.headers['Location'])
+        ok_('/project/detail/' in result.headers['Location'])
 
         # 契約期間は3月～4月で支払いサイトが30のため、
         # 3月のpayment_dateには翌月末日（2017/4/30（日））だが月末は前倒しのため、2017/4/28（金曜）、
@@ -766,7 +766,7 @@ class ProjectDetailTests(BaseTestCase):
         db.session.add(project)
         db.session.commit()
 
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': engineer.id,
             'billing_money': '1000000',
@@ -779,7 +779,7 @@ class ProjectDetailTests(BaseTestCase):
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/project_detail/' in result.headers['Location'])
+        ok_('/project/detail/' in result.headers['Location'])
 
         # 契約期間は3月～4月で支払いサイトが50のため、
         # 3月のpayment_dateには翌月末日（2017/5/20（土））だが月末以外後ろ倒しのため、2017/4/22（月）、
@@ -811,7 +811,7 @@ class ProjectDetailTests(BaseTestCase):
         # set_up
         project = self.project_repository.find_by_id(7)
 
-        result = self.app.post('/contract/' + str(project.id), data={
+        result = self.app.post('/project/contract/' + str(project.id), data={
             'status': Status.done.value,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -825,9 +825,9 @@ class ProjectDetailTests(BaseTestCase):
             'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
         })
         self.assertEqual(result.status_code, 302)
-        ok_('/contract' in result.headers['Location'])
+        ok_('/project/contract' in result.headers['Location'])
 
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work.value,
             'work_name': 'test',
             'billing_money': '100000000',
@@ -836,7 +836,7 @@ class ProjectDetailTests(BaseTestCase):
             'billing_fraction_calculation2': ''
         })
         self.assertEqual(result.status_code, 302)
-        ok_('/project_detail/' in result.headers['Location'])
+        ok_('/project/detail/' in result.headers['Location'])
         project_detail_id = result.headers['Location'].split('/')[-1]
 
         project_detail = self.project_detail_repository.find_by_id(project_detail_id)
@@ -853,5 +853,5 @@ class ProjectDetailTests(BaseTestCase):
         self.assertEqual(actual_3, expected_3)
 
         # tear_down
-        self.app.get('/project_detail/delete/' + str(project_detail.id))
+        self.app.get('/project/detail/delete/' + str(project_detail.id))
         self.app.get('/project/delete/' + str(project.id))

@@ -23,7 +23,7 @@ class AttachmentTests(BaseTestCase):
 
         # download用の添付文書を登録
         file = (BytesIO(b'my file contents'), 'test_download.pdf')
-        result = self.app.post('/project_attachment/create?project_id=1', data={
+        result = self.app.post('/project/attachment/create?project_id=1', data={
             'upload': file,
             'type': '1',
             'remarks': 'remarks'

@@ -28,7 +28,7 @@ class ProjectAttachmentTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/project_attachment/create?project_id=1')
+        result = self.app.get('/project/attachment/create?project_id=1')
         self.assertEqual(result.status_code, 200)
 
     # 添付文書を登録する。
@@ -41,7 +41,7 @@ class ProjectAttachmentTests(BaseTestCase):
         })
 
         file = (BytesIO(b'my file contents'), 'hello world.pdf')
-        result = self.app.post('/project_attachment/create?project_id=1', data={
+        result = self.app.post('/project/attachment/create?project_id=1', data={
             'upload': file,
             'type': '1',
             'remarks': 'remarks'
@@ -61,7 +61,7 @@ class ProjectAttachmentTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.post('/project_attachment/create?project_id=1', data={
+        result = self.app.post('/project/attachment/create?project_id=1', data={
             'type': '1',
             'remarks': 'remarks'
         })
@@ -80,7 +80,7 @@ class ProjectAttachmentTests(BaseTestCase):
             'password': 'test'
         })
         file = (BytesIO(b'my file contents'), 'hello world.doc')
-        result = self.app.post('/project_attachment/create?project_id=1', data={
+        result = self.app.post('/project/attachment/create?project_id=1', data={
             'upload': file,
             'type': '1',
             'remarks': 'remarks'
@@ -100,7 +100,7 @@ class ProjectAttachmentTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.post('/project_attachment/detail/1', data={
+        result = self.app.post('/project/attachment/detail/1', data={
             'type': '1',
             'remarks': expected
         })
@@ -120,7 +120,7 @@ class ProjectAttachmentTests(BaseTestCase):
         })
 
         # 存在しないproject_attachment_idでは登録できない
-        result = self.app.post('/project_attachment/detail/99', data={
+        result = self.app.post('/project/attachment/detail/99', data={
             'type': '1',
             'remarks': 'remarks'
         })
@@ -140,7 +140,7 @@ class ProjectAttachmentTests(BaseTestCase):
 
         # 削除用の添付文書を登録
         file = (BytesIO(b'my file contents'), 'delete_project_attachment.pdf')
-        result = self.app.post('/project_attachment/create?project_id=1', data={
+        result = self.app.post('/project/attachment/create?project_id=1', data={
             'upload': file,
             'type': '1',
             'remarks': 'remarks'
@@ -149,7 +149,7 @@ class ProjectAttachmentTests(BaseTestCase):
         delete_project_attachment_id = result.headers['Location'].split('/')[-1]
         project_attachment = self.project_attachment_repository.find_by_id(delete_project_attachment_id)
 
-        result = self.app.get('/project_attachment/delete/' + str(project_attachment.id))
+        result = self.app.get('/project/attachment/delete/' + str(project_attachment.id))
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
         print(result.headers['Location'])
@@ -162,7 +162,7 @@ class ProjectAttachmentTests(BaseTestCase):
     # storageにファイルが存在しない場合でも削除できる
     def test_delete_project_attachment_not_exist_storage(self):
         delete_attachment = self.create_attachment()
-        result = self.app.get('/project_attachment/delete/' + str(delete_attachment.id))
+        result = self.app.get('/project/attachment/delete/' + str(delete_attachment.id))
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
 
@@ -179,7 +179,7 @@ class ProjectAttachmentTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/project_attachment/delete/0')
+        result = self.app.get('/project/attachment/delete/0')
         # 削除できないことを確認
         self.assertEqual(result.status_code, 404)
 

@@ -11,19 +11,10 @@
 {% endblock %}
 {% block content_header %}
   <h1>
-    {% if form.id.data %}
-    <a href="{{ url_for('project.detail', project_id=form.project_id.data) }}" class="btn btn-default">
-    {% else %}
-    <a href="#" class="btn btn-default">
-    {% endif %}
+    <a href="{{ url_for('project_contract.index', project_id=form.project_id.data) }}" class="btn btn-default">
       <i class="fa fa-arrow-left"></i> 一覧に戻る
     </a>
   </h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li><i class="fa fa-database"></i> プロジェクト</li>
-    <li class="active"><i class="fa fa-file-o"></i> ファイル添付</li>
-  </ol>
 {% endblock %}
 {% block main_content %}
   <div class="box box-success">

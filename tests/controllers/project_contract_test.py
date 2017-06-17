@@ -18,19 +18,19 @@ from tests import BaseTestCase
 from application.domain.repository.project_repository import ProjectRepository
 
 
-class ContractTests(BaseTestCase):
+class ProjectContractTests(BaseTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(ContractTests, cls).setUpClass()
+        super(ProjectContractTests, cls).setUpClass()
 
     def setUp(self):
-        super(ContractTests, self).setUp()
+        super(ProjectContractTests, self).setUp()
         self.project_repository = ProjectRepository()
         self.project_detail_repository = ProjectDetailRepository()
 
     def tearDown(self):
-        super(ContractTests, self).tearDown()
+        super(ProjectContractTests, self).tearDown()
 
     # 契約画面に遷移する。
     def test_get_contract(self):
@@ -42,7 +42,7 @@ class ContractTests(BaseTestCase):
         })
         project = self.project_repository.find_all()[0]
 
-        result = self.app.get('/contract/' + str(project.id))
+        result = self.app.get('/project/contract/' + str(project.id))
         self.assertEqual(result.status_code, 200)
 
     # 存在しないプロジェクトの場合はnot_found
@@ -53,7 +53,7 @@ class ContractTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/contract/0')
+        result = self.app.get('/project/contract/0')
         self.assertEqual(result.status_code, 404)
 
     # 契約情報を保存できる
@@ -68,7 +68,7 @@ class ContractTests(BaseTestCase):
         expected = '単体テスト_変更'
         project_id = project.id
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'project_name': expected,
             'project_name_for_bp': project.project_name_for_bp,
             'status': project.status,
@@ -97,7 +97,7 @@ class ContractTests(BaseTestCase):
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/contract/' + str(project.id) in result.headers['Location'])
+        ok_('/project/contract/' + str(project.id) in result.headers['Location'])
 
         project = self.project_repository.find_by_id(project_id)
         actual = project.project_name
@@ -121,7 +121,7 @@ class ContractTests(BaseTestCase):
         project = self.project_repository.find_by_id(project_id)
 
         duplicate_estimation_no = 'duplicate_estimation_no'
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'project_name': 'project_name',
             'project_name_for_bp': project.project_name_for_bp,
             'status': project.status,
@@ -159,7 +159,7 @@ class ContractTests(BaseTestCase):
         project_id = result.headers['Location'].split('/')[-1]
         project = self.project_repository.find_by_id(project_id)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'project_name': 'project_name',
             'project_name_for_bp': project.project_name_for_bp,
             'status': project.status,
@@ -194,7 +194,7 @@ class ContractTests(BaseTestCase):
     def test_save_contract_second_basic(self):
         project = self.project_repository.find_all()[0]
 
-        result = self.app.post('/contract/' + str(project.id), data={
+        result = self.app.post('/project/contract/' + str(project.id), data={
             'project_name': project.project_name,
             'project_name_for_bp': project.project_name_for_bp,
             'status': project.status,
@@ -223,14 +223,14 @@ class ContractTests(BaseTestCase):
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/contract/' + str(project.id) in result.headers['Location'])
+        ok_('/project/contract/' + str(project.id) in result.headers['Location'])
 
     # 10月以降の契約情報を保存できる
     def test_save_contract_october(self):
         project = self.project_repository.find_all()[10]
         project.project_details.append(self.project_detail_repository.find_by_id(3))
 
-        result = self.app.post('/contract/' + str(project.id), data={
+        result = self.app.post('/project/contract/' + str(project.id), data={
             'project_name': project.project_name,
             'project_name_for_bp': project.project_name_for_bp,
             'status': Status.done,
@@ -259,7 +259,7 @@ class ContractTests(BaseTestCase):
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/contract/' + str(project.id) in result.headers['Location'])
+        ok_('/project/contract/' + str(project.id) in result.headers['Location'])
 
     # 計上部署は必須
     def test_required_recorded_department(self):
@@ -289,7 +289,7 @@ class ContractTests(BaseTestCase):
         before = project.recorded_department_id
 
         # 計上部署が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': '',
             'estimation_no': project.estimation_no,
@@ -339,7 +339,7 @@ class ContractTests(BaseTestCase):
         before = project.estimation_no
 
         # 見積番号が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': '',
@@ -389,7 +389,7 @@ class ContractTests(BaseTestCase):
         before = project.project_name
 
         # プロジェクト名が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -439,7 +439,7 @@ class ContractTests(BaseTestCase):
         before = project.end_user_company_id
 
         # エンドユーザーが空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -489,7 +489,7 @@ class ContractTests(BaseTestCase):
         before = project.client_company_id
 
         # 顧客が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -539,7 +539,7 @@ class ContractTests(BaseTestCase):
         before = project.start_date
 
         # 開始年月日が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -589,7 +589,7 @@ class ContractTests(BaseTestCase):
         before = project.end_date
 
         # 終了年月日が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -639,7 +639,7 @@ class ContractTests(BaseTestCase):
         before = project.contract_form
 
         # 契約形態が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -689,7 +689,7 @@ class ContractTests(BaseTestCase):
         before = project.billing_timing
 
         # 契約形態が空だと更新できないことを確認
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': project.status,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -737,7 +737,7 @@ class ContractTests(BaseTestCase):
         # 支払いサイトが25のため、deposit_dateには、end_dateの翌月25日（2017/1/25）が入る。
         expected = date(2017, 1, 25)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0010',
@@ -786,7 +786,7 @@ class ContractTests(BaseTestCase):
         # 支払いサイトが30のため、deposit_dateには、end_dateの翌月末日（2017/1/31）が入る。
         expected = date(2017, 1, 31)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0011',
@@ -835,7 +835,7 @@ class ContractTests(BaseTestCase):
         # 支払いサイトが40のため、deposit_dateには、end_dateの翌々月10日（2017/2/10）が入る。
         expected = date(2017, 2, 10)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0012',
@@ -884,7 +884,7 @@ class ContractTests(BaseTestCase):
         # 支払いサイトが50のため、deposit_dateには、end_dateの翌々月20日（2017/2/20）が入る。
         expected = date(2017, 2, 20)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0013',
@@ -933,7 +933,7 @@ class ContractTests(BaseTestCase):
         # 支払いサイトが51のため、deposit_dateには、end_dateの翌々月21日（2017/2/21）が入る。
         expected = date(2017, 2, 21)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0014',
@@ -983,7 +983,7 @@ class ContractTests(BaseTestCase):
         # 25日は土曜日なので、1日前倒しして24日（2017/2/24）が入る。
         expected = date(2017, 2, 24)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0015',
@@ -1032,7 +1032,7 @@ class ContractTests(BaseTestCase):
         # 支払いサイトが60のため、deposit_dateには、end_dateの翌々月末日（2017/2/28）が入る。
         expected = date(2017, 2, 28)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0016',
@@ -1082,7 +1082,7 @@ class ContractTests(BaseTestCase):
         # 2016/9/10は土曜日のため、前倒しして2017/9/9が入る。
         expected = date(2016, 9, 9)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0017',
@@ -1132,7 +1132,7 @@ class ContractTests(BaseTestCase):
         # 2016/9/10は土曜日のため、後ろ倒ししてして2017/9/12が入る。
         expected = date(2016, 9, 12)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0018',
@@ -1182,7 +1182,7 @@ class ContractTests(BaseTestCase):
         # 2016/7/10は日曜日のため、前倒しして2016/7/8が入る。
         expected = date(2016, 7, 8)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0019',
@@ -1232,7 +1232,7 @@ class ContractTests(BaseTestCase):
         # 2016/7/10は日曜日のため、後ろ倒ししてして2016/7/11が入る。
         expected = date(2016, 7, 11)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0020',
@@ -1282,7 +1282,7 @@ class ContractTests(BaseTestCase):
         # 2015/12/21は祝日（テストデータ）のため、前倒しして2015/12/18が入る（21日が月曜のため、先週の金曜になる）。
         expected = date(2015, 12, 18)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0021',
@@ -1332,7 +1332,7 @@ class ContractTests(BaseTestCase):
         # 2015/12/21は祝日（テストデータ）のため、後ろ倒しして2015/12/22が入る。
         expected = date(2015, 12, 22)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0022',
@@ -1382,7 +1382,7 @@ class ContractTests(BaseTestCase):
         # 2015/12/25は祝日（テストデータ）のため、前倒しして2015/12/24が入る。
         expected = date(2015, 12, 24)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0023',
@@ -1432,7 +1432,7 @@ class ContractTests(BaseTestCase):
         # 2015/12/25は祝日（テストデータ）のため、後ろ倒しして2015/12/28が入る（25日が金曜のため、来週の月曜28日となる）。
         expected = date(2015, 12, 28)
 
-        result = self.app.post('/contract/' + str(project_id), data={
+        result = self.app.post('/project/contract/' + str(project_id), data={
             'status': Status.start.value,
             'recorded_department_id': '1',
             'estimation_no': 'M0024',
@@ -1507,7 +1507,7 @@ class ContractTests(BaseTestCase):
         db.session.add(engineer)
         db.session.commit()
 
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': engineer.id,
             'billing_money': '100000000',
@@ -1519,10 +1519,10 @@ class ContractTests(BaseTestCase):
             'billing_fraction_calculation2': '',
         })
         self.assertEqual(result.status_code, 302)
-        ok_('/project_detail/' in result.headers['Location'])
+        ok_('/project/detail/' in result.headers['Location'])
         project_detail_id = result.headers['Location'].split('/')[-1]
 
-        result = self.app.post('/contract/' + str(project.id), data={
+        result = self.app.post('/project/contract/' + str(project.id), data={
             'status': Status.done.value,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -1552,7 +1552,7 @@ class ContractTests(BaseTestCase):
         self.assertEqual(actual_3, expected_3)
 
         # tear_down
-        self.app.get('/project_detail/delete/' + str(project_detail.id))
+        self.app.get('/project/detail/delete/' + str(project_detail.id))
         self.app.get('/project/delete/' + str(project.id))
 
     # 明細がworkの場合、ステータスを契約完了にして更新すると
@@ -1567,7 +1567,7 @@ class ContractTests(BaseTestCase):
         # set_up
         project = self.project_repository.find_by_id(6)
 
-        result = self.app.post('/project_detail/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/detail/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.work.value,
             'work_name': 'test',
             'billing_money': '100000000',
@@ -1576,10 +1576,10 @@ class ContractTests(BaseTestCase):
             'billing_fraction_calculation2': ''
         })
         self.assertEqual(result.status_code, 302)
-        ok_('/project_detail/' in result.headers['Location'])
+        ok_('/project/detail/' in result.headers['Location'])
         project_detail_id = result.headers['Location'].split('/')[-1]
 
-        result = self.app.post('/contract/' + str(project.id), data={
+        result = self.app.post('/project/contract/' + str(project.id), data={
             'status': Status.done.value,
             'recorded_department_id': project.recorded_department_id,
             'estimation_no': project.estimation_no,
@@ -1609,5 +1609,5 @@ class ContractTests(BaseTestCase):
         self.assertEqual(actual_3, expected_3)
 
         # tear_down
-        self.app.get('/project_detail/delete/' + str(project_detail.id))
+        self.app.get('/project/detail/delete/' + str(project_detail.id))
         self.app.get('/project/delete/' + str(project.id))
