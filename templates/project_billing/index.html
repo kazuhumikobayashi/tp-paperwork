@@ -35,9 +35,11 @@
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs">
             <li><a href="{{ url_for('project_contract.index', project_id=project.id) }}">契約</a></li>
+            {% if project.status.is_done() %}
             <li><a href="{{ url_for('project_result.index', project_id=project.id) }}">実績</a></li>
             <li class="active"><a href="#">請求</a></li>
             <li><a href="{{ url_for('project_payment.index', project_id=project.id) }}">支払</a></li>
+            {% endif %}
           </ul>
           <div class="tab-content">
             <div class="table-responsive no-padding">

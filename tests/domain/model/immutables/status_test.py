@@ -33,3 +33,10 @@ class StatusTests(BaseTestCase):
     def test_parse_fail_is_none(self):
         self.assertIsNone(Status.parse(0))
         self.assertIsNone(Status.parse('a'))
+
+    def test_is_done(self):
+        self.assertFalse(Status.start.is_done())
+        self.assertFalse(Status.placed.is_done())
+        self.assertFalse(Status.received.is_done())
+        self.assertTrue(Status.done.is_done())
+        self.assertFalse(Status.failure.is_done())
