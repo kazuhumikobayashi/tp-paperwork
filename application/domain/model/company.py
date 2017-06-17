@@ -82,6 +82,12 @@ class Company(BaseModel, db.Model):
         self.remarks = remarks
         self.print_name = print_name
 
+    def is_bp(self):
+        for company_client_flag in self.company_client_flags:
+            if company_client_flag.client_flag == ClientFlag.bp:
+                return True
+        return False
+
     def __repr__(self):
         return "<Company:" + \
                 "'id='{}".format(self.id) + \
@@ -109,9 +115,3 @@ class Company(BaseModel, db.Model):
                 "', updated_at='{}".format(self.updated_at) + \
                 "', updated_user='{}".format(self.updated_user) + \
                 "'>"
-
-    def is_bp(self):
-        for company_client_flag in self.company_client_flags:
-            if company_client_flag.client_flag == ClientFlag.bp:
-                return True
-        return False

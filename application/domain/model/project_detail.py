@@ -111,6 +111,9 @@ class ProjectDetail(BaseModel, db.Model):
     def is_engineer(self):
         return self.detail_type == DetailType.engineer
 
+    def has_payment(self):
+        return self.is_engineer() and self.engineer.is_bp()
+
     # 支払予定日を計算するメソッド
     def get_payment_date(self, date):
         # 支払予定日はBPのみ記述

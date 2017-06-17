@@ -202,6 +202,63 @@ class ProjectTests(BaseTestCase):
         # project_monthが紐づいている
         self.assertIsNotNone(project.project_months[0])
 
-        # 1件でもproject_ monthが紐づいているならFalse
+        # 1件でもproject_monthが紐づいているならFalse
         actual = project.has_not_project_months()
+        self.assertFalse(actual)
+
+    def test_has_payment_true(self):
+        project = self.project_repository.find_by_id(1)
+
+        # project_detailが紐づいている
+        self.assertIsNotNone(project.project_details[0])
+
+        # bp所属ならTrue
+        actual = project.has_payment()
+        self.assertTrue(actual)
+
+    def test_has_payment_false(self):
+        # set_up
+        project = Project(
+                    project_name='test_project',
+                    project_name_for_bp='project',
+                    status=Status.start,
+                    recorded_department_id=1,
+                    sales_person='営業担当',
+                    estimation_no='test_project',
+                    end_user_company_id=1,
+                    client_company_id=5,
+                    start_date=date.today(),
+                    end_date='2099/12/31',
+                    contract_form=Contract.blanket,
+                    billing_timing=BillingTiming.billing_at_last,
+                    estimated_total_amount=1000000,
+                    deposit_date='2099/12/31',
+                    scope='test',
+                    contents=None,
+                    working_place=None,
+                    delivery_place=None, deliverables=None,
+                    inspection_date=None,
+                    responsible_person=None,
+                    quality_control=None, subcontractor=None,
+                    remarks=None,
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+
+        project_detail = ProjectDetail(
+                    detail_type=DetailType.work,
+                    work_name='test_project_detail',
+                    billing_money='100000',
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+
+        project.project_details.append(project_detail)
+        db.session.add(project)
+        db.session.commit()
+
+        # 作業だけならFalse
+        actual = project.has_payment()
         self.assertFalse(actual)

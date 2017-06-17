@@ -30,7 +30,9 @@
             {% if project.status.is_done() %}
             <li><a href="{{ url_for('project_result.index', project_id=project.id) }}">実績</a></li>
             <li><a href="{{ url_for('project_billing.index', project_id=project.id) }}">請求</a></li>
-            <li class="active"><a>支払</a></li>
+              {% if project.has_payment() %}
+              <li class="active"><a>支払</a></li>
+              {% endif %}
             {% endif %}
           </ul>
           <div class="tab-content">
