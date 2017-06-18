@@ -7,6 +7,7 @@ from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_detail import ProjectDetail
 from application.domain.model.project_result import ProjectResult
 from application.domain.repository.base_repository import BaseRepository
+from application.service.calculator import Calculator
 
 
 class ProjectDetailRepository(BaseRepository):
@@ -23,11 +24,16 @@ class ProjectDetailRepository(BaseRepository):
                 for date in contract_dates:
                     project_result = ProjectResult(
                                         result_month=date,
-                                        payment_expected_date=project_detail.get_payment_date(date),
                                         created_at=datetime.today(),
                                         created_user=session['user']['user_name'],
                                         updated_at=datetime.today(),
                                         updated_user=session['user']['user_name'])
+                    if project_detail.has_payment():
+                        calculator = Calculator(
+                                        date,
+                                        project_detail.engineer.company.payment_site,
+                                        project_detail.get_holiday_flag_if_payment())
+                        project_result.payment_expected_date = calculator.get_deposit_date()
                     project_detail.project_results.append(project_result)
             else:
                 # 明細がworkの場合、プロジェクト期間を取得してその月々の実績レコードを作成する。

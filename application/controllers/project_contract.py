@@ -15,6 +15,7 @@ from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.status import Status
+from application.service.calculator import Calculator
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
 from application.service.engineer_history_service import EngineerHistoryService
@@ -63,7 +64,11 @@ def index(project_id=None):
         project.estimated_total_amount = form.estimated_total_amount.data
         if form.deposit_date.data is None:
             project.client_company = company_service.find_by_id(form.client_company_id.data)
-            project.deposit_date = project.get_deposit_date()
+            calculator = Calculator(
+                            form.end_date.data,
+                            project.client_company.billing_site,
+                            project.client_company.bank_holiday_flag)
+            project.deposit_date = calculator.get_deposit_date()
         else:
             project.deposit_date = form.deposit_date.data
         project.scope = form.scope.data

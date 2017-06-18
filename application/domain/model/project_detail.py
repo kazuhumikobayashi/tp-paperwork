@@ -14,7 +14,6 @@ from application.domain.model.immutables.rule import Rule
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_result import ProjectResult
 from application.domain.model.sqlalchemy.types import EnumType
-from application.service.calculator import Calculator
 
 
 class ProjectDetail(BaseModel, db.Model):
@@ -114,29 +113,17 @@ class ProjectDetail(BaseModel, db.Model):
     def has_payment(self):
         return self.is_engineer() and self.engineer.is_bp()
 
-    # 支払予定日を計算するメソッド
-    def get_payment_date(self, date):
-        # 支払予定日はBPのみ記述
-        if self.is_engineer() and self.engineer.is_bp():
-            payment_site = self.engineer.company.payment_site
+    # 支払フラグが前倒しか後ろ倒しか判断
+    def get_holiday_flag_if_payment(self):
+        payment_site = self.engineer.company.payment_site
 
-            # 支払いの場合、末日は前倒し、その他後ろ倒し
-            if payment_site.is_last_day():
-                bank_holiday_flag = HolidayFlag.before
-            else:
-                bank_holiday_flag = HolidayFlag.after
+        # 支払いの場合、末日は前倒し、その他後ろ倒し
+        if payment_site.is_last_day():
+            bank_holiday_flag = HolidayFlag.before
+        else:
+            bank_holiday_flag = HolidayFlag.after
 
-            # 入金サイトから支払日を選定
-            deposit_date = Calculator.calculate_deposit_date_from_site(date, payment_site.value)
-
-            # 土日の場合、前倒し・後ろ倒しの日付に変更。
-            deposit_date = Calculator.to_weekday_if_on_weekend(deposit_date, bank_holiday_flag)
-
-            # 祝日の場合、前倒し・後ろ倒しの日付に変更。
-            deposit_date = Calculator.to_weekday_if_on_holiday(deposit_date, bank_holiday_flag)
-
-            return deposit_date
-        return None
+        return bank_holiday_flag
 
     # 開始・終了日のそれぞれの年月をリストで返すメソッド
     def get_contract_month_list(self):
