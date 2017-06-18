@@ -3,6 +3,7 @@ from datetime import datetime, date
 
 import wtforms
 from dateutil.relativedelta import relativedelta
+from wtforms import widgets
 
 
 class IntegerField(wtforms.IntegerField):
@@ -89,3 +90,14 @@ class RadioField(wtforms.RadioField):
                 break
         else:
             raise ValueError(self.gettext('Not a valid choice'))
+
+
+class CheckboxField(wtforms.SelectMultipleField):
+    """
+    Like a SelectField, except displays a list of radio buttons.
+
+    Iterating the field will produce subfields (each containing a label as
+    well) in order to allow custom rendering of the individual radio fields.
+    """
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
