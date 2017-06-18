@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from flask_wtf import FlaskForm
 from wtforms import validators, StringField, SelectMultipleField
 
-from application.controllers.form.fields import RadioField
+from application.controllers.form.fields import CheckboxField
 from application.domain.model.immutables.input_flag import InputFlag
 
 
@@ -14,7 +14,7 @@ class PaymentSearchForm(FlaskForm):
     last_day = first_day + relativedelta(months=1, days=-1)
 
     project_name = StringField('プロジェクト名', [validators.optional()])
-    input_flag = RadioField('支払ステータス', choices=InputFlag.get_flag_for_radio())
+    input_flag = CheckboxField('支払ステータス', choices=InputFlag.get_flag_for_checkbox())
     end_user_company_id = SelectMultipleField('エンドユーザー', [validators.optional()],
                                               render_kw={"data-placeholder": "エンドユーザーを選択してください"})
     client_company_id = SelectMultipleField('顧客', [validators.optional()],

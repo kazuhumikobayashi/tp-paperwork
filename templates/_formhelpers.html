@@ -1,7 +1,7 @@
 {% macro render_field(field, group_class, required="", input_class="") %}
 <div class="form-group {{ group_class }} no-margin{% if field.errors|length %} has-error{% endif %}">
   {{ field.label(class_="control-label no-margin") }}
-  {% if field.type == "RadioField" %}
+  {% if field.type == "RadioField" or field.type == "CheckboxField" %}
   <div class="no-padding">
     {% for subfield in field %}
       {% if required %}
@@ -27,7 +27,7 @@
 </div>
 {% endmacro %}
 {% macro render_search_field(field, group_class, required="", input_class="") %}
-{% if field.type == "RadioField" %}
+{% if field.type == "RadioField" or field.type == "CheckboxField" %}
   <div class="{{ group_class }}" style="margin-bottom: 5px;">
     {% for subfield in field %}
       {% if required %}

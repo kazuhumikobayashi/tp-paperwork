@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% from "_formhelpers.html" import render_search_field %}
 {% import "_pagination.html" as p %}
-{% block title %}支払情報{% endblock %}
+{% block title %}支払情報検索{% endblock %}
 {% block include_css %}
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
@@ -20,11 +20,7 @@
   <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
 {% endblock %}
 {% block content_header %}
-  <h1>支払情報</h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li class="active">支払情報</li>
-  </ol>
+  <h1>支払情報検索</h1>
 {% endblock %}
 {% block main_content %}
   <div class="box box-primary">
@@ -101,7 +97,7 @@
               <td>{{ payment.project_detail.project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ payment.project_detail.project.client_company.company_name }}</td>
               <td>{{ payment.project_detail.project.recorded_department.department_name }}</td>
-              <td><a href="{{ url_for('project_contract.index', project_id=payment.project_detail.project.id) }}">{{ payment.project_detail.project.project_name }}</a></td>
+              <td><a href="{{ url_for('project_payment.index', project_id=payment.project_detail.project.id) }}">{{ payment.project_detail.project.project_name }}</a></td>
               <td>{{ payment.project_detail.engineer.engineer_name|filter_suppress_none }}</td>
               <td>{{ payment.payment_expected_date|datetime_format("%Y/%m/%d") }}</td>
               <td class="text-right">{{ payment.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>

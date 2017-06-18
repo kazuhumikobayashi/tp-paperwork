@@ -20,7 +20,7 @@ class InputFlag(Enum):
             return '支払済'        
 
     @staticmethod
-    def get_flag_for_radio():
+    def get_flag_for_checkbox():
         return [(str(flag.value), flag.payment_name) for flag in InputFlag]
 
     @staticmethod
