@@ -65,8 +65,8 @@
                       </a>
                     </td>
                     <td>{{ project_month.client_billing_no|filter_suppress_none }}</td>
-                    <td class="text-right">&yen{{ project_month.billing_estimated_money|number_with_commas }}</td>
-                    <td class="text-right">&yen{{ project_month.billing_confirmation_money|number_with_commas }}</td>
+                    <td class="text-right">{{ project_month.billing_estimated_money|number_with_commas|with_yen }}</td>
+                    <td class="text-right">{{ project_month.billing_confirmation_money|number_with_commas|with_yen }}</td>
                     <td class="text-center">
                       {% if project_month.result_input_flag.value %}
                         <i class="fa fa-check" aria-hidden="true"></i>
