@@ -1,3 +1,6 @@
+from datetime import date
+
+
 class ProjectPaymentForm(object):
 
     def __init__(self, project_id=None, project_month_id=None, month=None):
@@ -11,6 +14,12 @@ class ProjectPaymentForm(object):
 
     def has_not_project_results(self):
         return not self.project_results
+
+    def is_opened(self):
+        return date.today().replace(day=1) <= self.month
+
+    def is_closed(self):
+        return not self.is_opened()
 
     def __repr__(self):
         return "<ProjectPaymentForm:" + \
