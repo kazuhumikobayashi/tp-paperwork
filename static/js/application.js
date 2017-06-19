@@ -384,8 +384,8 @@ $(function() {
     var tr = $("table tr");//全行を取得
     for(var i=1, l=tr.length; i<l;i++ ){ //行数分回す
         var cells = tr.eq(i).children();
-        billing_confirmation_money += parseInt(cells.eq(billing_money_col_number).text()) || 0;
-        billing_carfare += parseInt(cells.eq(carfare_col_number).text()) || 0;
+        billing_confirmation_money += parseInt(cells.eq(billing_money_col_number).text().replace(/¥/g, "").replace(/,/g, "")) || 0;
+        billing_carfare += parseInt(cells.eq(carfare_col_number).text().replace(/¥/g, "").replace(/,/g, "")) || 0;
     }
 
     $('#billing_confirmation_money').val(billing_confirmation_money);
