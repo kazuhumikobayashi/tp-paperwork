@@ -4,7 +4,7 @@ from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField
 from application.controllers.form.validators import Length, DataRequired, LessThan
-from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.tax import Tax
@@ -49,17 +49,16 @@ class EngineerHistoryForm(FlaskForm):
                                    filters=[lambda x: x or None])
     payment_per_bottom_hour = IntegerField('支払△下限時間単価（必須）', [required_if_variable])
     payment_per_top_hour = IntegerField('支払＋下限時間単価', [required_if_variable])
-    payment_fraction = IntegerField('支払端数金額')
-    payment_fraction_calculation1 = SelectField('支払端数計算式１',
-                                                [validators.Optional()],
-                                                choices=Expression.get_type_for_select(),
-                                                filters=[lambda x: x or None],
-                                                render_kw={"data-minimum-results-for-search": "Infinity"})
-    payment_fraction_calculation2 = SelectField('支払端数計算式２',
-                                                [validators.Optional()],
-                                                choices=Round.get_round_for_select(),
-                                                filters=[lambda x: x or None],
-                                                render_kw={"data-minimum-results-for-search": "Infinity"})
+    payment_fraction = SelectField('支払端数金額',
+                                   [validators.Optional()],
+                                   choices=Fraction.get_fraction_for_select(),
+                                   filters=[lambda x: x or None],
+                                   render_kw={"data-minimum-results-for-search": "Infinity"})
+    payment_fraction_rule = SelectField('支払端数ルール',
+                                        [validators.Optional()],
+                                        choices=Round.get_round_for_select(),
+                                        filters=[lambda x: x or None],
+                                        render_kw={"data-minimum-results-for-search": "Infinity"})
     payment_condition = TextAreaField('支払条件', [Length(max=1024)])
     remarks = TextAreaField('その他特記事項', [Length(max=1024)])
 

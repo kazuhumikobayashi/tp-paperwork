@@ -5,6 +5,8 @@ from wtforms.validators import ValidationError
 from application.controllers.form.fields import IntegerField, DateField, RadioField
 from application.controllers.form.validators import Length, DataRequired
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.fraction import Fraction
+from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 
 
@@ -58,22 +60,16 @@ class ProjectDetailForm(FlaskForm):
     billing_per_hour = StringField('請求時間単価', [Length(max=128), required_if_variable])
     billing_per_bottom_hour = IntegerField('請求△下限時間単価', [required_if_variable])
     billing_per_top_hour = IntegerField('請求＋上限時間単価', [required_if_variable])
-    billing_fraction = IntegerField('請求端数金額')
-    billing_fraction_calculation1 = SelectField('請求端数計算式１',
-                                                [validators.Optional()],
-                                                choices=[('', ''),
-                                                         ('1', '以上'),
-                                                         ('2', 'より大きい'),
-                                                         ('3', '以下'),
-                                                         ('4', '未満')],
-                                                render_kw={"data-minimum-results-for-search": "Infinity"})
-    billing_fraction_calculation2 = SelectField('請求端数計算式２',
-                                                [validators.Optional()],
-                                                choices=[('', ''),
-                                                         ('1', '切り捨て'),
-                                                         ('2', '繰り上げ'),
-                                                         ('3', '四捨五入')],
-                                                render_kw={"data-minimum-results-for-search": "Infinity"})
+    billing_fraction = SelectField('請求端数金額',
+                                   [validators.Optional()],
+                                   choices=Fraction.get_fraction_for_select(),
+                                   filters=[lambda x: x or None],
+                                   render_kw={"data-minimum-results-for-search": "Infinity"})
+    billing_fraction_rule = SelectField('請求端数ルール',
+                                        [validators.Optional()],
+                                        filters=[lambda x: x or None],
+                                        choices=Round.get_round_for_select(),
+                                        render_kw={"data-minimum-results-for-search": "Infinity"})
     payment_start_day = DateField('支払契約開始年月（必須）',
                                   [validators.Optional()],
                                   format='%Y/%m',
@@ -99,25 +95,16 @@ class ProjectDetailForm(FlaskForm):
                                            render_kw={"disabled": "disabled"})
     payment_per_top_hour = IntegerField('支払＋上限時間単価',
                                         render_kw={"disabled": "disabled"})
-    payment_fraction = IntegerField('支払端数金額',
-                                    render_kw={"disabled": "disabled"})
-    payment_fraction_calculation1 = SelectField('支払端数計算式１',
-                                                [validators.Optional()],
-                                                choices=[('', ''),
-                                                         ('1', '以上'),
-                                                         ('2', 'より大きい'),
-                                                         ('3', '以下'),
-                                                         ('4', '未満')],
-                                                render_kw={"data-minimum-results-for-search": "Infinity",
-                                                           "disabled": "disabled"})
-    payment_fraction_calculation2 = SelectField('支払端数計算式２',
-                                                [validators.Optional()],
-                                                choices=[('', ''),
-                                                         ('1', '切り捨て'),
-                                                         ('2', '繰り上げ'),
-                                                         ('3', '四捨五入')],
-                                                render_kw={"data-minimum-results-for-search": "Infinity",
-                                                           "disabled": "disabled"})
+    payment_fraction = SelectField('支払端数金額',
+                                   [validators.Optional()],
+                                   choices=Fraction.get_fraction_for_select(),
+                                   filters=[lambda x: x or None],
+                                   render_kw={"disabled": "disabled"})
+    payment_fraction_rule = SelectField('支払端数ルール',
+                                        [validators.Optional()],
+                                        choices=Round.get_round_for_select(),
+                                        filters=[lambda x: x or None],
+                                        render_kw={"disabled": "disabled"})
     bp_order_no = StringField('BP注文書No')
     client_order_no_for_bp = StringField('顧客注文書No（BPごと）')
 

@@ -8,7 +8,7 @@ from flask import request
 from flask import url_for
 
 from application.controllers.form.engineer_history_form import EngineerHistoryForm
-from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.service.business_category_service import BusinessCategoryService
@@ -60,9 +60,8 @@ def history(engineer_history_id=None):
         engineer_history.payment_per_hour = form.payment_per_hour.data
         engineer_history.payment_per_bottom_hour = form.payment_per_bottom_hour.data
         engineer_history.payment_per_top_hour = form.payment_per_top_hour.data
-        engineer_history.payment_fraction = form.payment_fraction.data
-        engineer_history.payment_fraction_calculation1 = Expression.parse(form.payment_fraction_calculation1.data)
-        engineer_history.payment_fraction_calculation2 = Round.parse(form.payment_fraction_calculation2.data)
+        engineer_history.payment_fraction = Fraction.parse(form.payment_fraction.data)
+        engineer_history.payment_fraction_rule = Round.parse(form.payment_fraction_rule.data)
         engineer_history.payment_condition = form.payment_condition.data
         engineer_history.remarks = form.remarks.data
 

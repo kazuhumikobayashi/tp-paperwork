@@ -194,8 +194,7 @@ class ProjectResultTests(BaseTestCase):
             'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
             'billing_per_month': '100000',
             'billing_rule': Rule.fixed.value,
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': '',
+            'billing_fraction_rule': '',
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])

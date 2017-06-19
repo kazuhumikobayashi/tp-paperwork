@@ -4,6 +4,8 @@ from nose.tools import ok_
 
 from application import db
 from application.domain.model.engineer_history import EngineerHistory
+from application.domain.model.immutables.fraction import Fraction
+from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
 from tests import BaseTestCase
@@ -50,8 +52,7 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'payment_per_month': '100000',
             'payment_rule': str(Rule.fixed),
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'payment_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 302)
 
@@ -188,8 +189,7 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_end_day': date(2017, 5, 31).strftime('%Y/%m'),
             'payment_per_month': '100000',
             'payment_rule': str(Rule.fixed),
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'payment_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 302)
 
@@ -208,8 +208,7 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_end_day': before_engineer_history.payment_end_day,
             'payment_per_month': before_engineer_history.payment_per_month,
             'payment_rule': before_engineer_history.payment_rule,
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'payment_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 200)
 
@@ -247,8 +246,7 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_end_day': date(2017, 5, 31).strftime('%Y/%m'),
             'payment_per_month': '100000',
             'payment_rule': str(Rule.fixed),
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'payment_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 302)
 
@@ -267,8 +265,7 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_end_day': date(2017, 8, 1).strftime('%Y/%m'),
             'payment_per_month': before_engineer_history.payment_per_month,
             'payment_rule': before_engineer_history.payment_rule,
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'payment_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 200)
 
@@ -306,8 +303,7 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'payment_per_month': '100000',
             'payment_rule': str(Rule.variable),
-            'payment_fraction_calculation1': '',
-            'payment_fraction_calculation2': ''
+            'payment_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 200)
 
@@ -338,9 +334,8 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_per_hour': '1/100, 1/150',
             'payment_per_bottom_hour': 3,
             'payment_per_top_hour': 4,
-            'payment_fraction': 100,
-            'payment_fraction_calculation1': 1,
-            'payment_fraction_calculation2': 1,
+            'payment_fraction': Fraction.hundred.value,
+            'payment_fraction_rule': Round.down.value,
         })
         self.assertEqual(result.status_code, 302)
 
@@ -379,9 +374,8 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_per_hour': '1/100, 1/150',
             'payment_per_bottom_hour': 3,
             'payment_per_top_hour': 4,
-            'payment_fraction': 100,
-            'payment_fraction_calculation1': 1,
-            'payment_fraction_calculation2': 1,
+            'payment_fraction': Fraction.hundred.value,
+            'payment_fraction_calculation2': Round.down.value,
         })
         self.assertEqual(result.status_code, 302)
 

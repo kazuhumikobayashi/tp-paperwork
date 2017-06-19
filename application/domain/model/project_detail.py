@@ -9,7 +9,9 @@ from sqlalchemy.orm import relationship
 from application import db
 from application.domain.model.base_model import BaseModel
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.holiday_flag import HolidayFlag
+from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_result import ProjectResult
@@ -36,9 +38,8 @@ class ProjectDetail(BaseModel, db.Model):
     billing_per_hour = Column(String(128))
     billing_per_bottom_hour = Column(Integer)
     billing_per_top_hour = Column(Integer)
-    billing_fraction = Column(Integer)
-    billing_fraction_calculation1 = Column(Integer)
-    billing_fraction_calculation2 = Column(Integer)
+    billing_fraction = Column(EnumType(enum_class=Fraction))
+    billing_fraction_rule = Column(EnumType(enum_class=Round))
     bp_order_no = Column(String(128))
     client_order_no_for_bp = Column(String(128))
 
@@ -76,8 +77,7 @@ class ProjectDetail(BaseModel, db.Model):
                  billing_per_bottom_hour=None,
                  billing_per_top_hour=None,
                  billing_fraction=None,
-                 billing_fraction_calculation1=None,
-                 billing_fraction_calculation2=None,
+                 billing_fraction_rule=None,
                  bp_order_no=None,
                  client_order_no_for_bp=None,
                  created_at=None,
@@ -102,8 +102,7 @@ class ProjectDetail(BaseModel, db.Model):
         self.billing_per_bottom_hour = billing_per_bottom_hour
         self.billing_per_top_hour = billing_per_top_hour
         self.billing_fraction = billing_fraction
-        self.billing_fraction_calculation1 = billing_fraction_calculation1
-        self.billing_fraction_calculation2 = billing_fraction_calculation2
+        self.billing_fraction_rule = billing_fraction_rule
         self.bp_order_no = bp_order_no
         self.client_order_no_for_bp = client_order_no_for_bp
 
@@ -161,8 +160,7 @@ class ProjectDetail(BaseModel, db.Model):
                 "', billing_per_bottom_hour='{}".format(self.billing_per_bottom_hour) + \
                 "', billing_per_top_hour='{}".format(self.billing_per_top_hour) + \
                 "', billing_fraction='{}".format(self.billing_fraction) + \
-                "', billing_fraction_calculation1='{}".format(self.billing_fraction_calculation1) + \
-                "', billing_fraction_calculation2='{}".format(self.billing_fraction_calculation2) + \
+                "', billing_fraction_rule='{}".format(self.billing_fraction_rule) + \
                 "', bp_order_no='{}".format(self.bp_order_no) + \
                 "', client_order_no_for_bp='{}".format(self.client_order_no_for_bp) + \
                 "', created_at='{}".format(self.created_at) + \

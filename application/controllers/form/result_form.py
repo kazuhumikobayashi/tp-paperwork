@@ -3,7 +3,7 @@ from wtforms import SelectField, TextAreaField, StringField, RadioField, DateFie
 
 from application.controllers.form.fields import IntegerField, DecimalField
 from application.controllers.form.validators import Length
-from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 
@@ -53,15 +53,16 @@ class ProjectDetailInResultForm(FlaskForm):
     billing_per_hour = StringField('請求時間単価', [Length(max=128)], render_kw={"disabled": "disabled"})
     billing_per_bottom_hour = IntegerField('請求△下限時間単価', render_kw={"disabled": "disabled"})
     billing_per_top_hour = IntegerField('請求＋上限時間単価', render_kw={"disabled": "disabled"})
-    billing_fraction = IntegerField('請求端数金額', render_kw={"disabled": "disabled"})
-    billing_fraction_calculation1 = SelectField('請求端数計算式1',
-                                                [validators.optional()],
-                                                choices=Expression.get_type_for_select(),
-                                                render_kw={"disabled": "disabled"})
-    billing_fraction_calculation2 = SelectField('請求端数計算式2',
-                                                [validators.optional()],
-                                                choices=Round.get_round_for_select(),
-                                                render_kw={"disabled": "disabled"})
+    billing_fraction = SelectField('請求端数金額',
+                                   [validators.Optional()],
+                                   choices=Fraction.get_fraction_for_select(),
+                                   filters=[lambda x: x or None],
+                                   render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
+    billing_fraction_rule = SelectField('請求端数ルール',
+                                        [validators.optional()],
+                                        choices=Round.get_round_for_select(),
+                                        render_kw={"data-minimum-results-for-search": "Infinity",
+                                                   "disabled": "disabled"})
 
 
 class EngineerHistoryInResultForm(FlaskForm):
@@ -76,12 +77,13 @@ class EngineerHistoryInResultForm(FlaskForm):
     payment_per_hour = StringField('支払時間単価', [Length(max=128)], render_kw={"disabled": "disabled"})
     payment_per_bottom_hour = IntegerField('支払△下限時間単価', render_kw={"disabled": "disabled"})
     payment_per_top_hour = IntegerField('支払＋上限時間単価', render_kw={"disabled": "disabled"})
-    payment_fraction = IntegerField('支払端数金額', render_kw={"disabled": "disabled"})
-    payment_fraction_calculation1 = SelectField('支払端数計算式1',
-                                                [validators.optional()],
-                                                choices=Expression.get_type_for_select(),
-                                                render_kw={"disabled": "disabled"})
-    payment_fraction_calculation2 = SelectField('支払端数計算式2',
-                                                [validators.optional()],
-                                                choices=Round.get_round_for_select(),
-                                                render_kw={"disabled": "disabled"})
+    payment_fraction = SelectField('支払端数金額',
+                                   [validators.Optional()],
+                                   choices=Fraction.get_fraction_for_select(),
+                                   filters=[lambda x: x or None],
+                                   render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
+    payment_fraction_rule = SelectField('請求端数ルール',
+                                        [validators.optional()],
+                                        choices=Round.get_round_for_select(),
+                                        render_kw={"data-minimum-results-for-search": "Infinity",
+                                                   "disabled": "disabled"})

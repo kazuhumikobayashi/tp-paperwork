@@ -61,9 +61,8 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="row">
-              {{ render_field(project_detail_form.billing_fraction, "col-xs-4") }}
-              {{ render_field(project_detail_form.billing_fraction_calculation1, "col-xs-4", input_class="select2") }}
-              {{ render_field(project_detail_form.billing_fraction_calculation2, "col-xs-4", input_class="select2") }}
+              {{ render_field(project_detail_form.billing_fraction, "col-sm-4", input_class="select2") }}
+              {{ render_field(project_detail_form.billing_fraction_rule, "col-sm-8", input_class="select2") }}
             </div>
           </div>
         </div>
@@ -112,9 +111,8 @@
         <div class="row">
           <div class="col-sm-6">
             <div class="row">
-              {{ render_field(engineer_history_form.payment_fraction, "col-xs-4") }}
-              {{ render_field(engineer_history_form.payment_fraction_calculation1, "col-xs-4", input_class="select2") }}
-              {{ render_field(engineer_history_form.payment_fraction_calculation2, "col-xs-4", input_class="select2") }}
+              {{ render_field(engineer_history_form.payment_fraction, "col-sm-4", input_class="select2") }}
+              {{ render_field(engineer_history_form.payment_fraction_rule, "col-sm-8", input_class="select2") }}
             </div>
           </div>
         </div>
