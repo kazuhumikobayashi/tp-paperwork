@@ -3,7 +3,7 @@ from wtforms import validators, HiddenField, StringField, DateField, SelectField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, DateField, RadioField
-from application.controllers.form.validators import Length, DataRequired
+from application.controllers.form.validators import Length, DataRequired, InputRequired
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
@@ -12,20 +12,20 @@ from application.domain.model.immutables.rule import Rule
 
 # 明細区分で作業者を選択した場合、入力必須にする。
 def required_if_engineer(form, field):
-    if form.detail_type.data == str(DetailType.engineer) and not field.data:
-        raise ValidationError('入力必須項目です。')
+    if form.detail_type.data == str(DetailType.engineer) and (not field.raw_data or not field.raw_data[0]):
+        raise ValidationError(field.label.text + 'は必須です。')
 
 
 # 明細区分で作業を選択した場合、入力必須にする。
 def required_if_work(form, field):
-    if form.detail_type.data == str(DetailType.work) and not field.data:
-        raise ValidationError('入力必須項目です。')
+    if form.detail_type.data == str(DetailType.work) and (not field.raw_data or not field.raw_data[0]):
+        raise ValidationError(field.label.text + 'は必須です。')
 
 
 # 請求ルールで変動を選択した場合、入力必須にする。
 def required_if_variable(form, field):
-    if form.billing_rule.data == str(Rule.variable) and not field.data:
-        raise ValidationError('入力必須項目です。')
+    if form.billing_rule.data == str(Rule.variable) and (not field.raw_data or not field.raw_data[0]):
+        raise ValidationError(field.label.text + 'は必須です。')
 
 
 class ProjectDetailForm(FlaskForm):
@@ -38,7 +38,7 @@ class ProjectDetailForm(FlaskForm):
     engineer_id = SelectField('技術者名称（必須）',
                               [required_if_engineer])
     company = StringField('所属会社', render_kw={"disabled": "disabled"})
-    billing_money = IntegerField('請求金額（必須）', [DataRequired()])
+    billing_money = IntegerField('請求金額（必須）', [InputRequired()])
     remarks = StringField('備考', [Length(max=1024)])
     billing_start_day = DateField('請求契約開始年月（必須）',
                                   [required_if_engineer],
@@ -70,16 +70,16 @@ class ProjectDetailForm(FlaskForm):
                                         filters=[lambda x: x or None],
                                         choices=Round.get_round_for_select(),
                                         render_kw={"data-minimum-results-for-search": "Infinity"})
-    payment_start_day = DateField('支払契約開始年月（必須）',
+    payment_start_day = DateField('支払契約開始年月',
                                   [validators.Optional()],
                                   format='%Y/%m',
                                   render_kw={"autocomplete": "off", "disabled": "disabled"})
-    payment_end_day = DateField('支払契約終了年月（必須）',
+    payment_end_day = DateField('支払契約終了年月',
                                 [validators.Optional()],
                                 format='%Y/%m',
                                 render_kw={"autocomplete": "off", "disabled": "disabled"})
-    payment_per_month = IntegerField('支払単価（必須）', render_kw={"disabled": "disabled"})
-    payment_rule = RadioField('支払いルール（必須）',
+    payment_per_month = IntegerField('支払単価', render_kw={"disabled": "disabled"})
+    payment_rule = RadioField('支払いルール',
                               [validators.Optional()],
                               choices=Rule.get_rule_for_select(),
                               render_kw={"disabled": "disabled"})

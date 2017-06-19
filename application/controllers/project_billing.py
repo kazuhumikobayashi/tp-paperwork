@@ -7,7 +7,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
-from application.controllers.form.billing_form import BillingForm
+from application.controllers.form.project_billing_form import ProjectBillingForm
 from application.controllers.form.project_month_form import ProjectMonthForm
 from application.service.project_billing_service import ProjectBillingService
 from application.service.project_month_service import ProjectMonthService
@@ -64,7 +64,7 @@ def detail(billing_id=None):
     if billing.id is None and billing_id is not None:
         return abort(404)
 
-    form = BillingForm(request.form, billing)
+    form = ProjectBillingForm(request.form, billing)
 
     project_month = project_month_service.find_project_month_at_a_month(
         billing.project_detail.project.id, billing.billing_month)

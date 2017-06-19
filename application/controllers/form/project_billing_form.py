@@ -1,14 +1,13 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, TextAreaField, StringField
-from wtforms.validators import DataRequired
+from wtforms import TextAreaField, StringField
 
 from application.controllers.form.fields import IntegerField
-from application.controllers.form.validators import Length
+from application.controllers.form.validators import Length, DataRequired, InputRequired
 
 
-class BillingForm(FlaskForm):
+class ProjectBillingForm(FlaskForm):
     billing_content = StringField('請求明細内容（必須）', [DataRequired()])
     billing_amount = StringField('請求明細数量')
-    billing_confirmation_money = IntegerField('請求明細金額（必須）', [DataRequired()])
+    billing_confirmation_money = IntegerField('請求明細金額（必須）', [InputRequired()])
     billing_transportation = IntegerField('請求明細交通費等')
     remarks = TextAreaField('備考', [Length(max=1024)])
