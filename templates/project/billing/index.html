@@ -60,7 +60,7 @@
                 {% for project_month in project.project_months %}
                   <tr>
                     <td>
-                      <a href="{{ url_for('project_billing.detail', project_month_id=project_month.id) }}">
+                      <a href="{{ url_for('project_billing.month', project_month_id=project_month.id) }}">
                         {{ project_month.project_month|datetime_format("%Y年%m月") }}請求書
                       </a>
                     </td>
