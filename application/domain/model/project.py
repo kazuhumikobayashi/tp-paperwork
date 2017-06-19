@@ -17,6 +17,9 @@ from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.project_month import ProjectMonth
 from application.domain.model.project_detail import ProjectDetail
 from application.domain.model.sqlalchemy.types import EnumType
+from application.service.project_billing_service import ProjectBillingService
+
+billing_service = ProjectBillingService()
 
 
 class Project(BaseModel, db.Model):

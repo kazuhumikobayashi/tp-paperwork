@@ -9,7 +9,9 @@ from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.holiday_flag import HolidayFlag
+from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.status import Status
@@ -1519,8 +1521,7 @@ class ProjectContractTests(BaseTestCase):
             'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
             'billing_per_month': '100000',
             'billing_rule': Rule.fixed.value,
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': '',
+            'billing_fraction_rule': '',
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
@@ -1619,8 +1620,7 @@ class ProjectContractTests(BaseTestCase):
             'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
             'billing_per_month': '100000',
             'billing_rule': Rule.fixed.value,
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': '',
+            'billing_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
@@ -1676,8 +1676,7 @@ class ProjectContractTests(BaseTestCase):
             'work_name': 'test',
             'billing_money': '100000000',
             'engineer_id': '',
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': ''
+            'billing_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
@@ -1769,8 +1768,7 @@ class ProjectContractTests(BaseTestCase):
             'work_name': '作業',
             'billing_money': '100000',
             'engineer_id': '',
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': ''
+            'billing_fraction_rule': '',
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
@@ -1821,9 +1819,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_hour': '1000',
             'billing_per_bottom_hour': '1000',
             'billing_per_top_hour': '1000',
-            'billing_fraction': '1000',
-            'billing_fraction_calculation1': '1',
-            'billing_fraction_calculation2': '1',
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value,
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
@@ -1905,8 +1902,7 @@ class ProjectContractTests(BaseTestCase):
             'work_name': '',
             'billing_money': '100000',
             'engineer_id': '',
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': ''
+            'billing_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 200)
 
@@ -1930,8 +1926,7 @@ class ProjectContractTests(BaseTestCase):
             'work_name': 'test_project_detail',
             'billing_money': '',
             'engineer_id': '',
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': ''
+            'billing_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 200)
 
@@ -2120,9 +2115,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_hour': '1000',
             'billing_per_bottom_hour': '1000',
             'billing_per_top_hour': '1000',
-            'billing_fraction': '1000',
-            'billing_fraction_calculation1': '1',
-            'billing_fraction_calculation2': '1',
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value,
 
         })
         self.assertEqual(result.status_code, 200)
@@ -2156,10 +2150,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_hour': '1000',
             'billing_per_bottom_hour': '1000',
             'billing_per_top_hour': '1000',
-            'billing_fraction': '1000',
-            'billing_fraction_calculation1': '1',
-            'billing_fraction_calculation2': '1',
-
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value
         })
         self.assertEqual(result.status_code, 200)
 
@@ -2192,10 +2184,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_hour': '1000',
             'billing_per_bottom_hour': '1000',
             'billing_per_top_hour': '1000',
-            'billing_fraction': '1000',
-            'billing_fraction_calculation1': '1',
-            'billing_fraction_calculation2': '1',
-
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value
         })
         self.assertEqual(result.status_code, 200)
 
@@ -2228,9 +2218,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_hour': '',
             'billing_per_bottom_hour': '1000',
             'billing_per_top_hour': '1000',
-            'billing_fraction': '1000',
-            'billing_fraction_calculation1': '1',
-            'billing_fraction_calculation2': '1',
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value
 
         })
         self.assertEqual(result.status_code, 200)
@@ -2264,10 +2253,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_hour': '1000',
             'billing_per_bottom_hour': '',
             'billing_per_top_hour': '1000',
-            'billing_fraction': '1000',
-            'billing_fraction_calculation1': '1',
-            'billing_fraction_calculation2': '1',
-
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value
         })
         self.assertEqual(result.status_code, 200)
 
@@ -2300,10 +2287,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_hour': '1000',
             'billing_per_bottom_hour': '1000',
             'billing_per_top_hour': '',
-            'billing_fraction': '1000',
-            'billing_fraction_calculation1': '1',
-            'billing_fraction_calculation2': '1',
-
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value
         })
         self.assertEqual(result.status_code, 200)
 
@@ -2371,8 +2356,7 @@ class ProjectContractTests(BaseTestCase):
             'billing_end_day': '2017/4',
             'billing_per_month': '100000',
             'billing_rule': Rule.fixed,
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': ''
+            'billing_fraction_rule': ''
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -2456,8 +2440,7 @@ class ProjectContractTests(BaseTestCase):
             'billing_end_day': '2017/4',
             'billing_per_month': '100000',
             'billing_rule': Rule.fixed,
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': ''
+            'billing_fraction_rule': ''
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -2514,8 +2497,7 @@ class ProjectContractTests(BaseTestCase):
             'work_name': 'test',
             'billing_money': '100000000',
             'engineer_id': '',
-            'billing_fraction_calculation1': '',
-            'billing_fraction_calculation2': ''
+            'billing_fraction_rule': ''
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])

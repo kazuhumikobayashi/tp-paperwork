@@ -3,15 +3,12 @@ from enum import Enum
 
 class Round(Enum):
     down = 1
-    up = 2
-    off = 3
+    off = 2
 
     @property
     def name(self):
         if self._value_ == self.down.value:
-            return '切り捨て'
-        elif self._value_ == self.up.value:
-            return '繰り上げ'
+            return '以下切り捨て'
         else:
             return '四捨五入'
 

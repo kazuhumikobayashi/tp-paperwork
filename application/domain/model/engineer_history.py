@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 
 from application import db
 from application.domain.model.base_model import BaseModel
-from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.sqlalchemy.types import EnumType
@@ -25,9 +25,8 @@ class EngineerHistory(BaseModel, db.Model):
     payment_per_hour = Column(String(128))
     payment_per_bottom_hour = Column(Integer)
     payment_per_top_hour = Column(Integer)
-    payment_fraction = Column(Integer)
-    payment_fraction_calculation1 = Column(EnumType(enum_class=Expression))
-    payment_fraction_calculation2 = Column(EnumType(enum_class=Round))
+    payment_fraction = Column(EnumType(enum_class=Fraction))
+    payment_fraction_rule = Column(EnumType(enum_class=Round))
     payment_condition = Column(String(1024))
     remarks = Column(String(1024))
 
@@ -46,8 +45,7 @@ class EngineerHistory(BaseModel, db.Model):
                  payment_per_bottom_hour=None,
                  payment_per_top_hour=None,
                  payment_fraction=None,
-                 payment_fraction_calculation1=None,
-                 payment_fraction_calculation2=None,
+                 payment_fraction_rule=None,
                  payment_condition=None,
                  remarks=None,
                  created_at=None,
@@ -67,8 +65,7 @@ class EngineerHistory(BaseModel, db.Model):
         self.payment_per_bottom_hour = payment_per_bottom_hour
         self.payment_per_top_hour = payment_per_top_hour
         self.payment_fraction = payment_fraction
-        self.payment_fraction_calculation1 = payment_fraction_calculation1
-        self.payment_fraction_calculation2 = payment_fraction_calculation2
+        self.payment_fraction_rule = payment_fraction_rule
         self.payment_condition = payment_condition
         self.remarks = remarks
 
@@ -87,8 +84,7 @@ class EngineerHistory(BaseModel, db.Model):
                 "', payment_per_bottom_hour='{}".format(self.payment_per_bottom_hour) + \
                 "', payment_per_top_hour='{}".format(self.payment_per_top_hour) + \
                 "', payment_fraction='{}".format(self.payment_fraction) + \
-                "', payment_fraction_calculation1='{}".format(self.payment_fraction_calculation1) + \
-                "', payment_fraction_calculation2='{}".format(self.payment_fraction_calculation2) + \
+                "', payment_fraction_rule='{}".format(self.payment_fraction_rule) + \
                 "', payment_condition='{}".format(self.payment_condition) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', created_at='{}".format(self.created_at) + \

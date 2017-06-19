@@ -9,7 +9,7 @@ from application.domain.model.holiday import Holiday
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
-from application.domain.model.immutables.expression import Expression
+from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.gender import Gender
 from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.detail_type import DetailType
@@ -252,9 +252,8 @@ def create_engineer_histories():
             payment_per_hour='1/100, 1/150',
             payment_per_bottom_hour=num+1,
             payment_per_top_hour=num+2,
-            payment_fraction=100,
-            payment_fraction_calculation1=Expression.more,
-            payment_fraction_calculation2=Round.up,
+            payment_fraction=Fraction.hundred,
+            payment_fraction_rule=Round.down,
             payment_condition='test' + str(num),
             remarks='test' + str(num),
             created_at=datetime.today(),
@@ -284,9 +283,8 @@ def create_project_details():
             billing_per_hour=1,
             billing_per_bottom_hour=num+1,
             billing_per_top_hour=num+1,
-            billing_fraction=100,
-            billing_fraction_calculation1=1,
-            billing_fraction_calculation2=1,
+            billing_fraction=Fraction.hundred,
+            billing_fraction_rule=Round.down,
             bp_order_no=None,
             client_order_no_for_bp=None,
             created_at=datetime.today(),

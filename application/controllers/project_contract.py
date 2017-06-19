@@ -13,6 +13,8 @@ from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.fraction import Fraction
+from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.status import Status
 from application.service.calculator import Calculator
@@ -126,8 +128,7 @@ def detail(project_detail_id=None):
         form.payment_per_bottom_hour.data = current_engineer_history.payment_per_bottom_hour
         form.payment_per_top_hour.data = current_engineer_history.payment_per_top_hour
         form.payment_fraction.data = current_engineer_history.payment_fraction
-        form.payment_fraction_calculation1.data = str(current_engineer_history.payment_fraction_calculation1)
-        form.payment_fraction_calculation2.data = str(current_engineer_history.payment_fraction_calculation2)
+        form.payment_fraction_rule.data = str(current_engineer_history.payment_fraction_rule)
 
     if form.validate_on_submit():
         project_detail.project_id = project_detail.project.id
@@ -146,9 +147,8 @@ def detail(project_detail_id=None):
         project_detail.billing_per_hour = form.billing_per_hour.data
         project_detail.billing_per_bottom_hour = form.billing_per_bottom_hour.data
         project_detail.billing_per_top_hour = form.billing_per_top_hour.data
-        project_detail.billing_fraction = form.billing_fraction.data
-        project_detail.billing_fraction_calculation1 = form.billing_fraction_calculation1.data or None
-        project_detail.billing_fraction_calculation2 = form.billing_fraction_calculation2.data or None
+        project_detail.billing_fraction = Fraction.parse(form.billing_fraction.data)
+        project_detail.billing_fraction_rule = Round.parse(form.billing_fraction_rule.data)
         project_detail.bp_order_no = form.bp_order_no.data
         project_detail.client_order_no_for_bp = form.client_order_no_for_bp.data
 
