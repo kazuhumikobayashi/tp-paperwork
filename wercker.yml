@@ -95,11 +95,19 @@ build:
         code: |
           codecov
 deploy-development:
-  box: google/cloud-sdk
+  box: python:2.7
   steps:
+    - script:
+        name: install google-cloud-sdk
+        code: |
+          export CLOUDSDK_PYTHON_SITEPACKAGES=1
+          wget https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.zip && unzip google-cloud-sdk.zip && rm google-cloud-sdk.zip
+          google-cloud-sdk/install.sh --quiet
+          export PATH="$PATH:google-cloud-sdk/bin"
     - script:
         name: authentification
         code: |
+          export GOOGLE_APPLICATION_CREDENTIALS=/pipeline/source/tp-paperwork-development-2146f321f716.json
           gcloud config set project tp-paperwork-development
           openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json
           gcloud auth activate-service-account --key-file tp-paperwork-development-2146f321f716.json
@@ -118,12 +126,20 @@ deploy-development:
         channel: tp-paperwork
         username: wercker
 deploy-production:
-  box: google/cloud-sdk
+  box: python:2.7
   steps:
+    - script:
+        name: install google-cloud-sdk
+        code: |
+          export CLOUDSDK_PYTHON_SITEPACKAGES=1
+          wget https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.zip && unzip google-cloud-sdk.zip && rm google-cloud-sdk.zip
+          google-cloud-sdk/install.sh --quiet
+          export PATH="$PATH:google-cloud-sdk/bin"
     - script:
         name: authentification
         code: |
-          gcloud config set project tp-paperwork-development
+          export GOOGLE_APPLICATION_CREDENTIALS=/pipeline/source/tp-paperwork-221d27c465d1.json
+          gcloud config set project tp-paperwork
           openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-221d27c465d1.json.encrypted -out tp-paperwork-221d27c465d1.json
           gcloud auth activate-service-account --key-file tp-paperwork-221d27c465d1.json
     - script:
