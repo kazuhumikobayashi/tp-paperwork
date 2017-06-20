@@ -6,7 +6,7 @@ from application.domain.model.immutables.round import Round
 class RoundTests(unittest.TestCase):
 
     def test_name(self):
-        self.assertEqual(Round.down.name, '以下切り捨て')
+        self.assertEqual(Round.down.name, '切り捨て')
         self.assertEqual(Round.off.name, '四捨五入')
 
     def test_parse(self):

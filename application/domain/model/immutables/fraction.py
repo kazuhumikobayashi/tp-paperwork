@@ -2,21 +2,21 @@ from enum import Enum
 
 
 class Fraction(Enum):
-    one = 1
-    ten = 10
-    hundred = 100
-    thousand = 1000
+    one = -1
+    ten = -2
+    hundred = -3
+    thousand = -4
 
     @property
     def name(self):
         if self._value_ == self.one.value:
-            return '1円'
+            return '1の位'
         elif self._value_ == self.ten.value:
-            return '10円'
+            return '10の位'
         elif self._value_ == self.hundred.value:
-            return '100円'
+            return '100の位'
         else:
-            return '1000円'
+            return '1000の位'
 
     @staticmethod
     def get_fraction_for_select():

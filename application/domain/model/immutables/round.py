@@ -8,7 +8,7 @@ class Round(Enum):
     @property
     def name(self):
         if self._value_ == self.down.value:
-            return '以下切り捨て'
+            return '切り捨て'
         else:
             return '四捨五入'
 
