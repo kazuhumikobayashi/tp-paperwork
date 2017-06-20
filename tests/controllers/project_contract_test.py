@@ -210,7 +210,7 @@ class ProjectContractTests(BaseTestCase):
             'end_user_company_id': '4',
             'client_company_id': '3',
             'start_date': str(int(project.start_date.strftime('%Y')) + 1) + '/4/1',
-            'end_date': project.end_date.strftime('%Y/%m/%d'),
+            'end_date': str(int(project.start_date.strftime('%Y')) + 1) + '/6/30',
             'contract_form': project.contract_form,
             'billing_timing': project.billing_timing,
             'estimated_total_amount': project.estimated_total_amount,
@@ -246,7 +246,7 @@ class ProjectContractTests(BaseTestCase):
             'end_user_company_id': '4',
             'client_company_id': '3',
             'start_date': str(int(project.start_date.strftime('%Y')) + 1) + '/10/1',
-            'end_date': project.end_date.strftime('%Y/%m/%d'),
+            'end_date': str(int(project.start_date.strftime('%Y')) + 1) + '/12/31',
             'contract_form': project.contract_form,
             'billing_timing': project.billing_timing,
             'estimated_total_amount': project.estimated_total_amount,
@@ -2515,3 +2515,60 @@ class ProjectContractTests(BaseTestCase):
         self.assertEqual(actual_1, expected_1)
         self.assertEqual(actual_2, expected_2)
         self.assertEqual(actual_3, expected_3)
+
+    # 開始日より終了日の方が小さい場合はエラー
+    def test_start_date_less_than_end_date(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # set_up
+        project = self.project_repository.find_by_id(7)
+        before = str(project)
+
+        result = self.app.post('/project/contract/' + str(project.id), data={
+            'status': Status.done.value,
+            'recorded_department_id': project.recorded_department_id,
+            'estimation_no': project.estimation_no,
+            'project_name': project.project_name,
+            'end_user_company_id': '4',
+            'client_company_id': '3',
+            'start_date': date(2017, 4, 1).strftime('%Y/%m/%d'),
+            'end_date': date(2017, 3, 31).strftime('%Y/%m/%d'),
+            'contract_form': project.contract_form.value,
+            'billing_timing': project.billing_timing.value,
+            'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
+        })
+        self.assertEqual(result.status_code, 200)
+
+        # 更新されていないことを確認。
+        after = str(self.project_repository.find_by_id(7))
+        self.assertEqual(before, after)
+
+    # 開始日より終了日の方が小さい場合はエラー
+    def test_billing_start_date_less_than_billing_end_date(self):
+        before = len(self.project_detail_repository.find_all())
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_all()[0]
+
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': '1',
+            'billing_money': '100000000',
+            'billing_start_day': '2016/2',
+            'billing_end_day': '2016/1',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
+        })
+        self.assertEqual(result.status_code, 200)
+
+        # 件数が変わっていないことを確認。
+        after = len(self.project_detail_repository.find_all())
+        self.assertEqual(before, after)

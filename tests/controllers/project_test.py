@@ -289,3 +289,23 @@ class ProjectTests(BaseTestCase):
 
         # コピーしたプロジェクトの見積番号を確認
         self.assertEqual(copy.estimation_no, expected)
+
+    # 開始日より終了日の方が小さい場合はエラー
+    def test_start_date_less_than_end_date(self):
+        before = len(self.project_repository.find_all())
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/project/create', data={
+            'project_name': 'テスト',
+            'start_date': date(2017, 4, 1).strftime('%Y/%m/%d'),
+            'end_date': date(2017, 3, 31).strftime('%Y/%m/%d'),
+        })
+        self.assertEqual(result.status_code, 200)
+
+        # 件数が変わっていないことを確認。
+        after = len(self.project_repository.find_all())
+        self.assertEqual(before, after)
