@@ -60,6 +60,13 @@ def create(project_id=None):
         project.project_name_for_bp = form.project_name_for_bp.data
         project.start_date = form.start_date.data
         project.end_date = form.end_date.data
+        project_details_clone = []
+        for detail in project.project_details:
+            detail_clone = detail.clone()
+            detail_clone.billing_start_day = project.start_date
+            detail_clone.billing_end_day = project.end_date
+            project_details_clone.append(detail_clone)
+        project.project_details = project_details_clone
 
         service.save(project)
         flash('保存しました。')
