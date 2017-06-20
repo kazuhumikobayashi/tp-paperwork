@@ -15,6 +15,10 @@ class Tax(Enum):
         else:
             return '10％'
 
+    @property
+    def rate(self):
+        return self._value_ / 100
+
     @staticmethod
     def get_type_for_select():
         ret = [('', '')]

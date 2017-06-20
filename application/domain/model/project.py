@@ -193,6 +193,12 @@ class Project(BaseModel, db.Model):
     def has_payment(self):
         return True in [project_detail.has_payment() for project_detail in self.project_details]
 
+    def tax_of_estimated_total_amount(self):
+        if self.client_company:
+            return self.estimated_total_amount * self.client_company.billing_tax.rate
+        else:
+            return 0
+
     def __repr__(self):
         return "<Project:" + \
                 "'id='{}".format(self.id) + \
