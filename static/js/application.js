@@ -2,6 +2,16 @@ function pluginExists(pluginName) {
     return $.fn[pluginName] != undefined;
 }
 
+function round_off(number, n){
+    var pow = Math.pow(10, n);
+    return Math.round(number * pow) / pow
+}
+
+function round_down(number, n){
+    var pow = Math.pow(10, n);
+    return Math.floor(number * pow) / pow
+}
+
 $(function () {
 
     /*-- データテーブル --*/
@@ -294,6 +304,9 @@ $(function() {
       var estimated_money = 0;
       var carfare = 0;
       var adjustment = 0;
+      var ROUND_DOWN = 1;
+      var ROUND_OFF = 2;
+      var billing_confirmation_money = 0;
 
       var billing_rule = $("[name=billing_rule]:checked").val();
       var work_time = parseInt($('#work_time').val());
@@ -302,6 +315,8 @@ $(function() {
       var billing_per_bottom_hour = parseInt($('#billing_per_bottom_hour').val());
       var billing_per_top_hour = parseInt($('#billing_per_top_hour').val());
       var billing_per_month = parseInt($('#billing_per_month').val());
+      var billing_fraction_rule = parseInt($('#billing_fraction_rule').val());
+      var billing_fraction = parseInt($('#billing_fraction').val());
 
       // 請求のルールが固定の場合、作業時間がいかなる場合でも請求単価が入る。
       if (($.isNumeric(work_time) && work_time != 0) || (billing_rule == FIXED)) {
@@ -323,7 +338,16 @@ $(function() {
 
       carfare = parseInt($('#billing_transportation').val()) || 0;
       adjustment = parseInt($('#billing_adjustments').val()) || 0;
-      $('#billing_confirmation_money').val(estimated_money + carfare + adjustment);
+
+      billing_confirmation_money = estimated_money + carfare + adjustment;
+
+      if (billing_fraction_rule == ROUND_DOWN) {
+          billing_confirmation_money = round_down(billing_confirmation_money, billing_fraction)
+      } else if (billing_fraction_rule == ROUND_OFF) {
+          billing_confirmation_money = round_off(billing_confirmation_money, billing_fraction)
+      }
+
+      $('#billing_confirmation_money').val(billing_confirmation_money);
 
   });
 });
@@ -338,6 +362,9 @@ $(function() {
       var estimated_money = 0;
       var carfare = 0;
       var adjustment = 0;
+      var ROUND_DOWN = 1;
+      var ROUND_OFF = 2;
+      var payment_confirmation_money = 0;
 
       var payment_rule = $("[name=payment_rule]:checked").val();
       var work_time = parseInt($('#work_time').val());
@@ -346,6 +373,8 @@ $(function() {
       var payment_top_base_hour = parseInt($('#payment_top_base_hour').val());
       var payment_per_bottom_hour = parseInt($('#payment_per_bottom_hour').val());
       var payment_per_top_hour = parseInt($('#payment_per_top_hour').val());
+      var payment_fraction_rule = parseInt($('#payment_fraction_rule').val());
+      var payment_fraction = parseInt($('#payment_fraction').val());
 
       if ((($.isNumeric(work_time) && work_time != 0) || (payment_rule == FIXED))
               && $.isNumeric(payment_per_month)) {
@@ -367,6 +396,15 @@ $(function() {
 
       carfare = parseInt($('#payment_transportation').val()) || 0;
       adjustment = parseInt($('#payment_adjustments').val()) || 0;
+
+      payment_confirmation_money = estimated_money + carfare + adjustment;
+
+      if (payment_fraction_rule == ROUND_DOWN) {
+          payment_confirmation_money = round_down(payment_confirmation_money, payment_fraction)
+      } else if (payment_fraction_rule == ROUND_OFF) {
+          payment_confirmation_money = round_off(payment_confirmation_money, payment_fraction)
+      }
+
       $('#payment_confirmation_money').val(estimated_money + carfare + adjustment);
 
   });
