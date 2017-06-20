@@ -3,7 +3,7 @@ from wtforms import validators, HiddenField, StringField, DateField, SelectField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, DateField, RadioField
-from application.controllers.form.validators import Length, DataRequired, InputRequired
+from application.controllers.form.validators import Length, DataRequired, InputRequired, LessThan
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
@@ -41,7 +41,7 @@ class ProjectDetailForm(FlaskForm):
     billing_money = IntegerField('請求金額（必須）', [InputRequired()])
     remarks = StringField('備考', [Length(max=1024)])
     billing_start_day = DateField('請求契約開始年月（必須）',
-                                  [required_if_engineer],
+                                  [required_if_engineer, LessThan('billing_end_day')],
                                   format='%Y/%m',
                                   render_kw={"autocomplete": "off"})
     billing_end_day = DateField('請求契約終了年月（必須）',

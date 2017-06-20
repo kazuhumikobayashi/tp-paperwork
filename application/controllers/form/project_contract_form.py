@@ -3,7 +3,7 @@ from wtforms import ValidationError
 from wtforms import validators, StringField, SelectField, TextAreaField
 
 from application.controllers.form.fields import IntegerField, DateField
-from application.controllers.form.validators import Length, DataRequired
+from application.controllers.form.validators import Length, DataRequired, LessThan
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.status import Status
@@ -13,7 +13,7 @@ from application.domain.repository.project_repository import ProjectRepository
 repository = ProjectRepository()
 
 
-class ContractForm(FlaskForm):
+class ProjectContractForm(FlaskForm):
     id = IntegerField('プロジェクトコード')
     project_name = StringField('プロジェクト名称', [DataRequired(), Length(max=128)])
     project_name_for_bp = StringField('BP向けプロジェクト名称', [Length(max=128)], filters=[lambda x: x or None])
@@ -27,7 +27,10 @@ class ContractForm(FlaskForm):
     estimation_no = StringField('見積No（必須）', [DataRequired(), Length(max=64)])
     end_user_company_id = SelectField('エンドユーザー（必須）', [DataRequired()])
     client_company_id = SelectField('顧客会社（必須）', [DataRequired()])
-    start_date = DateField('プロジェクト開始日（必須）', [DataRequired()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
+    start_date = DateField('プロジェクト開始日（必須）',
+                           [DataRequired(), LessThan('end_date')],
+                           format='%Y/%m/%d',
+                           render_kw={"autocomplete": "off"})
     end_date = DateField('プロジェクト終了日（必須）', [DataRequired()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     contract_form = SelectField('契約形態（必須）',
                                 [DataRequired()],

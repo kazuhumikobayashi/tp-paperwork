@@ -7,7 +7,7 @@ from flask import render_template
 from flask import request
 from flask import url_for
 
-from application.controllers.form.contract_form import ContractForm
+from application.controllers.form.project_contract_form import ProjectContractForm
 from application.controllers.form.project_detail_form import ProjectDetailForm
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.client_flag import ClientFlag
@@ -41,7 +41,7 @@ def index(project_id=None):
     if project.id is None and project_id is not None:
         return abort(404)
 
-    form = ContractForm(request.form, project)
+    form = ProjectContractForm(request.form, project)
     form.recorded_department_id.choices = department_service.find_all_for_select()
     form.client_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.client.value])
     form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.end_user.value])

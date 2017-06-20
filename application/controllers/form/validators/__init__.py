@@ -1,3 +1,5 @@
+from datetime import date
+
 from flask_wtf import file
 from wtforms import ValidationError
 from wtforms import validators
@@ -77,13 +79,16 @@ class LessThan(object):
             other = form[self.fieldname]
         except KeyError:
             raise ValidationError(field.gettext("フィールド名 '%s' が見つかりません。") % self.fieldname)
-        if field.data > other.data:
+        if field.data and other.data and field.data > other.data:
             d = {
                 'other_label': hasattr(other, 'label') and other.label.text or self.fieldname,
                 'other_name': self.fieldname
             }
             message = self.message
             if message is None:
-                message = field.gettext('{} は %(other_label)sより小さい値にして下さい。'.format(field.label.text))
+                if isinstance(field.data, date):
+                    message = field.gettext('{} は %(other_label)sより前の日付にして下さい。'.format(field.label.text))
+                else:
+                    message = field.gettext('{} は %(other_label)sより小さい値にして下さい。'.format(field.label.text))
 
             raise ValidationError(message % d)
