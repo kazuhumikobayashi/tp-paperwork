@@ -15,8 +15,8 @@ class ProjectDetailRepository(BaseRepository):
     model = ProjectDetail
 
     def save(self, project_detail):
-        if project_detail.project.status == Status.done and project_detail.project.has_not_project_results\
-                and project_detail.project.has_not_project_billings:
+        if project_detail.project.status == Status.done and project_detail.project.has_not_project_results()\
+                and project_detail.project.has_not_project_billings():
 
             if project_detail.is_engineer():
                 # 明細がengineerの場合、明細に登録された契約期間を取得してその月々の実績レコードを作成する。
