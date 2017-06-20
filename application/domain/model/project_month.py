@@ -53,6 +53,9 @@ class ProjectMonth(BaseModel, db.Model):
         self.remarks = remarks
         self.client_billing_no = client_billing_no
 
+    def tax_of_billing_confirmation_money(self):
+        return self.billing_confirmation_money * self.project.client_company.billing_tax.rate
+
     def __repr__(self):
         return "<ProjectMonth:" + \
                 "'id='{}".format(self.id) + \
