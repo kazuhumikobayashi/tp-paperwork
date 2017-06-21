@@ -41,7 +41,7 @@ class EngineerTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer/page/2')
+        result = self.app.get('/engineer/page/2?company_id=&engineer_name=&skill_id=&business_category_id=')
         self.assertEqual(result.status_code, 200)
 
     # 技術者を検索する。
@@ -52,7 +52,7 @@ class EngineerTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer/?engineer_name=test&company_id=2&business_category_id=2&skill_id=2')
+        result = self.app.get('/engineer/?engineer_name=test&company_id=2&contract_engineer_is_checked=1&business_category_id=2&skill_id=2')
         self.assertEqual(result.status_code, 200)
 
     # 技術者登録画面に遷移する。
