@@ -69,7 +69,7 @@
 	        <tr>
 	          <th width="250px">支払契約開始年月</th>
 	          <th width="300px">支払契約終了年月</th>
-	          <th>支払単価</th>
+	          <th class="text-right" width="80px">支払単価</th>
 	          <th width="70px" class="center"></th>
 	        </tr>
 		  {% for engineer_history in engineer_histories %}
@@ -80,7 +80,7 @@
 	            </a>
 	          </td>
 	          <td>{{ engineer_history.payment_end_day.strftime('%Y/%m/%d')|filter_suppress_none }}</td>
-	          <td>{{ engineer_history.payment_per_month|filter_suppress_none }}</td>
+	          <td class="text-right">{{ engineer_history.payment_per_month|number_with_commas|with_yen  }}</td>
 	          <td>
 	            {% if engineer_history == latest_engineer_history %}
 	              <a class="btn btn-sm btn-danger" href="{{ url_for('engineer_history.delete', engineer_id=form.id.data, engineer_history_id=engineer_history.id) }}">
