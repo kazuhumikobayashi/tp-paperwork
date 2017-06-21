@@ -38,6 +38,7 @@ def index(page=1):
     pagination = service.find(page,
                               form.engineer_name.data,
                               form.company_id.data,
+                              form.contract_engineer_is_checked.data,
                               form.skill_id.data,
                               form.business_category_id.data)
     return render_template('master/engineer/index.html',
