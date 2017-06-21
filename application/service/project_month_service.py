@@ -21,6 +21,13 @@ class ProjectMonthService(object):
     def find_by_id(self, project_month_id):
         return self.repository.find_by_id(project_month_id)
 
+    def find_by_billing(self, page, project_name, result_input_flag, billing_input_flag,
+                        deposit_input_flag, end_user_company_id, client_company_id,
+                        recorded_department_id, deposit_date_from, deposit_date_to):
+        return self.repository.find_by_billing(page, project_name, result_input_flag, billing_input_flag,
+                                               deposit_input_flag, end_user_company_id, client_company_id,
+                                               recorded_department_id, deposit_date_from, deposit_date_to)
+
     def find_project_month_at_a_month(self, project_id, project_month):
         return self.repository.find_project_month_at_a_month(project_id, project_month)
 

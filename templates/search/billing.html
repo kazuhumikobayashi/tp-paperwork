@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_search_field %}
+{% import "_pagination.html" as p %}
+{% block title %}請求情報{% endblock %}
+{% block include_css %}
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- Select2 -->
+  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
+{% endblock %}
+{% block content_header %}
+  <h1>請求情報</h1>
+  <ol class="breadcrumb">
+    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
+    <li class="active">支払情報</li>
+  </ol>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 検索条件</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <!-- /.box-header -->
+    <form class="form-horizontal" method="get" action="{{ url_for('.index') }}">
+    <div class="box-body">
+      <div class="row">
+        {{ render_search_field(form.project_name, "col-md-12") }}
+      </div>
+      <div class="row">
+    	{{ render_search_field(form.result_input_flag, "col-sm-6") }}
+    	{{ render_search_field(form.billing_input_flag, "col-sm-6") }}
+      </div>
+      <div class="row">
+      	{{ render_search_field(form.deposit_input_flag, "col-sm-6") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.end_user_company_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.client_company_id, "col-md-6", input_class="select2") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.recorded_department_id, "col-md-6", input_class="select2") }}
+      </div>
+      <div class="row">
+        {{ render_search_field(form.deposit_date_from, "col-md-6", input_class="date") }}
+        {{ render_search_field(form.deposit_date_to, "col-md-6", input_class="date") }}
+      </div>
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <button type="submit" class="btn btn-sm btn-primary pull-right"><i class="fa fa-search"></i> 検索</button>
+    </div>
+    </form>
+  </div>
+  <!-- /.box -->
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          {% if pagination %}
+            {% if pagination.total > pagination.per_page %}
+              {{ p.pagination_widget(pagination,'.payment_page',
+              project_name=form.project_name.data,
+              result_input_flag=form.result_input_flag.data,
+              billing_input_flag=form.billing_input_flag.data,
+              deposit_input_flag=form.deposit_input_flag.data,
+              end_user_company_id=form.end_user_company_id.data,
+              client_company_id=form.client_company_id.data,
+              recorded_department_id=form.recorded_department_id.data,
+              deposit_date_from=form.deposit_date_from.data,
+              deposit_date_to=form.deposit_date_to.data) }}
+            {% endif %}
+          {% endif %}
+
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover">
+            <tr>
+              <th>エンドユーザー</th>
+              <th>顧客会社</th>
+              <th>計上部署</th>
+              <th>プロジェクト名</th>
+              <th>入金予定日</th>
+              <th class="text-right" width="160px">請求確定金額</th>
+              <th class="text-center">実績入力済</th>
+              <th class="text-center">請求済</th>
+              <th class="text-center">入金済</th>
+            </tr>
+            {% for project_month in pagination.items %}
+            <tr>
+              <td>{{ project_month.project.end_user_company.company_name|filter_suppress_none }}</td>
+              <td>{{ project_month.project.client_company.company_name }}</td>
+              <td>{{ project_month.project.recorded_department.department_name }}</td>
+              <td><a href="{{ url_for('project_contract.index', project_id=project_month.project.id) }}">{{ project_month.project.project_name }}</a></td>
+              <td>{{ project_month.deposit_date|datetime_format("%Y/%m/%d") }}</td>
+              <td class="text-right">{{ project_month.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>
+              <td class="text-center">
+                {% if project_month.result_input_flag.value %}
+                  <i class="fa fa-check" aria-hidden="true"></i>
+                {% endif %}
+              </td>              
+              <td class="text-center">
+                {% if project_month.billing_input_flag.value %}
+                  <i class="fa fa-check" aria-hidden="true"></i>
+                {% endif %}
+              </td>
+              <td class="text-center">
+              	<input type="checkbox" name="deposit_input_flag" {% if project_month.deposit_input_flag.value %}checked{% endif %}>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <!-- /.col-xs -->
+  </div>
+  <!-- /.row -->
+{% endblock %}
