@@ -101,7 +101,11 @@
               <td>{{ payment.project_detail.engineer.engineer_name|filter_suppress_none }}</td>
               <td>{{ payment.payment_expected_date|datetime_format("%Y/%m/%d") }}</td>
               <td class="text-right">{{ payment.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>
-              <td class="text-center"><input type="checkbox" name="payment_input_flag" {% if payment.payment_flag.value %}checked{% endif %}></td>
+              <td class="text-center">
+              	<input type="checkbox" class="payment-input-flag" 
+              		   id="{{ payment.id }}"
+              		   name="payment_input_flag" {% if payment.payment_flag.value %}checked{% endif %}>
+              </td>
             </tr>
             {% endfor %}
           </table>
