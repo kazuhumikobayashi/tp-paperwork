@@ -475,3 +475,25 @@ $(function() {
     });
   });
 });
+
+
+// 支払済みフラグ更新
+$(function() {
+  $('.payment-input-flag').on('ifChanged', function(event){
+    var payment_id = $(this).attr("id");
+    var input_flag = $(this).prop('checked') ? 1 : 0;
+
+    $.ajax({
+      type: 'POST',
+      url: '/search/payment/save_flag',
+      data: {payment_id: payment_id, input_flag: input_flag},
+      dataType: 'json',
+      success: function(data, dataType) {
+
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown){
+        console.log(errorThrown.message);
+      }
+    });
+  });
+});

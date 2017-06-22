@@ -105,3 +105,45 @@ class PaymentTests(BaseTestCase):
         result = self.app.get('/search/payment/?' + query_string)
 
         self.assertEqual(result.status_code, 200)
+
+    # 支払済みフラグが更新されることを確認する
+    def test_save_flag(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project_result = self.project_result_repository.find_by_id(3)
+        self.assertEqual(project_result.payment_flag, InputFlag.yet)
+
+        # 実支払済みフラグをチェック有りで更新する。
+        excepted = InputFlag.done.value
+
+        headers = [('X-Requested-With', 'XMLHttpRequest')]
+        result = self.app.post('/search/payment/save_flag',
+                               headers=headers,
+                               data={
+                                    'payment_id': project_result.id,
+                                    'input_flag': excepted
+                               })
+        self.assertEqual(result.status_code, 200)
+
+        # DBのpayment_flag値が1になっていることを確認。
+        project_result = self.project_result_repository.find_by_id(3)
+        actual_input_flag = project_result.payment_flag.value
+        self.assertEqual(actual_input_flag, excepted)
+
+    def test_save_flag_fail(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # xhrではない場合
+        result = self.app.post('/search/payment/save_flag', data={
+                                    'payment_id': '2',
+                                    'input_flag': InputFlag.done.value
+                               })
+        self.assertEqual(result.status_code, 404)
