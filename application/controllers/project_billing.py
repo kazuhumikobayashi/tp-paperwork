@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask import abort
 from flask import current_app
 from flask import flash
@@ -9,6 +9,7 @@ from flask import url_for
 
 from application.controllers.form.project_billing_form import ProjectBillingForm
 from application.controllers.form.project_month_form import ProjectMonthForm
+from application.domain.model.immutables.input_flag import InputFlag
 from application.service.project_billing_service import ProjectBillingService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
@@ -98,3 +99,18 @@ def delete(billing_id):
         return redirect('/project/billing/detail/' + str(project_month.id))
     else:
         return redirect('/project/')
+
+
+@bp.route('/save_flag', methods=['POST'])
+def save_flag():
+    if request.is_xhr:
+        month_id = request.form["month_id"]
+        input_flag = InputFlag.parse(request.form["input_flag"])
+
+        project_month = project_month_service.find_by_id(month_id)
+        project_month.billing_input_flag = input_flag
+
+        project_month_service.save(project_month)
+        return jsonify(result='success')
+
+    return abort(404)
