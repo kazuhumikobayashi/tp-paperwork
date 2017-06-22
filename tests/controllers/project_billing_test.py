@@ -3,6 +3,7 @@ from datetime import datetime, date
 from nose.tools import ok_
 
 from application import db
+from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.domain.repository.project_month_repository import ProjectMonthRepository
@@ -211,4 +212,46 @@ class ProjectBillingTests(BaseTestCase):
         })
 
         result = self.app.get('/project/billing/0')
+        self.assertEqual(result.status_code, 404)
+
+    # 。請求済みフラグが更新されることを確認する
+    def test_save_flag(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project_month_id = 5
+        project_month = self.project_month_repository.find_by_id(project_month_id)
+
+        # 請求入力済みフラグをチェック有りで更新する。
+        excepted = InputFlag.done.value
+
+        headers = [('X-Requested-With', 'XMLHttpRequest')]
+        result = self.app.post('/project/billing/save_flag',
+                               headers=headers,
+                               data={
+                                    'month_id': project_month.id,
+                                    'input_flag': excepted
+                               })
+        self.assertEqual(result.status_code, 200)
+
+        # DBのresult_input_flag値が1になっていることを確認。
+        project_month = self.project_month_repository.find_by_id(5)
+        actual_input_flag = project_month.billing_input_flag.value
+        self.assertEqual(actual_input_flag, excepted)
+
+    def test_save_flag_fail(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # xhrではない場合
+        result = self.app.post('/project/billing/save_flag', data={
+                                    'month_id': '2',
+                                    'input_flag': InputFlag.done.value
+                               })
         self.assertEqual(result.status_code, 404)

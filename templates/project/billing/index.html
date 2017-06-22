@@ -74,7 +74,10 @@
                     <td class="text-center">
                       <div class="form-group no-margin">
                         <label>
-                          <input type="checkbox" class="flat-red" name="billing_input_flag" value="input">
+                          <input type="checkbox" class="billing-input-flag"
+                                 id="{{ project_month.id }}"
+                                 name="billing_input_flag"
+                                 {% if project_month.billing_input_flag.value %}checked{% endif %} />
                         </label>
                       </div>
                     </td>
