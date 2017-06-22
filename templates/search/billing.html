@@ -20,11 +20,7 @@
   <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
 {% endblock %}
 {% block content_header %}
-  <h1>請求情報</h1>
-  <ol class="breadcrumb">
-    <li><a href="/"><i class="fa fa-home"></i> Home</a></li>
-    <li class="active">支払情報</li>
-  </ol>
+  <h1>請求情報検索</h1>
 {% endblock %}
 {% block main_content %}
   <div class="box box-primary">
@@ -42,11 +38,11 @@
         {{ render_search_field(form.project_name, "col-md-12") }}
       </div>
       <div class="row">
-    	{{ render_search_field(form.result_input_flag, "col-sm-6") }}
-    	{{ render_search_field(form.billing_input_flag, "col-sm-6") }}
+        {{ render_search_field(form.result_input_flag, "col-sm-6") }}
+        {{ render_search_field(form.billing_input_flag, "col-sm-6") }}
       </div>
       <div class="row">
-      	{{ render_search_field(form.deposit_input_flag, "col-sm-6") }}
+        {{ render_search_field(form.deposit_input_flag, "col-sm-6") }}
       </div>
       <div class="row">
         {{ render_search_field(form.end_user_company_id, "col-md-6", input_class="select2") }}
@@ -121,7 +117,10 @@
                 {% endif %}
               </td>
               <td class="text-center">
-              	<input type="checkbox" name="deposit_input_flag" {% if project_month.deposit_input_flag.value %}checked{% endif %}>
+                <input type="checkbox" class="deposit-input-flag"
+                       id="{{ project_month.id }}"
+                       name="deposit_input_flag"
+                       {% if project_month.deposit_input_flag.value %}checked{% endif %}>
               </td>
             </tr>
             {% endfor %}
