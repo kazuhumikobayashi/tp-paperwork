@@ -1,9 +1,10 @@
-from flask import Blueprint
+from flask import Blueprint, abort, jsonify
 from flask import render_template
 from flask import request
 
 from application.controllers.form.billing_search_form import BillingSearchForm
 from application.domain.model.immutables.client_flag import ClientFlag
+from application.domain.model.immutables.input_flag import InputFlag
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
 from application.service.project_billing_service import ProjectBillingService
@@ -40,3 +41,18 @@ def index(page=1):
 @bp.route('/page/<int:page>', methods=['GET'])
 def payment_page(page=1):
     return index(page)
+
+
+@bp.route('/save_flag', methods=['POST'])
+def save_flag():
+    if request.is_xhr:
+        month_id = request.form["month_id"]
+        input_flag = InputFlag.parse(request.form["input_flag"])
+
+        project_month = project_month_service.find_by_id(month_id)
+        project_month.deposit_input_flag = input_flag
+
+        project_month_service.save(project_month)
+        return jsonify(result='success')
+
+    return abort(404)
