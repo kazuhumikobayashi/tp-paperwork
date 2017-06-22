@@ -20,6 +20,7 @@ class ProjectResultService(object):
         return self.repository.find_incomplete_payments()
 
     def save(self, result):
-        self.billing_repository.copy_and_save(result)
+        if result.billing_confirmation_money:
+            self.billing_repository.copy_and_save(result)
 
         return self.repository.save(result)

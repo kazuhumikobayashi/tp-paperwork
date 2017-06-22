@@ -288,3 +288,100 @@ class ProjectResultTests(BaseTestCase):
                                     'input_flag': InputFlag.done.value
                                })
         self.assertEqual(result.status_code, 404)
+
+    # 請求確定金額がブランクの場合、請求情報が作成されるない
+    def test_do_not_create_billing_when_billing_confirmation_money_none(self):
+        before = len(self.project_billing_repository.find_all())
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # set_up
+        project = Project(
+            project_name='テスト',
+            project_name_for_bp='テスト',
+            status=Status.start,
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no='do_not_create_bill',
+            end_user_company_id=4,
+            client_company_id=3,
+            start_date=date(2017, 1, 1),
+            end_date=date(2017, 12, 31),
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.billing_at_last,
+            estimated_total_amount=1000000,
+            deposit_date='20/12/31',
+            scope='test',
+            contents=None,
+            working_place=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project)
+        db.session.commit()
+
+        engineer = Engineer(
+            engineer_name='エンジニア',
+            company_id=5,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': engineer.id,
+            'billing_money': '100000000',
+            'billing_start_day': date(2017, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_rule': '',
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        result = self.app.post('/project/contract/' + str(project.id), data={
+            'status': Status.done.value,
+            'recorded_department_id': project.recorded_department_id,
+            'estimation_no': project.estimation_no,
+            'project_name': project.project_name,
+            'end_user_company_id': str(project.end_user_company_id),
+            'client_company_id': str(project.client_company_id),
+            'start_date': project.start_date.strftime('%Y/%m/%d'),
+            'end_date': project.end_date.strftime('%Y/%m/%d'),
+            'contract_form': project.contract_form.value,
+            'billing_timing': project.billing_timing.value,
+            'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract' in result.headers['Location'])
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+        project_result_id = project_detail.project_results[0].id
+
+        # 実績を保存する。
+        result = self.app.post('/project/result/detail/' + str(project_result_id), data={
+            'work_time': '160.0',
+            'billing_confirmation_money': ''
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/result/detail/' + str(project_result_id) in result.headers['Location'])
+
+        # 請求のレコード数が増えていないことを確認。
+        after = len(self.project_billing_repository.find_all())
+        self.assertEqual(before, after)
