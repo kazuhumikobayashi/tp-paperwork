@@ -39,7 +39,7 @@ class BillingSearchTests(BaseTestCase):
             project_month = ProjectMonth(
                 project_id=1,
                 project_month=date(2017, num+1, 1),
-                deposit_date=datetime.today(),
+                deposit_date=datetime.today().date(),
                 billing_estimated_money=100000,
                 billing_confirmation_money=100100,
                 billing_transportation=100,
