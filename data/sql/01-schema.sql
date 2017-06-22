@@ -349,7 +349,7 @@ CREATE TABLE IF NOT EXISTS project_billings (
   billing_month DATE NOT NULL ,
   billing_content VARCHAR(128) ,
   billing_amount VARCHAR(128) ,
-  billing_confirmation_money INT ,
+  billing_confirmation_money INT NOT NULL DEFAULT 0 ,
   billing_transportation INT ,
   remarks VARCHAR(1024) ,
   created_at DATETIME NOT NULL ,

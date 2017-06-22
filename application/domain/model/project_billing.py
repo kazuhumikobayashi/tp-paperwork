@@ -12,7 +12,7 @@ class ProjectBilling(BaseModel, db.Model):
     billing_month = Column(Date, nullable=False)
     billing_content = Column(String(128))
     billing_amount = Column(String(128))
-    billing_confirmation_money = Column(Integer)
+    billing_confirmation_money = Column(Integer, nullable=False, default=0)
     billing_transportation = Column(Integer)
     remarks = Column(String(128))
 
@@ -23,7 +23,7 @@ class ProjectBilling(BaseModel, db.Model):
                  billing_month=None,
                  billing_content=None,
                  billing_amount=None,
-                 billing_confirmation_money=None,
+                 billing_confirmation_money=0,
                  billing_transportation=None,
                  remarks=None,
                  created_at=None,
