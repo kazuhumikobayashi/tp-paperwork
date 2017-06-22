@@ -32,7 +32,7 @@ def index(page=1):
                                          form.engineer_name.data,                            
                                          form.payment_expected_date_from.data,
                                          form.payment_expected_date_to.data)
-    return render_template('payment/index.html', pagination=pagination, form=form)
+    return render_template('search/payment.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])
