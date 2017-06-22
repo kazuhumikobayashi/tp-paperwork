@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, current_app
+from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, current_app, jsonify
 
 from application.controllers.form.result_form import ResultForm, ProjectDetailInResultForm, EngineerHistoryInResultForm
+from application.domain.model.immutables.input_flag import InputFlag
 from application.service.engineer_history_service import EngineerHistoryService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_result_service import ProjectResultService
@@ -62,3 +63,18 @@ def detail(result_id=None):
                            project_detail_form=project_detail_form,
                            engineer_history_form=engineer_history_form,
                            pre_page=pre_page)
+
+
+@bp.route('/save_flag', methods=['POST'])
+def save_flag():
+    if request.is_xhr:
+        month_id = request.form["month_id"]
+        input_flag = InputFlag.parse(request.form["input_flag"])
+
+        project_month = project_month_service.find_by_id(month_id)
+        project_month.result_input_flag = input_flag
+
+        project_month_service.save(project_month)
+        return jsonify(result='success')
+
+    return abort(404)

@@ -1,5 +1,6 @@
 from datetime import datetime, date
 from decimal import Decimal
+
 from nose.tools import ok_
 
 from application import db
@@ -7,12 +8,14 @@ from application.domain.model.engineer import Engineer
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.domain.repository.project_detail_repository import ProjectDetailRepository
+from application.domain.repository.project_month_repository import ProjectMonthRepository
 from application.domain.repository.project_repository import ProjectRepository
 from tests import BaseTestCase
 
@@ -31,6 +34,7 @@ class ProjectResultTests(BaseTestCase):
         self.project_result_repository = ProjectResultRepository()
         self.project_detail_repository = ProjectDetailRepository()
         self.project_billing_repository = ProjectBillingRepository()
+        self.project_month_repository = ProjectMonthRepository()
 
     def tearDown(self):
         super(ProjectResultTests, self).tearDown()
@@ -242,3 +246,45 @@ class ProjectResultTests(BaseTestCase):
         # 請求のレコード数が増えていないことを確認。
         after2 = len(self.project_billing_repository.find_all())
         self.assertEqual(after1, after2)
+
+    # 。実績入力済みフラグが更新されることを確認する
+    def test_save_flag(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project_month_id = 3
+        project_month = self.project_month_repository.find_by_id(project_month_id)
+
+        # 実績入力済みフラグをチェック有りで更新する。
+        excepted = InputFlag.done.value
+
+        headers = [('X-Requested-With', 'XMLHttpRequest')]
+        result = self.app.post('/project/result/save_flag',
+                               headers=headers,
+                               data={
+                                    'month_id': project_month.id,
+                                    'input_flag': excepted
+                               })
+        self.assertEqual(result.status_code, 200)
+
+        # DBのresult_input_flag値が1になっていることを確認。
+        project_month = self.project_month_repository.find_by_id(3)
+        actual_input_flag = project_month.result_input_flag.value
+        self.assertEqual(actual_input_flag, excepted)
+
+    def test_save_flag_fail(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # xhrではない場合
+        result = self.app.post('/project/result/save_flag', data={
+                                    'month_id': '2',
+                                    'input_flag': InputFlag.done.value
+                               })
+        self.assertEqual(result.status_code, 404)

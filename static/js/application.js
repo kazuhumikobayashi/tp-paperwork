@@ -431,3 +431,25 @@ $(function() {
 
   });
 });
+
+
+// 実績入力済みフラグ更新
+$(function() {
+  $('.result-input-flag').on('ifChanged', function(event){
+    var month_id = $(this).attr("id");
+    var input_flag = $(this).prop('checked') ? 1 : 0;
+
+    $.ajax({
+      type: 'POST',
+      url: '/project/result/save_flag',
+      data: {month_id: month_id, input_flag: input_flag},
+      dataType: 'json',
+      success: function(data, dataType) {
+
+      },
+      error: function(XMLHttpRequest, textStatus, errorThrown){
+        console.log(errorThrown.message);
+      }
+    });
+  });
+});
