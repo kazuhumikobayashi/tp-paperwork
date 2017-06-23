@@ -1,3 +1,6 @@
+from flask import current_app
+
+from application.domain.repository.billing_sequence_repository import BillingSequenceRepository
 from application.domain.repository.project_month_repository import ProjectMonthRepository
 from application.domain.repository.project_result_repository import ProjectResultRepository
 
@@ -5,6 +8,7 @@ from application.domain.repository.project_result_repository import ProjectResul
 class ProjectMonthService(object):
     repository = ProjectMonthRepository()
     result_repository = ProjectResultRepository()
+    billing_sequence_repository = BillingSequenceRepository()
 
     def get_project_result_form(self, project_id):
         project_result_forms = self.repository.get_project_result_form(project_id)
@@ -41,4 +45,15 @@ class ProjectMonthService(object):
         return self.repository.find_incomplete_deposits()
 
     def save(self, project_month):
+        if project_month.is_month_to_billing():
+            fiscal_year = project_month.get_fiscal_year()
+
+            while True:
+                billing_sequence = self.billing_sequence_repository.take_a_sequence(fiscal_year)
+                client_billing_no = billing_sequence.get_client_billing_no()
+
+                if not self.repository.find_by_client_billing_no(client_billing_no):
+                    project_month.client_billing_no = client_billing_no
+                    break
+
         return self.repository.save(project_month)

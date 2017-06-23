@@ -64,6 +64,9 @@ class ProjectMonthRepository(BaseRepository):
                     .filter(self.model.project_month == project_month).first()
         return project_month
 
+    def find_by_client_billing_no(self, client_billing_no):
+        return self.model.query.filter(self.model.client_billing_no == client_billing_no).first()
+
     def find_incomplete_results(self):
         return self.model.query\
                          .filter(self.model.result_input_flag == InputFlag.yet) \
