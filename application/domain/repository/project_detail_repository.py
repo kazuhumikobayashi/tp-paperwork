@@ -14,6 +14,9 @@ class ProjectDetailRepository(BaseRepository):
 
     model = ProjectDetail
 
+    def find_by_bp_order_no(self, bp_order_no):
+        return self.model.query.filter(self.model.bp_order_no == bp_order_no).first()
+
     def save(self, project_detail):
         if project_detail.project.status == Status.done\
                 and not project_detail.project_results and not project_detail.project_billings:

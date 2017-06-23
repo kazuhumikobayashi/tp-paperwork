@@ -8,6 +8,9 @@ from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
+from application.service.engineer_service import EngineerService
+
+service = EngineerService()
 
 
 # 明細区分で作業者を選択した場合、入力必須にする。
@@ -105,8 +108,8 @@ class ProjectDetailForm(FlaskForm):
                                         choices=Round.get_round_for_select(),
                                         filters=[lambda x: x or None],
                                         render_kw={"disabled": "disabled"})
-    bp_order_no = StringField('BP注文書No')
-    client_order_no_for_bp = StringField('顧客注文書No（BPごと）')
+    bp_order_no = StringField('BP注文書No', [Length(max=64)], filters=[lambda x: x or None])
+    client_order_no_for_bp = StringField('顧客注文書No（BPごと）', [Length(max=64)], filters=[lambda x: x or None])
 
     def validate_billing_bottom_base_hour(self, field):
         # 請求ルールが変動の時、フリー時間が空ならエラー
@@ -126,3 +129,13 @@ class ProjectDetailForm(FlaskForm):
                 and self.billing_bottom_base_hour.data is None \
                 and self.billing_top_base_hour.data is None:
             raise ValidationError('入力必須項目です。')
+
+    def validate_bp_order_no(self, field):
+        # 新規登録、作業の場合はチェック不要
+        if not self.id.data or DetailType.parse(self.detail_type.data) == DetailType.work:
+            return
+
+        engineer = service.find_by_id(self.engineer_id.data)
+        # BPの場合、新規登録時以外はBP向け注文書番号必須
+        if engineer.is_bp() and field.data is None:
+            raise ValidationError('BP向け注文書番号は入力必須です。')
