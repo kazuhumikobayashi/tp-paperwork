@@ -28,7 +28,7 @@ class ProjectDetail(BaseModel, db.Model):
     engineer_id = Column(Integer, ForeignKey("engineers.id"))
     _billing_money = Column('billing_money', Integer)
     remarks = Column(String(1024))
-    billing_start_day = Column(Date)
+    _billing_start_day = Column('billing_start_day', Date)
     billing_end_day = Column(Date)
     billing_per_month = Column(Integer)
     billing_rule = Column(EnumType(enum_class=Rule))
@@ -48,6 +48,8 @@ class ProjectDetail(BaseModel, db.Model):
     project_billings = relationship(ProjectBilling, cascade='all, delete-orphan')
     project_results = relationship(ProjectResult, cascade='all, delete-orphan')
 
+    _is_billing_start_day_change = False
+
     @hybrid_property
     def billing_money(self):
         return self._billing_money
@@ -58,6 +60,25 @@ class ProjectDetail(BaseModel, db.Model):
                                               + (value or 0) \
                                               - (self._billing_money or 0)
         self._billing_money = value
+
+    @hybrid_property
+    def billing_start_day(self):
+        return self._billing_start_day
+
+    @billing_start_day.setter
+    def billing_start_day(self, value):
+        old = self._get_fiscal_year(self._billing_start_day)
+        new = self._get_fiscal_year(value)
+
+        if old != new:
+            self._is_billing_start_day_change = True
+        self._billing_start_day = value
+
+    @property
+    def is_billing_start_day_change(self):
+        if not self.id:
+            return True
+        return self._is_billing_start_day_change
 
     def __init__(self,
                  project_id=None,
@@ -91,7 +112,7 @@ class ProjectDetail(BaseModel, db.Model):
         self.engineer_id = engineer_id
         self._billing_money = billing_money
         self.remarks = remarks
-        self.billing_start_day = billing_start_day
+        self._billing_start_day = billing_start_day
         self.billing_end_day = billing_end_day
         self.billing_per_month = billing_per_month
         self.billing_rule = billing_rule
@@ -106,11 +127,23 @@ class ProjectDetail(BaseModel, db.Model):
         self.bp_order_no = bp_order_no
         self.client_order_no_for_bp = client_order_no_for_bp
 
+    @staticmethod
+    def _get_fiscal_year(date_):
+        if not date_:
+            return None
+        if int(date_.strftime('%m')) >= 10:
+            return int(date_.strftime('%y')) + 1
+        else:
+            return int(date_.strftime('%y'))
+
     def is_engineer(self):
         return self.detail_type == DetailType.engineer
 
     def has_payment(self):
         return self.is_engineer() and self.engineer.is_bp()
+
+    def get_fiscal_year(self):
+        return self._get_fiscal_year(self.billing_start_day)
 
     # 支払フラグが前倒しか後ろ倒しか判断
     def get_holiday_flag_if_payment(self):

@@ -18,6 +18,7 @@ from application.domain.model.immutables.status import Status
 from application.domain.model.immutables.tax import Tax
 from application.domain.model.project import Project
 from application.domain.model.project_detail import ProjectDetail
+from application.domain.repository.order_sequence_repository import OrderSequenceRepository
 from application.domain.repository.project_detail_repository import ProjectDetailRepository
 from tests import BaseTestCase
 
@@ -34,6 +35,7 @@ class ProjectContractTests(BaseTestCase):
         super(ProjectContractTests, self).setUp()
         self.project_repository = ProjectRepository()
         self.project_detail_repository = ProjectDetailRepository()
+        self.order_sequence_repository = OrderSequenceRepository()
 
     def tearDown(self):
         super(ProjectContractTests, self).tearDown()
@@ -2572,3 +2574,169 @@ class ProjectContractTests(BaseTestCase):
         # 件数が変わっていないことを確認。
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
+
+    # 10月以降の明細情報（BP）を保存できる
+    def test_save_project_detail_october(self):
+        project_detail = self.project_detail_repository.find_all()[0]
+
+        result = self.app.post('/project/contract/detail/' + str(project_detail.id), data={
+            'detail_type': DetailType.engineer.value,
+            'engineer_id': '2',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/10',
+            'billing_end_day': '2016/12',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '100',
+            'billing_top_base_hour': '200',
+            'billing_free_base_hour': '1/100、1/200',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '10000',
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/detail/' + str(project_detail.id) in result.headers['Location'])
+
+    # 注文番号が重複しない
+    def test_duplicate_bp_order_number(self):
+        # 2017年度のシーケンスを取得
+        order_sequence = self.order_sequence_repository.find_by_fiscal_year(17)
+
+        # 連番が一つ先の注文書番号を登録しておく。
+        bp_order_no = 'C' + str(order_sequence.fiscal_year)\
+                          + '-'\
+                          + '{0:03d}'.format(order_sequence.sequence + 1)
+
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # 明細を新規作成。
+        project_detail = ProjectDetail(
+            project_id=1,
+            detail_type=DetailType.engineer,
+            engineer_id=2,
+            billing_money=1000000,
+            billing_start_day='2016/10/1',
+            billing_end_day='2017/8/1',
+            billing_per_month=100000,
+            billing_rule=Rule.fixed,
+            bp_order_no=bp_order_no,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_detail)
+        db.session.commit()
+
+        # 新規作成時に発番が期待される注文書番号
+        expected = 'C' + str(order_sequence.fiscal_year)\
+                   + '-'\
+                   + '{0:03d}'.format(order_sequence.sequence + 2)
+
+        project = self.project_repository.find_all()[6]
+
+        # 明細（BP）を新規登録
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer.value,
+            'engineer_id': '2',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/12',
+            'billing_end_day': '2017/8',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.variable,
+            'billing_bottom_base_hour': '100',
+            'billing_top_base_hour': '200',
+            'billing_free_base_hour': '1/100、1/200',
+            'billing_per_hour': '1000',
+            'billing_per_bottom_hour': '1000',
+            'billing_per_top_hour': '10000',
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value,
+            'bp_order_no': bp_order_no
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+        actual = project_detail.bp_order_no
+
+        self.assertEqual(actual, expected)
+
+    # BP向け注文書番号は、明細がBPの場合は入力必須（新規登録の場合は除く）
+    def test_required_bp_order_no_by_bp(self):
+
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_all()[7]
+
+        # 明細（BP）を新規登録
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer.value,
+            'engineer_id': '2',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/12',
+            'billing_end_day': '2017/8',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value,
+            'bp_order_no': ''
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+
+        # BP向け注文書番号に値が入っていることを確認する
+        self.assertIsNotNone(project_detail.bp_order_no)
+
+        # BP向け注文書番号が空だと更新できないことを確認
+        result = self.app.post('/project/contract/detail/' + str(project_detail.id), data={
+            'id': project_detail.id,
+            'detail_type': project_detail.detail_type,
+            'engineer_id': project_detail.engineer_id,
+            'billing_money': project_detail.billing_money,
+            'billing_start_day': project_detail.billing_start_day.strftime('%Y/%m'),
+            'billing_end_day': project_detail.billing_end_day.strftime('%Y/%m'),
+            'billing_per_month': project_detail.billing_per_month,
+            'billing_rule': project_detail.billing_rule,
+            'billing_fraction': project_detail.billing_fraction,
+            'billing_fraction_rule': project_detail.billing_fraction_rule,
+            'bp_order_no': ''
+        })
+        self.assertEqual(result.status_code, 200)
+
+        # BP向け注文書番号に値が入ってままであることを確認する。
+        self.assertIsNotNone(project_detail.bp_order_no)
+
+        # BP向け注文書番号に値が入っていると更新できることを確認
+        result = self.app.post('/project/contract/detail/' + str(project_detail.id), data={
+            'id': project_detail.id,
+            'detail_type': project_detail.detail_type,
+            'engineer_id': project_detail.engineer_id,
+            'billing_money': project_detail.billing_money,
+            'billing_start_day': project_detail.billing_start_day.strftime('%Y/%m'),
+            'billing_end_day': project_detail.billing_end_day.strftime('%Y/%m'),
+            'billing_per_month': project_detail.billing_per_month,
+            'billing_rule': project_detail.billing_rule,
+            'billing_fraction': project_detail.billing_fraction,
+            'billing_fraction_rule': project_detail.billing_fraction_rule,
+            'bp_order_no': project_detail.bp_order_no
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/detail/' in result.headers['Location'])

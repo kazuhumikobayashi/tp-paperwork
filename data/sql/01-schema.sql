@@ -384,6 +384,18 @@ CREATE TABLE IF NOT EXISTS project_months (
 ) ENGINE = INNODB;
 
 
+CREATE TABLE IF NOT EXISTS order_sequence (
+  id INT NOT NULL AUTO_INCREMENT ,
+  fiscal_year INT NOT NULL ,
+  sequence INT NOT NULL ,
+  created_at DATETIME NOT NULL ,
+  created_user VARCHAR(128) NOT NULL ,
+  updated_at DATETIME NOT NULL ,
+  updated_user VARCHAR(128) NOT NULL ,
+  PRIMARY KEY (id)
+) ENGINE = INNODB;
+
+
 CREATE TABLE IF NOT EXISTS billing_sequence (
   id INT NOT NULL AUTO_INCREMENT ,
   fiscal_year INT NOT NULL ,
