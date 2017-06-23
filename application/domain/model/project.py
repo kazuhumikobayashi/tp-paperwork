@@ -55,7 +55,7 @@ class Project(BaseModel, db.Model):
     project_attachments = relationship(ProjectAttachment, cascade='all, delete-orphan')
     project_details = relationship(ProjectDetail, cascade='all, delete-orphan')
     project_months = relationship(ProjectMonth,
-                                  order_by="desc(ProjectMonth.deposit_date)",
+                                  order_by="desc(ProjectMonth.project_month)",
                                   cascade='all, delete-orphan')
 
     _is_start_date_change = False
