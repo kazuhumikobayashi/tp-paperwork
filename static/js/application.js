@@ -177,7 +177,7 @@ var MessageBox = (function () {
     "padding": "8px 30px",
     "display": "none",
     "z-index": "999999",
-    "font-size": "16px"
+    "font-size": "22px"
   };
 
   var link_css = {
