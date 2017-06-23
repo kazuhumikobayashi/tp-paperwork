@@ -53,8 +53,21 @@ class ProjectMonth(BaseModel, db.Model):
         self.remarks = remarks
         self.client_billing_no = client_billing_no
 
+    @staticmethod
+    def _get_fiscal_year(date_):
+        if int(date_.strftime('%m')) >= 10:
+            return int(date_.strftime('%y')) + 1
+        else:
+            return int(date_.strftime('%y'))
+
     def tax_of_billing_confirmation_money(self):
         return self.billing_confirmation_money * self.project.client_company.billing_tax.rate
+
+    def is_month_to_billing(self):
+        return not self.client_billing_no and self.billing_confirmation_money > 0
+
+    def get_fiscal_year(self):
+        return self._get_fiscal_year(self.project_month)
 
     def __repr__(self):
         return "<ProjectMonth:" + \

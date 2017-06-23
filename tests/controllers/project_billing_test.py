@@ -5,6 +5,8 @@ from nose.tools import ok_
 from application import db
 from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.project_billing import ProjectBilling
+from application.domain.model.project_month import ProjectMonth
+from application.domain.repository.billing_sequence_repository import BillingSequenceRepository
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.domain.repository.project_month_repository import ProjectMonthRepository
 from tests import BaseTestCase
@@ -20,6 +22,7 @@ class ProjectBillingTests(BaseTestCase):
         super(ProjectBillingTests, self).setUp()
         self.project_billing_repository = ProjectBillingRepository()
         self.project_month_repository = ProjectMonthRepository()
+        self.billing_sequence_repository = BillingSequenceRepository()
 
     def tearDown(self):
         super(ProjectBillingTests, self).tearDown()
@@ -255,3 +258,89 @@ class ProjectBillingTests(BaseTestCase):
                                     'input_flag': InputFlag.done.value
                                })
         self.assertEqual(result.status_code, 404)
+
+    # client_billing_noが発番されることを確認。
+    def test_create_client_billing_no(self):
+        shain_number = 'test1'
+        self.app.post('/login', data={
+            'shain_number': shain_number,
+            'password': 'test'
+        })
+        project_month = self.project_month_repository.find_all()[0]
+        project_billing_id = project_month.id
+
+        result = self.app.post('/project/billing/month/' + str(project_billing_id), data={
+            'client_billing_no': '',
+            'billing_confirmation_money': project_month.billing_confirmation_money,
+            'billing_transportation': project_month.billing_transportation,
+            'deposit_date': project_month.deposit_date.strftime('%Y/%m/%d'),
+            'remarks': project_month.remarks
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/billing/month/' + str(project_month.id) in result.headers['Location'])
+
+        project_month = self.project_month_repository.find_by_id(project_billing_id)
+        actual = project_month.client_billing_no
+        self.assertIsNotNone(actual)
+
+    # 請求番号が重複しない
+    def test_duplicate_client_billing_no(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # 2017年度のシーケンスを取得
+        billing_sequence = self.billing_sequence_repository.find_by_fiscal_year(17)
+
+        # 連番が一つ先の注文書番号を登録しておく。
+        client_billing_no = 'B' + str(billing_sequence.fiscal_year)\
+                            + '-'\
+                            + '{0:03d}'.format(billing_sequence.sequence + 1)
+
+        project_month = ProjectMonth(
+                            project_id=1,
+                            project_month='2016/10/1',
+                            result_input_flag=InputFlag.yet,
+                            billing_input_flag=InputFlag.yet,
+                            deposit_input_flag=InputFlag.yet,
+                            deposit_date='2016/10/1',
+                            billing_estimated_money=10000,
+                            billing_confirmation_money=10000,
+                            billing_transportation=100,
+                            remarks='remarks',
+                            client_billing_no=client_billing_no,
+                            created_at=datetime.today(),
+                            created_user='test',
+                            updated_at=datetime.today(),
+                            updated_user='test')
+        db.session.add(project_month)
+        db.session.commit()
+
+        # 新規作成時に発番が期待される注文書番号
+        expected = 'B' + str(billing_sequence.fiscal_year)\
+                   + '-'\
+                   + '{0:03d}'.format(billing_sequence.sequence + 2)
+
+        project_month = self.project_month_repository.find_all()[4]
+        project_month.project_month = date(2016, 10, 1)
+        db.session.add(project_month)
+        db.session.commit()
+
+        result = self.app.post('/project/billing/month/' + str(project_month.id), data={
+            'client_billing_no': '',
+            'billing_confirmation_money': project_month.billing_confirmation_money,
+            'billing_transportation': project_month.billing_transportation,
+            'deposit_date': project_month.deposit_date.strftime('%Y/%m/%d'),
+            'remarks': project_month.remarks
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/billing/month/' + str(project_month.id) in result.headers['Location'])
+
+        # 更新後のデータを確認する。
+        actual = project_month.client_billing_no
+
+        self.assertEqual(actual, expected)
