@@ -3,7 +3,7 @@ from wtforms import StringField, SelectField, TextAreaField, RadioField, validat
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField
-from application.controllers.form.validators import Length, DataRequired, LessThan
+from application.controllers.form.validators import Length, DataRequired, LessThan, InputRequired
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
@@ -34,7 +34,7 @@ class EngineerHistoryForm(FlaskForm):
                               choices=Tax.get_type_for_select(),
                               filters=[lambda x: x or None],
                               render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
-    payment_per_month = IntegerField('支払単価（必須）', [DataRequired()])
+    payment_per_month = IntegerField('支払単価（必須）', [InputRequired()])
     payment_rule = RadioField('支払ルール（必須）',
                               [DataRequired()],
                               choices=Rule.get_rule_for_select(),
