@@ -1,5 +1,7 @@
 from datetime import date, timedelta
 
+from sqlalchemy import asc
+
 from application.domain.model.company import Company
 from application.domain.model.company_client_flag import CompanyClientFlag
 from application.domain.model.engineer import Engineer
@@ -66,11 +68,12 @@ class ProjectResultRepository(BaseRepository):
         return pagination
 
     def find_incomplete_payments(self):
-        return self.model.query\
-                     .filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer)) \
-                     .filter(self.model.payment_flag == InputFlag.yet) \
-                     .filter(self.model.payment_confirmation_money >= 0) \
-                     .filter(self.model.payment_expected_date <= date.today() + timedelta(days=7)).all()
+        query = self.model.query.filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))
+        query = query.filter(self.model.payment_flag == InputFlag.yet)
+        query = query.filter(self.model.payment_confirmation_money > 0)
+        query = query.filter(self.model.payment_expected_date <= date.today() + timedelta(days=7))
+        query = query.order_by(asc(self.model.payment_expected_date), asc('projects_1.project_name'))
+        return query.all()
 
     def create(self):
         return ProjectResult()

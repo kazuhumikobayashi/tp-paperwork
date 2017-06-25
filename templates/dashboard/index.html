@@ -76,17 +76,17 @@
                 <tr>
                   <th class="hidden-xs" width="60px">見積りNo</th>
                   <th>プロジェクト名</th>
-                  <th class="hidden-xs" width="60px">年月</th>
-                  <th width="80px">計上部署</th>
+                  <th width="70px">年月</th>
+                  <th class="hidden-xs" width="80px">計上部署</th>
                 </tr>
                 </thead>
                 <tbody>
                   {% for billing in incomplete_billings %}
                   <tr>
                     <td class="hidden-xs">{{ billing.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('project_contract.index', project_id=billing.project.id) }}">{{ billing.project.project_name }}</a></td>
-                    <td class="hidden-xs">{{ billing.project_month|datetime_format('%Y年%m月') }}</td>
-                    <td>{{ billing.project.recorded_department.department_name }}</td>
+                    <td><a href="{{ url_for('project_billing.index', project_id=billing.project.id) }}">{{ billing.project.project_name }}</a></td>
+                    <td>{{ billing.project_month|datetime_format('%Y年%m月') }}</td>
+                    <td class="hidden-xs">{{ billing.project.recorded_department.department_name }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -117,8 +117,8 @@
                 <tr>
                   <th class="hidden-xs" width="60px">見積りNo</th>
                   <th>プロジェクト名</th>
-                  <th class="hidden-xs" width="60px">入金日</th>
-                  <th width="80px">計上部署</th>
+                  <th width="70px">入金予定日</th>
+                  <th class="hidden-xs" width="80px">計上部署</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -126,8 +126,8 @@
                   <tr>
                     <td class="hidden-xs">{{ deposit.project.estimation_no }}</td>
                     <td><a href="{{ url_for('project_contract.index', project_id=deposit.project.id) }}">{{ deposit.project.project_name }}</a></td>
-                    <td class="hidden-xs">{{ deposit.deposit_date|datetime_format('%Y/%m/%d') }}</td>
-                    <td>{{ deposit.project.recorded_department.department_name }}</td>
+                    <td>{{ deposit.deposit_date|datetime_format('%Y/%m/%d') }}</td>
+                    <td class="hidden-xs">{{ deposit.project.recorded_department.department_name }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -161,17 +161,17 @@
                 <tr>
                   <th class="hidden-xs" width="60px">見積りNo</th>
                   <th>プロジェクト名</th>
-                  <th class="hidden-xs" width="60px">年月</th>
-                  <th width="80px">計上部署</th>
+                  <th width="60px">年月</th>
+                  <th class="hidden-xs" width="80px">計上部署</th>
                 </tr>
                 </thead>
                 <tbody>
                   {% for result in incomplete_results %}
                   <tr>
                     <td class="hidden-xs">{{ result.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('project_contract.index', project_id=result.project.id) }}">{{ result.project.project_name }}</a></td>
-                    <td class="hidden-xs">{{ result.project_month|datetime_format('%Y年%m月') }}</td>
-                    <td>{{ result.project.recorded_department.department_name }}</td>
+                    <td><a href="{{ url_for('project_result.index', project_id=result.project.id) }}">{{ result.project.project_name }}</a></td>
+                    <td>{{ result.project_month|datetime_format('%Y年%m月') }}</td>
+                    <td class="hidden-xs">{{ result.project.recorded_department.department_name }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -188,7 +188,7 @@
             <div class="box-header" style="padding-bottom: 0;">
               <h3 class="box-title">
                 未払いのプロジェクト<br />
-                <small class="hidden-xs">（支払い予定日の１週間前で未払いのプロジェクトを表示）</small>
+                <small class="hidden-xs">（支払予定日の１週間前で未払いのプロジェクトを表示）</small>
               </h3>
               <div class="box-tools">
                 <span data-toggle="tooltip" title="{{ incomplete_payments|length }}件 未完了" class="badge bg-red">{{ incomplete_payments|length }}</span>
@@ -203,7 +203,7 @@
                   <th class="hidden-xs" width="60px">見積りNo</th>
                   <th>プロジェクト名</th>
                   <th width="80px">技術者</th>
-                  <th class="hidden-xs" width="60px">支払日</th>
+                  <th class="hidden-xs" width="70px">支払予定日</th>
                 </tr>
                 </thead>
                 <tbody>

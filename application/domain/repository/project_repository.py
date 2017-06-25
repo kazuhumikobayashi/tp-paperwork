@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from flask import session
+from sqlalchemy import asc
 
 from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
@@ -42,7 +43,9 @@ class ProjectRepository(BaseRepository):
         return self.model.query.filter(self.model.estimation_no == estimation_no).first()
 
     def find_incomplete_estimates(self):
-        return self.model.query.filter(self.model.status <= Status.received).all()
+        query = self.model.query.filter(self.model.status <= Status.received)
+        query = query.order_by(asc(self.model.start_date), asc(self.model.project_name))
+        return query.all()
 
     def save(self, project):
         if project.status == Status.done and project.has_not_project_results() and project.has_not_project_billings()\
