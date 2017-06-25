@@ -11,7 +11,7 @@ repository = BusinessCategoryRepository()
 
 class BusinessCategoryForm(FlaskForm):
     id = IntegerField('Id')
-    business_category_name = StringField('業種', [DataRequired(), Length(max=32)])
+    business_category_name = StringField('業種（必須）', [DataRequired(), Length(max=32)])
 
     def validate_business_category_name(self, field):
         business_category = repository.find_by_name(field.data)
