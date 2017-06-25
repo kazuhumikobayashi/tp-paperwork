@@ -153,7 +153,6 @@ def create_projects():
             contract_form=Contract.blanket,
             billing_timing=BillingTiming.billing_at_last,
             estimated_total_amount=1000000,
-            deposit_date='2099/12/31',
             scope='test',
             contents=None,
             working_place=None,

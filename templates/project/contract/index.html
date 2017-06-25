@@ -119,7 +119,7 @@
                                   {% endif %}
                                 </a>
                               </td>
-                              <td class="text-right">&yen{{ project_detail.billing_money|number_with_commas }}</td>
+                              <td class="text-right">{{ project_detail.billing_money|number_with_commas|with_yen }}</td>
                               <td>{{ project_detail.remarks|filter_suppress_none }}</td>
                               <td>
                                 {% if project_detail.is_engineer() and project_detail.engineer.company.is_bp() %}
@@ -146,11 +146,6 @@
                   <div class="row">
                     {{ render_field(form.billing_site, "col-sm-6") }}
                     {{ render_field(form.billing_tax, "col-sm-6", input_class="select2") }}
-                  </div>
-                  <div class="show-if-blanket" {% if form.contract_form.data != '1' %}hidden{% endif %}{# '1'=請負 #}>
-                    <div class="row">
-                      {{ render_field(form.deposit_date, "col-sm-6", input_class="date") }}
-                    </div>
                   </div>
                   <div class="row">
                     {{ render_field(form.scope, "col-sm-12") }}

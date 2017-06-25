@@ -134,7 +134,6 @@ CREATE TABLE IF NOT EXISTS projects (
   contract_form INT ,
   billing_timing INT ,
   estimated_total_amount INT ,
-  deposit_date DATE ,
   scope VARCHAR(1024) ,
   contents VARCHAR(1024) ,
   working_place VARCHAR(1024) ,
