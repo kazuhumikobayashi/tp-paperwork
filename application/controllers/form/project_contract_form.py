@@ -47,7 +47,6 @@ class ProjectContractForm(FlaskForm):
                               [validators.Optional()],
                               choices=Tax.get_type_for_select(),
                               render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
-    deposit_date = DateField('単月入金予定日', [validators.Optional()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     scope = StringField('委託範囲', [Length(max=1024)], filters=[lambda x: x or None])
     contents = StringField('委託内容', [Length(max=1024)], filters=[lambda x: x or None])
     working_place = StringField('作業場所', [Length(max=1024)], filters=[lambda x: x or None])

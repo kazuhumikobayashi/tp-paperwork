@@ -58,6 +58,8 @@ mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/23-data-project_detail
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/24-data-project_results.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/25-data-project_billings.sql
 mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/26-data-project_months.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/27-data-order_sequence.sql
+mysql -uadmin_user -Dtp_paperwork -padmin_user < data/sql/28-data-billing_sequence.sql
 ```
 
 

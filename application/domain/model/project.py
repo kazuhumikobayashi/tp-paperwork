@@ -36,7 +36,6 @@ class Project(BaseModel, db.Model):
     contract_form = Column(EnumType(enum_class=Contract))
     billing_timing = Column(EnumType(enum_class=BillingTiming))
     estimated_total_amount = Column(Integer)
-    deposit_date = Column(Date)
     scope = Column(String(1024))
     contents = Column(String(1024))
     working_place = Column(String(1024))
@@ -93,7 +92,6 @@ class Project(BaseModel, db.Model):
                  contract_form=None,
                  billing_timing=None,
                  estimated_total_amount=None,
-                 deposit_date=None,
                  scope=None,
                  contents=None,
                  working_place=None,
@@ -123,7 +121,6 @@ class Project(BaseModel, db.Model):
         self.contract_form = contract_form
         self.billing_timing = billing_timing
         self.estimated_total_amount = estimated_total_amount
-        self.deposit_date = deposit_date
         self.scope = scope
         self.contents = contents
         self.working_place = working_place
@@ -212,7 +209,6 @@ class Project(BaseModel, db.Model):
                 "', contract_form='{}".format(self.contract_form) + \
                 "', billing_timing='{}".format(self.billing_timing) + \
                 "', estimated_total_amount='{}".format(self.estimated_total_amount) + \
-                "', deposit_date='{}".format(self.deposit_date) + \
                 "', scope='{}".format(self.scope) + \
                 "', contents='{}".format(self.contents) + \
                 "', working_place='{}".format(self.working_place) + \

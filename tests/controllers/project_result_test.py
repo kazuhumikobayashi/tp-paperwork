@@ -162,7 +162,6 @@ class ProjectResultTests(BaseTestCase):
             contract_form=Contract.blanket,
             billing_timing=BillingTiming.billing_at_last,
             estimated_total_amount=1000000,
-            deposit_date='20/12/31',
             scope='test',
             contents=None,
             working_place=None,
@@ -214,8 +213,7 @@ class ProjectResultTests(BaseTestCase):
             'start_date': project.start_date.strftime('%Y/%m/%d'),
             'end_date': project.end_date.strftime('%Y/%m/%d'),
             'contract_form': project.contract_form.value,
-            'billing_timing': project.billing_timing.value,
-            'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
+            'billing_timing': project.billing_timing.value
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract' in result.headers['Location'])
@@ -313,7 +311,6 @@ class ProjectResultTests(BaseTestCase):
             contract_form=Contract.blanket,
             billing_timing=BillingTiming.billing_at_last,
             estimated_total_amount=1000000,
-            deposit_date='20/12/31',
             scope='test',
             contents=None,
             working_place=None,
@@ -365,8 +362,7 @@ class ProjectResultTests(BaseTestCase):
             'start_date': project.start_date.strftime('%Y/%m/%d'),
             'end_date': project.end_date.strftime('%Y/%m/%d'),
             'contract_form': project.contract_form.value,
-            'billing_timing': project.billing_timing.value,
-            'deposit_date': project.deposit_date.strftime('%Y/%m/%d')
+            'billing_timing': project.billing_timing.value
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract' in result.headers['Location'])

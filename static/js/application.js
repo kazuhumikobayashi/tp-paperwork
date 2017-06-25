@@ -280,21 +280,6 @@ $(function() {
   });
 });
 
-
-// 請負の場合表示
-$(function() {
-  var BLANKET = 1;
-
-  $('select[name="contract_form"]').change(function() {
-      if ($("#contract_form option:selected").val() == BLANKET) {
-        $('.show-if-blanket').show('slow')
-      } else{
-        $('.show-if-blanket').hide('slow')
-      }
-  });
-});
-
-
 // 実績の請求計算
 $(function() {
   $('#cal-billing').click(function() {
