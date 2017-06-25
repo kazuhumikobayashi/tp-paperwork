@@ -11,7 +11,7 @@ repository = SkillRepository()
 
 class SkillForm(FlaskForm):
     id = IntegerField('Id')
-    skill_name = StringField('スキル名', [DataRequired(), Length(max=32)])
+    skill_name = StringField('スキル名（必須）', [DataRequired(), Length(max=32)])
 
     def validate_skill_name(self, field):
         skill = repository.find_by_name(field.data)
