@@ -30,12 +30,12 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          {{ render_field(form.project_name, "col-sm-6", "required") }}
+          {{ render_field(form.project_name, "col-sm-6") }}
           {{ render_field(form.project_name_for_bp, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.start_date, "col-sm-6", "required", input_class="date") }}
-          {{ render_field(form.end_date, "col-sm-6", "required", input_class="date") }}
+          {{ render_field(form.start_date, "col-sm-6", input_class="date") }}
+          {{ render_field(form.end_date, "col-sm-6", input_class="date") }}
         </div>
         <!-- /.row -->
       </div>

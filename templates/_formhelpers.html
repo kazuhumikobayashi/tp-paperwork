@@ -1,23 +1,15 @@
-{% macro render_field(field, group_class, required="", input_class="") %}
+{% macro render_field(field, group_class, input_class="") %}
 <div class="form-group {{ group_class }} no-margin{% if field.errors|length %} has-error{% endif %}">
   {{ field.label(class_="control-label no-margin") }}
   {% if field.type == "RadioField" or field.type == "CheckboxField" %}
   <div class="no-padding">
     {% for subfield in field %}
-      {% if required %}
-        {{ subfield(required="required", **kwargs) }}
-      {% else %}
-        {{ subfield(**kwargs) }}
-      {% endif %}
+      {{ subfield(**kwargs) }}
       {{ subfield.label(style="margin: 5px 20px 15px 5px; cursor: pointer;") }}
     {% endfor %}
   </div>
   {% else %}
-    {% if required %}
-      {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;", **kwargs) }}
-    {% else %}
-      {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;", **kwargs) }}
-    {% endif %}
+    {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;", **kwargs) }}
   {% endif %}
   <span class="help-block no-margin">
   {% for error in field.errors %}
@@ -26,25 +18,17 @@
   </span>
 </div>
 {% endmacro %}
-{% macro render_search_field(field, group_class, required="", input_class="") %}
+{% macro render_search_field(field, group_class, input_class="") %}
 {% if field.type == "RadioField" or field.type == "CheckboxField" %}
   <div class="{{ group_class }}" style="margin-bottom: 5px;">
     {% for subfield in field %}
-      {% if required %}
-        {{ subfield(required="required", **kwargs) }}
-      {% else %}
-        {{ subfield(**kwargs) }}
-      {% endif %}
+      {{ subfield(**kwargs) }}
       {{ subfield.label(style="margin: 5px 20px 15px 5px; cursor: pointer;") }}
     {% endfor %}
   </div>
 {% else %}
   <div class="{{ group_class }}" style="margin-bottom: 5px;">
-    {% if required %}
-      {{ field(class_="form-control " + input_class, placeholder=field.label.text, required="required", style="width: 100%;", **kwargs) }}
-    {% else %}
-      {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;", **kwargs) }}
-    {% endif %}
+    {{ field(class_="form-control " + input_class, placeholder=field.label.text, style="width: 100%;", **kwargs) }}
   </div>
 {% endif %}
 {% endmacro %}

@@ -43,11 +43,11 @@
     <form method="post">
       {{ form.csrf_token }}
       <div class="form-group has-feedback">
-        {{ form.shain_number(class_="form-control", placeholder=form.shain_number.label.text, style="ime-mode: inactive", required="required") }}
+        {{ form.shain_number(class_="form-control", placeholder=form.shain_number.label.text, style="ime-mode: inactive") }}
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        {{ form.password(class_="form-control", placeholder=form.password.label.text, required="required") }}
+        {{ form.password(class_="form-control", placeholder=form.password.label.text) }}
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
