@@ -38,14 +38,14 @@
       <!-- /.box-header -->
       <div class="box-body">
         <div class="row">
-          {{ render_field(form.company_name, "col-sm-6", "required") }}
+          {{ render_field(form.company_name, "col-sm-6") }}
         </div>
         <div class="row">
           {{ render_field(form.company_name_kana, "col-sm-6") }}
           {{ render_field(form.company_short_name, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.client_flag, "col-sm-6", "required", input_class="select2") }}
+          {{ render_field(form.client_flag, "col-sm-6", input_class="select2") }}
           {{ render_field(form.contract_date, "col-sm-6", input_class="date") }}
         </div>
         <div class="row">

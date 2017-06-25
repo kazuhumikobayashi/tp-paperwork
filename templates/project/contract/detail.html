@@ -39,9 +39,9 @@
       <div class="box-body">
         <div class="row">
           {% if form.id.data %}
-              {{ render_field(form.detail_type, "col-sm-6", "required", disabled="disabled") }}
+              {{ render_field(form.detail_type, "col-sm-6", disabled="disabled") }}
           {% else %}
-              {{ render_field(form.detail_type, "col-sm-6", "required") }}
+              {{ render_field(form.detail_type, "col-sm-6") }}
           {% endif %}
         </div>
         <div class="engineer-variable-area" {% if form.detail_type.data != '1' %}hidden{% endif %}{# '1'=ENGINEER #}>
