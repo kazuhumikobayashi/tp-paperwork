@@ -8,6 +8,7 @@ from flask import request
 from flask import url_for
 
 from application.controllers.form.user_form import UserForm
+from application.controllers.form.user_search_form import UserSearchForm
 from application.service.user_service import UserService
 
 bp = Blueprint('user', __name__, url_prefix='/user')
@@ -16,10 +17,9 @@ service = UserService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    user_name = request.args.get('user_name','')
-    shain_number = request.args.get('shain_number','')
-    pagination = service.find(page, user_name, shain_number)
-    return render_template('master/user/index.html', pagination=pagination)
+    form = UserSearchForm(request.values)
+    pagination = service.find(page, form.user_name.data, form.shain_number.data)
+    return render_template('master/user/index.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])

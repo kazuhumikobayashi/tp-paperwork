@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% from "_formhelpers.html" import render_search_field %}
 {% import "_pagination.html" as p %}
 {% block title %}ユーザーマスタ{% endblock %}
 {% block content_header %}
@@ -17,12 +18,8 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="row">
-        <div class="col-md-6">
-          <input type="text" class="form-control" name="user_name" placeholder="ユーザー名" value="{{ request.args.get('user_name', '') }}">
-        </div>
-        <div class="col-md-6">
-          <input type="text" class="form-control" name="shain_number" placeholder="社員番号" value="{{ request.args.get('shain_number', '') }}">
-        </div>
+        {{ render_search_field(form.shain_number, "col-md-6") }}
+        {{ render_search_field(form.user_name, "col-md-6") }}
       </div>
       <!-- /.row -->
     </div>
@@ -41,7 +38,8 @@
         <div class="box-header">
           {% if pagination %}
             {% if pagination.total > pagination.per_page %}
-              {{ p.pagination_widget(pagination,'.user_page', shain_number=request.args.get('shain_number', ''), user_name=request.args.get('user_name', '')) }}
+              {{ p.pagination_widget(pagination,'.user_page', shain_number=form.shain_number.data,
+                                                              user_name=form.user_name.data) }}
             {% endif %}
           {% endif %}
           <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
@@ -54,7 +52,7 @@
           <table class="table table-hover">
             <tr>
               <th width="100px">社員番号</th>
-              <th>ユーザー名</th>
+              <th>ユーザー名称</th>
               <th width="70px" class="center"></th>
             </tr>
             {% for user in pagination.items %}
@@ -64,7 +62,11 @@
                   {{ user.shain_number }}
                 </a>
               </td>
-              <td>{{ user.user_name|filter_suppress_none }}</td>
+              <td>
+                <a href="{{ url_for('.detail', user_id=user.id) }}">
+                  {{ user.user_name|filter_suppress_none }}
+                </a>
+              </td>
               <td>
                 <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', user_id=user.id) }}">
                   <i class="fa fa-trash"></i> 削除
