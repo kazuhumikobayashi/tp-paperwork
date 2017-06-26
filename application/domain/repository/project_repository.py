@@ -1,15 +1,9 @@
-from datetime import datetime
+from application.domain.model.immutables.status import Status
 
-from flask import session
 from sqlalchemy import asc
 
-from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
-from application.domain.model.project_billing import ProjectBilling
-from application.domain.model.project_month import ProjectMonth
-from application.domain.model.project_result import ProjectResult
 from application.domain.repository.base_repository import BaseRepository
-from application.service.calculator import Calculator
 
 
 class ProjectRepository(BaseRepository):
@@ -50,52 +44,13 @@ class ProjectRepository(BaseRepository):
     def save(self, project):
         if project.status == Status.done and project.has_not_project_results() and project.has_not_project_billings()\
                 and project.has_not_project_months():
-
-            project_dates = project.get_project_month_list()
-            for date in project_dates:
-                calculator = Calculator(
-                                date,
-                                project.client_company.billing_site,
-                                project.client_company.bank_holiday_flag)
-                project_month = ProjectMonth(
-                                        project_month=date,
-                                        deposit_date=calculator.get_deposit_date(),
-                                        created_at=datetime.today(),
-                                        created_user=session['user']['user_name'],
-                                        updated_at=datetime.today(),
-                                        updated_user=session['user']['user_name'])
-                project.project_months.append(project_month)
+            project.create_project_months()
 
             for project_detail in project.project_details:
-                # 明細がengineerの場合、明細に登録された契約期間を取得してその月々の実績レコードを作成する。
                 if project_detail.is_engineer():
-                    contract_dates = project_detail.get_contract_month_list()
-                    for date in contract_dates:
-                        project_result = ProjectResult(
-                                            result_month=date,
-                                            created_at=datetime.today(),
-                                            created_user=session['user']['user_name'],
-                                            updated_at=datetime.today(),
-                                            updated_user=session['user']['user_name'])
-                        if project_detail.has_payment():
-                            calculator = Calculator(
-                                            date,
-                                            project_detail.engineer.company.payment_site,
-                                            project_detail.get_holiday_flag_if_payment())
-                            project_result.payment_expected_date = calculator.get_deposit_date()
-                        project_detail.project_results.append(project_result)
-                # 明細がworkの場合、プロジェクト期間を取得してその月々の実績レコードを作成する。
+                    project_detail.create_results()
                 else:
-                    for date in project_dates:
-                        project_billing = ProjectBilling(
-                                            billing_month=date,
-                                            billing_content=project_detail.work_name,
-                                            billing_confirmation_money=project_detail.get_payment_per_month_by_work(),
-                                            created_at=datetime.today(),
-                                            created_user=session['user']['user_name'],
-                                            updated_at=datetime.today(),
-                                            updated_user=session['user']['user_name'])
-                        project_detail.project_billings.append(project_billing)
+                    project_detail.create_billings()
 
         super(ProjectRepository, self).save(project)
 

@@ -1,4 +1,6 @@
-from datetime import date
+from datetime import date, datetime
+
+from flask import session
 
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import Column, Integer, String, Date
@@ -8,6 +10,7 @@ from sqlalchemy.orm import relationship
 
 from application import db
 from application.domain.model.base_model import BaseModel
+from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.holiday_flag import HolidayFlag
@@ -16,6 +19,7 @@ from application.domain.model.immutables.rule import Rule
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_result import ProjectResult
 from application.domain.model.sqlalchemy.types import EnumType
+from application.service.calculator import Calculator
 
 
 class ProjectDetail(BaseModel, db.Model):
@@ -172,6 +176,62 @@ class ProjectDetail(BaseModel, db.Model):
         payment = self.billing_money / len(self.project.get_project_month_list())
         # TODO 端数計算処理実行
         return payment
+
+    # 月々の実績情報を作成
+    def create_results(self):
+        contract_dates = self.get_contract_month_list()
+        for contract_date in contract_dates:
+            project_result = ProjectResult(
+                                result_month=contract_date,
+                                created_at=datetime.today(),
+                                created_user=session['user']['user_name'],
+                                updated_at=datetime.today(),
+                                updated_user=session['user']['user_name'])
+            if self.has_payment():
+                calculator = Calculator(
+                                contract_date,
+                                self.engineer.company.payment_site,
+                                self.get_holiday_flag_if_payment())
+                project_result.payment_expected_date = calculator.get_deposit_date()
+            self.project_results.append(project_result)
+        return self
+
+    # 請求情報を作成
+    def create_billings(self):
+        if self.project.billing_timing == BillingTiming.billing_by_month:
+            self.create_billing_by_month()
+        else:
+            self.create_billing_at_last()
+        return self
+
+    # 月々の請求情報を作成
+    def create_billing_by_month(self):
+        project_dates = self.project.get_project_month_list()
+        for project_date in project_dates:
+            project_billing = ProjectBilling(
+                                    billing_month=project_date,
+                                    billing_content=self.work_name,
+                                    billing_confirmation_money=self.get_payment_per_month_by_work(),
+                                    created_at=datetime.today(),
+                                    created_user=session['user']['user_name'],
+                                    updated_at=datetime.today(),
+                                    updated_user=session['user']['user_name'])
+            self.project_billings.append(project_billing)
+        return self
+
+    # 最終月の請求情報を作成
+    def create_billing_at_last(self):
+        project_dates = self.project.get_project_month_list()
+        project_billing = ProjectBilling(
+                                billing_month=max(project_dates),
+                                billing_content=self.work_name,
+                                billing_confirmation_money=self.billing_money,
+                                created_at=datetime.today(),
+                                created_user=session['user']['user_name'],
+                                updated_at=datetime.today(),
+                                updated_user=session['user']['user_name'])
+        self.project_billings.append(project_billing)
+        return self
 
     def __repr__(self):
         return "<ProjectDetails:" + \
