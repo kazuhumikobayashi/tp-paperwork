@@ -1,4 +1,6 @@
-from datetime import date
+from datetime import date, datetime
+
+from flask import session
 
 from dateutil.relativedelta import relativedelta
 from sqlalchemy import Column, Integer, String, Date
@@ -17,6 +19,7 @@ from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.project_month import ProjectMonth
 from application.domain.model.project_detail import ProjectDetail
 from application.domain.model.sqlalchemy.types import EnumType
+from application.service.calculator import Calculator
 
 
 class Project(BaseModel, db.Model):
@@ -168,6 +171,33 @@ class Project(BaseModel, db.Model):
             project_month_list.append(date(start.year, start.month, 1) + relativedelta(months=i))
             i += 1
         return project_month_list
+
+    # 見積もり合計金額を月々で割った値を取得
+    def get_estimated_total_amount_by_month(self):
+        return self.estimated_total_amount / len(self.get_project_month_list())
+
+    # プロジェクトの年月情報を作成
+    def create_project_months(self):
+        project_dates = self.get_project_month_list()
+        for project_date in project_dates:
+            calculator = Calculator(
+                            project_date,
+                            self.client_company.billing_site,
+                            self.client_company.bank_holiday_flag)
+            project_month = ProjectMonth(
+                                project_month=project_date,
+                                deposit_date=calculator.get_deposit_date(),
+                                created_at=datetime.today(),
+                                created_user=session['user']['user_name'],
+                                updated_at=datetime.today(),
+                                updated_user=session['user']['user_name'])
+            if self.billing_timing == BillingTiming.billing_by_month:
+                project_month.billing_estimated_money = self.get_estimated_total_amount_by_month()
+            else:
+                if project_date == max(project_dates):
+                    project_month.billing_estimated_money = self.estimated_total_amount
+            self.project_months.append(project_month)
+        return self
 
     def has_not_project_results(self):
         for project_detail in self.project_details:

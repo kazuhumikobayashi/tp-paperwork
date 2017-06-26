@@ -992,7 +992,7 @@ class ProjectContractTests(BaseTestCase):
             'start_date': date(2017, 1, 1).strftime('%Y/%m/%d'),
             'end_date': date(2017, 3, 31).strftime('%Y/%m/%d'),
             'contract_form': project.contract_form.value,
-            'billing_timing': project.billing_timing.value
+            'billing_timing': BillingTiming.billing_by_month.value
         })
         self.assertEqual(result.status_code, 302)
         ok_('/contract' in result.headers['Location'])
@@ -1009,6 +1009,76 @@ class ProjectContractTests(BaseTestCase):
         self.assertEqual(actual_1, expected_1)
         self.assertEqual(actual_2, expected_2)
         self.assertEqual(actual_3, expected_3)
+
+        # tear_down
+        self.app.get('/project/contract/delete/' + str(project_detail.id))
+        self.app.get('/project/delete/' + str(project.id))
+
+    # 明細がworkの場合、ステータスを契約完了にして更新すると
+    # プロジェクト開始～終了年月の請求レコードが作成される
+    # 請求のタイミングが契約期間末1回の場合、最終月の請求確定金額にbilling_moneyが入る。
+    def test_update_work_billing_when_status_done_and_billing_at_last(self):
+        # set_up
+        project = Project(
+                    status=Status.start,
+                    recorded_department_id=1,
+                    estimation_no='M0001',
+                    project_name='validation_test',
+                    end_user_company_id=4,
+                    client_company_id=3,
+                    start_date='2017/1/1',
+                    end_date='2017/3/1',
+                    contract_form=Contract.blanket,
+                    billing_timing=BillingTiming.billing_at_last,
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+        db.session.add(project)
+        db.session.commit()
+        project_id = project.id
+
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_by_id(project_id)
+        expected = 100000000
+
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.work.value,
+            'work_name': 'test',
+            'billing_money': expected,
+            'engineer_id': '',
+            'billing_fraction_rule': ''
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        result = self.app.post('/project/contract/' + str(project.id), data={
+            'status': Status.done.value,
+            'recorded_department_id': project.recorded_department_id,
+            'estimation_no': project.estimation_no,
+            'project_name': project.project_name,
+            'end_user_company_id': project.end_user_company_id,
+            'client_company_id': project.client_company_id,
+            'start_date': project.start_date.strftime('%Y/%m/%d'),
+            'end_date': project.end_date.strftime('%Y/%m/%d'),
+            'contract_form': project.contract_form.value,
+            'billing_timing': project.billing_timing.value,
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/contract' in result.headers['Location'])
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+        # プロジェクト期間が2017年の1～3月のため、1～3月分の請求レコードが作成される。
+        # 請求タイミングが契約期間末1回のため、3月の請求確定金額にbilling_moneyが全額入る、
+        actual = project_detail.project_billings[0].billing_confirmation_money
+
+        self.assertEqual(actual, expected)
 
         # tear_down
         self.app.get('/project/contract/delete/' + str(project_detail.id))
@@ -1785,7 +1855,7 @@ class ProjectContractTests(BaseTestCase):
             'start_date': date(2017, 1, 1).strftime('%Y/%m/%d'),
             'end_date': date(2017, 3, 31).strftime('%Y/%m/%d'),
             'contract_form': project.contract_form.value,
-            'billing_timing': project.billing_timing.value
+            'billing_timing': BillingTiming.billing_by_month.value
         })
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract' in result.headers['Location'])
