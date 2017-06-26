@@ -19,7 +19,7 @@
   <!-- AdminLTE Skins. -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/AdminLTE/css/skins/skin-purple.min.css') }}">
   <!-- application.css -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/application.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/application.css') }}?ver=1.0.0">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,7 +64,7 @@
 {% block include_js %}{% endblock %}
 {% include "message.html" %}
 <!-- application.js -->
-<script src="{{ url_for('static', filename='js/application.js') }}"></script>
+<script src="{{ url_for('static', filename='js/application.js') }}?ver=1.0.0"></script>
 
 
 </body>
