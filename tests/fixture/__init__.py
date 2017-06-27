@@ -125,7 +125,7 @@ def create_engineers():
 
 
 def create_departments():
-    for num in range(12):
+    for num in range(120):
         department = Department(
             group_name='本部' + str(num),
             department_name='単体テスト' + str(num),

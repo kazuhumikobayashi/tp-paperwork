@@ -161,17 +161,21 @@
                 <tr>
                   <th class="hidden-xs" width="60px">見積りNo</th>
                   <th>プロジェクト名</th>
-                  <th width="60px">年月</th>
-                  <th class="hidden-xs" width="80px">計上部署</th>
+                  <th width="80px">技術者</th>
+                  <th class="hidden-xs" width="70px">年月</th>
                 </tr>
                 </thead>
                 <tbody>
                   {% for result in incomplete_results %}
                   <tr>
-                    <td class="hidden-xs">{{ result.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('project_result.index', project_id=result.project.id) }}">{{ result.project.project_name }}</a></td>
-                    <td>{{ result.project_month|datetime_format('%Y年%m月') }}</td>
-                    <td class="hidden-xs">{{ result.project.recorded_department.department_name }}</td>
+                    <td class="hidden-xs">{{ result.project_detail.project.estimation_no }}</td>
+                    <td>
+                      <a href="{{ url_for('project_result.index', project_id=result.project_detail.project_id) }}">
+                        {{ result.project_detail.project.project_name }}
+                      </a>
+                    </td>
+                    <td>{{ result.project_detail.engineer.engineer_name }}</td>
+                    <td class="hidden-xs">{{ result.result_month|datetime_format('%Y年%m月') }}</td>
                   </tr>
                   {% endfor %}
                 </tbody>

@@ -26,7 +26,6 @@ class ProjectMonthTests(BaseTestCase):
         project_month = ProjectMonth(
             project_id=1,
             project_month='2017/1/1',
-            result_input_flag=0,
             billing_input_flag=0,
             deposit_input_flag=0,
             deposit_date='2017/1/1',
@@ -44,7 +43,6 @@ class ProjectMonthTests(BaseTestCase):
                    "'id='{}".format(project_month.id) + \
                    "', project_id='{}".format(project_month.project_id) + \
                    "', project_month='{}".format(project_month.project_month) + \
-                   "', result_input_flag='{}".format(project_month.result_input_flag) + \
                    "', billing_input_flag='{}".format(project_month.billing_input_flag) + \
                    "', deposit_input_flag='{}".format(project_month.deposit_input_flag) + \
                    "', deposit_date='{}".format(project_month.deposit_date) + \
@@ -117,7 +115,6 @@ class ProjectMonthTests(BaseTestCase):
         project_month = ProjectMonth(
             project_id=project.id,
             project_month='2017/1/1',
-            result_input_flag=InputFlag.yet,
             billing_input_flag=InputFlag.yet,
             deposit_input_flag=InputFlag.yet,
             deposit_date='2017/1/1',

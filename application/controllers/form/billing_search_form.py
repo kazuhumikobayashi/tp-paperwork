@@ -15,7 +15,6 @@ class BillingSearchForm(FlaskForm):
     last_day = first_day + relativedelta(months=1, days=-1)
     
     project_name = StringField('プロジェクト名', [validators.optional()])
-    result_input_flag = CheckboxField('実績ステータス', choices=InputFlag.get_result_flag_for_radio())
     billing_input_flag = CheckboxField('請求ステータス', choices=InputFlag.get_billing_flag_for_radio())
     deposit_input_flag = CheckboxField('入金ステータス', choices=InputFlag.get_deposit_flag_for_radio())
     end_user_company_id = SelectMultipleField('エンドユーザー', [validators.optional()],

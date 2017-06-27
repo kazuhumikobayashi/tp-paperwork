@@ -63,18 +63,3 @@ def detail(result_id=None):
                            project_detail_form=project_detail_form,
                            engineer_history_form=engineer_history_form,
                            pre_page=pre_page)
-
-
-@bp.route('/save_flag', methods=['POST'])
-def save_flag():
-    if request.is_xhr:
-        month_id = request.form["month_id"]
-        input_flag = InputFlag.parse(request.form["input_flag"])
-
-        project_month = project_month_service.find_by_id(month_id)
-        project_month.result_input_flag = input_flag
-
-        project_month_service.save(project_month)
-        return jsonify(result='success')
-
-    return abort(404)

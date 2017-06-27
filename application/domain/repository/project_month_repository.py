@@ -18,7 +18,7 @@ class ProjectMonthRepository(BaseRepository):
         project_months = self.model.query.order_by(self.model.project_month.desc())\
                                           .filter(self.model.project_id == project_id).all()
 
-        return [ProjectResultForm(m.project_id, m.id, m.project_month, m.result_input_flag) for m in project_months]
+        return [ProjectResultForm(m.project_id, m.id, m.project_month) for m in project_months]
 
     def get_project_payment_form(self, project_id):
         project_months = self.model.query.order_by(self.model.project_month.desc())\
@@ -26,15 +26,12 @@ class ProjectMonthRepository(BaseRepository):
 
         return [ProjectPaymentForm(m.project_id, m.id, m.project_month) for m in project_months]
 
-    def find_by_billing(self, page, project_name, result_input_flag, billing_input_flag,
+    def find_by_billing(self, page, project_name, billing_input_flag,
                         deposit_input_flag, end_user_company_id, client_company_id,
                         recorded_department_id, deposit_date_from, deposit_date_to):
         query = self.model.query
         if project_name:
             query = query.filter(self.model.project.has(Project.project_name.like('%' + project_name + '%')))
-        if result_input_flag:    
-            query = query.filter(self.model.result_input_flag.
-                                 in_([InputFlag.parse(st) for st in result_input_flag])) 
         if billing_input_flag:
             query = query.filter(self.model.billing_input_flag.
                                  in_([InputFlag.parse(st) for st in billing_input_flag])) 
@@ -68,12 +65,6 @@ class ProjectMonthRepository(BaseRepository):
 
     def find_by_client_billing_no(self, client_billing_no):
         return self.model.query.filter(self.model.client_billing_no == client_billing_no).first()
-
-    def find_incomplete_results(self):
-        query = self.model.query.filter(self.model.result_input_flag == InputFlag.yet)
-        query = query.filter(self.model.project_month <= date.today())
-        query = query.order_by(asc(self.model.project_month), asc('projects_1.project_name'))
-        return query.all()
 
     def find_incomplete_billings(self):
         query = self.model.query.filter(self.model.billing_input_flag == InputFlag.yet)

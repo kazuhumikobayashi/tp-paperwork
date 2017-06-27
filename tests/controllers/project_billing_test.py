@@ -240,7 +240,7 @@ class ProjectBillingTests(BaseTestCase):
                                })
         self.assertEqual(result.status_code, 200)
 
-        # DBのresult_input_flag値が1になっていることを確認。
+        # DBのbilling_input_flag値が1になっていることを確認。
         project_month = self.project_month_repository.find_by_id(5)
         actual_input_flag = project_month.billing_input_flag.value
         self.assertEqual(actual_input_flag, excepted)
@@ -303,7 +303,6 @@ class ProjectBillingTests(BaseTestCase):
         project_month = ProjectMonth(
                             project_id=1,
                             project_month='2016/10/1',
-                            result_input_flag=InputFlag.yet,
                             billing_input_flag=InputFlag.yet,
                             deposit_input_flag=InputFlag.yet,
                             deposit_date='2016/10/1',

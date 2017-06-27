@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 
-from sqlalchemy import asc
+from sqlalchemy import asc, or_
 
 from application.domain.model.company import Company
 from application.domain.model.company_client_flag import CompanyClientFlag
@@ -66,6 +66,13 @@ class ProjectResultRepository(BaseRepository):
                            'departments_1.department_name asc', 'engineers_1_engineer_name asc')\
             .paginate(page, self.model.PER_PAGE)
         return pagination
+
+    def find_incomplete_results(self):
+        query = self.model.query.filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))
+        query = query.filter(or_(self.model.work_time == 0, self.model.work_time.is_(None)))
+        query = query.filter(self.model.result_month <= date.today())
+        query = query.order_by(asc(self.model.result_month), asc('projects_1.project_name'))
+        return query.all()
 
     def find_incomplete_payments(self):
         query = self.model.query.filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))

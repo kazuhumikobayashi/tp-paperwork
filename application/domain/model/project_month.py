@@ -12,7 +12,6 @@ class ProjectMonth(BaseModel, db.Model):
 
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
     project_month = Column(Date, nullable=False)
-    result_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
     billing_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
     deposit_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
     deposit_date = Column(Date)
@@ -27,7 +26,6 @@ class ProjectMonth(BaseModel, db.Model):
     def __init__(self,
                  project_id=None,
                  project_month=None,
-                 result_input_flag=InputFlag.yet,
                  billing_input_flag=InputFlag.yet,
                  deposit_input_flag=InputFlag.yet,
                  deposit_date=None,
@@ -43,7 +41,6 @@ class ProjectMonth(BaseModel, db.Model):
         super(ProjectMonth, self).__init__(created_at, created_user, updated_at, updated_user)
         self.project_id = project_id
         self.project_month = project_month
-        self.result_input_flag = result_input_flag
         self.billing_input_flag = billing_input_flag
         self.deposit_input_flag = deposit_input_flag
         self.deposit_date = deposit_date
@@ -74,7 +71,6 @@ class ProjectMonth(BaseModel, db.Model):
                 "'id='{}".format(self.id) + \
                 "', project_id='{}".format(self.project_id) + \
                 "', project_month='{}".format(self.project_month) + \
-                "', result_input_flag='{}".format(self.result_input_flag) + \
                 "', billing_input_flag='{}".format(self.billing_input_flag) + \
                 "', deposit_input_flag='{}".format(self.deposit_input_flag) + \
                 "', deposit_date='{}".format(self.deposit_date) + \

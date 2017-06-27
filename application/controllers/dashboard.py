@@ -14,7 +14,7 @@ project_result_service = ProjectResultService()
 @bp.route('/', methods=['GET'])
 def index():
     incomplete_estimates = project_service.find_incomplete_estimates()
-    incomplete_results = project_month_service.find_incomplete_results()
+    incomplete_results = project_result_service.find_incomplete_results()
     incomplete_billings = project_month_service.find_incomplete_billings()
     incomplete_payments = project_result_service.find_incomplete_payments()
     incomplete_deposits = project_month_service.find_incomplete_deposits()
