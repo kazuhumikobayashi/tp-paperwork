@@ -38,10 +38,7 @@
         {{ render_search_field(form.project_name, "col-md-12") }}
       </div>
       <div class="row">
-        {{ render_search_field(form.result_input_flag, "col-sm-6") }}
         {{ render_search_field(form.billing_input_flag, "col-sm-6") }}
-      </div>
-      <div class="row">
         {{ render_search_field(form.deposit_input_flag, "col-sm-6") }}
       </div>
       <div class="row">
@@ -72,7 +69,6 @@
             {% if pagination.total > pagination.per_page %}
               {{ p.pagination_widget(pagination,'.payment_page',
               project_name=form.project_name.data,
-              result_input_flag=form.result_input_flag.data,
               billing_input_flag=form.billing_input_flag.data,
               deposit_input_flag=form.deposit_input_flag.data,
               end_user_company_id=form.end_user_company_id.data,
@@ -94,7 +90,6 @@
               <th>プロジェクト名</th>
               <th>入金予定日</th>
               <th class="text-right" width="160px">請求確定金額</th>
-              <th class="text-center">実績入力済</th>
               <th class="text-center">請求済</th>
               <th class="text-center">入金済</th>
             </tr>
@@ -106,11 +101,6 @@
               <td><a href="{{ url_for('project_contract.index', project_id=project_month.project.id) }}">{{ project_month.project.project_name }}</a></td>
               <td>{{ project_month.deposit_date|datetime_format("%Y/%m/%d") }}</td>
               <td class="text-right">{{ project_month.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>
-              <td class="text-center">
-                {% if project_month.result_input_flag.value %}
-                  <i class="fa fa-check" aria-hidden="true"></i>
-                {% endif %}
-              </td>              
               <td class="text-center">
                 {% if project_month.billing_input_flag.value %}
                   <i class="fa fa-check" aria-hidden="true"></i>

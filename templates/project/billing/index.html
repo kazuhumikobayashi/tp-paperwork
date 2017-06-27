@@ -51,7 +51,6 @@
                   <th>顧客請求書No</th>
                   <th class="text-right">予定請求金額</th>
                   <th class="text-right">確定請求金額</th>
-                  <th class="text-center">実績入力</th>
                   <th class="text-center">請求済</th>
                   <th class="text-center">入金済</th>
                   <th width="50px" class="ri"></th>
@@ -67,10 +66,6 @@
                     <td>{{ project_month.client_billing_no|filter_suppress_none }}</td>
                     <td class="text-right">{{ project_month.billing_estimated_money|number_with_commas|with_yen }}</td>
                     <td class="text-right">{{ project_month.billing_confirmation_money|number_with_commas|with_yen }}</td>
-                    <td class="text-center">
-                      {% if project_month.result_input_flag.value %}
-                        <i class="fa fa-check" aria-hidden="true"></i>
-                      {% endif %}
                     <td class="text-center">
                       <div class="form-group no-margin">
                         <label>

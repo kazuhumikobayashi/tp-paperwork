@@ -364,7 +364,6 @@ CREATE TABLE IF NOT EXISTS project_months (
   id INT NOT NULL AUTO_INCREMENT,
   project_id INT NOT NULL ,
   project_month DATE NOT NULL ,
-  result_input_flag INT NOT NULL DEFAULT 0 ,
   billing_input_flag INT NOT NULL DEFAULT 0 ,
   deposit_input_flag INT NOT NULL DEFAULT 0 ,
   deposit_date DATE ,

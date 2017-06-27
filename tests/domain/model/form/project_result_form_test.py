@@ -15,14 +15,12 @@ class ProjectResultFormTests(BaseTestCase):
     def test___repr__(self):
         project_result_form = ProjectResultForm(project_id=1,
                                                 project_month_id=1,
-                                                month=date(2017, 1, 1),
-                                                input_flag=InputFlag.yet)
+                                                month=date(2017, 1, 1))
 
         expected = "<ProjectResultForm:" + \
                    "'project_id='{}".format(project_result_form.project_id) + \
                    "', project_month_id='{}".format(project_result_form.project_month_id) + \
                    "', month='{}".format(project_result_form.month) + \
-                   "', input_flag='{}".format(project_result_form.input_flag) + \
                    "', project_results='{}".format(project_result_form.project_results) + \
                    "'>"
 

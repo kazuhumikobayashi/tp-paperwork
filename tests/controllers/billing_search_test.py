@@ -71,7 +71,6 @@ class BillingSearchTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
-                                  'result_input_flag': '1',
                                   'billing_input_flag': '1',
                                   'deposit_input_flag': '1',
                                   'end_user_company_id': '1', 
@@ -92,7 +91,6 @@ class BillingSearchTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
-                                  'result_input_flag': '1',
                                   'billing_input_flag': '1',
                                   'deposit_input_flag': '1',
                                   'end_user_company_id': '1', 
