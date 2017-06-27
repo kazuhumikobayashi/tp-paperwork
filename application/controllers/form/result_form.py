@@ -35,7 +35,7 @@ class ResultForm(FlaskForm):
                                       [validators.optional()],
                                       format='%Y/%m/%d',
                                       render_kw={"autocomplete": "off"})
-    payment_confirmation_money = DecimalField('支払確定金額_個別（予定金額と調整金額の合計）',
+    payment_confirmation_money = IntegerField('支払確定金額_個別（予定金額と調整金額の合計）',
                                               render_kw={"readonly": "readonly"})
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
 
