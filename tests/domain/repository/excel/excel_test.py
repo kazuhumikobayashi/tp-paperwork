@@ -75,3 +75,37 @@ class ExcelTests(BaseTestCase):
         self.excel.active = 1
         ws = self.excel.active
         self.assertEqual(ws.title, expected)
+
+    def test_insert_rows(self):
+        ws = self.excel.active
+        ws['A1'] = 'A1'
+        ws['A2'] = 'A2'
+        ws['A3'] = 'A3'
+
+        # １行目に1行挿入する
+        ws.insert_rows(1, 1)
+        # 結果
+        # | A1 |
+        # |    |
+        # | A2 |
+        # | A3 |
+        self.assertEqual(ws['A1'].value, 'A1')
+        self.assertIsNone(ws['A2'].value)
+        self.assertEqual(ws['A3'].value, 'A2')
+        self.assertEqual(ws['A4'].value, 'A3')
+
+        # 4行目に上に2行挿入する
+        ws.insert_rows(4, 2, above=True, copy_style=False)
+        # 結果
+        # | A1 |
+        # |    |
+        # | A2 |
+        # |    |
+        # |    |
+        # | A3 |
+        self.assertEqual(ws['A1'].value, 'A1')
+        self.assertIsNone(ws['A2'].value)
+        self.assertEqual(ws['A3'].value, 'A2')
+        self.assertIsNone(ws['A4'].value)
+        self.assertIsNone(ws['A5'].value)
+        self.assertEqual(ws['A6'].value, 'A3')
