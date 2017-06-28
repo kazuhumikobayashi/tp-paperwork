@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS projects (
   id INT NOT NULL AUTO_INCREMENT,
   project_name VARCHAR(128) NOT NULL ,
   project_name_for_bp VARCHAR(128) ,
-  status INT ,
+  status INT NOT NULL DEFAULT 1 ,
   recorded_department_id INT ,
   sales_person VARCHAR(128) ,
   estimation_no VARCHAR(64) ,

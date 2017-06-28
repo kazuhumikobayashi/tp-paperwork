@@ -28,7 +28,7 @@ class Project(BaseModel, db.Model):
 
     project_name = Column(String(128), nullable=False)
     project_name_for_bp = Column(String(128))
-    status = Column(EnumType(enum_class=Status))
+    status = Column(EnumType(enum_class=Status), nullable=False, default=1)
     recorded_department_id = Column(Integer, ForeignKey("departments.id"))
     sales_person = Column(String(128))
     estimation_no = Column(String(64), unique=True)
