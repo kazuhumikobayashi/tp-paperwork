@@ -14,7 +14,7 @@ files = UploadSet('files', ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls'])
 class ProjectAttachmentForm(FlaskForm):
     id = IntegerField('id')
     project_id = IntegerField('プロジェクトid')
-    type = SelectField('区分',
+    type = SelectField('添付種類（必須）',
                        [DataRequired()],
                        choices=ProjectAttachmentType.get_type_for_select(),
                        render_kw={"data-minimum-results-for-search": "Infinity"})
@@ -24,7 +24,7 @@ class ProjectAttachmentForm(FlaskForm):
 
 class FileForm(FlaskForm):
     attachment_id = IntegerField('添付id')
-    upload = FileField("アップロードファイル", validators=[FileAllowed(files)], filters=[lambda x: x or None])
+    upload = FileField("アップロードファイル（必須）", validators=[FileAllowed(files)], filters=[lambda x: x or None])
 
     def validate_upload(self, field):
         if self.attachment_id.data is None and (field.data or None) is None:
