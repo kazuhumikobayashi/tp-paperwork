@@ -69,8 +69,6 @@ def detail(engineer_id=None):
     # 更新時、所属会社を変更不可。
     if engineer.id:
         form.company_id.render_kw = {"disabled": "disabled"}
-    else:
-        form.company_id.render_kw = {"required": "required"}
 
     if form.validate_on_submit():
         engineer.engineer_name = form.engineer_name.data
