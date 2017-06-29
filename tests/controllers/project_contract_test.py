@@ -716,6 +716,56 @@ class ProjectContractTests(BaseTestCase):
         db.session.delete(project)
         db.session.commit()
 
+    # 契約完了時は明細必須
+    def test_required_detail_when_status_done(self):
+        # ログイン
+        self.app.post('/login', data={'shain_number': 'test1', 'password': 'test'})
+
+        # プロジェクトを新規作成
+        project = Project(
+            status=Status.start,
+            recorded_department_id=1,
+            estimation_no='M0009',
+            project_name='validation_test',
+            end_user_company_id=4,
+            client_company_id=3,
+            start_date='2016/1/1',
+            end_date='2016/12/31',
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.billing_at_last,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project)
+        db.session.commit()
+
+        project_id = project.id
+        before = project.status
+
+        # 契約完了時に明細が入力されていないと
+        result = self.app.post('/project/contract/' + str(project_id), data={
+            'status': Status.done,
+            'recorded_department_id': project.recorded_department_id,
+            'estimation_no': project.estimation_no,
+            'project_name': project.project_name,
+            'end_user_company_id': project.end_user_company_id,
+            'client_company_id': project.client_company_id,
+            'start_date': project.start_date.strftime('%Y/%m/%d'),
+            'end_date': project.end_date.strftime('%Y/%m/%d'),
+            'contract_form': project.contract_form,
+            'billing_timing': project.billing_timing,
+        })
+        self.assertEqual(result.status_code, 200)
+
+        # ステータスの値が変わっていないことを確認。
+        after = project.status
+        self.assertEqual(before, after)
+
+        # プロジェクトを削除
+        db.session.delete(project)
+        db.session.commit()
+
     # 支払い予定日が祝日の場合、後ろ倒しする（祝日が金曜の場合）
     def test_after_deposit_date_if_holiday_friday(self):
         # ログイン
@@ -739,6 +789,17 @@ class ProjectContractTests(BaseTestCase):
         project.client_company.billing_site = Site.fifty_five
         project.client_company.bank_holiday_flag = HolidayFlag.after
 
+        result = self.app.post('/project/contract/create?project_id=' + str(project_id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': 1,
+            'billing_money': '100000000',
+            'billing_start_day': date(2015, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2015, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_rule': '',
+        })
+
         # 支払いサイトが55のため、deposit_dateには、end_dateの翌々月25日（2015/12/25）が入るが、
         # 2015/12/25は祝日（テストデータ）のため、後ろ倒しして2015/12/28が入る（25日が金曜のため、来週の月曜28日となる）。
         expected = date(2015, 12, 28)
@@ -756,6 +817,9 @@ class ProjectContractTests(BaseTestCase):
             'billing_timing': BillingTiming.billing_at_last.value
         })
         self.assertEqual(result.status_code, 302)
+        project_id = result.headers['Location'].split('/')[-1]
+
+        project = self.project_repository.find_by_id(project_id)
 
         # 2016/12/28 になっていることを確認
         actual = project.project_months[0].deposit_date
@@ -1844,6 +1908,17 @@ class ProjectContractTests(BaseTestCase):
 
         # set_up
         project = self.project_repository.find_by_id(7)
+
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': 1,
+            'billing_money': '100000000',
+            'billing_start_day': date(2015, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2015, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_rule': '',
+        })
 
         result = self.app.post('/project/contract/' + str(project.id), data={
             'status': Status.done.value,
