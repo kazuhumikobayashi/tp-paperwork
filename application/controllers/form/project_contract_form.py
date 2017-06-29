@@ -64,3 +64,9 @@ class ProjectContractForm(FlaskForm):
         project = repository.find_by_estimation_no(estimation_no=field.data)
         if project and project.id != self.id.data:
             raise ValidationError('この見積Noは既に登録されています。')
+
+    def validate_status(self, field):
+        if field.data == str(Status.done):
+            project = repository.find_by_id(self.id.data)
+            if not project.project_details:
+                raise ValidationError('契約完了時には明細が必須です。')
