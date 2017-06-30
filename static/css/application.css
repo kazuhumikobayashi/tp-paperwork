@@ -36,3 +36,7 @@ input,textarea {
     font-size: 12px;
     cursor: pointer;
 }
+
+.has-error .select2-selection {
+    border-color: #dd4b39;
+}

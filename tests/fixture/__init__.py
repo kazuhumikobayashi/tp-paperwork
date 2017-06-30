@@ -244,6 +244,8 @@ def create_engineer_histories():
             payment_start_day=date(2016, 1, 1),
             payment_end_day=date(9999, 12, 31),
             payment_per_month=num+1,
+            payment_site=Site.twenty_five,
+            payment_tax=Tax.eight,
             payment_rule=Rule.fixed,
             payment_bottom_base_hour=num+1,
             payment_top_base_hour=num+2,

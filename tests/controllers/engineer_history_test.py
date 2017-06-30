@@ -7,6 +7,9 @@ from application.domain.model.engineer_history import EngineerHistory
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
+from application.domain.model.immutables.site import Site
+from application.domain.model.immutables.tax import Tax
+from application.domain.repository.company_repository import CompanyRepository
 from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
 from tests import BaseTestCase
 
@@ -20,6 +23,7 @@ class EngineerHistoryTests(BaseTestCase):
     def setUp(self):
         super(EngineerHistoryTests, self).setUp()
         self.engineer_history_repository = EngineerHistoryRepository()
+        self.company_repository = CompanyRepository()
 
     def tearDown(self):
         super(EngineerHistoryTests, self).tearDown()
@@ -123,6 +127,8 @@ class EngineerHistoryTests(BaseTestCase):
             engineer_id=1,
             payment_start_day=date(2017, 1, 1),
             payment_end_day=date(2017, 2, 28),
+            payment_site=Site.twenty_five,
+            payment_tax=Tax.eight,
             payment_per_month=100000,
             payment_rule=Rule.fixed,
             created_at=datetime.today(),
@@ -390,3 +396,67 @@ class EngineerHistoryTests(BaseTestCase):
             '/engineer/history/delete/' + str(engineer_history.id))
         # 削除できたことを確認
         self.assertEqual(result.status_code, 302)
+
+    # 新規作成時には会社の支払サイトと支払消費税で保存される
+    def test_history_create_new(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        company = self.company_repository.find_by_id(2)
+        expected_site = company.payment_site
+        expected_tax = company.payment_tax
+
+        result = self.app.post('/engineer/create', data={
+            'engineer_name': 'テスト登録',
+            'engineer_name_kana': 'テストトウロク',
+            'birthday': datetime.today().strftime('%Y/%m/%d'),
+            'gender': '1',
+            'company_id': company.id,
+            'skill': ['1', '2'],
+            'business_category': ['1', '2']
+        })
+        self.assertEqual(result.status_code, 302)
+        engineer_id = result.headers['Location'].split('/')[-1]
+
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
+            'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
+            'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
+            'payment_per_month': '100000',
+            'payment_rule': Rule.variable.value,
+            'payment_bottom_base_hour': 1,
+            'payment_top_base_hour': 2,
+            'payment_per_hour': '1/100, 1/150',
+            'payment_per_bottom_hour': 3,
+            'payment_per_top_hour': 4,
+            'payment_fraction': Fraction.hundred.value,
+            'payment_fraction_calculation2': Round.down.value,
+        })
+        self.assertEqual(result.status_code, 302)
+        engineer_history_id = result.headers['Location'].split('/')[-1]
+
+        sut = self.engineer_history_repository.find_by_id(engineer_history_id)
+
+        # 会社のサイトになっていることを確認
+        self.assertEqual(sut.payment_site, expected_site)
+        self.assertEqual(sut.payment_tax, expected_tax)
+
+        # ブランクにした場合はバリデーションチェックに引っかかる
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
+            'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
+            'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
+            'payment_site': '',
+            'payment_tax': '',
+            'payment_per_month': '100000',
+            'payment_rule': Rule.variable.value,
+            'payment_bottom_base_hour': 1,
+            'payment_top_base_hour': 2,
+            'payment_per_hour': '1/100, 1/150',
+            'payment_per_bottom_hour': 3,
+            'payment_per_top_hour': 4,
+            'payment_fraction': Fraction.hundred.value,
+            'payment_fraction_calculation2': Round.down.value,
+        })
+        self.assertEqual(result.status_code, 200)

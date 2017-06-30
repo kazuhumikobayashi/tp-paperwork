@@ -11,6 +11,8 @@ from application.controllers.form.engineer_history_form import EngineerHistoryFo
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
+from application.domain.model.immutables.site import Site
+from application.domain.model.immutables.tax import Tax
 from application.service.business_category_service import BusinessCategoryService
 from application.service.company_service import CompanyService
 from application.service.engineer_history_service import EngineerHistoryService
@@ -38,9 +40,10 @@ def history(engineer_history_id=None):
     # 履歴データ新規作成時にはengineer情報を取得する。
     if engineer_id:
         engineer_history.engineer = service.find_by_id(engineer_id)
-
-    form.payment_site.data = engineer_history.engineer.company.payment_site
-    form.payment_tax.data = str(engineer_history.engineer.company.payment_tax)
+        if not form.payment_site.raw_data:
+            form.payment_site.data = str(engineer_history.engineer.company.payment_site)
+        if not form.payment_tax.raw_data:
+            form.payment_tax.data = str(engineer_history.engineer.company.payment_tax)
 
     # 対象技術者の最新の履歴データを取得する
     latest_engineer_history = engineer_history_service.get_latest_history(engineer_history.engineer.id)
@@ -52,6 +55,8 @@ def history(engineer_history_id=None):
         engineer_history.engineer_id = engineer_history.engineer.id
         engineer_history.payment_start_day = form.payment_start_day.data
         engineer_history.payment_end_day = form.payment_end_day.data
+        engineer_history.payment_site = Site.parse(form.payment_site.data)
+        engineer_history.payment_tax = Tax.parse(form.payment_tax.data)
         engineer_history.payment_per_month = form.payment_per_month.data
         engineer_history.payment_rule = Rule.parse(form.payment_rule.data)
         engineer_history.payment_bottom_base_hour = form.payment_bottom_base_hour.data

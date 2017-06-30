@@ -7,10 +7,11 @@ from application.controllers.form.validators import Length, DataRequired, LessTh
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
+from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.tax import Tax
-from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
+from application.service.engineer_history_service import EngineerHistoryService
 
-repository = EngineerHistoryRepository()
+service = EngineerHistoryService()
 
 
 def required_if_variable(form, field):
@@ -28,12 +29,14 @@ class EngineerHistoryForm(FlaskForm):
                                       [DataRequired()],
                                       format='%Y/%m',
                                       render_kw={"autocomplete": "off"})
-    payment_site = IntegerField('支払サイト', [validators.optional()], render_kw={"disabled": "disabled"})
-    payment_tax = SelectField('支払消費税区分',
-                              [validators.optional()],
+    payment_site = SelectField('支払サイト（必須）',
+                               [DataRequired()],
+                               choices=Site.get_site_for_select(),
+                               render_kw={"data-minimum-results-for-search": "Infinity"})
+    payment_tax = SelectField('支払消費税（必須）',
+                              [DataRequired()],
                               choices=Tax.get_type_for_select(),
-                              filters=[lambda x: x or None],
-                              render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
+                              render_kw={"data-minimum-results-for-search": "Infinity"})
     payment_per_month = IntegerField('支払単価（必須）', [InputRequired()])
     payment_rule = RadioField('支払ルール（必須）',
                               [DataRequired()],
@@ -63,7 +66,7 @@ class EngineerHistoryForm(FlaskForm):
     remarks = TextAreaField('その他特記事項', [Length(max=1024)])
 
     def validate_payment_start_day(self, field):
-        engineer_history = repository.find_by_id(self.id.data)
+        engineer_history = service.find_by_id(self.id.data)
         if engineer_history and engineer_history.payment_end_day is not None \
                 and field.data != engineer_history.payment_start_day and field.data < engineer_history.payment_end_day:
             raise ValidationError('前回の支払い契約終了年月「'

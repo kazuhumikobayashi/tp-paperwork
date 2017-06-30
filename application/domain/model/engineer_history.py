@@ -7,6 +7,8 @@ from application.domain.model.base_model import BaseModel
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
+from application.domain.model.immutables.site import Site
+from application.domain.model.immutables.tax import Tax
 from application.domain.model.sqlalchemy.types import EnumType
 
 
@@ -17,6 +19,8 @@ class EngineerHistory(BaseModel, db.Model):
     engineer_id = Column(Integer, ForeignKey("engineers.id"))
     payment_start_day = Column(Date, nullable=False)
     payment_end_day = Column(Date, nullable=False)
+    payment_site = Column(EnumType(enum_class=Site))
+    payment_tax = Column(EnumType(enum_class=Tax))
     payment_per_month = Column(Integer, nullable=False)
     payment_rule = Column(EnumType(enum_class=Rule), nullable=False)
     payment_bottom_base_hour = Column(Integer)
@@ -38,6 +42,8 @@ class EngineerHistory(BaseModel, db.Model):
                  payment_end_day=None,
                  payment_per_month=None,
                  payment_rule=None,
+                 payment_site=None,
+                 payment_tax=None,
                  payment_bottom_base_hour=None,
                  payment_top_base_hour=None,
                  payment_free_base_hour=None,
@@ -56,6 +62,8 @@ class EngineerHistory(BaseModel, db.Model):
         self.engineer_id = engineer_id
         self.payment_start_day = payment_start_day
         self.payment_end_day = payment_end_day
+        self.payment_site = payment_site
+        self.payment_tax = payment_tax
         self.payment_per_month = payment_per_month
         self.payment_rule = payment_rule
         self.payment_bottom_base_hour = payment_bottom_base_hour
@@ -69,12 +77,21 @@ class EngineerHistory(BaseModel, db.Model):
         self.payment_condition = payment_condition
         self.remarks = remarks
 
+    # 履歴を切る際にengineer情報を紐づけたまま新規履歴を作成して返すメソッド
+    def create_new_history(self):
+        # engineerをhistoryに紐づけた状態で返す
+        engineer_history = EngineerHistory()
+        engineer_history.engineer = self.engineer
+        return engineer_history
+
     def __repr__(self):
         return "<EngineerHistory:" + \
                 "'id='{}".format(self.id) + \
                 "', engineer='{}".format(self.engineer) + \
                 "', payment_start_day='{}".format(self.payment_start_day) + \
                 "', payment_end_day='{}".format(self.payment_end_day) + \
+                "', payment_site='{}".format(self.payment_site) + \
+                "', payment_tax='{}".format(self.payment_tax) + \
                 "', payment_per_month='{}".format(self.payment_per_month) + \
                 "', payment_rule='{}".format(self.payment_rule) + \
                 "', payment_bottom_base_hour='{}".format(self.payment_bottom_base_hour) + \
@@ -92,10 +109,3 @@ class EngineerHistory(BaseModel, db.Model):
                 "', updated_at='{}".format(self.updated_at) + \
                 "', updated_user='{}".format(self.updated_user) + \
                 "'>"
-
-    # 履歴を切る際にengineer情報を紐づけたまま新規履歴を作成して返すメソッド
-    def create_new_history(self):
-        # engineerをhistoryに紐づけた状態で返す
-        engineer_history = EngineerHistory()
-        engineer_history.engineer = self.engineer
-        return engineer_history
