@@ -46,25 +46,32 @@ class ProjectResultRepository(BaseRepository):
                                                        .has(Company.company_client_flags
                                                             .any(CompanyClientFlag.client_flag == ClientFlag.bp))))) 
         if project_name:
-            query = query.filter(self.model.project_detail.has(Project.project_name.like('%' + project_name + '%')))
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.project_name.like('%' + project_name + '%'))))
         if input_flag:    
             query = query.filter(self.model.payment_flag.in_([InputFlag.parse(st) for st in input_flag])) 
         if end_user_company_id:
-            query = query.filter(self.model.project_detail.has(Project.end_user_company_id.in_(end_user_company_id)))
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.end_user_company_id.in_(end_user_company_id))))
         if client_company_id:
-            query = query.filter(self.model.project_detail.has(Project.client_company_id.in_(client_company_id)))
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.client_company_id.in_(client_company_id))))
         if recorded_department_id:
-            query = query.filter(self.model.project_detail.
-                                 has(Project.recorded_department_id.in_(recorded_department_id)))
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project
+                                      .has(Project.recorded_department_id.in_(recorded_department_id))))
         if engineer_name:
-            query = query.filter(self.model.project_detail.has(Engineer.engineer_name.like('%' + engineer_name + '%')))
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.engineer
+                                      .has(Engineer.engineer_name.like('%' + engineer_name + '%'))))
         if payment_expected_date_from:
             query = query.filter(self.model.payment_expected_date >= payment_expected_date_from)
         if payment_expected_date_to:
             query = query.filter(self.model.payment_expected_date <= payment_expected_date_to)
         pagination = \
             query.order_by('companies_1.company_name asc', 'companies_2.company_name asc',
-                           'departments_1.department_name asc', 'engineers_1_engineer_name asc')\
+                           'departments_1.department_name asc', 'engineers_1_engineer_name asc',
+                           asc(self.model.payment_expected_date))\
             .paginate(page, self.model.PER_PAGE)
         return pagination
 
@@ -73,7 +80,8 @@ class ProjectResultRepository(BaseRepository):
         query = self.model.query\
             .filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))
         if project_name:
-            query = query.filter(self.model.project_detail.has(Project.project_name.like('%' + project_name + '%')))
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.project_name.like('%' + project_name + '%'))))
         if result_input_flag and len(result_input_flag) == 1:
             if InputFlag.yet in [InputFlag.parse(f) for f in result_input_flag]:
                 query = query.filter(or_(self.model.work_time == 0, self.model.work_time.is_(None)))
