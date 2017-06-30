@@ -122,7 +122,7 @@
                               <td class="text-right">{{ project_detail.billing_money|number_with_commas|with_yen }}</td>
                               <td>{{ project_detail.remarks|filter_suppress_none }}</td>
                               <td>
-                                {% if project_detail.is_engineer() and project_detail.engineer.company.is_bp() %}
+                                {% if project_detail.is_engineer() and project_detail.engineer.is_bp() %}
                                   <a class="btn btn-sm btn-success">
                                     <i class="fa fa-file-text-o"></i> 注文書・請書作成
                                   </a>
@@ -173,34 +173,17 @@
                   <div class="row">
                     {{ render_field(form.remarks, "col-sm-12", rows="4") }}
                   </div>
-                  <!-- /.row -->
-                  <div class="footer text-right" style="margin-top: 10px;">
-                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
-                  </div>
-                </div>
-              </div>
-              <!-- /.box box-success -->
-              <div class="box box-success color-palette-box">
-                <!-- /.box-body -->
-                <div class="box-header with-border">
-                  <h3 class="box-title"> 注文書詳細</h3>
-                  <div class="box-tools">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  </div>
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body">
+                  <div class="part-title"> 注文書詳細</div>
                   <div class="row">
                     {{ render_field(form.client_order_no, "col-sm-6") }}
                   </div>
-                  <!-- /.row -->
                   <div class="footer text-right" style="margin-top: 10px;">
                     <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> 保存</button>
                   </div>
                 </div>
                 <!-- /.box-body -->
               </div>
-              <!-- box box-default -->
+              <!-- /.box box-success -->
             </form>
           </div><!-- /.tab-content -->
         </div>
