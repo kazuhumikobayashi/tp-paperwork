@@ -151,6 +151,7 @@ class ProjectDetail(BaseModel, db.Model):
 
     # 支払フラグが前倒しか後ろ倒しか判断
     def get_holiday_flag_if_payment(self):
+        # TODO 技術者履歴から取得するようにする
         payment_site = self.engineer.company.payment_site
 
         # 支払いの場合、末日は前倒し、その他後ろ倒し
@@ -190,6 +191,7 @@ class ProjectDetail(BaseModel, db.Model):
             if self.has_payment():
                 calculator = Calculator(
                                 contract_date,
+                                # TODO 技術者履歴から取得するようにする
                                 self.engineer.company.payment_site,
                                 self.get_holiday_flag_if_payment())
                 project_result.payment_expected_date = calculator.get_deposit_date()

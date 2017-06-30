@@ -308,6 +308,8 @@ CREATE TABLE IF NOT EXISTS engineer_histories (
   engineer_id INT NOT NULL ,
   payment_start_day DATE NOT NULL ,
   payment_end_day DATE NOT NULL ,
+  payment_site INT ,
+  payment_tax INT ,
   payment_per_month INT NOT NULL ,
   payment_rule INT NOT NULL ,
   payment_bottom_base_hour INT ,
