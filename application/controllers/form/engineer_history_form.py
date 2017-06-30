@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, RadioField, validators
+from wtforms import StringField, SelectField, TextAreaField, validators
 from wtforms.validators import ValidationError
 
-from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField
+from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField, RadioField
 from application.controllers.form.validators import Length, DataRequired, LessThan, InputRequired
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
