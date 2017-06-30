@@ -1,5 +1,6 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
+from dateutil.relativedelta import relativedelta
 from sqlalchemy import asc, or_
 
 from application.domain.model.company import Company
@@ -64,6 +65,48 @@ class ProjectResultRepository(BaseRepository):
         pagination = \
             query.order_by('companies_1.company_name asc', 'companies_2.company_name asc',
                            'departments_1.department_name asc', 'engineers_1_engineer_name asc')\
+            .paginate(page, self.model.PER_PAGE)
+        return pagination
+
+    def find_by_result(self, page, project_name, result_input_flag, end_user_company_id,
+                       client_company_id, recorded_department_id, engineer_name, result_month_from, result_month_to):
+        query = self.model.query\
+            .filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))
+        if project_name:
+            query = query.filter(self.model.project_detail.has(Project.project_name.like('%' + project_name + '%')))
+        if result_input_flag and len(result_input_flag) == 1:
+            if InputFlag.yet in [InputFlag.parse(f) for f in result_input_flag]:
+                query = query.filter(or_(self.model.work_time == 0, self.model.work_time.is_(None)))
+            if InputFlag.done in [InputFlag.parse(f) for f in result_input_flag]:
+                query = query.filter(self.model.work_time > 0)
+        if end_user_company_id:
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.end_user_company_id.in_(end_user_company_id))))
+        if client_company_id:
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.client_company_id.in_(client_company_id))))
+        if recorded_department_id:
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project
+                                      .has(Project.recorded_department_id.in_(recorded_department_id))))
+        if engineer_name:
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.engineer
+                                      .has(Engineer.engineer_name.like('%' + engineer_name + '%'))))
+        if result_month_from:
+            tmp_data = datetime.strptime(result_month_from, '%Y/%m').date()
+            result_month_from = date(tmp_data.year, tmp_data.month, 1)
+
+            query = query.filter(self.model.result_month >= result_month_from)
+        if result_month_to:
+            tmp_data = datetime.strptime(result_month_to, '%Y/%m').date()
+            result_month_to = tmp_data + relativedelta(months=1, days=-1)
+
+            query = query.filter(self.model.result_month <= result_month_to)
+        pagination = \
+            query.order_by('companies_1.company_name asc', 'companies_2.company_name asc',
+                           'departments_1.department_name asc', 'engineers_1_engineer_name asc',
+                           asc(self.model.result_month))\
             .paginate(page, self.model.PER_PAGE)
         return pagination
 

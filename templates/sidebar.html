@@ -18,6 +18,11 @@
                 <i class="fa fa-home fa-fw"></i> <span>プロジェクト検索</span>
             </a>
         </li>
+        <li{% if request.path.count('/search/result/') %} class="active"{% endif %}>
+        	<a href="{{ url_for('search_result.index') }}">
+        		<i class="fa fa-line-chart fa-fw"></i> <span>実績情報検索</span>
+        	</a>
+        </li>
         <li{% if request.path.count('/search/billing/') %} class="active"{% endif %}>
         	<a href="{{ url_for('search_billing.index') }}">
         		<i class="fa fa-calculator fa-fw"></i> <span>請求情報検索</span>
