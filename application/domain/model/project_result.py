@@ -61,6 +61,9 @@ class ProjectResult(BaseModel, db.Model):
         self.payment_expected_date = payment_expected_date
         self.payment_flag = payment_flag
 
+    def is_result_input(self):
+        return (self.work_time or 0) > 0
+
     def __repr__(self):
         return "<ProjectResult:" + \
                 "'id='{}".format(self.id) + \

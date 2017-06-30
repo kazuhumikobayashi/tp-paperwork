@@ -16,6 +16,12 @@ class ProjectResultService(object):
                                                client_company_id, recorded_department_id, engineer_name,
                                                payment_expected_date_from, payment_expected_date_to)
 
+    def find_by_result(self, page, project_name, result_input_flag, end_user_company_id,
+                       client_company_id, recorded_department_id, engineer_name, result_month_from, result_month_to):
+        return self.repository.find_by_result(page, project_name, result_input_flag, end_user_company_id,
+                                              client_company_id, recorded_department_id, engineer_name,
+                                              result_month_from, result_month_to)
+
     def find_incomplete_results(self):
         return self.repository.find_incomplete_results()
 
