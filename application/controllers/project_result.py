@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, current_app, jsonify
+from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, current_app
 
-from application.controllers.form.result_form import ResultForm, ProjectDetailInResultForm, EngineerHistoryInResultForm
-from application.domain.model.immutables.input_flag import InputFlag
+from application.controllers.form.project_result_form import ProjectResultForm, ProjectDetailInResultForm, EngineerHistoryInResultForm
 from application.service.engineer_history_service import EngineerHistoryService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_result_service import ProjectResultService
@@ -35,7 +34,7 @@ def detail(result_id=None):
     engineer_history = engineer_history_service.get_history_at_result_month(result.project_detail.engineer_id,
                                                                             result.result_month)
 
-    form = ResultForm(request.form, result)
+    form = ProjectResultForm(request.form, result)
     project_detail_form = ProjectDetailInResultForm(obj=result.project_detail)
     engineer_history_form = EngineerHistoryInResultForm(obj=engineer_history)
 

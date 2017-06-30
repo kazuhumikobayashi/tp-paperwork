@@ -48,8 +48,8 @@ class ProjectContractForm(FlaskForm):
                               [validators.Optional()],
                               choices=Tax.get_type_for_select(),
                               render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
-    scope = StringField('委託範囲', [Length(max=1024)], filters=[lambda x: x or None])
-    contents = StringField('委託内容', [Length(max=1024)], filters=[lambda x: x or None])
+    scope = TextAreaField('作業範囲', [Length(max=1024)], filters=[lambda x: x or None])
+    contents = TextAreaField('作業内容', [Length(max=1024)], filters=[lambda x: x or None])
     working_place = StringField('作業場所', [Length(max=1024)], filters=[lambda x: x or None])
     delivery_place = StringField('納入場所', [Length(max=1024)], filters=[lambda x: x or None])
     deliverables = StringField('納品物', [Length(max=1024)], filters=[lambda x: x or None])
