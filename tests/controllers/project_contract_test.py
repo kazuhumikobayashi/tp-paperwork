@@ -1,4 +1,6 @@
 from datetime import date, datetime
+
+from dateutil.relativedelta import relativedelta
 from nose.tools import ok_
 
 from application import db
@@ -121,7 +123,7 @@ class ProjectContractTests(BaseTestCase):
         result = self.app.post('/project/create', data={
             'project_name': '重複テスト',
             'start_date': date.today().strftime('%Y/%m/%d'),
-            'end_date': '2099/12/31'
+            'end_date': (date.today() + relativedelta(months=3)).strftime('%Y/%m/%d')
         })
         self.assertEqual(result.status_code, 302)
         project_id = result.headers['Location'].split('/')[-1]
@@ -160,7 +162,7 @@ class ProjectContractTests(BaseTestCase):
         result = self.app.post('/project/create', data={
             'project_name': '重複テスト',
             'start_date': date.today().strftime('%Y/%m/%d'),
-            'end_date': '2099/12/31'
+            'end_date': (date.today() + relativedelta(months=3)).strftime('%Y/%m/%d')
         })
         self.assertEqual(result.status_code, 302)
         project_id = result.headers['Location'].split('/')[-1]
@@ -789,7 +791,7 @@ class ProjectContractTests(BaseTestCase):
         project.client_company.billing_site = Site.fifty_five
         project.client_company.bank_holiday_flag = HolidayFlag.after
 
-        result = self.app.post('/project/contract/create?project_id=' + str(project_id), data={
+        self.app.post('/project/contract/create?project_id=' + str(project_id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': 1,
             'billing_money': '100000000',
@@ -1909,7 +1911,7 @@ class ProjectContractTests(BaseTestCase):
         # set_up
         project = self.project_repository.find_by_id(7)
 
-        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+        self.app.post('/project/contract/create?project_id=' + str(project.id), data={
             'detail_type': DetailType.engineer,
             'engineer_id': 1,
             'billing_money': '100000000',
@@ -2180,3 +2182,60 @@ class ProjectContractTests(BaseTestCase):
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
+
+    # 初回登録時にステータスを完了で更新できる
+    def test_status_is_done_when_first_entry(self):
+
+        result = self.app.post('/project/create', data={
+            'project_name': '初回登録時にステータスを完了',
+            'start_date': date.today().strftime('%Y/%m/%d'),
+            'end_date': (date.today() + relativedelta(months=3)).strftime('%Y/%m/%d')
+        })
+        self.assertEqual(result.status_code, 302)
+        project_id = result.headers['Location'].split('/')[-1]
+        project = self.project_repository.find_by_id(project_id)
+
+        # 明細登録
+        result = self.app.post('/project/contract/create?project_id=' + str(project_id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': 1,
+            'billing_money': '100000000',
+            'billing_start_day': date(2015, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2015, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_rule': '',
+        })
+        self.assertEqual(result.status_code, 302)
+
+        result = self.app.post('/project/contract/' + str(project_id), data={
+            'project_name': 'project_name',
+            'project_name_for_bp': project.project_name_for_bp,
+            'status': Status.done.value,
+            'recorded_department_id': '1',
+            'sales_person': project.sales_person,
+            'estimation_no': 'test_status_done_first_entry',
+            'end_user_company_id': '4',
+            'client_company_id': '3',
+            'start_date': project.start_date.strftime('%Y/%m/%d'),
+            'end_date': project.end_date.strftime('%Y/%m/%d'),
+            'contract_form': Contract.blanket,
+            'billing_timing': BillingTiming.billing_at_last,
+            'estimated_total_amount': project.estimated_total_amount,
+            'deposit_date': date.today().strftime('%Y/%m/%d'),
+            'billing_tax': Tax.eight,
+            'scope': project.scope,
+            'contents': project.contents,
+            'working_place': project.working_place,
+            'delivery_place': project.delivery_place,
+            'deliverables': project.deliverables,
+            'inspection_date': project.inspection_date,
+            'responsible_person': project.responsible_person,
+            'quality_control': project.quality_control,
+            'subcontractor': project.subcontractor,
+            'remarks': project.remarks
+        })
+
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/' + str(project_id) in result.headers['Location'])

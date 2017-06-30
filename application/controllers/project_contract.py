@@ -75,6 +75,10 @@ def index(project_id=None):
         project.remarks = form.remarks.data
         project.client_order_no = form.client_order_no.data
 
+        # 初回登録時にステータスが完了だった場合にclient_company.billing_siteを利用できるようにセットする
+        if not project.client_company and project.status.is_done():
+            project.client_company = company_service.find_by_id(form.client_company_id.data)
+
         project_service.save(project)
         flash('保存しました。')
         return redirect(url_for('.index', project_id=project.id))
