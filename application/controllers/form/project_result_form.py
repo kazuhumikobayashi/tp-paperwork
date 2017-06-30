@@ -8,7 +8,7 @@ from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 
 
-class ResultForm(FlaskForm):
+class ProjectResultForm(FlaskForm):
     result_month = DateField('実績年月', [validators.optional()], format='%Y/%m/%d')
     engineer_name = StringField('技術者名称', render_kw={"disabled": "disabled"})
     work_time = DecimalField('実稼働時間')
