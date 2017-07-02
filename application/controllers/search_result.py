@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import render_template
 from flask import request
 
-from application.controllers.form.result_search_form import ResultSearchForm
+from application.controllers.form.search_result_form import SearchResultForm
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
@@ -16,10 +16,10 @@ department_service = DepartmentService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = ResultSearchForm(request.values)
-    form.client_company_id.choices = company_service.find_for_select_by_client_flag_id(
+    form = SearchResultForm(request.values)
+    form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])
-    form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id(
+    form.end_user_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.end_user.value])
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = project_result_service.find_by_result(page,
