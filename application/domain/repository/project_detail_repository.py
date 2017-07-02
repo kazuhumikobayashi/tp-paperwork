@@ -21,7 +21,6 @@ class ProjectDetailRepository(BaseRepository):
         super(ProjectDetailRepository, self).save(project_detail)
 
     def destroy(self, model):
-        model.billing_money = None
         super(ProjectDetailRepository, self).destroy(model)
 
     def create(self):

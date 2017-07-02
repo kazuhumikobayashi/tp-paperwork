@@ -1,5 +1,3 @@
-from flask import current_app
-
 from application.domain.repository.billing_sequence_repository import BillingSequenceRepository
 from application.domain.repository.project_month_repository import ProjectMonthRepository
 from application.domain.repository.project_result_repository import ProjectResultRepository
