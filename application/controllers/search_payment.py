@@ -2,7 +2,7 @@ from flask import Blueprint, abort, jsonify
 from flask import render_template
 from flask import request
 
-from application.controllers.form.payment_search_form import PaymentSearchForm
+from application.controllers.form.search_payment_form import SearchPaymentForm
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.input_flag import InputFlag
 from application.service.company_service import CompanyService
@@ -17,10 +17,10 @@ company_service = CompanyService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = PaymentSearchForm(request.values)
-    form.client_company_id.choices = company_service.find_for_select_by_client_flag_id(
+    form = SearchPaymentForm(request.values)
+    form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])
-    form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id(
+    form.end_user_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.end_user.value])
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = service.find_by_payment(page,
