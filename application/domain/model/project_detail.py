@@ -30,7 +30,7 @@ class ProjectDetail(BaseModel, db.Model):
     detail_type = Column(EnumType(enum_class=DetailType), nullable=False)
     work_name = Column(String(128))
     engineer_id = Column(Integer, ForeignKey("engineers.id"))
-    _billing_money = Column('billing_money', Integer)
+    billing_money = Column(Integer)
     remarks = Column(String(1024))
     _billing_start_day = Column('billing_start_day', Date)
     billing_end_day = Column(Date)
@@ -53,17 +53,6 @@ class ProjectDetail(BaseModel, db.Model):
     project_results = relationship(ProjectResult, cascade='all, delete-orphan')
 
     _is_billing_start_day_change = False
-
-    @hybrid_property
-    def billing_money(self):
-        return self._billing_money
-
-    @billing_money.setter
-    def billing_money(self, value):
-        self.project.estimated_total_amount = (self.project.estimated_total_amount or 0)\
-                                              + (value or 0) \
-                                              - (self._billing_money or 0)
-        self._billing_money = value
 
     @hybrid_property
     def billing_start_day(self):
@@ -114,7 +103,7 @@ class ProjectDetail(BaseModel, db.Model):
         self.detail_type = detail_type
         self.work_name = work_name
         self.engineer_id = engineer_id
-        self._billing_money = billing_money
+        self.billing_money = billing_money
         self.remarks = remarks
         self._billing_start_day = billing_start_day
         self.billing_end_day = billing_end_day

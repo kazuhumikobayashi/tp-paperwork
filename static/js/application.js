@@ -403,28 +403,6 @@ $(function() {
   });
 });
 
-// 請求確定金額・交通費の計算
-$(function() {
-  $('#cal-billing-sum').click(function() {
-    var billing_confirmation_money = 0;
-    var billing_carfare = 0;
-    var billing_money_col_number = 2;
-    var carfare_col_number = 3;
-
-    var tr = $("table tr");//全行を取得
-    for(var i=1, l=tr.length; i<l;i++ ){ //行数分回す
-        var cells = tr.eq(i).children();
-        billing_confirmation_money += parseInt(cells.eq(billing_money_col_number).text().replace(/¥/g, "").replace(/,/g, "")) || 0;
-        billing_carfare += parseInt(cells.eq(carfare_col_number).text().replace(/¥/g, "").replace(/,/g, "")) || 0;
-    }
-
-    $('#billing_confirmation_money').val(billing_confirmation_money);
-    $('#billing_transportation').val(billing_carfare);
-
-  });
-});
-
-
 // 請求済みフラグ更新
 $(function() {
   $('.billing-input-flag').on('ifChanged', function(event){

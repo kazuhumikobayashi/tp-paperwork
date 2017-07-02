@@ -192,10 +192,13 @@ class Project(BaseModel, db.Model):
                                 updated_at=datetime.today(),
                                 updated_user=session['user']['user_name'])
             if self.billing_timing == BillingTiming.billing_by_month:
-                project_month.billing_estimated_money = self.get_estimated_total_amount_by_month()
+                money = self.get_estimated_total_amount_by_month()
+                project_month.billing_estimated_money = money
+                project_month.billing_confirmation_money = money
             else:
                 if project_date == max(project_dates):
                     project_month.billing_estimated_money = self.estimated_total_amount
+                    project_month.billing_confirmation_money = self.estimated_total_amount
             self.project_months.append(project_month)
         return self
 
