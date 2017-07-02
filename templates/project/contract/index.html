@@ -27,7 +27,7 @@
     <div class="box box-success">
       <div class="box-header with-border">
         <h3 class="box-title">
-          {% if form.project_name.data %}{{ form.project_name.data }}
+          {% if form.project_name.data %}{{ form.project_name.data[:128] }}
           <small> 見積No : {{ form.estimation_no.data|filter_suppress_none }}</small>
           {% endif %}
         </h3>

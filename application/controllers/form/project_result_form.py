@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, TextAreaField, StringField, RadioField, DateField, validators, HiddenField
+from wtforms import SelectField, TextAreaField, StringField, DateField, validators, HiddenField
 
-from application.controllers.form.fields import IntegerField, DecimalField
+from application.controllers.form.fields import IntegerField, DecimalField, RadioField
 from application.controllers.form.validators import Length
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
