@@ -296,24 +296,25 @@ $(function() {
     var billing_confirmation_money = 0;
 
     var billing_rule = $("[name=billing_rule]:checked").val();
-    var work_time = parseInt($('#work_time').val());
-    var billing_bottom_base_hour = parseInt($('#billing_bottom_base_hour').val());
-    var billing_top_base_hour = parseInt($('#billing_top_base_hour').val());
-    var billing_per_bottom_hour = parseInt($('#billing_per_bottom_hour').val());
-    var billing_per_top_hour = parseInt($('#billing_per_top_hour').val());
-    var billing_per_month = parseInt($('#billing_per_month').val());
-    var billing_fraction_rule = parseInt($('#billing_fraction_rule').val());
-    var billing_fraction = parseInt($('#billing_fraction').val());
+    var work_time = $('#work_time').val();
+    work_time = parseFloat(work_time.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)}));
+    var billing_bottom_base_hour = parseFloat($('#billing_bottom_base_hour').val());
+    var billing_top_base_hour = parseFloat($('#billing_top_base_hour').val());
+    var billing_per_bottom_hour = parseFloat($('#billing_per_bottom_hour').val());
+    var billing_per_top_hour = parseFloat($('#billing_per_top_hour').val());
+    var billing_per_month = parseFloat($('#billing_per_month').val());
+    var billing_fraction_rule = parseFloat($('#billing_fraction_rule').val());
+    var billing_fraction = parseFloat($('#billing_fraction').val());
 
     // 請求のルールが固定の場合、作業時間がいかなる場合でも請求単価が入る。
     if (($.isNumeric(work_time) && work_time !== 0) || (billing_rule === FIXED)) {
 
       if (work_time < billing_bottom_base_hour) {
         sub_hours = work_time - billing_bottom_base_hour;
-        sub_money = sub_hours * billing_per_bottom_hour;
+        sub_money = parseInt(sub_hours * billing_per_bottom_hour);
       } else if (billing_top_base_hour < work_time) {
         sub_hours = work_time - billing_top_base_hour;
-        sub_money = sub_hours * billing_per_top_hour;
+        sub_money = parseInt(sub_hours * billing_per_top_hour);
       }
       estimated_money = billing_per_month + sub_money;
 
@@ -323,8 +324,10 @@ $(function() {
     $('#billing_subtraction_money').val(sub_money);
     $('#billing_estimated_money').val(estimated_money);
 
-    carfare = parseInt($('#billing_transportation').val()) || 0;
-    adjustment = parseInt($('#billing_adjustments').val()) || 0;
+    var carfare = $('#billing_transportation').val();
+    carfare = parseInt(carfare.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
+    var adjustment = $('#billing_adjustments').val();
+    adjustment = parseInt(adjustment.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
 
     billing_confirmation_money = estimated_money + carfare + adjustment;
 
@@ -350,14 +353,15 @@ $(function() {
     var payment_confirmation_money = 0;
 
     var payment_rule = $("[name=payment_rule]:checked").val();
-    var work_time = parseInt($('#work_time').val());
-    var payment_per_month = parseInt($('#payment_per_month').val());
-    var payment_bottom_base_hour = parseInt($('#payment_bottom_base_hour').val());
-    var payment_top_base_hour = parseInt($('#payment_top_base_hour').val());
-    var payment_per_bottom_hour = parseInt($('#payment_per_bottom_hour').val());
-    var payment_per_top_hour = parseInt($('#payment_per_top_hour').val());
-    var payment_fraction_rule = parseInt($('#payment_fraction_rule').val());
-    var payment_fraction = parseInt($('#payment_fraction').val());
+    var work_time = $('#work_time').val();
+    work_time = parseFloat(work_time.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)}));
+    var payment_per_month = parseFloat($('#payment_per_month').val());
+    var payment_bottom_base_hour = parseFloat($('#payment_bottom_base_hour').val());
+    var payment_top_base_hour = parseFloat($('#payment_top_base_hour').val());
+    var payment_per_bottom_hour = parseFloat($('#payment_per_bottom_hour').val());
+    var payment_per_top_hour = parseFloat($('#payment_per_top_hour').val());
+    var payment_fraction_rule = parseFloat($('#payment_fraction_rule').val());
+    var payment_fraction = parseFloat($('#payment_fraction').val());
 
     if ((($.isNumeric(work_time) && work_time !== 0) || (payment_rule === FIXED))
         && $.isNumeric(payment_per_month)) {
@@ -377,8 +381,10 @@ $(function() {
     $('#payment_subtraction_money').val(sub_money);
     $('#payment_estimated_money').val(estimated_money);
 
-    carfare = parseInt($('#payment_transportation').val()) || 0;
-    adjustment = parseInt($('#payment_adjustments').val()) || 0;
+    var carfare = $('#payment_transportation').val();
+    carfare = parseInt(carfare.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
+    var adjustment = $('#payment_adjustments').val();
+    adjustment = parseInt(adjustment.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
 
     payment_confirmation_money = estimated_money + carfare + adjustment;
 
