@@ -28,7 +28,9 @@
 {% block main_content %}
   <div class="box box-success">
     <div class="box-header with-border">
-      <h3 class="box-title"><i class="fa fa-search"></i>{{ form.result_month.data|datetime_format("%Y年%m月") }}</h3>
+      <h3 class="box-title">
+          <i class="fa fa-search"></i> {{ form.result_month.data|datetime_format("%Y年%m月") }}
+      </h3>
       <div class="box-tools">
         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
       </div>
@@ -39,30 +41,32 @@
       <div class="box-body">
         <div class="row">
           {{ render_field(form.engineer_name, "col-sm-6") }}
-          {{ render_field(form.work_time, "col-sm-6") }}
+          {{ render_field(form.work_time, "col-sm-6", input_class="auto-calc") }}
         </div>
         <div class="part-title"> 請求情報</div>
         <div class="row">
           {{ render_field(project_detail_form.billing_per_month, "col-sm-6") }}
           {{ render_field(project_detail_form.billing_rule, "col-sm-6", disabled="disabled") }}
         </div>
-        <div class="row">
-          {{ render_field(project_detail_form.billing_bottom_base_hour, "col-sm-6") }}
-          {{ render_field(project_detail_form.billing_top_base_hour, "col-sm-6") }}
-        </div>
-        <div class="row">
-          {{ render_field(project_detail_form.billing_free_base_hour, "col-sm-6") }}
-          {{ render_field(project_detail_form.billing_per_hour, "col-sm-6") }}
-        </div>
-        <div class="row">
-          {{ render_field(project_detail_form.billing_per_bottom_hour, "col-sm-6") }}
-          {{ render_field(project_detail_form.billing_per_top_hour, "col-sm-6") }}
-        </div>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="row">
-              {{ render_field(project_detail_form.billing_fraction, "col-sm-4", input_class="select2") }}
-              {{ render_field(project_detail_form.billing_fraction_rule, "col-sm-8", input_class="select2") }}
+        <div id="payment-variable-area" {% if project_detail_form.billing_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
+          <div class="row">
+            {{ render_field(project_detail_form.billing_bottom_base_hour, "col-sm-6") }}
+            {{ render_field(project_detail_form.billing_top_base_hour, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(project_detail_form.billing_free_base_hour, "col-sm-6") }}
+            {{ render_field(project_detail_form.billing_per_hour, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(project_detail_form.billing_per_bottom_hour, "col-sm-6") }}
+            {{ render_field(project_detail_form.billing_per_top_hour, "col-sm-6") }}
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="row">
+                {{ render_field(project_detail_form.billing_fraction, "col-sm-4", input_class="select2") }}
+                {{ render_field(project_detail_form.billing_fraction_rule, "col-sm-8", input_class="select2") }}
+              </div>
             </div>
           </div>
         </div>
@@ -75,44 +79,39 @@
           {{ render_field(form.billing_estimated_money, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.billing_transportation, "col-sm-6") }}
+          {{ render_field(form.billing_transportation, "col-sm-6", input_class="auto-calc") }}
         </div>
         <div class="row">
-          {{ render_field(form.billing_adjustments, "col-sm-6") }}
+          {{ render_field(form.billing_adjustments, "col-sm-6", input_class="auto-calc") }}
           {{ render_field(form.billing_confirmation_number, "col-sm-6") }}
         </div>
         <div class="row">
           {{ render_field(form.billing_confirmation_money, "col-sm-6") }}
-        </div>
-        <div class="row">
-          <div class="col-sm-6" style="margin-top: 10px">
-            <div class="btn btn-sm btn-success pull-left" id="cal-billing">
-              <i class="fa fa-plus"></i> 請求金額計算
-            </div>
-          </div>
         </div>
         <div class="part-title"> 支払情報</div>
         <div class="row">
           {{ render_field(engineer_history_form.payment_per_month, "col-sm-6") }}
           {{ render_field(engineer_history_form.payment_rule, "col-sm-6", disabled="disabled") }}
         </div>
-        <div class="row">
-          {{ render_field(engineer_history_form.payment_bottom_base_hour, "col-sm-6") }}
-          {{ render_field(engineer_history_form.payment_top_base_hour, "col-sm-6") }}
-        </div>
-        <div class="row">
-          {{ render_field(engineer_history_form.payment_free_base_hour, "col-sm-6") }}
-          {{ render_field(engineer_history_form.payment_per_hour, "col-sm-6") }}
-        </div>
-        <div class="row">
-          {{ render_field(engineer_history_form.payment_per_bottom_hour, "col-sm-6") }}
-          {{ render_field(engineer_history_form.payment_per_top_hour, "col-sm-6") }}
-        </div>
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="row">
-              {{ render_field(engineer_history_form.payment_fraction, "col-sm-4", input_class="select2") }}
-              {{ render_field(engineer_history_form.payment_fraction_rule, "col-sm-8", input_class="select2") }}
+        <div{% if engineer_history_form.payment_rule.data != '2' %} hidden{% endif %}{# '2'=VARIABLE #}>
+          <div class="row">
+            {{ render_field(engineer_history_form.payment_bottom_base_hour, "col-sm-6") }}
+            {{ render_field(engineer_history_form.payment_top_base_hour, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(engineer_history_form.payment_free_base_hour, "col-sm-6") }}
+            {{ render_field(engineer_history_form.payment_per_hour, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(engineer_history_form.payment_per_bottom_hour, "col-sm-6") }}
+            {{ render_field(engineer_history_form.payment_per_top_hour, "col-sm-6") }}
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="row">
+                {{ render_field(engineer_history_form.payment_fraction, "col-sm-4", input_class="select2") }}
+                {{ render_field(engineer_history_form.payment_fraction_rule, "col-sm-8", input_class="select2") }}
+              </div>
             </div>
           </div>
         </div>
@@ -125,23 +124,15 @@
           {{ render_field(form.payment_estimated_money, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.payment_transportation, "col-sm-6") }}
+          {{ render_field(form.payment_transportation, "col-sm-6", input_class="auto-calc") }}
         </div>
         <div class="row">
-          {{ render_field(form.payment_adjustments, "col-sm-6") }}
+          {{ render_field(form.payment_adjustments, "col-sm-6", input_class="auto-calc") }}
           {{ render_field(form.payment_expected_date, "col-sm-6", input_class="date") }}
         </div>
         <div class="row">
           {{ render_field(form.payment_confirmation_money, "col-sm-6") }}
         </div>
-        <div class="row">
-          <div class="col-sm-6" style="margin-top: 10px">
-            <div class="btn btn-sm btn-success pull-left" id="cal-payment">
-              <i class="fa fa-plus"></i> 支払金額計算
-            </div>
-          </div>
-        </div>
-        <hr />
         <div class="row">
           {{ render_field(form.remarks, "col-xs-12", rows="3") }}
         </div>
