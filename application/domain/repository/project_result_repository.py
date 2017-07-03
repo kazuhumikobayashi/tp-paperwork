@@ -80,7 +80,8 @@ class ProjectResultRepository(BaseRepository):
         query = self.model.query\
             .filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))
         if project_name:
-            query = query.filter(self.model.project_detail.has(Project.project_name.like('%' + project_name + '%')))
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.project_name.like('%' + project_name + '%'))))
         if result_input_flag and len(result_input_flag) == 1:
             if InputFlag.yet in [InputFlag.parse(f) for f in result_input_flag]:
                 query = query.filter(or_(self.model.work_time == 0, self.model.work_time.is_(None)))
