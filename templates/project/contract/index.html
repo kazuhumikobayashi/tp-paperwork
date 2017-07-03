@@ -41,7 +41,9 @@
           <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab">契約</a></li>
             {% if project.status.is_done() %}
-            <li><a href="{{ url_for('project_result.index', project_id=form.id.data) }}">実績</a></li>
+              {% if project.require_result() %}
+              <li><a href="{{ url_for('project_result.index', project_id=form.id.data) }}">実績</a></li>
+              {% endif %}
             <li><a href="{{ url_for('project_billing.index', project_id=form.id.data) }}">請求</a></li>
               {% if project.has_payment() %}
               <li><a href="{{ url_for('project_payment.index', project_id=form.id.data) }}">支払</a></li>

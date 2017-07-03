@@ -372,3 +372,113 @@ class ProjectTests(BaseTestCase):
         expected = 0
         actual = project.tax_of_estimated_total_amount()
         self.assertEqual(expected, actual)
+
+    def test_require_result_true(self):
+        # set_up
+        project = Project(
+                    project_name='test_project',
+                    project_name_for_bp='project',
+                    status=Status.start,
+                    recorded_department_id=1,
+                    sales_person='営業担当',
+                    estimation_no='test_require_result_true',
+                    end_user_company_id=1,
+                    client_company_id=5,
+                    start_date=date.today(),
+                    end_date='2099/12/31',
+                    contract_form=Contract.blanket,
+                    billing_timing=BillingTiming.billing_at_last,
+                    estimated_total_amount=1000000,
+                    scope='test',
+                    contents=None,
+                    working_place=None,
+                    delivery_place=None, deliverables=None,
+                    inspection_date=None,
+                    responsible_person=None,
+                    quality_control=None, subcontractor=None,
+                    remarks=None,
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+
+        project_details = [
+            ProjectDetail(
+                project_id=project.id,
+                detail_type=DetailType.engineer,
+                engineer_id=1,
+                billing_money=1,
+                remarks=1,
+                billing_start_day=project.start_date,
+                billing_end_day=project.end_date,
+                created_at=datetime.today(),
+                created_user='test',
+                updated_at=datetime.today(),
+                updated_user='test'),
+            ProjectDetail(
+                project_id=project.id,
+                detail_type=DetailType.engineer,
+                engineer_id=2,
+                billing_money=1,
+                remarks=1,
+                billing_start_day=project.start_date,
+                billing_end_day=project.end_date,
+                created_at=datetime.today(),
+                created_user='test',
+                updated_at=datetime.today(),
+                updated_user='test')
+        ]
+        project.project_details = project_details
+
+        db.session.add(project)
+        db.session.commit()
+
+        # 技術者だけならTrue
+        actual = project.require_result()
+        self.assertTrue(actual)
+
+    def test_require_result_false(self):
+        # set_up
+        project = Project(
+                    project_name='test_project',
+                    project_name_for_bp='project',
+                    status=Status.start,
+                    recorded_department_id=1,
+                    sales_person='営業担当',
+                    estimation_no='test_require_result_false',
+                    end_user_company_id=1,
+                    client_company_id=5,
+                    start_date=date.today(),
+                    end_date='2099/12/31',
+                    contract_form=Contract.blanket,
+                    billing_timing=BillingTiming.billing_at_last,
+                    estimated_total_amount=1000000,
+                    scope='test',
+                    contents=None,
+                    working_place=None,
+                    delivery_place=None, deliverables=None,
+                    inspection_date=None,
+                    responsible_person=None,
+                    quality_control=None, subcontractor=None,
+                    remarks=None,
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+
+        project_detail = ProjectDetail(
+                    detail_type=DetailType.work,
+                    work_name='test_project_detail',
+                    billing_money='100000',
+                    created_at=datetime.today(),
+                    created_user='test',
+                    updated_at=datetime.today(),
+                    updated_user='test')
+
+        project.project_details.append(project_detail)
+        db.session.add(project)
+        db.session.commit()
+
+        # 作業だけならFalse
+        actual = project.require_result()
+        self.assertFalse(actual)

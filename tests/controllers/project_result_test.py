@@ -8,7 +8,6 @@ from application.domain.model.engineer import Engineer
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
-from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
