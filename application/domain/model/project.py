@@ -202,6 +202,12 @@ class Project(BaseModel, db.Model):
             self.project_months.append(project_month)
         return self
 
+    def require_result(self):
+        for project_detail in self.project_details:
+            if project_detail.is_engineer():
+                return True
+        return False
+
     def has_not_project_results(self):
         for project_detail in self.project_details:
             if project_detail.project_results:
