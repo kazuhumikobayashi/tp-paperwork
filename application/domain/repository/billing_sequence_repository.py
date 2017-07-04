@@ -1,6 +1,5 @@
 from application import db
 from application.domain.model.billing_sequence import BillingSequence
-from application.domain.model.estimation_sequence import EstimationSequence
 from application.domain.repository.base_repository import BaseRepository
 
 

@@ -343,3 +343,39 @@ class ProjectBillingTests(BaseTestCase):
         actual = project_month.client_billing_no
 
         self.assertEqual(actual, expected)
+
+    # 同じ顧客請求Noは登録できない
+    def test_not_register_duplicate_client_billing_no(self):
+        duplicate_client_billing_no = 'duplicate_client_billing_no'
+        project_month = ProjectMonth(
+                            project_id=1,
+                            project_month='2016/10/1',
+                            billing_input_flag=InputFlag.yet,
+                            deposit_input_flag=InputFlag.yet,
+                            deposit_date='2016/10/1',
+                            billing_estimated_money=10000,
+                            billing_confirmation_money=10000,
+                            billing_transportation=100,
+                            remarks='remarks',
+                            client_billing_no=duplicate_client_billing_no,
+                            created_at=datetime.today(),
+                            created_user='test',
+                            updated_at=datetime.today(),
+                            updated_user='test')
+        db.session.add(project_month)
+        db.session.commit()
+
+        project_month = self.project_month_repository.find_all()[4]
+        project_month.project_month = date(2016, 10, 1)
+        db.session.add(project_month)
+        db.session.commit()
+
+        result = self.app.post('/project/billing/month/' + str(project_month.id), data={
+            'client_billing_no': duplicate_client_billing_no,
+            'billing_confirmation_money': project_month.billing_confirmation_money,
+            'billing_transportation': project_month.billing_transportation,
+            'deposit_date': project_month.deposit_date.strftime('%Y/%m/%d'),
+            'remarks': project_month.remarks
+        })
+        # 保存できない事を確認
+        self.assertEqual(result.status_code, 200)
