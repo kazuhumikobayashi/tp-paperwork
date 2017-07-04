@@ -59,6 +59,7 @@
                   <th width="50px" class="center"></th>
                 </tr>
                 {% for project_month in project.project_months %}
+                  {% if project_month.has_billing() %}
                   <tr>
                     <td>
                       <a href="{{ url_for('project_billing.month', project_month_id=project_month.id) }}">
@@ -89,6 +90,7 @@
                       <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 納品書出力</button>
                     </td>
                   </tr>
+                  {% endif %}
                 {% endfor %}
               </table>
             </div>

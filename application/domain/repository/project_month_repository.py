@@ -30,6 +30,7 @@ class ProjectMonthRepository(BaseRepository):
                         deposit_input_flag, end_user_company_id, client_company_id,
                         recorded_department_id, deposit_date_from, deposit_date_to):
         query = self.model.query
+        query = query.filter(self.model.billing_confirmation_money > 0)
         if project_name:
             query = query.filter(self.model.project.has(Project.project_name.like('%' + project_name + '%')))
         if billing_input_flag:
