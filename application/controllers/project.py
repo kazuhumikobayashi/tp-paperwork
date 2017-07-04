@@ -12,10 +12,12 @@ from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.project import Project
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
+from application.service.project_detail_service import ProjectDetailService
 from application.service.project_service import ProjectService
 
 bp = Blueprint('project', __name__, url_prefix='/project')
 service = ProjectService()
+project_detail_service = ProjectDetailService()
 department_service = DepartmentService()
 company_service = CompanyService()
 
@@ -60,15 +62,19 @@ def create(project_id=None):
         project.project_name_for_bp = form.project_name_for_bp.data
         project.start_date = form.start_date.data
         project.end_date = form.end_date.data
-        project_details_clone = []
         for detail in project.project_details:
-            detail_clone = detail.clone()
-            detail_clone.billing_start_day = project.start_date
-            detail_clone.billing_end_day = project.end_date
-            project_details_clone.append(detail_clone)
-        project.project_details = project_details_clone
+            # BP注文番号を再発番したいので一旦ブランクで保存する
+            detail.billing_start_day = None
+            detail.billing_end_day = None
 
         service.save(project)
+
+        # BP注文番号を再発番するため、開始日、終了日を設定する
+        for detail in project.project_details:
+            detail.billing_start_day = project.start_date
+            detail.billing_end_day = project.end_date
+            project_detail_service.save(detail)
+
         flash('保存しました。')
         return redirect(url_for('project_contract.index', project_id=project.id))
     current_app.logger.debug(form.errors)
