@@ -19,7 +19,7 @@ class ProjectMonth(BaseModel, db.Model):
     billing_confirmation_money = Column(Integer)
     billing_transportation = Column(Integer)
     remarks = Column(String(1024))
-    client_billing_no = Column(String(64))
+    client_billing_no = Column(String(64), unique=True)
 
     project = relationship("Project", lazy='joined')
 

@@ -379,6 +379,7 @@ CREATE TABLE IF NOT EXISTS project_months (
   updated_at DATETIME NOT NULL ,
   updated_user VARCHAR(128) NOT NULL ,
   PRIMARY KEY (id) ,
+  UNIQUE KEY (client_billing_no) ,
   INDEX (project_id) ,
   INDEX (project_month)
 ) ENGINE = INNODB;

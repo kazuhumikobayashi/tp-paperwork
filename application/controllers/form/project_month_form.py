@@ -1,11 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, TextAreaField, StringField
+from wtforms import HiddenField, TextAreaField, StringField, ValidationError
 
 from application.controllers.form.fields import IntegerField, DateField
 from application.controllers.form.validators import Length
+from application.domain.repository.project_month_repository import ProjectMonthRepository
+
+project_month_repository = ProjectMonthRepository()
 
 
 class ProjectMonthForm(FlaskForm):
+    id = HiddenField('プロジェクト年月ID')
     project_id = HiddenField('プロジェクトID')
     client_billing_no = StringField('顧客請求書No', [Length(max=64)])
     billing_confirmation_money = IntegerField('請求確定金額（請求明細金額の合計）', render_kw={"readonly": "readonly"})
@@ -13,3 +17,8 @@ class ProjectMonthForm(FlaskForm):
     deposit_date = DateField('入金予定日', format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     remarks = TextAreaField('備考', [Length(max=1024)])
     project_month = DateField('プロジェクト年月', format='%Y/%m/%d')
+
+    def validate_client_billing_no(self, field):
+        project_month = project_month_repository.find_by_client_billing_no(client_billing_no=field.data)
+        if project_month and project_month.id != self.id.data:
+            raise ValidationError('この顧客請求書Noは既に登録されています。')

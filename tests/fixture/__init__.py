@@ -348,7 +348,7 @@ def create_project_months():
             billing_confirmation_money=100100,
             billing_transportation=100,
             remarks=None,
-            client_billing_no='1000',
+            client_billing_no=num+1000,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),

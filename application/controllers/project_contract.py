@@ -22,11 +22,13 @@ from application.service.department_service import DepartmentService
 from application.service.engineer_history_service import EngineerHistoryService
 from application.service.engineer_service import EngineerService
 from application.service.project_detail_service import ProjectDetailService
+from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
 
 bp = Blueprint('project_contract', __name__, url_prefix='/project/contract')
 project_service = ProjectService()
 project_detail_service = ProjectDetailService()
+project_month_service = ProjectMonthService()
 engineer_service = EngineerService()
 engineer_history_service = EngineerHistoryService()
 department_service = DepartmentService()
@@ -80,6 +82,11 @@ def index(project_id=None):
             project.client_company = company_service.find_by_id(form.client_company_id.data)
 
         project_service.save(project)
+
+        # 顧客請求Noを設定
+        for project_month in reversed(project.project_months):
+            project_month_service.save(project_month)
+
         flash('保存しました。')
         return redirect(url_for('.index', project_id=project.id))
     current_app.logger.debug(form.errors)
