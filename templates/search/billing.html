@@ -98,7 +98,7 @@
               <td>{{ project_month.project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ project_month.project.client_company.company_name }}</td>
               <td>{{ project_month.project.recorded_department.department_name }}</td>
-              <td><a href="{{ url_for('project_contract.index', project_id=project_month.project.id) }}">{{ project_month.project.project_name }}</a></td>
+              <td><a href="{{ url_for('project_billing.index', project_id=project_month.project.id) }}">{{ project_month.project.project_name }}</a></td>
               <td>{{ project_month.deposit_date|datetime_format("%Y/%m/%d") }}</td>
               <td class="text-right">{{ project_month.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>
               <td class="text-center">
