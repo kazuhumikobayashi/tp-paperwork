@@ -47,7 +47,7 @@ class Engineer(BaseModel, db.Model):
         self.company_id = company_id
 
     def is_bp(self):
-        return self.company.is_bp()
+        return self.company and self.company.is_bp()
 
     def __repr__(self):
         return "<Engineer:" + \
