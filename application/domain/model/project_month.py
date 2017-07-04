@@ -60,6 +60,9 @@ class ProjectMonth(BaseModel, db.Model):
     def tax_of_billing_confirmation_money(self):
         return self.billing_confirmation_money * self.project.client_company.billing_tax.rate
 
+    def has_billing(self):
+        return (self.billing_estimated_money or 0) > 0
+
     def is_month_to_billing(self):
         return not self.client_billing_no and (self.billing_confirmation_money or 0) > 0
 
