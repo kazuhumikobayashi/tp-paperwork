@@ -96,7 +96,7 @@ def delete(billing_id):
                                                                             billing.billing_month)
         project_billing_service.destroy(billing)
         flash('削除しました。')
-        return redirect('/project/billing/detail/' + str(project_month.id))
+        return redirect('/project/billing/month/' + str(project_month.id))
     else:
         return redirect('/project/')
 

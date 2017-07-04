@@ -169,7 +169,7 @@ class ProjectBillingTests(BaseTestCase):
         result = self.app.get('/project/billing/delete/' + str(billing.id))
         # 削除できることを確認
         self.assertEqual(result.status_code, 302)
-        ok_('/project/billing/detail/' in result.headers['Location'])
+        ok_('/project/billing/month/' in result.headers['Location'])
 
         # 削除した請求が存在しないことを確認
         billing = self.project_billing_repository.find_by_id(delete_billing_id)
