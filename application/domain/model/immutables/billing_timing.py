@@ -12,6 +12,13 @@ class BillingTiming(Enum):
         else:
             return 'その他（毎月・複数月）'
 
+    @property
+    def name_for_report(self):
+        if self._value_ == self.billing_at_last.value:
+            return '納入検収後、月末締め翌月未支払'
+        else:
+            return '請求毎月末締め翌月未支払'
+
     @staticmethod
     def get_type_for_select():
         ret = [('', '')]

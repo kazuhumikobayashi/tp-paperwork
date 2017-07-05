@@ -52,7 +52,9 @@
           </ul>
           <div class="tab-content">
             <div class="text-right" style="padding-bottom: 10px;">
-              <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 見積書出力</button>
+              <a href="{{ url_for('.estimated_report_download', project_id=project.id) }}" class="btn btn-sm btn-success">
+                <i class="fa fa-download"></i> 見積書出力
+              </a>
               <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 注文請書出力</button>
             </div>
             <form class="form-horizontal" method="post">

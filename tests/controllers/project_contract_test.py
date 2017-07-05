@@ -2239,3 +2239,16 @@ class ProjectContractTests(BaseTestCase):
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/' + str(project_id) in result.headers['Location'])
+
+    def test_download(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_all()[0]
+
+        # 帳票作成実行
+        result = self.app.get('/project/contract/estimated_report_download/' + str(project.id))
+        self.assertEqual(result.status_code, 200)

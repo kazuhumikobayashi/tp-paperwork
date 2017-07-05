@@ -24,6 +24,7 @@ from application.service.engineer_service import EngineerService
 from application.service.project_detail_service import ProjectDetailService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
+from application.service.report.estimated_report import EstimatedReport
 
 bp = Blueprint('project_contract', __name__, url_prefix='/project/contract')
 project_service = ProjectService()
@@ -176,3 +177,10 @@ def delete(project_detail_id):
         return redirect(url_for('.index', project_id=project_id))
     else:
         return redirect('/project')
+
+
+@bp.route('/estimated_report_download/<project_id>', methods=['GET'])
+def estimated_report_download(project_id):
+    project = project_service.find_by_id(project_id)
+    estimated_report = EstimatedReport(project)
+    return estimated_report.download()
