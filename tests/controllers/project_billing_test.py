@@ -379,3 +379,54 @@ class ProjectBillingTests(BaseTestCase):
         })
         # 保存できない事を確認
         self.assertEqual(result.status_code, 200)
+
+    # 請求明細登録画面に遷移する。
+    def test_get_billing_create(self):
+        # ログインする
+        shain_number = 'test1'
+        self.app.post('/login', data={
+            'shain_number': shain_number,
+            'password': 'test'
+        })
+        project_month = self.project_month_repository.find_all()[0]
+
+        result = self.app.get('/project/billing/create/' + str(project_month.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 存在しないプロジェクト年月の場合はnot_found
+    def test_create_billing_fail(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.get('/project/billing/create/0')
+        self.assertEqual(result.status_code, 404)
+
+    # 請求明細を新規登録できる
+    def test_create_billing(self):
+        shain_number = 'test1'
+        self.app.post('/login', data={
+            'shain_number': shain_number,
+            'password': 'test'
+        })
+        billing = self.project_billing_repository.find_all()[0]
+        project_month = self.project_month_repository.find_project_month_at_a_month(billing.project_detail.project.id,
+                                                                                    billing.billing_month)
+
+        expected = '単体テスト_登録'
+        result = self.app.post('/project/billing/create/' + str(project_month.id), data={
+            'billing_content': expected,
+            'billing_amount': billing.billing_amount,
+            'billing_confirmation_money': billing.billing_confirmation_money,
+            'billing_transportation': billing.billing_transportation
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        billing_id = result.headers['Location'].split('/')[-1]
+        ok_('/project/billing/detail/' + str(billing_id) in result.headers['Location'])
+
+        billing = self.project_billing_repository.find_by_id(billing_id)
+        actual = billing.billing_content
+        self.assertEqual(actual, expected)

@@ -1,4 +1,6 @@
-from flask import Blueprint, jsonify
+from datetime import datetime
+
+from flask import Blueprint, jsonify, session
 from flask import abort
 from flask import current_app
 from flask import flash
@@ -9,7 +11,10 @@ from flask import url_for
 
 from application.controllers.form.project_billing_form import ProjectBillingForm
 from application.controllers.form.project_month_form import ProjectMonthForm
+from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.input_flag import InputFlag
+from application.domain.model.project_billing import ProjectBilling
+from application.domain.model.project_detail import ProjectDetail
 from application.service.project_billing_service import ProjectBillingService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
@@ -77,6 +82,50 @@ def detail(billing_id=None):
         billing.billing_confirmation_money = form.billing_confirmation_money.data
         billing.billing_transportation = form.billing_transportation.data
         billing.remarks = form.remarks.data
+
+        project_billing_service.save(billing)
+        flash('保存しました。')
+        return redirect(url_for('.detail', billing_id=billing.id))
+
+    current_app.logger.debug(form.errors)
+    return render_template('project/billing/detail.html',
+                           form=form,
+                           project_month=project_month)
+
+
+@bp.route('/create/<project_month_id>', methods=['GET', 'POST'])
+def create(project_month_id):
+    project_month = project_month_service.find_by_id(project_month_id)
+
+    if project_month.id is None and project_month_id is not None:
+        return abort(404)
+
+    form = ProjectBillingForm(request.form)
+
+    if form.validate_on_submit():
+        project_detail = ProjectDetail()
+        project_detail.project = project_month.project
+        project_detail.detail_type = DetailType.work
+        project_detail.work_name = form.billing_content.data
+        project_detail.billing_money = form.billing_confirmation_money.data
+        project_detail.created_at = datetime.today()
+        project_detail.created_user = session['user']['user_name']
+        project_detail.updated_at = datetime.today()
+        project_detail.updated_user = session['user']['user_name']
+
+        billing = ProjectBilling()
+        billing.billing_month = project_month.project_month
+        billing.billing_content = form.billing_content.data
+        billing.billing_amount = form.billing_amount.data
+        billing.billing_confirmation_money = form.billing_confirmation_money.data
+        billing.billing_transportation = form.billing_transportation.data
+        billing.remarks = form.remarks.data
+        billing.created_at = datetime.today()
+        billing.created_user = session['user']['user_name']
+        billing.updated_at = datetime.today()
+        billing.updated_user = session['user']['user_name']
+
+        billing.project_detail = project_detail
 
         project_billing_service.save(billing)
         flash('保存しました。')

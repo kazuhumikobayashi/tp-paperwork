@@ -36,9 +36,9 @@
         </div>
         <div class="box-frame">
           <div class="box-header with-border">
-            <a href="{{ url_for('project_contract.create', project_id=form.project_id.data) }}"
+            <a href="{{ url_for('.create', project_month_id=form.id.data) }}"
                 class="btn btn-sm btn-success pull-left">
-              <i class="fa fa-plus"></i> 新規登録
+              <i class="fa fa-plus"></i> 請求明細追加
             </a>
           </div>
           <div class="box box-primary">
