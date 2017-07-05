@@ -9,6 +9,10 @@ class BillingTimingTests(unittest.TestCase):
         self.assertEqual(BillingTiming.billing_at_last.name, '契約期間末1回')
         self.assertEqual(BillingTiming.billing_by_month.name, 'その他（毎月・複数月）')
 
+    def test_name_for_report(self):
+        self.assertEqual(BillingTiming.billing_at_last.name_for_report, '納入検収後、月末締め翌月未支払')
+        self.assertEqual(BillingTiming.billing_by_month.name_for_report, '請求毎月末締め翌月未支払')
+
     def test_parse(self):
         billing_at_last = 1
         billing_by_month = 2
