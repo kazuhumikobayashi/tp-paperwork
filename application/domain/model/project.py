@@ -228,7 +228,7 @@ class Project(BaseModel, db.Model):
 
     def tax_of_estimated_total_amount(self):
         if self.client_company:
-            return self.estimated_total_amount * self.client_company.billing_tax.rate
+            return (self.estimated_total_amount or 0) * self.client_company.billing_tax.rate
         else:
             return 0
 

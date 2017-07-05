@@ -53,12 +53,15 @@ class EstimatedReport(object):
         # 値を代入
         self.ws.get_named_range("estimation_no")[0].value = self.project.estimation_no
         self.ws.get_named_range("printed_date")[0].value = datetime.today().date()
-        self.ws.get_named_range("client_company_name")[0].value = self.project.client_company.company_name
+        if self.project.client_company:
+            self.ws.get_named_range("client_company_name")[0].value = self.project.client_company.company_name
         self.ws.get_named_range("project_name")[0].value = self.project.project_name
         self.ws.get_named_range("start_date")[0].value = self.project.start_date
         self.ws.get_named_range("end_date")[0].value = self.project.end_date
-        self.ws.get_named_range("billing_timing")[0].value = self.project.billing_timing.name_for_report
-        self.ws.get_named_range("contract_form")[0].value = self.project.contract_form.name
+        if self.project.billing_timing:
+            self.ws.get_named_range("billing_timing")[0].value = self.project.billing_timing.name_for_report
+        if self.project.contract_form:
+            self.ws.get_named_range("contract_form")[0].value = self.project.contract_form.name
         # 表示形式
         self.ws.get_named_range("printed_date")[0].number_format = u'yyyy年m月d日'
         self.ws.get_named_range("start_date")[0].number_format = u'  yyyy年m月d日'
@@ -98,7 +101,11 @@ class EstimatedReport(object):
         # 書式作成
         self.create_project_detail_style()
         # 値代入
-        self.ws['C' + str(self.current_row)].value = '消費税（' + str(self.project.client_company.billing_tax.name) + '）'
+        if self.project.client_company and self.project.client_company.billing_tax:
+            tax = str(self.project.client_company.billing_tax.name)
+        else:
+            tax = ''
+        self.ws['C' + str(self.current_row)].value = '消費税（' + tax + '）'
         self.ws['G' + str(self.current_row)].value = self.project.tax_of_estimated_total_amount()
         # 表示形式
         self.ws['C' + str(self.current_row)].number_format = '"  "@'
@@ -110,7 +117,7 @@ class EstimatedReport(object):
         self.create_project_detail_style()
         # 値代入
         self.ws['C' + str(self.current_row)].value = '合計'
-        self.ws['G' + str(self.current_row)].value = self.project.estimated_total_amount\
+        self.ws['G' + str(self.current_row)].value = (self.project.estimated_total_amount or 0)\
             + self.project.tax_of_estimated_total_amount()
         # 上部に存在する「金額」は、合計金額を参照するようにする。
         self.ws['E14'].value = '=G' + str(self.current_row)
