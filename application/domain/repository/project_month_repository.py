@@ -69,6 +69,7 @@ class ProjectMonthRepository(BaseRepository):
 
     def find_incomplete_billings(self):
         query = self.model.query.filter(self.model.billing_input_flag == InputFlag.yet)
+        query = query.filter(self.model.billing_confirmation_money > 0)
         query = query.filter(self.model.project_month <= date.today())
         query = query.order_by(asc(self.model.project_month), asc('projects_1.project_name'))
         return query.all()
