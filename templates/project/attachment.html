@@ -2,12 +2,13 @@
 {% from "_formhelpers.html" import render_field %}
 {% block title %}ファイル添付{% endblock %}
 {% block include_css %}
-  <!-- Select2 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap select -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/css/bootstrap-select.min.css') }}">
 {% endblock %}
 {% block include_js %}
-  <!-- Select2 -->
-  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap select -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/bootstrap-select.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/i18n/defaults-ja_JP.js') }}"></script>
 {% endblock %}
 {% block content_header %}
   <h1>
@@ -34,7 +35,7 @@
           {% else %}
             {{ render_field(file_form.upload, "col-xs-6") }}
           {% endif %}
-          {{ render_field(form.type, "col-xs-6", input_class="select2") }}
+          {{ render_field(form.type, "col-xs-6", input_class="selectpicker") }}
           {{ render_field(form.remarks, "col-xs-12") }}
         </div>
         <!-- /.row -->

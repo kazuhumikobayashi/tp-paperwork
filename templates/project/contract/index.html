@@ -2,14 +2,15 @@
 {% from "_formhelpers.html" import render_field %}
 {% block title %}プロジェクト登録{% endblock %}
 {% block include_css %}
-  <!-- Select2 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap select -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/css/bootstrap-select.min.css') }}">
   <!-- bootstrap datepicker -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
 {% endblock %}
 {% block include_js %}
-  <!-- Select2 -->
-  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap select -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/bootstrap-select.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/i18n/defaults-ja_JP.js') }}"></script>
   <!-- bootstrap datepicker -->
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
@@ -69,10 +70,10 @@
                 <!-- /.box-header -->
                 <div class="box-body">
                   <div class="row">
-                    {{ render_field(form.status, "col-sm-6", input_class="select2") }}
+                    {{ render_field(form.status, "col-sm-6", input_class="selectpicker") }}
                   </div>
                   <div class="row">
-                    {{ render_field(form.recorded_department_id, "col-sm-6", input_class="select2") }}
+                    {{ render_field(form.recorded_department_id, "col-sm-6", input_class="selectpicker") }}
                     {{ render_field(form.sales_person, "col-sm-6") }}
                   </div>
                   <div class="part-title"> 見積情報</div>
@@ -84,16 +85,16 @@
                     {{ render_field(form.project_name_for_bp, "col-sm-6") }}
                   </div>
                   <div class="row">
-                    {{ render_field(form.end_user_company_id, "col-sm-6", input_class="select2") }}
-                    {{ render_field(form.client_company_id, "col-sm-6", input_class="select2") }}
+                    {{ render_field(form.end_user_company_id, "col-sm-6", input_class="selectpicker") }}
+                    {{ render_field(form.client_company_id, "col-sm-6", input_class="selectpicker") }}
                   </div>
                   <div class="row">
                     {{ render_field(form.start_date, "col-sm-6", input_class="date") }}
                     {{ render_field(form.end_date, "col-sm-6", input_class="date") }}
                   </div>
                   <div class="row">
-                    {{ render_field(form.contract_form, "col-sm-6", input_class="select2") }}
-                    {{ render_field(form.billing_timing, "col-sm-6", input_class="select2") }}
+                    {{ render_field(form.contract_form, "col-sm-6", input_class="selectpicker") }}
+                    {{ render_field(form.billing_timing, "col-sm-6", input_class="selectpicker") }}
                   </div>
                   <div class="box-frame">
                     <div class="box-header with-border">
@@ -149,7 +150,7 @@
                   </div>
                   <div class="row">
                     {{ render_field(form.billing_site, "col-sm-6") }}
-                    {{ render_field(form.billing_tax, "col-sm-6", input_class="select2") }}
+                    {{ render_field(form.billing_tax, "col-sm-6", input_class="selectpicker") }}
                   </div>
                   <div class="row">
                     {{ render_field(form.scope, "col-sm-12", rows="3") }}

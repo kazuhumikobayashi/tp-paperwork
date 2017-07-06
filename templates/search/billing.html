@@ -3,16 +3,17 @@
 {% import "_pagination.html" as p %}
 {% block title %}請求情報{% endblock %}
 {% block include_css %}
-  <!-- Select2 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap select -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/css/bootstrap-select.min.css') }}">
   <!-- bootstrap datepicker -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
 {% endblock %}
 {% block include_js %}
-  <!-- Select2 -->
-  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap select -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/bootstrap-select.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/i18n/defaults-ja_JP.js') }}"></script>
   <!-- bootstrap datepicker -->
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
@@ -42,11 +43,11 @@
         {{ render_search_field(form.deposit_input_flag, "col-sm-6") }}
       </div>
       <div class="row">
-        {{ render_search_field(form.end_user_company_id, "col-md-6", input_class="select2") }}
-        {{ render_search_field(form.client_company_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.end_user_company_id, "col-md-6", input_class="selectpicker") }}
+        {{ render_search_field(form.client_company_id, "col-md-6", input_class="selectpicker") }}
       </div>
       <div class="row">
-        {{ render_search_field(form.recorded_department_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.recorded_department_id, "col-md-6", input_class="selectpicker") }}
       </div>
       <div class="row">
         {{ render_search_field(form.deposit_date_from, "col-md-6", input_class="date") }}

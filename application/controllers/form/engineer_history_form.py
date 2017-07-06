@@ -32,11 +32,11 @@ class EngineerHistoryForm(FlaskForm):
     payment_site = SelectField('支払サイト（必須）',
                                [DataRequired()],
                                choices=Site.get_site_for_select(),
-                               render_kw={"data-minimum-results-for-search": "Infinity"})
+                               render_kw={"title": "支払サイト（必須）"})
     payment_tax = SelectField('支払消費税（必須）',
                               [DataRequired()],
                               choices=Tax.get_type_for_select(),
-                              render_kw={"data-minimum-results-for-search": "Infinity"})
+                              render_kw={"title": "支払消費税（必須）"})
     payment_per_month = IntegerField('支払単価（必須）', [InputRequired()])
     payment_rule = RadioField('支払ルール（必須）',
                               [DataRequired()],
@@ -56,12 +56,12 @@ class EngineerHistoryForm(FlaskForm):
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
                                    filters=[lambda x: x or None],
-                                   render_kw={"data-minimum-results-for-search": "Infinity"})
+                                   render_kw={"title": "支払端数金額"})
     payment_fraction_rule = SelectField('支払端数ルール',
                                         [validators.Optional()],
                                         choices=Round.get_round_for_select(),
                                         filters=[lambda x: x or None],
-                                        render_kw={"data-minimum-results-for-search": "Infinity"})
+                                        render_kw={"title": "支払端数ルール"})
     payment_condition = TextAreaField('支払条件', [Length(max=1024)])
     remarks = TextAreaField('その他特記事項', [Length(max=1024)])
 

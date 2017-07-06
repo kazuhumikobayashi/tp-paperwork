@@ -57,12 +57,11 @@ class ProjectDetailInResultForm(FlaskForm):
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
                                    filters=[lambda x: x or None],
-                                   render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
+                                   render_kw={"title": "請求端数金額", "disabled": "disabled"})
     billing_fraction_rule = SelectField('請求端数ルール',
                                         [validators.optional()],
                                         choices=Round.get_round_for_select(),
-                                        render_kw={"data-minimum-results-for-search": "Infinity",
-                                                   "disabled": "disabled"})
+                                        render_kw={"title": "請求端数ルール", "disabled": "disabled"})
 
 
 class EngineerHistoryInResultForm(FlaskForm):
@@ -81,9 +80,8 @@ class EngineerHistoryInResultForm(FlaskForm):
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
                                    filters=[lambda x: x or None],
-                                   render_kw={"data-minimum-results-for-search": "Infinity", "disabled": "disabled"})
-    payment_fraction_rule = SelectField('請求端数ルール',
+                                   render_kw={"title": "支払端数金額", "disabled": "disabled"})
+    payment_fraction_rule = SelectField('支払端数ルール',
                                         [validators.optional()],
                                         choices=Round.get_round_for_select(),
-                                        render_kw={"data-minimum-results-for-search": "Infinity",
-                                                   "disabled": "disabled"})
+                                        render_kw={"title": "支払端数ルール", "disabled": "disabled"})

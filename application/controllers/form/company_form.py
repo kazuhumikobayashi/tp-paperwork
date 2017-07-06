@@ -28,7 +28,10 @@ class CompanyForm(FlaskForm):
     company_name = StringField('会社名称（必須）', [DataRequired(), Length(max=128)], filters=[lambda x: x or None])
     company_name_kana = StringField('会社名称カナ', [Length(max=128)], filters=[lambda x: x or None])
     company_short_name = StringField('会社略称', [Length(max=32)], filters=[lambda x: x or None])
-    client_flag = SelectMultipleField('顧客フラグ（必須）', [DataRequired()])
+    client_flag = SelectMultipleField('顧客フラグ（必須）', [DataRequired()],
+                                      render_kw={"title": "顧客フラグ（複数選択）",
+                                                 "data-size": "8",
+                                                 "data-actions-box": "true"})
     contract_date = DateField('基本契約日', [validators.optional()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     postal_code = StringField('郵便番号', [Length(max=32)], filters=[lambda x: x or None])
     address = StringField('住所', [Length(max=1024)], filters=[lambda x: x or None])
@@ -43,22 +46,22 @@ class CompanyForm(FlaskForm):
     billing_site = SelectField('入金サイト（顧客フラグ＝顧客の時、必須）',
                                [required_if_client],
                                choices=Site.get_site_for_select(),
-                               render_kw={"data-minimum-results-for-search": "Infinity"})
+                               render_kw={"title": "入金サイト（顧客フラグ＝顧客の時、必須）"})
     payment_site = SelectField('支払サイト（顧客フラグ＝BP所属の時、必須）',
                                [required_if_bp],
                                choices=Site.get_site_for_select(),
-                               render_kw={"data-minimum-results-for-search": "Infinity"})
+                               render_kw={"title": "支払サイト（顧客フラグ＝BP所属の時、必須）"})
     billing_tax = SelectField('入金消費税（顧客フラグ＝顧客の時、必須）',
                               [Length(max=8), required_if_client],
                               choices=Tax.get_type_for_select(),
-                              render_kw={"data-minimum-results-for-search": "Infinity"})
+                              render_kw={"title": "入金消費税（顧客フラグ＝顧客の時、必須）"})
     payment_tax = SelectField('支払消費税（顧客フラグ＝BP所属の時、必須）',
                               [Length(max=8), required_if_bp],
                               choices=Tax.get_type_for_select(),
-                              render_kw={"data-minimum-results-for-search": "Infinity"})
+                              render_kw={"title": "支払消費税（顧客フラグ＝BP所属の時、必須）"})
     bank_id = SelectField('振込先銀行（顧客フラグ＝顧客の時、必須）',
                           [required_if_client],
-                          render_kw={"data-minimum-results-for-search": "Infinity"})
+                          render_kw={"title": "振込先銀行（顧客フラグ＝顧客の時、必須）"})
     bank_holiday_flag = RadioField('振込先銀行休日時フラグ（顧客フラグ＝顧客の時、必須）', 
                                    [required_if_client],
                                    choices=HolidayFlag.get_flag_for_radio())

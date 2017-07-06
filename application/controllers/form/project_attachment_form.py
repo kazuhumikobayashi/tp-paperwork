@@ -17,7 +17,7 @@ class ProjectAttachmentForm(FlaskForm):
     type = SelectField('添付種類（必須）',
                        [DataRequired()],
                        choices=ProjectAttachmentType.get_type_for_select(),
-                       render_kw={"data-minimum-results-for-search": "Infinity"})
+                       render_kw={"title": "添付種類（必須）"})
     remarks = StringField('備考', [Length(max=256)])
     filename = StringField('ファイル名', render_kw={"disabled": "disabled"})
 

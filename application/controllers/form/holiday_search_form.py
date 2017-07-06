@@ -14,4 +14,4 @@ class HolidaySearchForm(FlaskForm):
                        choices=[("", ""), (_last_year, _last_year + "年"),
                                 (_this_year, _this_year + "年"), (_next_year, _next_year + "年")],
                        default=_this_year,
-                       render_kw={"data-placeholder": "年", "data-minimum-results-for-search": "Infinity"})
+                       render_kw={"title": "年"})
