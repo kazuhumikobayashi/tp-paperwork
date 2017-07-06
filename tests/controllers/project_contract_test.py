@@ -2252,3 +2252,25 @@ class ProjectContractTests(BaseTestCase):
         # 帳票作成実行
         result = self.app.get('/project/contract/estimated_report_download/' + str(project.id))
         self.assertEqual(result.status_code, 200)
+
+    # 登録した直後にダウンロードできる
+    def test_download_first_register(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/project/create', data={
+            'project_name': 'テスト',
+            'start_date': date(2017, 4, 1).strftime('%Y/%m/%d'),
+            'end_date': date(2017, 10, 31).strftime('%Y/%m/%d'),
+        })
+        self.assertEqual(result.status_code, 302)
+        project_id = result.headers['Location'].split('/')[-1]
+
+        project = self.project_repository.find_by_id(project_id)
+
+        # 帳票作成実行
+        result = self.app.get('/project/contract/estimated_report_download/' + str(project.id))
+        self.assertEqual(result.status_code, 200)
