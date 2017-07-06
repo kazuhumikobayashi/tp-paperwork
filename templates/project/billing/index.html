@@ -80,9 +80,15 @@
                       </div>
                     </td>
                     <td class="text-center">
-                      {% if project_month.deposit_input_flag.value %}
-                        <i class="fa fa-check" aria-hidden="true"></i>
-                      {% endif %}
+                      <div class="form-group no-margin">
+                        <label>
+                          <input type="checkbox" class="deposit-input-flag"
+                                 id="{{ project_month.id }}"
+                                 name="deposit_input_flag"
+                                 {% if project_month.deposit_input_flag.value %}checked{% endif %} />
+                        </label>
+                      </div>
+                    </td>
                     <td>
                       <button class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 請求書出力</button>
                     </td>
