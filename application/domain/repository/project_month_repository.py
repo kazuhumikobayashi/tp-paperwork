@@ -76,6 +76,7 @@ class ProjectMonthRepository(BaseRepository):
 
     def find_incomplete_deposits(self):
         query = self.model.query.filter(self.model.deposit_input_flag == InputFlag.yet)
+        query = query.filter(self.model.billing_confirmation_money > 0)
         query = query.filter(self.model.deposit_date <= date.today())
         query = query.order_by(asc(self.model.deposit_date), asc('projects_1.project_name'))
         return query.all()
