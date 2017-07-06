@@ -91,6 +91,7 @@ class EstimatedReport(object):
                 self.ws['C' + str(self.current_row)].value = project_detail.engineer.engineer_name
             else:
                 self.ws['C' + str(self.current_row)].value = project_detail.work_name
+            self.ws['C' + str(self.current_row)].font = Font(name="ＭＳ ゴシック", size=9, bold=False)
             self.ws['G' + str(self.current_row)].value = project_detail.billing_money
             self.ws['H' + str(self.current_row)].value = project_detail.remarks
             # 表示形式
@@ -139,10 +140,10 @@ class EstimatedReport(object):
         self.ws.merge_cells('C' + str(self.current_row) + ':F' + str(self.current_row))
         self.ws.merge_cells('H' + str(self.current_row) + ':M' + str(self.current_row))
         # フォント設定
-        self.ws['B' + str(self.current_row)].font = Font(name="MS Gothic", bold=True)
-        self.ws['C' + str(self.current_row)].font = Font(name="MS Gothic", bold=False)
-        self.ws['G' + str(self.current_row)].font = Font(name="MS Gothic", bold=False)
-        self.ws['H' + str(self.current_row)].font = Font(name="MS Gothic", bold=False)
+        self.ws['B' + str(self.current_row)].font = Font(name="ＭＳ ゴシック", bold=True)
+        self.ws['C' + str(self.current_row)].font = Font(name="ＭＳ ゴシック", bold=False)
+        self.ws['G' + str(self.current_row)].font = Font(name="ＭＳ ゴシック", bold=False)
+        self.ws['H' + str(self.current_row)].font = Font(name="ＭＳ ゴシック", bold=False)
         # 書式設定
         self.ws['B' + str(self.current_row)].alignment = Alignment(horizontal='center')
         self.ws['C' + str(self.current_row)].alignment = Alignment(wrap_text=True)
@@ -183,8 +184,8 @@ class EstimatedReport(object):
         self.ws.merge_cells('B' + str(self.current_row) + ':C' + str(self.current_row))
         self.ws.merge_cells('E' + str(self.current_row) + ':M' + str(self.current_row))
         # フォント設定
-        self.ws['B' + str(self.current_row)].font = Font(name="MS Gothic", bold=True)
-        self.ws['E' + str(self.current_row)].font = Font(name="MS PGothic", bold=False)
+        self.ws['B' + str(self.current_row)].font = Font(name="ＭＳ ゴシック", bold=True)
+        self.ws['E' + str(self.current_row)].font = Font(name="ＭＳ ゴシック", bold=False)
         # 書式設定
         self.ws['B' + str(self.current_row)].alignment = Alignment(
                                                             horizontal='distributed',
