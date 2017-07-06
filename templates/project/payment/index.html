@@ -1,6 +1,14 @@
 {% extends "layout.html" %}
 {% from "_formhelpers.html" import render_field %}
 {% block title %}支払一覧{% endblock %}
+{% block include_css %}
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- iCheck 1.0.2 -->
+  <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
+{% endblock %}
 {% block content_header %}
   <h1>
     <a href="{{ url_for('project.index') }}" class="btn btn-default">
@@ -76,9 +84,14 @@
                         <td class="text-right">{{ project_result.payment_confirmation_money|number_with_commas|with_yen }}</td>
                         <td class="text-right">{{ project_result.payment_transportation|number_with_commas|with_yen }}</td>
                         <td class="text-center">
-                          {% if project_result.payment_flag.value %}
-                            <i class="fa fa-check" aria-hidden="true"></i>
-                          {% endif %}
+                          <div class="form-group no-margin">
+                            <label>
+                              <input type="checkbox" class="payment-input-flag"
+                                     id="{{ project_result.id }}"
+                                     name="payment_input_flag"
+                                     {% if project_result.payment_flag.value %}checked{% endif %} />
+                            </label>
+                          </div>
                         </td>
                       </tr>
                     {% endfor %}

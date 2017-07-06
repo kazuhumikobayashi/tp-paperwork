@@ -125,7 +125,7 @@
                   {% for deposit in incomplete_deposits %}
                   <tr>
                     <td class="hidden-xs">{{ deposit.project.estimation_no }}</td>
-                    <td><a href="{{ url_for('project_contract.index', project_id=deposit.project.id) }}">{{ deposit.project.project_name }}</a></td>
+                    <td><a href="{{ url_for('project_billing.index', project_id=deposit.project.id) }}">{{ deposit.project.project_name }}</a></td>
                     <td>{{ deposit.deposit_date|datetime_format('%Y/%m/%d') }}</td>
                     <td class="hidden-xs">{{ deposit.project.recorded_department.department_name }}</td>
                   </tr>
@@ -215,7 +215,7 @@
                   <tr>
                     <td class="hidden-xs">{{ payment.project_detail.project.estimation_no }}</td>
                     <td>
-                        <a href="{{ url_for('project_contract.index', project_id=payment.project_detail.project_id) }}">
+                        <a href="{{ url_for('project_payment.index', project_id=payment.project_detail.project_id) }}">
                             {{ payment.project_detail.project.project_name }}
                         </a>
                     </td>
