@@ -3,6 +3,8 @@ import os
 from datetime import datetime
 
 import re
+from urllib import parse
+
 from flask import session, send_file
 from openpyxl import Workbook, load_workbook
 from openpyxl.cell import Cell
@@ -30,7 +32,7 @@ class Excel(object):
 
     def save(self, file_name=None):
         if file_name:
-            self.file_name = file_name
+            self.file_name = parse.quote(file_name)
         self.workbook.save(self.file_path)
 
     def download(self):
