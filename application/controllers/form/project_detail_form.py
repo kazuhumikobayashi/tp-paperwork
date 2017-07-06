@@ -39,7 +39,11 @@ class ProjectDetailForm(FlaskForm):
                              render_kw={"disabled": "disabled"})
     work_name = StringField('作業名称（必須）', [Length(max=128), required_if_work])
     engineer_id = SelectField('技術者名称（必須）',
-                              [required_if_engineer])
+                              [required_if_engineer],
+                              render_kw={"title": "技術者名称（必須）",
+                                         "data-live-search": "true",
+                                         "data-size": "8",
+                                         "data-actions-box": "true"})
     company = StringField('所属会社', render_kw={"disabled": "disabled"})
     billing_money = IntegerField('請求金額（必須）', [InputRequired()])
     remarks = StringField('備考', [Length(max=1024)])
@@ -67,12 +71,12 @@ class ProjectDetailForm(FlaskForm):
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
                                    filters=[lambda x: x or None],
-                                   render_kw={"data-minimum-results-for-search": "Infinity"})
+                                   render_kw={"title": "請求端数金額"})
     billing_fraction_rule = SelectField('請求端数ルール',
                                         [validators.Optional()],
                                         filters=[lambda x: x or None],
                                         choices=Round.get_round_for_select(),
-                                        render_kw={"data-minimum-results-for-search": "Infinity"})
+                                        render_kw={"title": "請求端数ルール"})
     payment_start_day = DateField('支払契約開始年月',
                                   [validators.Optional()],
                                   format='%Y/%m',
@@ -102,12 +106,12 @@ class ProjectDetailForm(FlaskForm):
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
                                    filters=[lambda x: x or None],
-                                   render_kw={"disabled": "disabled"})
+                                   render_kw={"title": "支払端数金額", "disabled": "disabled"})
     payment_fraction_rule = SelectField('支払端数ルール',
                                         [validators.Optional()],
                                         choices=Round.get_round_for_select(),
                                         filters=[lambda x: x or None],
-                                        render_kw={"disabled": "disabled"})
+                                        render_kw={"title": "支払端数ルール", "disabled": "disabled"})
     bp_order_no = StringField('BP注文書No', [Length(max=64)], filters=[lambda x: x or None])
     client_order_no_for_bp = StringField('顧客注文書No（BPごと）', [Length(max=64)], filters=[lambda x: x or None])
 

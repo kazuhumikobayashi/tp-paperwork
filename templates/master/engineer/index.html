@@ -2,14 +2,15 @@
 {% from "_formhelpers.html" import render_search_field %}
 {% import "_pagination.html" as p %}
 {% block include_css %}
-  <!-- Select2 -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2-4.0.3/css/select2.min.css') }}">
+  <!-- bootstrap select -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/css/bootstrap-select.min.css') }}">
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/icheck-1.0.2/skins/all.css') }}">
 {% endblock %}
 {% block include_js %}
-  <!-- Select2 -->
-  <script src="{{ url_for('static', filename='vendor/select2-4.0.3/js/select2.full.js') }}"></script>
+  <!-- bootstrap select -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/bootstrap-select.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/i18n/defaults-ja_JP.js') }}"></script>
   <!-- iCheck 1.0.2 -->
   <script src="{{ url_for('static', filename='vendor/icheck-1.0.2/icheck.js') }}"></script>
 {% endblock %}
@@ -31,15 +32,15 @@
     <div class="box-body">
       <div class="row">
         {{ render_search_field(form.engineer_name, "col-md-6") }}
-        {{ render_search_field(form.company_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.company_id, "col-md-6", input_class="selectpicker") }}
       </div>
       <div class="row">
         {{ render_search_field(form.contract_engineer_is_checked, "col-md-6") }}
       </div>
       <!-- /.row -->
       <div class="row">
-        {{ render_search_field(form.business_category_id, "col-md-6", input_class="select2") }}
-        {{ render_search_field(form.skill_id, "col-md-6", input_class="select2") }}
+        {{ render_search_field(form.business_category_id, "col-md-6", input_class="selectpicker") }}
+        {{ render_search_field(form.skill_id, "col-md-6", input_class="selectpicker") }}
       </div>
       <!-- /.row -->
     </div>

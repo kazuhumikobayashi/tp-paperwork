@@ -18,11 +18,22 @@ class SearchBillingForm(FlaskForm):
     billing_input_flag = CheckboxField('請求ステータス', choices=InputFlag.get_billing_flag_for_radio())
     deposit_input_flag = CheckboxField('入金ステータス', choices=InputFlag.get_deposit_flag_for_radio())
     end_user_company_id = SelectMultipleField('エンドユーザー', [validators.optional()],
-                                              render_kw={"data-placeholder": "エンドユーザ（複数選択）"})
+                                              render_kw={"title": "エンドユーザー（複数選択）",
+                                                         "data-live-search": "true",
+                                                         "data-size": "8",
+                                                         "data-actions-box": "true",
+                                                         "data-selected-text-format": "count > 3"})
     client_company_id = SelectMultipleField('顧客', [validators.optional()],
-                                            render_kw={"data-placeholder": "顧客会社（複数選択）"})
+                                            render_kw={"title": "顧客会社（複数選択）",
+                                                       "data-live-search": "true",
+                                                       "data-size": "8",
+                                                       "data-actions-box": "true",
+                                                       "data-selected-text-format": "count > 3"})
     recorded_department_id = SelectMultipleField('計上部署',
-                                                 render_kw={"data-placeholder": "計上部署（複数選択）"})
+                                                 render_kw={"title": "計上部署（複数選択）",
+                                                            "data-size": "8",
+                                                            "data-actions-box": "true",
+                                                            "data-selected-text-format": "count > 3"})
     deposit_date_from = StringField('入金予定日(From)', [validators.optional()],
                                     default=first_day.strftime("%Y/%m/%d"),
                                     render_kw={"autocomplete": "off"})

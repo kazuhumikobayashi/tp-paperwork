@@ -16,6 +16,17 @@ class EngineerForm(FlaskForm):
                          render_kw={"autocomplete": "off"})
     gender = RadioField('性別',
                         choices=Gender.get_gender_for_radio())
-    company_id = SelectField('所属会社（必須）', [DataRequired()])
-    business_category = SelectMultipleField('業種', [Length(max=2048)], coerce=int)
-    skill = SelectMultipleField('スキル', [Length(max=2048)], coerce=int)
+    company_id = SelectField('所属会社（必須）', [DataRequired()],
+                             render_kw={"title": "所属会社（必須）",
+                                        "data-size": "8",
+                                        "data-live-search": "true"})
+    business_category = SelectMultipleField('業種', [Length(max=2048)], coerce=int,
+                                            render_kw={"title": "業種（複数選択）",
+                                                       "data-size": "8",
+                                                       "data-live-search": "true",
+                                                       "data-actions-box": "true"})
+    skill = SelectMultipleField('スキル', [Length(max=2048)], coerce=int,
+                                render_kw={"title": "スキル（複数選択）",
+                                           "data-size": "8",
+                                           "data-live-search": "true",
+                                           "data-actions-box": "true"})

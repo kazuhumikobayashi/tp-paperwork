@@ -16,11 +16,22 @@ class SearchPaymentForm(FlaskForm):
     project_name = StringField('プロジェクト名称', [validators.optional()])
     input_flag = CheckboxField('支払ステータス', choices=InputFlag.get_flag_for_checkbox())
     end_user_company_id = SelectMultipleField('エンドユーザー', [validators.optional()],
-                                              render_kw={"data-placeholder": "エンドユーザー（複数選択）"})
+                                              render_kw={"title": "エンドユーザー（複数選択）",
+                                                         "data-live-search": "true",
+                                                         "data-size": "8",
+                                                         "data-actions-box": "true",
+                                                         "data-selected-text-format": "count > 3"})
     client_company_id = SelectMultipleField('顧客', [validators.optional()],
-                                            render_kw={"data-placeholder": "顧客会社（複数選択）"})
+                                            render_kw={"title": "顧客会社（複数選択）",
+                                                       "data-live-search": "true",
+                                                       "data-size": "8",
+                                                       "data-actions-box": "true",
+                                                       "data-selected-text-format": "count > 3"})
     recorded_department_id = SelectMultipleField('計上部署',
-                                                 render_kw={"data-placeholder": "計上部署（複数選択）"})
+                                                 render_kw={"title": "計上部署（複数選択）",
+                                                            "data-size": "8",
+                                                            "data-actions-box": "true",
+                                                            "data-selected-text-format": "count > 3"})
     engineer_name = StringField('技術者名称', [validators.optional()])
     payment_expected_date_from = StringField('支払予定日(From)', [validators.optional()],
                                              default=first_day.strftime("%Y/%m/%d"),
