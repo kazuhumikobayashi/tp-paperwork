@@ -107,7 +107,7 @@ class ProjectResultTests(BaseTestCase):
         })
 
         # set_up
-        project_result = self.project_result_repository.find_all()[2]
+        project_result = self.project_result_repository.find_by_id(6)
         project_billing = ProjectBilling(
             project_detail_id=project_result.project_detail_id,
             billing_month=project_result.result_month,

@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import validators, HiddenField, StringField, DateField, SelectField
 from wtforms.validators import ValidationError
 
-from application.controllers.form.fields import IntegerField, DateField, RadioField
+from application.controllers.form.fields import IntegerField, DateField, RadioField, SelectMultipleFieldWithDisable
 from application.controllers.form.validators import Length, DataRequired, InputRequired, LessThan
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
@@ -38,7 +38,7 @@ class ProjectDetailForm(FlaskForm):
                              choices=DetailType.get_type_for_select(),
                              render_kw={"disabled": "disabled"})
     work_name = StringField('作業名称（必須）', [Length(max=128), required_if_work])
-    engineer_id = SelectField('技術者名称（必須）',
+    engineer_id = SelectMultipleFieldWithDisable('技術者名称（必須）',
                               [required_if_engineer],
                               render_kw={"title": "技術者名称（必須）",
                                          "data-live-search": "true",

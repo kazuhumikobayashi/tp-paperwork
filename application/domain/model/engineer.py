@@ -49,6 +49,17 @@ class Engineer(BaseModel, db.Model):
     def is_bp(self):
         return self.company and self.company.is_bp()
 
+    def is_proper(self):
+        return self.company and self.company.is_our_company()
+
+    def is_finished_contract(self):
+        if self.is_proper():
+            return False
+
+        if self.engineer_histories:
+            return [history.is_contract() for history in self.engineer_histories][-1]
+        return True
+
     def __repr__(self):
         return "<Engineer:" + \
                 "'id='{}".format(self.id) + \

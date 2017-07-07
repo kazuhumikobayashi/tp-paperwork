@@ -112,12 +112,12 @@ class EstimatedReportTests(BaseTestCase):
         self.assertEqual(self.estimated_report.ws['H24'].value,
                          self.estimated_report.project.project_details[0].remarks)
         # 消費税が指定のセルに値が入っていることを確認。
-        self.assertEqual(self.estimated_report.ws['C29'].value, '消費税（なし）')
-        self.assertEqual(self.estimated_report.ws['G29'].value,
+        self.assertEqual(self.estimated_report.ws['C30'].value, '消費税（なし）')
+        self.assertEqual(self.estimated_report.ws['G30'].value,
                          self.estimated_report.project.tax_of_estimated_total_amount())
         # 合計が指定のセルに値が入っていることを確認。
-        self.assertEqual(self.estimated_report.ws['C30'].value, '合計')
-        self.assertEqual(self.estimated_report.ws['G30'].value,
+        self.assertEqual(self.estimated_report.ws['C31'].value, '合計')
+        self.assertEqual(self.estimated_report.ws['G31'].value,
                          self.estimated_report.project.estimated_total_amount
                          + self.estimated_report.project.tax_of_estimated_total_amount())
 

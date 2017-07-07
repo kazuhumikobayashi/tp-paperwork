@@ -59,9 +59,10 @@
         <div class="box-header">
           {% if pagination %}
             {% if pagination.total > pagination.per_page %}
-              {{ p.pagination_widget(pagination,'.engineer_page', company_id=request.args.get('company_id', ''),
-              engineer_name=request.args.get('engineer_name', ''), skill_id=request.args.get('skill_id', ''),
-              business_category_id=request.args.get('business_category_id', '')) }}
+              {{ p.pagination_widget(pagination,'.engineer_page', company_id=form.company_id.data,
+              contract_engineer_is_checked=form.contract_engineer_is_checked.data,
+              engineer_name=form.engineer_name.data, skill_id=form.skill_id.data,
+              business_category_id=form.business_category_id.data) }}
             {% endif %}
           {% endif %}
           <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">

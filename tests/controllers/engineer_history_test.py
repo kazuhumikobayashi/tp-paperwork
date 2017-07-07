@@ -186,7 +186,7 @@ class EngineerHistoryTests(BaseTestCase):
             'password': 'test'
         })
 
-        engineer_id = 3
+        engineer_id = 6
 
         # 以下のデータを新規作成。
         result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
@@ -199,7 +199,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         self.assertEqual(result.status_code, 302)
 
-        # engineer=3に紐づく履歴が1件であることを確認
+        # engineer=6に紐づく履歴が1件であることを確認
         before = len(
             self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(before, 1)
@@ -218,7 +218,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         self.assertEqual(result.status_code, 200)
 
-        # engineer=4に紐づく履歴が1件であることを確認（履歴が切られていないことを確認）
+        # engineer=6に紐づく履歴が1件であることを確認（履歴が切られていないことを確認）
         after = len(
             self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(after, 1)
@@ -244,7 +244,7 @@ class EngineerHistoryTests(BaseTestCase):
             'password': 'test'
         })
 
-        engineer_id = 4
+        engineer_id = 7
 
         # 以下のデータを新規作成。
         result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
@@ -256,7 +256,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         self.assertEqual(result.status_code, 302)
 
-        # engineer=4に紐づく履歴が1件であることを確認
+        # engineer=7に紐づく履歴が1件であることを確認
         before = len(
             self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(before, 1)
@@ -275,7 +275,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         self.assertEqual(result.status_code, 200)
 
-        # engineer=4に紐づく履歴が1件であることを確認（履歴が切られていないことを確認）
+        # engineer=7に紐づく履歴が1件であることを確認（履歴が切られていないことを確認）
         after = len(
             self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(after, 1)

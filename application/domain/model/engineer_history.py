@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import Column, Integer, Date, String
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
@@ -83,6 +85,9 @@ class EngineerHistory(BaseModel, db.Model):
         engineer_history = EngineerHistory()
         engineer_history.engineer = self.engineer
         return engineer_history
+
+    def is_contract(self):
+        return self.payment_end_day <= datetime.today().date()
 
     def __repr__(self):
         return "<EngineerHistory:" + \
