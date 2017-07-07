@@ -171,3 +171,32 @@ class EstimatedReportTests(BaseTestCase):
         self.assertEqual(self.estimated_report.ws['E38'].value, self.estimated_report.project.subcontractor)
         self.assertEqual(self.estimated_report.ws['B39'].value, '備考')
         self.assertEqual(self.estimated_report.ws['E39'].value, self.estimated_report.project.remarks)
+
+    def test_create_contract_content_rows_if_billing_by_month(self):
+        # set_up
+        project = self.project_repository.find_by_id(2)
+        project_detail = self.project_detail_repository.find_all()[1]
+        project.project_details.append(project_detail)
+        self.estimated_report.project = project
+
+        # テスト対象のメソッドを実行
+        self.estimated_report.current_row = 32
+        self.estimated_report.create_contract_content_rows()
+
+        # 指定のセルに値が入っていることを確認。
+        self.assertEqual(self.estimated_report.ws['B32'].value, '作業内容')
+        self.assertEqual(self.estimated_report.ws['E32'].value, self.estimated_report.project.contents)
+        self.assertEqual(self.estimated_report.ws['B33'].value, '納品物')
+        self.assertEqual(self.estimated_report.ws['E33'].value, self.estimated_report.project.deliverables)
+        self.assertEqual(self.estimated_report.ws['B34'].value, '作業場所')
+        self.assertEqual(self.estimated_report.ws['E34'].value, self.estimated_report.project.working_place)
+        self.assertEqual(self.estimated_report.ws['B35'].value, '検査完了日')
+        self.assertEqual(self.estimated_report.ws['E35'].value, '毎月月末')
+        self.assertEqual(self.estimated_report.ws['B36'].value, '作業責任者')
+        self.assertEqual(self.estimated_report.ws['E36'].value, self.estimated_report.project.responsible_person)
+        self.assertEqual(self.estimated_report.ws['B37'].value, '品質管理担当者')
+        self.assertEqual(self.estimated_report.ws['E37'].value, self.estimated_report.project.quality_control)
+        self.assertEqual(self.estimated_report.ws['B38'].value, '再委託先')
+        self.assertEqual(self.estimated_report.ws['E38'].value, self.estimated_report.project.subcontractor)
+        self.assertEqual(self.estimated_report.ws['B39'].value, '備考')
+        self.assertEqual(self.estimated_report.ws['E39'].value, self.estimated_report.project.remarks)

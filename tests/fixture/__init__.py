@@ -151,7 +151,7 @@ def create_projects():
             start_date='2017/1/1',
             end_date='2017/12/31',
             contract_form=Contract.blanket,
-            billing_timing=BillingTiming.billing_at_last,
+            billing_timing=BillingTiming.parse((num % 2)+1),
             estimated_total_amount=1000000,
             scope='test',
             contents=None,
