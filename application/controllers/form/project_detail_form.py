@@ -37,16 +37,16 @@ class ProjectDetailForm(FlaskForm):
                              [DataRequired()],
                              choices=DetailType.get_type_for_select(),
                              render_kw={"disabled": "disabled"})
-    work_name = StringField('作業名称（必須）', [Length(max=128), required_if_work])
+    work_name = StringField('作業名称（必須）', [Length(max=128), required_if_work], filters=[lambda x: x or None])
     engineer_id = SelectMultipleFieldWithDisable('技術者名称（必須）',
-                              [required_if_engineer],
-                              render_kw={"title": "技術者名称（必須）",
-                                         "data-live-search": "true",
-                                         "data-size": "8",
-                                         "data-actions-box": "true"})
+                                                 [required_if_engineer],
+                                                 render_kw={"title": "技術者名称（必須）",
+                                                            "data-live-search": "true",
+                                                            "data-size": "8",
+                                                            "data-actions-box": "true"})
     company = StringField('所属会社', render_kw={"disabled": "disabled"})
     billing_money = IntegerField('請求金額（必須）', [InputRequired()])
-    remarks = StringField('備考', [Length(max=1024)])
+    remarks = StringField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     billing_start_day = DateField('請求契約開始年月（必須）',
                                   [required_if_engineer, LessThan('billing_end_day')],
                                   format='%Y/%m',
@@ -64,7 +64,7 @@ class ProjectDetailForm(FlaskForm):
     billing_free_base_hour = StringField('請求フリー入力基準時間',
                                          [Length(max=128)],
                                          filters=[lambda x: x or None])
-    billing_per_hour = StringField('請求時間単価', [Length(max=128), required_if_variable])
+    billing_per_hour = StringField('請求時間単価', [Length(max=128), required_if_variable], filters=[lambda x: x or None])
     billing_per_bottom_hour = IntegerField('請求△下限時間単価', [required_if_variable])
     billing_per_top_hour = IntegerField('請求＋上限時間単価', [required_if_variable])
     billing_fraction = SelectField('請求端数金額',
