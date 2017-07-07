@@ -5,7 +5,7 @@ from application.domain.model.immutables.status import Status
 
 
 class ProjectSearchForm(FlaskForm):
-    project_name = StringField('プロジェクト名', [validators.optional()])
+    project_name = StringField('プロジェクト名称', [validators.optional()])
     status = SelectMultipleField('契約ステータス',
                                  choices=Status.get_status_for_multi_select(),
                                  render_kw={"title": "契約ステータス（複数選択）",
