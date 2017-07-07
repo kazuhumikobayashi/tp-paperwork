@@ -2048,7 +2048,7 @@ class ProjectContractTests(BaseTestCase):
         order_sequence = self.order_sequence_repository.find_by_fiscal_year(17)
 
         # 連番が一つ先の注文書番号を登録しておく。
-        bp_order_no = 'C' + str(order_sequence.fiscal_year)\
+        bp_order_no = 'C-' + str(order_sequence.fiscal_year)\
                           + '-'\
                           + '{0:03d}'.format(order_sequence.sequence + 1)
 
@@ -2077,7 +2077,7 @@ class ProjectContractTests(BaseTestCase):
         db.session.commit()
 
         # 新規作成時に発番が期待される注文書番号
-        expected = 'C' + str(order_sequence.fiscal_year)\
+        expected = 'C-' + str(order_sequence.fiscal_year)\
                    + '-'\
                    + '{0:03d}'.format(order_sequence.sequence + 2)
 

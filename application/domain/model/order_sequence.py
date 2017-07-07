@@ -22,7 +22,7 @@ class OrderSequence(BaseModel, db.Model):
         self.sequence = 1
 
     def get_bp_order_no(self):
-        return 'C' + str(self.fiscal_year) + '-' + '{0:03d}'.format(self.sequence)
+        return 'C-' + str(self.fiscal_year) + '-' + '{0:03d}'.format(self.sequence)
 
     def __repr__(self):
         return "<OrderSequence:" + \
