@@ -6,7 +6,7 @@ from application.controllers.form.validators import Length, DataRequired, LessTh
 
 
 class ProjectCreateForm(FlaskForm):
-    project_name = StringField('プロジェクト名（必須）', [DataRequired(), Length(max=128)])
+    project_name = StringField('プロジェクト名称（必須）', [DataRequired(), Length(max=128)])
     project_name_for_bp = StringField('BP向けプロジェクト名称', [Length(max=128)], filters=[lambda x: x or None])
     start_date = DateField('プロジェクト開始日（必須）',
                            [DataRequired(), LessThan('end_date')],
