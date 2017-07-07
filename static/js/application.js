@@ -297,7 +297,6 @@ $(function() {
     var sub_hours = 0;
     var sub_money = 0;
     var estimated_money = 0;
-    var carfare = 0;
     var adjustment = 0;
     var ROUND_DOWN = 1;
     var ROUND_OFF = 2;
@@ -332,12 +331,10 @@ $(function() {
     $('#billing_subtraction_money').val(sub_money);
     $('#billing_estimated_money').val(estimated_money);
 
-    var carfare = $('#billing_transportation').val();
-    carfare = parseInt(carfare.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
-    var adjustment = $('#billing_adjustments').val();
+    adjustment = $('#billing_adjustments').val();
     adjustment = parseInt(adjustment.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
 
-    billing_confirmation_money = estimated_money + carfare + adjustment;
+    billing_confirmation_money = estimated_money + adjustment;
 
     if (billing_fraction_rule === ROUND_DOWN) {
       billing_confirmation_money = round_down(billing_confirmation_money, billing_fraction)
@@ -354,7 +351,6 @@ $(function() {
     var sub_hours = 0;
     var sub_money = 0;
     var estimated_money = 0;
-    var carfare = 0;
     var adjustment = 0;
     var ROUND_DOWN = 1;
     var ROUND_OFF = 2;
@@ -389,12 +385,10 @@ $(function() {
     $('#payment_subtraction_money').val(sub_money);
     $('#payment_estimated_money').val(estimated_money);
 
-    var carfare = $('#payment_transportation').val();
-    carfare = parseInt(carfare.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
-    var adjustment = $('#payment_adjustments').val();
+    adjustment = $('#payment_adjustments').val();
     adjustment = parseInt(adjustment.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
 
-    payment_confirmation_money = estimated_money + carfare + adjustment;
+    payment_confirmation_money = estimated_money + adjustment;
 
     if (payment_fraction_rule === ROUND_DOWN) {
       payment_confirmation_money = round_down(payment_confirmation_money, payment_fraction)
@@ -402,7 +396,7 @@ $(function() {
       payment_confirmation_money = round_off(payment_confirmation_money, payment_fraction)
     }
 
-    $('#payment_confirmation_money').val(estimated_money + carfare + adjustment);
+    $('#payment_confirmation_money').val(estimated_money + adjustment);
   }
 
   $('.auto-calc').on('blur', function () {
