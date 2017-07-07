@@ -1,5 +1,4 @@
 from datetime import datetime
-from urllib import parse
 
 from openpyxl.drawing.image import Image
 from openpyxl.styles import Border, Side, Font, Alignment
@@ -44,7 +43,8 @@ class EstimatedReport(object):
         self.ws.page_setup.scale = 86
 
         # エクセルを一時フォルダに保存
-        self.excel.save(parse.quote('見積書.xlsx'))
+        self.excel.save('01_見積書（{}）_{}.xlsx'.format(self.project.estimation_no,
+                                                    datetime.today().strftime("%Y%m%d")))
 
     def write_estimated_content_rows(self):
         # 結合しているセルの罫線が消えるため、罫線を引き直す。
