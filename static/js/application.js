@@ -103,7 +103,6 @@ $(function () {
 
   $(".select2").select2({
     placeholder: "選択してください",
-    multiple:true,
     allowClear: true,
     language: {"noResults": function(){ return "検索結果がありません。";}},
     escapeMarkup: function (markup) { return markup; }
