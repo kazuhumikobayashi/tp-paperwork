@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from application import bcrypt, db
 from application.domain.model.attachment import Attachment
@@ -240,9 +240,9 @@ def create_company_client_flags():
 def create_engineer_histories():
     for num in range(5):
         engineer_history = EngineerHistory(
-            engineer_id=1,
+            engineer_id=num+1,
             payment_start_day=date(2016, 1, 1),
-            payment_end_day=date(9999, 12, 31),
+            payment_end_day=datetime.today().date() + timedelta(days=-1+num),
             payment_per_month=num+1,
             payment_site=Site.twenty_five,
             payment_tax=Tax.eight,
@@ -266,7 +266,7 @@ def create_engineer_histories():
 
 
 def create_project_details():
-    for num in range(5):
+    for num in range(6):
         project_detail = ProjectDetail(
             project_id=1,
             detail_type=DetailType.engineer,

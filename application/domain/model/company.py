@@ -88,6 +88,12 @@ class Company(BaseModel, db.Model):
                 return True
         return False
 
+    def is_our_company(self):
+        for company_client_flag in self.company_client_flags:
+            if company_client_flag.client_flag == ClientFlag.our_company:
+                return True
+        return False
+
     def __repr__(self):
         return "<Company:" + \
                 "'id='{}".format(self.id) + \

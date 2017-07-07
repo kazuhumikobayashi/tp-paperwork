@@ -12,14 +12,12 @@ class EngineerService(object):
                                     skill_id,
                                     business_category_id)
 
-    def find_all_for_multi_select(self):
-        engineer_list = [(str(h.id), h.engineer_name) for h in self.find_all()]
-        engineer_list.sort(key=lambda x: x[1])
-        return engineer_list
-
-    def find_all_for_select(self):
-        ret = [('', '')]
-        engineer_list = self.find_all_for_multi_select()
+    def find_contract_for_select(self):
+        ret = [('', '', '')]
+        engineer_list = [(str(h.id),
+                          h.engineer_name + '【契約終了】' if h.is_finished_contract() else h.engineer_name,
+                          h.is_finished_contract())
+                         for h in self.find_all()]
         ret.extend(engineer_list)
         return ret
 

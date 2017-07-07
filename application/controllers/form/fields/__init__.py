@@ -5,6 +5,8 @@ import wtforms
 from dateutil.relativedelta import relativedelta
 from wtforms import widgets
 
+from application.controllers.form.widgets import SelectWithDisable
+
 
 class IntegerField(wtforms.IntegerField):
 
@@ -101,3 +103,19 @@ class CheckboxField(wtforms.SelectMultipleField):
     """
     widget = widgets.ListWidget(prefix_label=False)
     option_widget = widgets.CheckboxInput()
+
+
+class SelectMultipleFieldWithDisable(wtforms.SelectField):
+    widget = SelectWithDisable()
+
+    def iter_choices(self):
+        for value, label, disabled in self.choices:
+            selected = self.data is not None and self.coerce(value) in self.data
+            yield (value, label, selected, disabled)
+
+    def pre_validate(self, form):
+        for v, _, _ in self.choices:
+            if self.data == v:
+                break
+        else:
+            raise ValueError(self.gettext('Not a valid choice'))
