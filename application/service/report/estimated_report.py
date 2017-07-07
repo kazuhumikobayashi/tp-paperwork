@@ -3,6 +3,7 @@ from datetime import datetime
 from openpyxl.drawing.image import Image
 from openpyxl.styles import Border, Side, Font, Alignment
 
+from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.repository.excel import Excel
 
@@ -173,7 +174,10 @@ class EstimatedReport(object):
         self.create_contract_contents_row('作業内容', self.project.contents, top_line_style='double')
         self.create_contract_contents_row('納品物', self.project.deliverables)
         self.create_contract_contents_row('作業場所', self.project.working_place)
-        self.create_contract_contents_row('検査完了日', self.project.inspection_date)
+        if self.project.billing_timing == BillingTiming.billing_by_month:
+            self.create_contract_contents_row('検査完了日', '毎月月末')
+        else:
+            self.create_contract_contents_row('検査完了日', self.project.inspection_date)
         self.create_contract_contents_row('作業責任者', self.project.responsible_person)
         self.create_contract_contents_row('品質管理担当者', self.project.quality_control)
         self.create_contract_contents_row('再委託先', self.project.subcontractor)
