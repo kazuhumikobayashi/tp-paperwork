@@ -11,11 +11,11 @@ project_month_repository = ProjectMonthRepository()
 class ProjectMonthForm(FlaskForm):
     id = HiddenField('プロジェクト年月ID')
     project_id = HiddenField('プロジェクトID')
-    client_billing_no = StringField('顧客請求書No', [Length(max=64)])
+    client_billing_no = StringField('顧客請求書No', [Length(max=64)], filters=[lambda x: x or None])
     billing_confirmation_money = IntegerField('請求確定金額（請求明細金額の合計）', render_kw={"readonly": "readonly"})
     billing_transportation = IntegerField('請求交通費等（請求明細交通費等の合計）', render_kw={"readonly": "readonly"})
     deposit_date = DateField('入金予定日', format='%Y/%m/%d', render_kw={"autocomplete": "off"})
-    remarks = TextAreaField('備考', [Length(max=1024)])
+    remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     project_month = DateField('プロジェクト年月', format='%Y/%m/%d')
 
     def validate_client_billing_no(self, field):

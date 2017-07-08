@@ -9,7 +9,7 @@ from application.domain.model.immutables.gender import Gender
 class EngineerForm(FlaskForm):
     id = IntegerField('Id')
     engineer_name = StringField('技術者名称（必須）', [Length(max=128), DataRequired()])
-    engineer_name_kana = StringField('技術者名称カナ', [Length(max=128)])
+    engineer_name_kana = StringField('技術者名称カナ', [Length(max=128)], filters=[lambda x: x or None])
     birthday = DateField('生年月日',
                          [validators.optional()],
                          format='%Y/%m/%d',

@@ -152,7 +152,8 @@ CREATE TABLE IF NOT EXISTS projects (
   PRIMARY KEY (id) ,
   UNIQUE KEY (estimation_no) ,
   INDEX (client_company_id) ,
-  INDEX (end_user_company_id)
+  INDEX (end_user_company_id) ,
+  INDEX (recorded_department_id)
 ) ENGINE = INNODB;
 
 
