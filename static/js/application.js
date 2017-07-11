@@ -469,3 +469,15 @@ $(function() {
     });
   });
 });
+
+// formクリア
+$(function() {
+  $('.form-clear').bind('click', function(){
+    $(':input').not(':button, :submit, :reset, :hidden, :checkbox, :radio').val('');
+    if (pluginExists("iCheck")) {
+      $(':checkbox, :radio').iCheck('uncheck');
+    }
+    $('select, textarea').val('');
+    $('.selectpicker').selectpicker('refresh');
+  });
+});
