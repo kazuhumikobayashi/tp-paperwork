@@ -36,7 +36,7 @@ class UserTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/user/page/2')
+        result = self.app.get('/user/page/2?user_name=&shain_number=')
         self.assertEqual(result.status_code, 200)
 
     # ユーザーを検索する。

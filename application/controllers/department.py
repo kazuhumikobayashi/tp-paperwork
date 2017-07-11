@@ -8,7 +8,9 @@ from flask import request
 from flask import url_for
 
 from application.controllers.form.department_form import DepartmentForm
+from application.controllers.form.department_search_form import DepartmentSearchForm
 from application.service.department_service import DepartmentService
+from application.service.search_session_service import SearchSessionService
 
 bp = Blueprint('department', __name__, url_prefix='/department')
 service = DepartmentService()
@@ -16,10 +18,11 @@ service = DepartmentService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    group_name = request.args.get('group_name', '')
-    department_name = request.args.get('department_name', '')
-    pagination = service.find(page, group_name, department_name)
-    return render_template('master/department/index.html', pagination=pagination)
+    search = SearchSessionService('department', request.args)
+    search.save()
+    form = DepartmentSearchForm(search.get_dict())
+    pagination = service.find(page, form.group_name.data, form.department_name.data)
+    return render_template('master/department/index.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])

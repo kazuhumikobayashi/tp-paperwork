@@ -14,6 +14,7 @@ from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
 from application.service.project_detail_service import ProjectDetailService
 from application.service.project_service import ProjectService
+from application.service.search_session_service import SearchSessionService
 
 bp = Blueprint('project', __name__, url_prefix='/project')
 service = ProjectService()
@@ -24,7 +25,9 @@ company_service = CompanyService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = ProjectSearchForm(request.values)
+    search = SearchSessionService('project', request.args)
+    search.save()
+    form = ProjectSearchForm(search.get_dict())
     form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])
     form.end_user_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(

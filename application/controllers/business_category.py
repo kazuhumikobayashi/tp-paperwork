@@ -7,7 +7,9 @@ from flask import request
 from flask import url_for
 
 from application.controllers.form.business_category_form import BusinessCategoryForm
+from application.controllers.form.business_category_search_form import BusinessCategorySearchForm
 from application.service.business_category_service import BusinessCategoryService
+from application.service.search_session_service import SearchSessionService
 
 bp = Blueprint('business_category', __name__, url_prefix='/business_category')
 service = BusinessCategoryService()
@@ -15,9 +17,11 @@ service = BusinessCategoryService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    business_category_name = request.args.get('business_category_name', '')
-    pagination = service.find(page, business_category_name)
-    return render_template('master/business_category/index.html', pagination=pagination)
+    search = SearchSessionService('business_category', request.args)
+    search.save()
+    form = BusinessCategorySearchForm(search.get_dict())
+    pagination = service.find(page, form.business_category_name.data)
+    return render_template('master/business_category/index.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])

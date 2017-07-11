@@ -7,6 +7,8 @@ from flask import request
 from flask import url_for
 
 from application.controllers.form.skill_form import SkillForm
+from application.controllers.form.skill_search_form import SkillSearchForm
+from application.service.search_session_service import SearchSessionService
 from application.service.skill_service import SkillService
 
 bp = Blueprint('skill', __name__, url_prefix='/skill')
@@ -15,9 +17,11 @@ service = SkillService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    skill_name = request.args.get('skill_name', '')
-    pagination = service.find(page, skill_name)
-    return render_template('master/skill/index.html', pagination=pagination)
+    search = SearchSessionService('skill', request.args)
+    search.save()
+    form = SkillSearchForm(search.get_dict())
+    pagination = service.find(page, form.skill_name.data)
+    return render_template('master/skill/index.html', pagination=pagination, form=form)
 
 
 @bp.route('/page/<int:page>', methods=['GET'])

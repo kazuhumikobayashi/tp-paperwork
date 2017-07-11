@@ -14,6 +14,7 @@ from application.controllers.form.holiday_form import HolidayForm
 from application.controllers.form.holiday_search_form import HolidaySearchForm
 from application.service.calendar_service import CalendarService
 from application.service.holiday_service import HolidayService
+from application.service.search_session_service import SearchSessionService
 
 bp = Blueprint('holiday', __name__, url_prefix='/holiday')
 service = HolidayService()
@@ -22,7 +23,9 @@ calendar_service = CalendarService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = HolidaySearchForm(request.values)
+    search = SearchSessionService('holiday', request.args)
+    search.save()
+    form = HolidaySearchForm(search.get_dict())
     _save_holidays_when_no_data()
 
     pagination = service.find_by_year(form.year.data, page)
