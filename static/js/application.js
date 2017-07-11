@@ -483,3 +483,11 @@ $(function() {
     }
   });
 });
+
+$("form").submit(function() {
+  var self = this;
+    $(":submit.save", self).prop("disabled", true);
+  setTimeout(function() {
+    $(":submit.save", self).prop("disabled", false);
+  }, 10000);
+});
