@@ -478,6 +478,8 @@ $(function() {
       $(':checkbox, :radio').iCheck('uncheck');
     }
     $('select, textarea').val('');
-    $('.selectpicker').selectpicker('refresh');
+    if (pluginExists("selectpicker")) {
+      $('.selectpicker').selectpicker('refresh');
+    }
   });
 });
