@@ -9,6 +9,7 @@ from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
 from application.service.project_billing_service import ProjectBillingService
 from application.service.project_month_service import ProjectMonthService
+from application.service.search_session_service import SearchSessionService
 
 bp = Blueprint('search_billing', __name__, url_prefix='/search/billing')
 service = ProjectBillingService()
@@ -19,7 +20,9 @@ department_service = DepartmentService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = SearchBillingForm(request.values)
+    search = SearchSessionService('search_billing', request.args)
+    search.save()
+    form = SearchBillingForm(search.get_dict())
     form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])
     form.end_user_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(

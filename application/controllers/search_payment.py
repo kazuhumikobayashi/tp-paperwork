@@ -8,6 +8,7 @@ from application.domain.model.immutables.input_flag import InputFlag
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
 from application.service.project_result_service import ProjectResultService
+from application.service.search_session_service import SearchSessionService
 
 bp = Blueprint('payment', __name__, url_prefix='/search/payment')
 service = ProjectResultService()
@@ -17,7 +18,9 @@ company_service = CompanyService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = SearchPaymentForm(request.values)
+    search = SearchSessionService('search_payment', request.args)
+    search.save()
+    form = SearchPaymentForm(search.get_dict())
     form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])
     form.end_user_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(

@@ -17,6 +17,7 @@ from application.service.business_category_service import BusinessCategoryServic
 from application.service.company_service import CompanyService
 from application.service.engineer_history_service import EngineerHistoryService
 from application.service.engineer_service import EngineerService
+from application.service.search_session_service import SearchSessionService
 from application.service.skill_service import SkillService
 
 bp = Blueprint('engineer', __name__, url_prefix='/engineer')
@@ -29,7 +30,9 @@ business_category_service = BusinessCategoryService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = EngineerSearchForm(request.values)
+    search = SearchSessionService('engineer', request.args)
+    search.save()
+    form = EngineerSearchForm(search.get_dict())
     form.company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.our_company.value, ClientFlag.bp.value])
     form.skill_id.choices = skill_service.find_all_for_multi_select()

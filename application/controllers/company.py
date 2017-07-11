@@ -16,7 +16,7 @@ from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.tax import Tax
 from application.service.bank_service import BankService
 from application.service.company_service import CompanyService
-
+from application.service.search_session_service import SearchSessionService
 
 bp = Blueprint('company', __name__, url_prefix='/company')
 service = CompanyService()
@@ -25,7 +25,9 @@ bank_service = BankService()
 
 @bp.route('/', methods=['GET'])
 def index(page=1):
-    form = CompanySearchForm(request.values)
+    search = SearchSessionService('company', request.args)
+    search.save()
+    form = CompanySearchForm(search.get_dict())
     form.client_flag_id.choices = ClientFlag.get_flag_for_multi_select()
     form.bank_id.choices = bank_service.find_all_for_multi_select()
 
