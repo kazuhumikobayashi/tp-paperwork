@@ -7,10 +7,11 @@ from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.input_flag import InputFlag
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
+from application.service.page_session_service import PageSessionService
 from application.service.project_result_service import ProjectResultService
 from application.service.search_session_service import SearchSessionService
 
-bp = Blueprint('payment', __name__, url_prefix='/search/payment')
+bp = Blueprint('search_payment', __name__, url_prefix='/search/payment')
 service = ProjectResultService()
 department_service = DepartmentService()
 company_service = CompanyService()
@@ -20,6 +21,9 @@ company_service = CompanyService()
 def index(page=1):
     search = SearchSessionService('search_payment', request.args)
     search.save()
+    page_session_service = PageSessionService(bp.name + '.index')
+    page_session_service.save()
+
     form = SearchPaymentForm(search.get_dict())
     form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])

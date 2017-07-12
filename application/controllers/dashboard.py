@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import render_template
 
+from application.service.page_session_service import PageSessionService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_result_service import ProjectResultService
 from application.service.project_service import ProjectService
@@ -13,6 +14,9 @@ project_result_service = ProjectResultService()
 
 @bp.route('/', methods=['GET'])
 def index():
+    page_session_service = PageSessionService(bp.name + '.index')
+    page_session_service.save()
+
     incomplete_estimates = project_service.find_incomplete_estimates()
     incomplete_results = project_result_service.find_incomplete_results()
     incomplete_billings = project_month_service.find_incomplete_billings()

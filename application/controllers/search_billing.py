@@ -7,6 +7,7 @@ from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.input_flag import InputFlag
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
+from application.service.page_session_service import PageSessionService
 from application.service.project_billing_service import ProjectBillingService
 from application.service.project_month_service import ProjectMonthService
 from application.service.search_session_service import SearchSessionService
@@ -22,6 +23,9 @@ department_service = DepartmentService()
 def index(page=1):
     search = SearchSessionService('search_billing', request.args)
     search.save()
+    page_session_service = PageSessionService(bp.name + '.index')
+    page_session_service.save()
+
     form = SearchBillingForm(search.get_dict())
     form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])

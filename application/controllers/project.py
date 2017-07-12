@@ -12,6 +12,7 @@ from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.project import Project
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
+from application.service.page_session_service import PageSessionService
 from application.service.project_detail_service import ProjectDetailService
 from application.service.project_service import ProjectService
 from application.service.search_session_service import SearchSessionService
@@ -27,6 +28,9 @@ company_service = CompanyService()
 def index(page=1):
     search = SearchSessionService('project', request.args)
     search.save()
+    page_session_service = PageSessionService(bp.name + '.index')
+    page_session_service.save()
+
     form = ProjectSearchForm(search.get_dict())
     form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])

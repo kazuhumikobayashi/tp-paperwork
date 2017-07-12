@@ -6,6 +6,7 @@ from application.controllers.form.search_result_form import SearchResultForm
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
+from application.service.page_session_service import PageSessionService
 from application.service.project_result_service import ProjectResultService
 from application.service.search_session_service import SearchSessionService
 
@@ -19,6 +20,9 @@ department_service = DepartmentService()
 def index(page=1):
     search = SearchSessionService('search_result', request.args)
     search.save()
+    page_session_service = PageSessionService(bp.name + '.index')
+    page_session_service.save()
+
     form = SearchResultForm(search.get_dict())
     form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
         [ClientFlag.client.value])
