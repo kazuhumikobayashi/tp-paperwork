@@ -60,6 +60,13 @@ class Engineer(BaseModel, db.Model):
             return [history.is_contract() for history in self.engineer_histories][-1]
         return True
 
+    # 指定された日の期間内にある支払いサイトを返却
+    def get_payment_site_by_date(self, date):
+        for history in self.engineer_histories:
+            if history.payment_start_day <= date <= history.payment_end_day:
+                return history.payment_site
+        return None
+
     def __repr__(self):
         return "<Engineer:" + \
                 "'id='{}".format(self.id) + \

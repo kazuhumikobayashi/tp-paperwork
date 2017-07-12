@@ -140,8 +140,7 @@ class ProjectDetail(BaseModel, db.Model):
 
     # 支払フラグが前倒しか後ろ倒しか判断
     def get_holiday_flag_if_payment(self):
-        # TODO 技術者履歴から取得するようにする
-        payment_site = self.engineer.company.payment_site
+        payment_site = self.get_payment_site()
 
         # 支払いの場合、末日は前倒し、その他後ろ倒し
         if payment_site.is_last_day():
@@ -164,7 +163,6 @@ class ProjectDetail(BaseModel, db.Model):
     # 作業の請求単価（ひと月当たりに請求する金額）を取得
     def get_payment_per_month_by_work(self):
         payment = self.billing_money / len(self.project.get_project_month_list())
-        # TODO 端数計算処理実行
         return payment
 
     # 月々の実績情報を作成
@@ -180,8 +178,7 @@ class ProjectDetail(BaseModel, db.Model):
             if self.has_payment():
                 calculator = Calculator(
                                 contract_date,
-                                # TODO 技術者履歴から取得するようにする
-                                self.engineer.company.payment_site,
+                                self.get_payment_site(),
                                 self.get_holiday_flag_if_payment())
                 project_result.payment_expected_date = calculator.get_deposit_date()
             self.project_results.append(project_result)
@@ -223,6 +220,11 @@ class ProjectDetail(BaseModel, db.Model):
                                 updated_user=session['user']['user_name'])
         self.project_billings.append(project_billing)
         return self
+
+    # 技術者履歴から支払いサイトを取得する。履歴が存在しない場合は会社から取得
+    def get_payment_site(self):
+        site = self.engineer.get_payment_site_by_date(self.project.start_date)
+        return site or self.engineer.company.payment_site
 
     def __repr__(self):
         return "<ProjectDetails:" + \
