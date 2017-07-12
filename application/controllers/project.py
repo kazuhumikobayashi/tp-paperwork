@@ -69,6 +69,8 @@ def create(project_id=None):
             # BP注文番号を再発番したいので一旦ブランクで保存する
             detail.billing_start_day = None
             detail.billing_end_day = None
+            # 顧客注文書No（BPごと）はブランクにする
+            detail.client_order_no_for_bp = None
 
         service.save(project)
 
