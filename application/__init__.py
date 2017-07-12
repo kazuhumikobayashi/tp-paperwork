@@ -2,7 +2,6 @@ import os
 
 from flask import Flask
 from flask import redirect
-from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
@@ -32,7 +31,10 @@ my_filter(app)
 
 @app.before_request
 def before_request():
-    # セッションに user が保存されている (= ログイン済み)
+    # セッションにpage情報がない場合、「一覧に戻る」ボタンでprojectに戻る
+    if session.get('user') is None:
+        session['pre_page'] = 'project.index'
+    # セッションにuserが保存されている (= ログイン済み)
     if session.get('user') is not None:
         return
     # ログインページへの移動はそのまま
