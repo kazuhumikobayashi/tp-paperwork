@@ -32,7 +32,7 @@ my_filter(app)
 @app.before_request
 def before_request():
     # セッションにpage情報がない場合、「一覧に戻る」ボタンでprojectに戻る
-    if session.get('user') is None:
+    if session.get('pre_page') is None:
         session['pre_page'] = 'project.index'
     # セッションにuserが保存されている (= ログイン済み)
     if session.get('user') is not None:
