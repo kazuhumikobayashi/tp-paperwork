@@ -7,6 +7,7 @@ from application import db
 from application.domain.model.company import Company
 from application.domain.model.company_client_flag import CompanyClientFlag
 from application.domain.model.engineer import Engineer
+from application.domain.model.engineer_history import EngineerHistory
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
@@ -880,6 +881,21 @@ class ProjectContractTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
+
+        history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(2016, 12, 31),
+            payment_per_month=600000,
+            payment_rule=Rule.fixed,
+            payment_site=engineer.company.payment_site,
+            payment_tax=engineer.company.payment_tax,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(history)
         db.session.commit()
 
         result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
@@ -2049,8 +2065,8 @@ class ProjectContractTests(BaseTestCase):
 
         # 連番が一つ先の注文書番号を登録しておく。
         bp_order_no = 'C-' + str(order_sequence.fiscal_year)\
-                          + '-'\
-                          + '{0:03d}'.format(order_sequence.sequence + 1)
+                           + '-'\
+                           + '{0:03d}'.format(order_sequence.sequence + 1)
 
         # ログイン
         self.app.post('/login', data={
