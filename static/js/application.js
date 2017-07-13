@@ -229,6 +229,22 @@ var MessageBox = (function () {
     wrapper.hide(4).delay(500).slideDown();
   };
 
+  var error_icon = $("<i />", {
+    "class": "icon fa fa-warning"
+  });
+  that.show_error = function(text) {
+    clearTimeout(hideHandler);
+
+    link.html(error_icon.html(" " + text));
+
+    wrapper.append(close);
+    wrapper.append(link);
+
+    $(".content-wrapper").prepend(wrapper);
+
+    wrapper.hide(4).delay(500).slideDown();
+  };
+
   return that;
 }());
 

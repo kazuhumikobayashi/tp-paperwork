@@ -13,6 +13,7 @@ from application.controllers.form.project_billing_form import ProjectBillingForm
 from application.controllers.form.project_month_form import ProjectMonthForm
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.input_flag import InputFlag
+from application.domain.model.immutables.message import Message
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_detail import ProjectDetail
 from application.service.project_billing_service import ProjectBillingService
@@ -54,7 +55,7 @@ def month(project_month_id=None):
         project_month.remarks = form.remarks.data
 
         project_month_service.save(project_month)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.month', project_month_id=project_month.id))
 
     current_app.logger.debug(form.errors)
@@ -84,7 +85,7 @@ def detail(billing_id=None):
         billing.remarks = form.remarks.data
 
         project_billing_service.save(billing)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', billing_id=billing.id))
 
     current_app.logger.debug(form.errors)
@@ -128,10 +129,11 @@ def create(project_month_id):
         billing.project_detail = project_detail
 
         project_billing_service.save(billing)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', billing_id=billing.id))
-
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('project/billing/detail.html',
                            form=form,
                            project_month=project_month)
@@ -144,7 +146,7 @@ def delete(billing_id):
         project_month = project_month_service.find_project_month_at_a_month(billing.project_detail.project.id,
                                                                             billing.billing_month)
         project_billing_service.destroy(billing)
-        flash('削除しました。')
+        flash(Message.deleted.value)
         return redirect('/project/billing/month/' + str(project_month.id))
     else:
         return redirect('/project/')

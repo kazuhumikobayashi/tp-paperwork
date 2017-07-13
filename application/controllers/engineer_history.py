@@ -9,6 +9,7 @@ from flask import url_for
 
 from application.controllers.form.engineer_history_form import EngineerHistoryForm
 from application.domain.model.immutables.fraction import Fraction
+from application.domain.model.immutables.message import Message
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.site import Site
@@ -71,9 +72,11 @@ def history(engineer_history_id=None):
         engineer_history.remarks = form.remarks.data
 
         engineer_history_service.save(engineer_history)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.history', engineer_history_id=engineer_history.id))
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('master/engineer/history.html',
                            form=form,
                            engineer_id=engineer_history.engineer.id,
@@ -91,5 +94,5 @@ def delete(engineer_history_id):
     engineer_id = engineer_history.engineer_id
     if engineer_history.id is not None:
         engineer_history_service.destroy(engineer_history)
-        flash('削除しました。')
+        flash(Message.deleted.value)
     return redirect('/engineer/detail/' + str(engineer_id))

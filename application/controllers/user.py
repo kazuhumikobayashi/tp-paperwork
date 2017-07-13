@@ -9,6 +9,7 @@ from flask import url_for
 
 from application.controllers.form.user_form import UserForm
 from application.controllers.form.user_search_form import UserSearchForm
+from application.domain.model.immutables.message import Message
 from application.service.search_session_service import SearchSessionService
 from application.service.user_service import UserService
 
@@ -41,17 +42,17 @@ def detail(user_id=None):
     if user.id:
         form.shain_number.render_kw = {"disabled": "disabled"}
         form.shain_number.data = user.shain_number
-    else:
-        form.shain_number.render_kw = {"required": "required"}
 
     if form.validate_on_submit():
         user.shain_number = form.shain_number.data
         user.user_name = form.user_name.data
 
         service.save(user)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', user_id=user.id))
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('master/user/detail.html', form=form)
 
 
@@ -65,5 +66,5 @@ def delete(user_id):
     user = service.find_by_id(user_id)
     if user.id is not None:
         service.destroy(user)
-        flash('削除しました。')
+        flash(Message.deleted.value)
     return redirect('/user')

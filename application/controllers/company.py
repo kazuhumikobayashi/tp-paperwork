@@ -12,6 +12,7 @@ from application.controllers.form.company_search_form import CompanySearchForm
 from application.domain.model.company_client_flag import CompanyClientFlag
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.holiday_flag import HolidayFlag
+from application.domain.model.immutables.message import Message
 from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.tax import Tax
 from application.service.bank_service import BankService
@@ -78,9 +79,11 @@ def detail(company_id=None):
         company.company_client_flags = client_flags
 
         service.save(company)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', company_id=company.id))
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('master/company/detail.html', form=form)
 
 
@@ -94,5 +97,5 @@ def delete(company_id):
     company = service.find_by_id(company_id)
     if company.id is not None:
         service.destroy(company)
-        flash('削除しました。')
+        flash(Message.deleted.value)
     return redirect('/company')

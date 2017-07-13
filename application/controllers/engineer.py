@@ -13,6 +13,7 @@ from application.domain.model.engineer_business_category import EngineerBusiness
 from application.domain.model.engineer_skill import EngineerSkill
 from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.gender import Gender
+from application.domain.model.immutables.message import Message
 from application.service.business_category_service import BusinessCategoryService
 from application.service.company_service import CompanyService
 from application.service.engineer_history_service import EngineerHistoryService
@@ -91,7 +92,7 @@ def detail(engineer_id=None):
         engineer.engineer_business_categories = business_categories
 
         service.save(engineer)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', engineer_id=engineer.id))
 
     engineer_histories = engineer_history_service.find_by_engineer_id(
@@ -100,6 +101,8 @@ def detail(engineer_id=None):
     latest_engineer_history = engineer_history_service.get_latest_history(
         engineer.id)
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('master/engineer/detail.html',
                            form=form,
                            engineer_histories=engineer_histories,
@@ -116,5 +119,5 @@ def delete(engineer_id):
     engineer = service.find_by_id(engineer_id)
     if engineer.id is not None:
         service.destroy(engineer)
-        flash('削除しました。')
+        flash(Message.deleted.value)
     return redirect('/engineer')

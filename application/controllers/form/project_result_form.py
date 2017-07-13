@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField, TextAreaField, StringField, DateField, validators, HiddenField
 
 from application.controllers.form.fields import IntegerField, DecimalField, RadioField
-from application.controllers.form.validators import Length
+from application.controllers.form.validators import Length, InputRequired
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
@@ -11,7 +11,7 @@ from application.domain.model.immutables.rule import Rule
 class ProjectResultForm(FlaskForm):
     result_month = DateField('実績年月', [validators.optional()], format='%Y/%m/%d')
     engineer_name = StringField('技術者名称', render_kw={"disabled": "disabled"})
-    work_time = DecimalField('実稼働時間')
+    work_time = DecimalField('実稼働時間（必須）', [InputRequired()])
     billing_subtraction_hours = IntegerField('請求差分時間（基準時間と実稼働時間の差分）',
                                              render_kw={"disabled": "disabled"})
     billing_subtraction_money = IntegerField('請求差分金額（差分時間に時間単価を掛けた金額）',

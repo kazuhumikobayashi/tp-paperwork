@@ -1,5 +1,4 @@
 from flask import Blueprint
-from flask import current_app
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -33,4 +32,3 @@ def logout():
     session.pop('user', None)
     # ログインページにリダイレクトする
     return redirect(url_for('login.login'))
-

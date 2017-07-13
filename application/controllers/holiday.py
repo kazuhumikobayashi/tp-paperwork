@@ -12,6 +12,7 @@ from httplib2 import ServerNotFoundError
 
 from application.controllers.form.holiday_form import HolidayForm
 from application.controllers.form.holiday_search_form import HolidaySearchForm
+from application.domain.model.immutables.message import Message
 from application.service.calendar_service import CalendarService
 from application.service.holiday_service import HolidayService
 from application.service.search_session_service import SearchSessionService
@@ -50,9 +51,11 @@ def detail(holiday_id=None):
         holiday.holiday_name = form.holiday_name.data
 
         service.save(holiday)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', holiday_id=holiday.id))
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('master/holiday/detail.html', form=form)
 
 
@@ -66,7 +69,7 @@ def delete(holiday_id):
     holiday = service.find_by_id(holiday_id)
     if holiday.id is not None:
         service.destroy(holiday)
-        flash('削除しました。')
+        flash(Message.deleted.value)
     return redirect('/holiday')
 
 

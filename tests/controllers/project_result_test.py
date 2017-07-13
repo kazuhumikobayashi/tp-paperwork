@@ -338,3 +338,20 @@ class ProjectResultTests(BaseTestCase):
         # 請求のレコード数が増えていないことを確認。
         after = len(self.project_billing_repository.find_all())
         self.assertEqual(before, after)
+
+    # validationチェックに引っかかって実績を保存できない。
+    def test_save_result_validation_error(self):
+        shain_number = 'test1'
+        self.app.post('/login', data={
+            'shain_number': shain_number,
+            'password': 'test'
+        })
+        project_result = self.project_result_repository.find_all()[0]
+
+        project_result_id = project_result.id
+
+        result = self.app.post('/project/result/detail/' + str(project_result_id), data={
+            'work_time': ''
+        })
+        # 保存できないことを確認
+        self.assertEqual(result.status_code, 200)

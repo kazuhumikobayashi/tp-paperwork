@@ -9,6 +9,7 @@ from flask import url_for
 
 from application.controllers.form.department_form import DepartmentForm
 from application.controllers.form.department_search_form import DepartmentSearchForm
+from application.domain.model.immutables.message import Message
 from application.service.department_service import DepartmentService
 from application.service.search_session_service import SearchSessionService
 
@@ -43,9 +44,11 @@ def detail(department_id=None):
         department.department_name = form.department_name.data
 
         service.save(department)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', department_id=department.id))
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('master/department/detail.html', form=form)
 
 
@@ -59,5 +62,5 @@ def delete(department_id):
     department = service.find_by_id(department_id)
     if department.id is not None:
         service.destroy(department)
-        flash('削除しました。')
+        flash(Message.deleted.value)
     return redirect('/department')

@@ -1,8 +1,12 @@
 {% if get_flashed_messages() %}
 <script>
-  {% for message in get_flashed_messages() %}
+  {% for category, message in get_flashed_messages(with_categories=true) %}
     $(function () {
+        {% if category != 'error' %}
         MessageBox.show('{{ message }}');
+        {% else %}
+        MessageBox.show_error('{{ message }}');
+        {% endif %}
     });
   {% endfor %}
 </script>

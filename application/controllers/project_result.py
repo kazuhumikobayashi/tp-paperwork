@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, current_app
 
 from application.controllers.form.project_result_form import ProjectResultForm, ProjectDetailInResultForm, EngineerHistoryInResultForm
+from application.domain.model.immutables.message import Message
 from application.service.engineer_history_service import EngineerHistoryService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_result_service import ProjectResultService
@@ -53,10 +54,12 @@ def detail(result_id=None):
         result.payment_expected_date = form.payment_expected_date.data
 
         project_result_service.save(result)
-        flash('保存しました。')
+        flash(Message.saved.value)
         query_strings = '' if pre_page == 'result' else '?pre_page=' + pre_page
         return redirect(url_for('.detail', result_id=result.id) + query_strings)
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('project/result/detail.html',
                            form=form,
                            project_detail_form=project_detail_form,
