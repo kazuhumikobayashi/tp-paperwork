@@ -52,7 +52,8 @@ class EngineerTests(BaseTestCase):
             'password': 'test'
         })
 
-        result = self.app.get('/engineer/?engineer_name=test&company_id=2&contract_engineer_is_checked=1&business_category_id=2&skill_id=2')
+        result = self.app.get('/engineer/?engineer_name=test&company_id=2&contract_engineer_is_checked=1'
+                              '&business_category_id=2&skill_id=2')
         self.assertEqual(result.status_code, 200)
 
     # 技術者登録画面に遷移する。
@@ -224,3 +225,19 @@ class EngineerTests(BaseTestCase):
         sut = self.engineer_repository.find_by_id(engineer_id)
         # ブランクに更新されていることを確認
         self.assertIsNone(sut.birthday)
+
+    # validationチェックに引っかかって技術者を保存できない。
+    def test_save_engineer_validation_error(self):
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+        engineer = self.engineer_repository.find_all()[0]
+
+        engineer_id = engineer.id
+
+        result = self.app.post('/engineer/detail/' + str(engineer_id), data={
+            'engineer_name': ''
+        })
+        # 保存できないことを確認
+        self.assertEqual(result.status_code, 200)

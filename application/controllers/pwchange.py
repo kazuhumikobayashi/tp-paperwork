@@ -1,5 +1,4 @@
 from flask import Blueprint
-from flask import current_app
 from flask import flash
 from flask import render_template
 from flask import request
@@ -7,6 +6,7 @@ from flask import session
 
 from application import bcrypt
 from application.controllers.form.pwchange_form import PwChangeForm
+from application.domain.model.immutables.message import Message
 from application.service.user_service import UserService
 
 bp = Blueprint('pwchange', __name__)
@@ -23,6 +23,6 @@ def pwchange():
         if user is not None:
             user.password = bcrypt.generate_password_hash(form.new_password.data)
             service.save(user)
-        flash('保存しました。')
+        flash(Message.saved.value)
     # パスワード変更ページを表示する
     return render_template('pwchange/pwchange.html', form=form)

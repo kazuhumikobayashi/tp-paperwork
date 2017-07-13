@@ -430,3 +430,23 @@ class ProjectBillingTests(BaseTestCase):
         billing = self.project_billing_repository.find_by_id(billing_id)
         actual = billing.billing_content
         self.assertEqual(actual, expected)
+
+    # validationチェックに引っかかって請求明細を保存できない。
+    def test_create_billing_validation_error(self):
+        shain_number = 'test1'
+        self.app.post('/login', data={
+            'shain_number': shain_number,
+            'password': 'test'
+        })
+        billing = self.project_billing_repository.find_all()[0]
+        project_month = self.project_month_repository.find_project_month_at_a_month(billing.project_detail.project.id,
+                                                                                    billing.billing_month)
+
+        result = self.app.post('/project/billing/create/' + str(project_month.id), data={
+            'billing_content': '',
+            'billing_amount': '',
+            'billing_confirmation_money': '',
+            'billing_transportation': ''
+        })
+        # 保存できないことを確認
+        self.assertEqual(result.status_code, 200)

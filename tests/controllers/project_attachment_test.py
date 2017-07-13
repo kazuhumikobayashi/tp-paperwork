@@ -187,6 +187,21 @@ class ProjectAttachmentTests(BaseTestCase):
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
 
+    # validationチェックに引っかかって添付文書を保存できない。
+    def test_detail_project_attachment_validation_error(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/project/attachment/detail/1', data={
+            'type': '',
+            'remarks': ''
+        })
+        # 保存できないことを確認
+        self.assertEqual(result.status_code, 200)
+
     def create_attachment(self):
         attachment = Attachment(
             filename='delete.pdf',

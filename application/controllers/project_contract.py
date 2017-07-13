@@ -14,6 +14,7 @@ from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
+from application.domain.model.immutables.message import Message
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.status import Status
@@ -88,7 +89,7 @@ def index(project_id=None):
         for project_month in reversed(project.project_months):
             project_month_service.save(project_month)
 
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.index', project_id=project.id))
     current_app.logger.debug(form.errors)
 
@@ -157,10 +158,11 @@ def detail(project_detail_id=None):
         project_detail.client_order_no_for_bp = form.client_order_no_for_bp.data
 
         project_detail_service.save(project_detail)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', project_detail_id=project_detail.id))
-
     current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('project/contract/detail.html', form=form, project_detail=project_detail)
 
 
@@ -175,7 +177,7 @@ def delete(project_detail_id):
     if project_detail.id is not None:
         project_id = project_detail.project_id
         project_detail_service.destroy(project_detail)
-        flash('削除しました。')
+        flash(Message.deleted.value)
         return redirect(url_for('.index', project_id=project_id))
     else:
         return redirect('/project')

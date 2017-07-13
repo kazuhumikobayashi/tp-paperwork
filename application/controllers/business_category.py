@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, current_app
 from flask import abort
 from flask import flash
 from flask import redirect
@@ -8,6 +8,7 @@ from flask import url_for
 
 from application.controllers.form.business_category_form import BusinessCategoryForm
 from application.controllers.form.business_category_search_form import BusinessCategorySearchForm
+from application.domain.model.immutables.message import Message
 from application.service.business_category_service import BusinessCategoryService
 from application.service.search_session_service import SearchSessionService
 
@@ -41,8 +42,11 @@ def detail(business_category_id=None):
         business_category.business_category_name = form.business_category_name.data
 
         service.save(business_category)
-        flash('保存しました。')
+        flash(Message.saved.value)
         return redirect(url_for('.detail', business_category_id=business_category.id))
+    current_app.logger.debug(form.errors)
+    if form.errors:
+        flash(Message.saving_failed.value, 'error')
     return render_template('master/business_category/detail.html', form=form)
 
 
@@ -56,5 +60,5 @@ def delete(business_category_id):
     business_category = service.find_by_id(business_category_id)
     if business_category.id is not None:
         service.destroy(business_category)
-        flash('削除しました。')
+        flash(Message.deleted.value)
     return redirect('/business_category')
