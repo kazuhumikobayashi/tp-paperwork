@@ -128,7 +128,8 @@
                               <td>{{ project_detail.remarks|filter_suppress_none }}</td>
                               <td>
                                 {% if project_detail.is_engineer() and project_detail.engineer.is_bp() %}
-                                  <a class="btn btn-sm btn-success">
+                                  <a href="{{ url_for('.bp_order_report_download', project_detail_id=project_detail.id) }}"
+                                      class="btn btn-sm btn-success">
                                     <i class="fa fa-file-text-o"></i> 注文書・請書作成
                                   </a>
                                 {% endif %}
