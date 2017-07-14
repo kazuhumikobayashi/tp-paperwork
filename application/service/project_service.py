@@ -25,6 +25,7 @@ class ProjectService(object):
         project_details_clone = [detail.clone() for detail in project.project_details]
         project_clone.project_details = project_details_clone
         project_clone.status = Status.start
+        project_clone.client_order_no = None
 
         return project_clone
 
