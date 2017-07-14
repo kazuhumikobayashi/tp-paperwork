@@ -37,6 +37,7 @@ def detail(result_id=None):
 
     form = ProjectResultForm(request.form, result)
     project_detail_form = ProjectDetailInResultForm(obj=result.project_detail)
+    project_detail_form.project_id.data = result.project_detail.project_id
     engineer_history_form = EngineerHistoryInResultForm(obj=engineer_history)
 
     form.engineer_name.data = result.project_detail.engineer.engineer_name
