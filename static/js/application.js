@@ -31,6 +31,7 @@ $(function () {
       "lengthChange": false,
       "searching": false,
       "ordering": true,
+      "order": [],
       "info": true,
       "autoWidth": false,
       "drawCallback": function () {
