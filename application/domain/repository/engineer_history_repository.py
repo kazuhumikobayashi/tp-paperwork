@@ -20,13 +20,11 @@ class EngineerHistoryRepository(BaseRepository):
             latest_engineer_history = self.create()
         return latest_engineer_history
 
-    def get_history_at_date(self, engineer_id, date):
+    def get_history_by_date(self, engineer_id, date):
         fil = self.model.query
         engineer_history_at_date = fil.filter(self.model.engineer_id == engineer_id,
                                               self.model.payment_start_day <= date,
                                               date <= self.model.payment_end_day).first()
-        if engineer_history_at_date is None:
-            engineer_history_at_date = self.create()
         return engineer_history_at_date
 
     def get_history_at_result_month(self, engineer_id, month):

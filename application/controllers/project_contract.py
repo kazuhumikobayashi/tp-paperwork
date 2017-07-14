@@ -26,6 +26,7 @@ from application.service.project_detail_service import ProjectDetailService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
 from application.service.report.estimated_report import EstimatedReport
+from application.service.report.bp_order_report import BpOrderReport
 
 bp = Blueprint('project_contract', __name__, url_prefix='/project/contract')
 project_service = ProjectService()
@@ -118,22 +119,23 @@ def detail(project_detail_id=None):
 
     if form.detail_type.data == str(DetailType.engineer) and project_detail.engineer is not None\
             and form.billing_start_day.data is not None:
-        engineer_history = engineer_history_service.get_history_at_start_day(project_detail.engineer.id,
+        engineer_history = engineer_history_service.get_history_by_start_day(project_detail.engineer.id,
                                                                              form.billing_start_day.data)
 
         form.company.data = project_detail.engineer.company.company_name
-        form.payment_start_day.data = engineer_history.payment_start_day
-        form.payment_end_day.data = engineer_history.payment_end_day
-        form.payment_per_month.data = engineer_history.payment_per_month
-        form.payment_rule.data = str(engineer_history.payment_rule)
-        form.payment_bottom_base_hour.data = engineer_history.payment_bottom_base_hour
-        form.payment_top_base_hour.data = engineer_history.payment_top_base_hour
-        form.payment_free_base_hour.data = engineer_history.payment_free_base_hour
-        form.payment_per_hour.data = engineer_history.payment_per_hour
-        form.payment_per_bottom_hour.data = engineer_history.payment_per_bottom_hour
-        form.payment_per_top_hour.data = engineer_history.payment_per_top_hour
-        form.payment_fraction.data = engineer_history.payment_fraction
-        form.payment_fraction_rule.data = str(engineer_history.payment_fraction_rule)
+        if engineer_history:
+            form.payment_start_day.data = engineer_history.payment_start_day
+            form.payment_end_day.data = engineer_history.payment_end_day
+            form.payment_per_month.data = engineer_history.payment_per_month
+            form.payment_rule.data = str(engineer_history.payment_rule)
+            form.payment_bottom_base_hour.data = engineer_history.payment_bottom_base_hour
+            form.payment_top_base_hour.data = engineer_history.payment_top_base_hour
+            form.payment_free_base_hour.data = engineer_history.payment_free_base_hour
+            form.payment_per_hour.data = engineer_history.payment_per_hour
+            form.payment_per_bottom_hour.data = engineer_history.payment_per_bottom_hour
+            form.payment_per_top_hour.data = engineer_history.payment_per_top_hour
+            form.payment_fraction.data = engineer_history.payment_fraction
+            form.payment_fraction_rule.data = str(engineer_history.payment_fraction_rule)
 
     if form.validate_on_submit():
         project_detail.project_id = project_detail.project.id
@@ -188,3 +190,10 @@ def estimated_report_download(project_id):
     project = project_service.find_by_id(project_id)
     estimated_report = EstimatedReport(project)
     return estimated_report.download()
+
+
+@bp.route('/bp_order_report_download/<project_detail_id>', methods=['GET'])
+def bp_order_report_download(project_detail_id):
+    project_detail = project_detail_service.find_by_id(project_detail_id)
+    bp_order_report = BpOrderReport(project_detail)
+    return bp_order_report.download()

@@ -2256,7 +2256,7 @@ class ProjectContractTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/' + str(project_id) in result.headers['Location'])
 
-    def test_download(self):
+    def test_estimated_report_download(self):
         # ログイン
         self.app.post('/login', data={
             'shain_number': 'test1',
@@ -2270,7 +2270,7 @@ class ProjectContractTests(BaseTestCase):
         self.assertEqual(result.status_code, 200)
 
     # 登録した直後にダウンロードできる
-    def test_download_first_register(self):
+    def test_estimated_report_download_first_register(self):
         # ログイン
         self.app.post('/login', data={
             'shain_number': 'test1',
@@ -2287,6 +2287,73 @@ class ProjectContractTests(BaseTestCase):
 
         project = self.project_repository.find_by_id(project_id)
 
-        # 帳票作成実行
+        # 帳票DL実施
         result = self.app.get('/project/contract/estimated_report_download/' + str(project.id))
+        self.assertEqual(result.status_code, 200)
+
+    def test_bp_order_report_download(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project_detail = self.project_detail_repository.find_by_id(5)
+
+        # 帳票DL実施
+        result = self.app.get('/project/contract/bp_order_report_download/' + str(project_detail.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 登録した直後にダウンロードできる
+    def test_bp_order_report_download_first_register(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/project/contract/create?project_id=1', data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': 5,
+            'billing_money': '100000000',
+            'billing_start_day': date(2017, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_rule': '',
+        })
+        self.assertEqual(result.status_code, 302)
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+
+        # 帳票DL実施
+        result = self.app.get('/project/contract/bp_order_report_download/' + str(project_detail.id))
+        self.assertEqual(result.status_code, 200)
+
+    # engineer_historyがないBPの注文書を出力できる。
+    def test_bp_order_report_download_without_engineer_history(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/project/contract/create?project_id=1', data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': 6,
+            'billing_money': '100000000',
+            'billing_start_day': date(2017, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_rule': '',
+        })
+        self.assertEqual(result.status_code, 302)
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+
+        # 帳票DL実施
+        result = self.app.get('/project/contract/bp_order_report_download/' + str(project_detail.id))
         self.assertEqual(result.status_code, 200)
