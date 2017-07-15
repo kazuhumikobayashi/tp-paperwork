@@ -28,7 +28,7 @@
             </td>
             <td>{{ project_attachment.remarks|filter_suppress_none }}</td>
             <td width="20px" style="padding-right: 0;">
-              <a class="" style="font-size: xx-small;" href="{{ url_for('project_attachment.delete', project_attachment_id=project_attachment.id) }}">
+              <a class="btn-delete" style="font-size: xx-small;" href="{{ url_for('project_attachment.delete', project_attachment_id=project_attachment.id) }}">
                 <i class="fa fa-trash"></i>
               </a>
             </td>

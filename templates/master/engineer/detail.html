@@ -84,7 +84,7 @@
 	          <td class="text-right">{{ engineer_history.payment_per_month|number_with_commas|with_yen  }}</td>
 	          <td>
 	            {% if engineer_history == latest_engineer_history %}
-	              <a class="btn btn-sm btn-danger" href="{{ url_for('engineer_history.delete', engineer_id=form.id.data, engineer_history_id=engineer_history.id) }}">
+	              <a class="btn btn-sm btn-danger btn-delete" href="{{ url_for('engineer_history.delete', engineer_id=form.id.data, engineer_history_id=engineer_history.id) }}">
 	                <i class="fa fa-trash"></i> 削除
 	              </a>
 	            {% endif %}
