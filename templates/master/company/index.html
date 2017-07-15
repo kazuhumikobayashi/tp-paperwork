@@ -96,7 +96,7 @@
               <td>{{ company.payment_site.name|filter_suppress_none }}</td>
               <td>{{ company.bank.bank_name|filter_suppress_none }}</td>
               <td>
-                <a class="btn btn-sm btn-danger" href="{{ url_for('.delete', company_id=company.id) }}">
+                <a class="btn btn-sm btn-danger btn-delete" href="{{ url_for('.delete', company_id=company.id) }}">
                   <i class="fa fa-trash"></i> 削除
                 </a>
               </td>

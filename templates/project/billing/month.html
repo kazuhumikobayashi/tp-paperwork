@@ -64,7 +64,7 @@
                     <td class="text-right">{{ billing.billing_transportation|number_with_commas|with_yen }}</td>
                     <td>{{ billing.remarks|filter_suppress_none }}</td>
                     <td>
-                      <a class="btn btn-sm btn-danger"
+                      <a class="btn btn-sm btn-danger btn-delete"
                           href="{{ url_for('project_billing.delete', billing_id=billing.id) }}">
                         <i class="fa fa-trash"></i> 削除
                       </a>

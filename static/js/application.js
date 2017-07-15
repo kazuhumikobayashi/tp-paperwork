@@ -508,3 +508,25 @@ $("form").submit(function() {
     $(":submit.save", self).prop("disabled", false);
   }, 10000);
 });
+
+$(function() {
+  $('.btn-delete').click(function(event) {
+    event.preventDefault();
+    var $href = $(this).attr('href');
+    BootstrapDialog.confirm({
+      title: '削除の確認',
+      message: '削除してよろしいですか？',
+      type: BootstrapDialog.TYPE_DANGER,
+      closable: true,
+      draggable: true,
+      btnCancelLabel: 'キャンセル',
+      btnOKLabel: '削除する',
+      btnOKClass: 'btn-danger',
+      callback: function(result) {
+        if(result) {
+          window.location.href = $href;
+        }
+      }
+    });
+  });
+});
