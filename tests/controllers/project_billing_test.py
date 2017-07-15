@@ -4,10 +4,12 @@ from nose.tools import ok_
 
 from application import db
 from application.domain.model.immutables.input_flag import InputFlag
+from application.domain.model.immutables.tax import Tax
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_month import ProjectMonth
 from application.domain.repository.billing_sequence_repository import BillingSequenceRepository
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
+from application.domain.repository.project_detail_repository import ProjectDetailRepository
 from application.domain.repository.project_month_repository import ProjectMonthRepository
 from tests import BaseTestCase
 
@@ -23,6 +25,7 @@ class ProjectBillingTests(BaseTestCase):
         self.project_billing_repository = ProjectBillingRepository()
         self.project_month_repository = ProjectMonthRepository()
         self.billing_sequence_repository = BillingSequenceRepository()
+        self.project_detail_repository = ProjectDetailRepository()
 
     def tearDown(self):
         super(ProjectBillingTests, self).tearDown()
@@ -449,4 +452,100 @@ class ProjectBillingTests(BaseTestCase):
             'billing_transportation': ''
         })
         # 保存できないことを確認
+        self.assertEqual(result.status_code, 200)
+
+    # 請求書をダウンロード
+    def test_billing_report_download(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project_month = self.project_month_repository.find_all()[0]
+
+        # 帳票作成実行
+        result = self.app.get('/project/billing/billing_report_download/' + str(project_month.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 請求明細が大量に存在する請求書をダウンロード
+    def test_billing_report_download_when_project_detail_over_15(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # set_up
+        project_month = self.project_month_repository.find_by_id(4)
+        project_month.deposit_date = None
+        project_month.project.client_order_no = '11111-0170'
+        project_month.project.client_company.billing_tax = Tax.eight
+        project_detail = self.project_detail_repository.find_by_id(1)
+
+        for i in range(20):
+            project_billing = ProjectBilling(
+                project_detail_id=project_detail.id,
+                billing_month=date(2017, 4, 1).strftime('%Y/%m/%d'),
+                billing_amount='1人月',
+                billing_content='削除用請求',
+                billing_confirmation_money=1000,
+                billing_transportation=100,
+                remarks='テスト',
+                created_at=datetime.today(),
+                created_user='test',
+                updated_at=datetime.today(),
+                updated_user='test')
+            project_detail.project_billings.append(project_billing)
+
+        # 帳票作成実行
+        result = self.app.get('/project/billing/billing_report_download/' + str(project_month.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 納品書をダウンロードする
+    def test_delivery_report_download(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project_month = self.project_month_repository.find_all()[0]
+
+        # 帳票作成実行
+        result = self.app.get('/project/billing/delivery_report_download/' + str(project_month.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 請求明細が大量に存在する納品書をダウンロード
+    def test_delivery_report_download_when_project_detail_over_15(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # set_up
+        project_month = self.project_month_repository.find_by_id(4)
+        project_month.deposit_date = None
+        project_month.project.client_order_no = '11111-0170'
+        project_month.project.client_company.billing_tax = Tax.eight
+        project_detail = self.project_detail_repository.find_by_id(1)
+
+        for i in range(20):
+            project_billing = ProjectBilling(
+                project_detail_id=project_detail.id,
+                billing_month=date(2017, 4, 1).strftime('%Y/%m/%d'),
+                billing_amount='1人月',
+                billing_content='削除用請求',
+                billing_confirmation_money=1000,
+                billing_transportation=100,
+                remarks='テスト',
+                created_at=datetime.today(),
+                created_user='test',
+                updated_at=datetime.today(),
+                updated_user='test')
+            project_detail.project_billings.append(project_billing)
+
+        # 帳票作成実行
+        result = self.app.get('/project/billing/billing_report_download/' + str(project_month.id))
         self.assertEqual(result.status_code, 200)

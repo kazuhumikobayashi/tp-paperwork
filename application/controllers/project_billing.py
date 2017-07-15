@@ -19,6 +19,8 @@ from application.domain.model.project_detail import ProjectDetail
 from application.service.project_billing_service import ProjectBillingService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
+from application.service.report.billing_report import BillingReport
+from application.service.report.delivery_report import DeliveryReport
 
 bp = Blueprint('project_billing', __name__, url_prefix='/project/billing')
 project_service = ProjectService()
@@ -165,3 +167,17 @@ def save_flag():
         return jsonify(result='success')
 
     return abort(404)
+
+
+@bp.route('/billing_report_download/<project_month_id>', methods=['GET'])
+def billing_report_download(project_month_id):
+    project_month = project_month_service.find_by_id(project_month_id)
+    billing_report = BillingReport(project_month)
+    return billing_report.billing_report_download()
+
+
+@bp.route('/delivery_report_download/<project_month_id>', methods=['GET'])
+def delivery_report_download(project_month_id):
+    project_month = project_month_service.find_by_id(project_month_id)
+    billing_report = DeliveryReport(project_month)
+    return billing_report.delivery_report_download()
