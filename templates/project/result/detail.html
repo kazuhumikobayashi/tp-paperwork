@@ -72,12 +72,14 @@
           </div>
         </div>
         <hr />
-        <div class="row">
-          {{ render_field(form.billing_subtraction_hours, "col-sm-6") }}
-          {{ render_field(form.billing_subtraction_money, "col-sm-6") }}
-        </div>
-        <div class="row">
-          {{ render_field(form.billing_estimated_money, "col-sm-6") }}
+        <div id="payment-variable-area" {% if project_detail_form.billing_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
+          <div class="row">
+            {{ render_field(form.billing_subtraction_hours, "col-sm-6") }}
+            {{ render_field(form.billing_subtraction_money, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(form.billing_estimated_money, "col-sm-6") }}
+          </div>
         </div>
         <div class="row">
           {{ render_field(form.billing_transportation, "col-sm-6", input_class="auto-calc") }}
@@ -117,12 +119,14 @@
           </div>
         </div>
         <hr />
-        <div class="row">
-          {{ render_field(form.payment_subtraction_hours, "col-sm-6") }}
-          {{ render_field(form.payment_subtraction_money, "col-sm-6") }}
-        </div>
-        <div class="row">
-          {{ render_field(form.payment_estimated_money, "col-sm-6") }}
+        <div id="payment-variable-area" {% if project_detail_form.billing_rule.data != '2' %}hidden{% endif %}{# '2'=VARIABLE #}>
+          <div class="row">
+            {{ render_field(form.payment_subtraction_hours, "col-sm-6") }}
+            {{ render_field(form.payment_subtraction_money, "col-sm-6") }}
+          </div>
+          <div class="row">
+            {{ render_field(form.payment_estimated_money, "col-sm-6") }}
+          </div>
         </div>
         <div class="row">
           {{ render_field(form.payment_transportation, "col-sm-6", input_class="auto-calc") }}
