@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, HiddenField, StringField, DateField, SelectField
+from wtforms import validators, StringField, DateField, SelectField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, DateField, RadioField, SelectMultipleFieldWithDisable
@@ -8,9 +8,11 @@ from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
+from application.domain.repository.project_detail_repository import ProjectDetailRepository
 from application.service.engineer_service import EngineerService
 
 service = EngineerService()
+project_detail_repository = ProjectDetailRepository()
 
 
 # 明細区分で作業者を選択した場合、入力必須にする。
@@ -32,7 +34,7 @@ def required_if_variable(form, field):
 
 
 class ProjectDetailForm(FlaskForm):
-    id = HiddenField('Id')
+    id = IntegerField('Id')
     detail_type = RadioField('明細区分（必須）',
                              [DataRequired()],
                              choices=DetailType.get_type_for_select(),
@@ -112,7 +114,7 @@ class ProjectDetailForm(FlaskForm):
                                         choices=Round.get_round_for_select(),
                                         filters=[lambda x: x or None],
                                         render_kw={"title": "支払端数ルール", "disabled": "disabled"})
-    bp_order_no = StringField('BP注文書No', [Length(max=64)], filters=[lambda x: x or None])
+    bp_order_no = StringField('BP注文書No（BPの場合、必須）', [Length(max=64)], filters=[lambda x: x or None])
     client_order_no_for_bp = StringField('顧客注文書No（BPごと）', [Length(max=64)], filters=[lambda x: x or None])
 
     def validate_billing_bottom_base_hour(self, field):
@@ -140,6 +142,10 @@ class ProjectDetailForm(FlaskForm):
             return
 
         engineer = service.find_by_id(self.engineer_id.data)
-        # BPの場合、新規登録時以外はBP向け注文書番号必須
+        # BPの場合、新規登録時以外はBP注文Noは必須
         if engineer.is_bp() and field.data is None:
-            raise ValidationError('BP向け注文書番号は入力必須です。')
+            raise ValidationError(field.label.text + 'は必須です。')
+
+        project_detail = project_detail_repository.find_by_bp_order_no(field.data)
+        if project_detail and project_detail.id != self.id.data:
+            raise ValidationError('このBP注文Noは既に登録されています。')
