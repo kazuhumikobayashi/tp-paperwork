@@ -2052,7 +2052,8 @@ class ProjectContractTests(BaseTestCase):
             'billing_per_bottom_hour': '1000',
             'billing_per_top_hour': '10000',
             'billing_fraction': Fraction.thousand.value,
-            'billing_fraction_rule': Round.down.value
+            'billing_fraction_rule': Round.down.value,
+            'bp_order_no': 'test_save_project_detail_october'
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
@@ -2138,9 +2139,10 @@ class ProjectContractTests(BaseTestCase):
         })
 
         project = self.project_repository.find_all()[7]
+        project_id = project.id
 
         # 明細（BP）を新規登録
-        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+        result = self.app.post('/project/contract/create?project_id=' + str(project_id), data={
             'detail_type': DetailType.engineer.value,
             'engineer_id': '2',
             'billing_money': '1000000',
@@ -2158,6 +2160,7 @@ class ProjectContractTests(BaseTestCase):
         project_detail_id = result.headers['Location'].split('/')[-1]
 
         project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+        bp_order_no = project_detail.bp_order_no
 
         # BP向け注文書番号に値が入っていることを確認する
         self.assertIsNotNone(project_detail.bp_order_no)
@@ -2198,6 +2201,44 @@ class ProjectContractTests(BaseTestCase):
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
+
+        # 明細（BP）を新規登録
+        result = self.app.post('/project/contract/create?project_id=' + str(project_id), data={
+            'detail_type': DetailType.engineer.value,
+            'engineer_id': '2',
+            'billing_money': '1000000',
+            'billing_start_day': '2016/12',
+            'billing_end_day': '2017/8',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
+            'billing_fraction': Fraction.thousand.value,
+            'billing_fraction_rule': Round.down.value,
+            'bp_order_no': ''
+        })
+        # 保存できることを確認
+        self.assertEqual(result.status_code, 302)
+        ok_('/project/contract/detail/' in result.headers['Location'])
+        project_detail_id = result.headers['Location'].split('/')[-1]
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+
+        # BP向け注文書番号に値が入っていることを確認する
+        self.assertIsNotNone(project_detail.bp_order_no)
+
+        # 同じBP注文Noで更新できないことを確認
+        result = self.app.post('/project/contract/detail/' + str(project_detail.id), data={
+            'id': project_detail.id,
+            'detail_type': project_detail.detail_type,
+            'engineer_id': project_detail.engineer_id,
+            'billing_money': project_detail.billing_money,
+            'billing_start_day': project_detail.billing_start_day.strftime('%Y/%m'),
+            'billing_end_day': project_detail.billing_end_day.strftime('%Y/%m'),
+            'billing_per_month': project_detail.billing_per_month,
+            'billing_rule': project_detail.billing_rule,
+            'billing_fraction': project_detail.billing_fraction,
+            'billing_fraction_rule': project_detail.billing_fraction_rule,
+            'bp_order_no': bp_order_no
+        })
+        self.assertEqual(result.status_code, 200)
 
     # 初回登録時にステータスを完了で更新できる
     def test_status_is_done_when_first_entry(self):
