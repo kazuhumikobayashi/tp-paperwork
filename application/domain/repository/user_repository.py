@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from dateutil.tz import tz
 from flask import current_app
 from flask import session
 
@@ -22,14 +23,16 @@ class UserRepository(BaseRepository):
         return pagination
 
     def find_by_shain_number(self, shain_number):
-        return User.query.filter(User.shain_number == shain_number).first()
+        return User.query.filter(self.model.shain_number == shain_number).first()
 
     def save(self, user):
+        jst = tz.gettz('Asia/Tokyo')
+        now = datetime.now(jst)
         if user.id is None:
-            user.created_at = datetime.today()
+            user.created_at = now
             user.created_user = session['user']['user_name']
             user.password = bcrypt.generate_password_hash(user.shain_number)
-        user.updated_at = datetime.today()
+        user.updated_at = now
         user.updated_user = session['user']['user_name']
 
         db.session.add(user)
