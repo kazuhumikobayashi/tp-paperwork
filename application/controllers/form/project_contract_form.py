@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import ValidationError
+from wtforms import ValidationError, DateTimeField
 from wtforms import validators, StringField, SelectField, TextAreaField
 
 from application.controllers.form.fields import IntegerField, DateField
@@ -67,6 +67,8 @@ class ProjectContractForm(FlaskForm):
     subcontractor = StringField('再委託先', [Length(max=64)], filters=[lambda x: x or None])
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     client_order_no = StringField('顧客注文書No', [Length(max=64)], filters=[lambda x: x or None])
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
 
     def validate_estimation_no(self, field):
         project = repository.find_by_estimation_no(estimation_no=field.data)

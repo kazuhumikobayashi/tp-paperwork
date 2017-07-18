@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, StringField
+from wtforms import TextAreaField, StringField, DateTimeField
 
 from application.controllers.form.fields import IntegerField
 from application.controllers.form.validators import Length, DataRequired, InputRequired
@@ -11,3 +11,5 @@ class ProjectBillingForm(FlaskForm):
     billing_confirmation_money = IntegerField('請求明細金額（必須）', [InputRequired()])
     billing_transportation = IntegerField('請求明細交通費等')
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')

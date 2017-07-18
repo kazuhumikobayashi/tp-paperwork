@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField
+from wtforms import StringField, DateTimeField
 from wtforms import ValidationError
 
 from application.controllers.form.fields import IntegerField
@@ -12,6 +12,8 @@ repository = BusinessCategoryRepository()
 class BusinessCategoryForm(FlaskForm):
     id = IntegerField('Id')
     business_category_name = StringField('業種（必須）', [DataRequired(), Length(max=32)])
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
 
     def validate_business_category_name(self, field):
         business_category = repository.find_by_name(field.data)

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, SelectMultipleField, validators, RadioField
+from wtforms import StringField, SelectField, TextAreaField, SelectMultipleField, validators, RadioField, DateTimeField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, DateField, RadioField
@@ -67,7 +67,9 @@ class CompanyForm(FlaskForm):
                                    choices=HolidayFlag.get_flag_for_radio())
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     print_name = TextAreaField('印刷用宛名', [Length(max=1024)], filters=[lambda x: x or None])
-    
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
+
     def validate_client_flag(self, field):
         companies = service.find_by_client_flag([ClientFlag.our_company.value])
         if str(ClientFlag.our_company) in field.data and len(companies) != 0 and companies[0].id != self.id.data:

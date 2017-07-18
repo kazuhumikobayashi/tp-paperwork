@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, DateField, SelectField
+from wtforms import validators, StringField, DateField, SelectField, DateTimeField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, DateField, RadioField, SelectMultipleFieldWithDisable
@@ -116,6 +116,8 @@ class ProjectDetailForm(FlaskForm):
                                         render_kw={"title": "支払端数ルール", "disabled": "disabled"})
     bp_order_no = StringField('BP注文書No（BPの場合、必須）', [Length(max=64)], filters=[lambda x: x or None])
     client_order_no_for_bp = StringField('顧客注文書No（BPごと）', [Length(max=64)], filters=[lambda x: x or None])
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
 
     def validate_billing_bottom_base_hour(self, field):
         # 請求ルールが変動の時、フリー時間が空ならエラー

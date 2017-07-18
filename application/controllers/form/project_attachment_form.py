@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from wtforms import StringField, SelectField
+from wtforms import StringField, SelectField, DateTimeField
 from wtforms import ValidationError
 
 from application.controllers.form.fields import IntegerField
@@ -20,6 +20,8 @@ class ProjectAttachmentForm(FlaskForm):
                        render_kw={"title": "添付種類（必須）"})
     remarks = StringField('備考', [Length(max=256)])
     filename = StringField('ファイル名', render_kw={"disabled": "disabled"})
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
 
 
 class FileForm(FlaskForm):

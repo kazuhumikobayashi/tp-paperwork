@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, validators
+from wtforms import StringField, SelectField, TextAreaField, validators, DateTimeField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField, RadioField
@@ -64,6 +64,8 @@ class EngineerHistoryForm(FlaskForm):
                                         render_kw={"title": "支払端数ルール"})
     payment_condition = TextAreaField('支払条件', [Length(max=1024)])
     remarks = TextAreaField('その他特記事項', [Length(max=1024)])
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
 
     def validate_payment_start_day(self, field):
         engineer_history = service.find_by_id(self.id.data)
