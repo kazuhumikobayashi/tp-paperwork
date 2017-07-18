@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from dateutil.tz import tz
 from flask import current_app
 from flask import session
 
@@ -36,15 +37,17 @@ class CompanyRepository(BaseRepository):
         return companies
 
     def save(self, company):
+        jst = tz.gettz('Asia/Tokyo')
+        now = datetime.now(jst)
         if company.id is None:
-            company.created_at = datetime.today()
+            company.created_at = now
             company.created_user = session['user']['user_name']
-        company.updated_at = datetime.today()
+        company.updated_at = now
         company.updated_user = session['user']['user_name']
         for company_client_flags in company.company_client_flags:
-            company_client_flags.created_at = datetime.today()
+            company_client_flags.created_at = now
             company_client_flags.created_user = session['user']['user_name']
-            company_client_flags.updated_at = datetime.today()
+            company_client_flags.updated_at = now
             company_client_flags.updated_user = session['user']['user_name']
 
         db.session.add(company)

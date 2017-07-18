@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from dateutil.tz import tz
 from flask import current_app
 from flask import session
 
@@ -40,20 +41,22 @@ class EngineerRepository(BaseRepository):
         return pagination
 
     def save(self, engineer):
+        jst = tz.gettz('Asia/Tokyo')
+        now = datetime.now(jst)
         if engineer.id is None:
-            engineer.created_at = datetime.today()
+            engineer.created_at = now
             engineer.created_user = session['user']['user_name']
-        engineer.updated_at = datetime.today()
+        engineer.updated_at = now
         engineer.updated_user = session['user']['user_name']
         for engineer_skills in engineer.engineer_skills:
-            engineer_skills.created_at = datetime.today()
+            engineer_skills.created_at = now
             engineer_skills.created_user = session['user']['user_name']
-            engineer_skills.updated_at = datetime.today()
+            engineer_skills.updated_at = now
             engineer_skills.updated_user = session['user']['user_name']
         for engineer_business_categories in engineer.engineer_business_categories:
-            engineer_business_categories.created_at = datetime.today()
+            engineer_business_categories.created_at = now
             engineer_business_categories.created_user = session['user']['user_name']
-            engineer_business_categories.updated_at = datetime.today()
+            engineer_business_categories.updated_at = now
             engineer_business_categories.updated_user = session['user']['user_name']
 
         db.session.add(engineer)
