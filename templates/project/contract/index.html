@@ -177,19 +177,23 @@
                     {{ render_field(form.subcontractor, "col-sm-6") }}
                   </div>
                   <div class="row">
-                    {{ render_field(form.remarks, "col-sm-12", rows="4") }}
+                    {{ render_field(form.remarks, "col-sm-12", rows="6") }}
                   </div>
                   <div class="part-title"> 注文書詳細</div>
                   <div class="row">
                     {{ render_field(form.client_order_no, "col-sm-6") }}
                   </div>
-                  <div class="footer text-right" style="margin-top: 10px;">
-                    <button type="submit" class="btn btn-primary save"><i class="fa fa-save"></i> 保存</button>
-                  </div>
                 </div>
                 <!-- /.box-body -->
               </div>
               <!-- /.box box-success -->
+              <div class="box-footer">
+                <div class="pull-left small" style="color: #777">
+                  <p style="margin: 0;">{{ form.updated_user.label.text }} : {{ form.updated_user.data|filter_suppress_none }}</p>
+                  <p style="margin: 0;">{{ form.updated_at.label.text }} : {{ form.updated_at.data|filter_suppress_none }}</p>
+                </div>
+                <button type="submit" class="btn btn-primary pull-right save"><i class="fa fa-save"></i> 保存</button>
+              </div>
             </form>
           </div><!-- /.tab-content -->
         </div>

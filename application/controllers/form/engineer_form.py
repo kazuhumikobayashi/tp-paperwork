@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, SelectField, SelectMultipleField
+from wtforms import validators, StringField, SelectField, SelectMultipleField, DateTimeField
 
 from application.controllers.form.fields import IntegerField, DateField, RadioField
 from application.controllers.form.validators import Length, DataRequired
@@ -30,3 +30,5 @@ class EngineerForm(FlaskForm):
                                            "data-size": "8",
                                            "data-live-search": "true",
                                            "data-actions-box": "true"})
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from dateutil.tz import tz
 from flask import current_app
 from flask import session
 
@@ -24,10 +25,12 @@ class BaseRepository(object):
         return ret
 
     def save(self, model):
+        jst = tz.gettz('Asia/Tokyo')
+        now = datetime.now(jst)
         if model.id is None:
-            model.created_at = datetime.today()
+            model.created_at = now
             model.created_user = session['user']['user_name']
-        model.updated_at = datetime.today()
+        model.updated_at = now
         model.updated_user = session['user']['user_name']
 
         db.session.add(model)

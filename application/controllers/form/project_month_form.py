@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, StringField, ValidationError
+from wtforms import TextAreaField, StringField, ValidationError, DateTimeField
 
 from application.controllers.form.fields import IntegerField, DateField
 from application.controllers.form.validators import Length
@@ -17,6 +17,8 @@ class ProjectMonthForm(FlaskForm):
     deposit_date = DateField('入金予定日', format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     project_month = DateField('プロジェクト年月', format='%Y/%m/%d')
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
 
     def validate_client_billing_no(self, field):
         project_month = project_month_repository.find_by_client_billing_no(client_billing_no=field.data)

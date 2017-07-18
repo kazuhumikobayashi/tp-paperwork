@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, TextAreaField, StringField, DateField, validators, HiddenField
+from wtforms import SelectField, TextAreaField, StringField, DateField, validators, HiddenField, DateTimeField
 
 from application.controllers.form.fields import IntegerField, DecimalField, RadioField
 from application.controllers.form.validators import Length, InputRequired
@@ -38,6 +38,8 @@ class ProjectResultForm(FlaskForm):
     payment_confirmation_money = IntegerField('支払確定金額_個別（予定金額と調整金額の合計）',
                                               render_kw={"readonly": "readonly"})
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
+    updated_user = StringField('更新者')
+    updated_at = DateTimeField('更新日')
 
 
 class ProjectDetailInResultForm(FlaskForm):
