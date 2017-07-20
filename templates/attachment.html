@@ -21,12 +21,13 @@
                   <i class="fa fa-edit"></i>
               </a>
             </td>
-            <td width="100px">
-                <a href="{{ url_for('attachment.download', attachment_id = project_attachment.attachment_id) }}">
+            <td>
+                <a href="{{ url_for('attachment.download', attachment_id = project_attachment.attachment_id) }}"
+                    data-toggle="tooltip"
+                    title="{{ project_attachment.remarks|filter_suppress_none }}">
                     {{ project_attachment.attachment.filename }}
                 </a>
             </td>
-            <td>{{ project_attachment.remarks|filter_suppress_none }}</td>
             <td width="20px" style="padding-right: 0;">
               <a class="btn-delete" style="font-size: xx-small;" href="{{ url_for('project_attachment.delete', project_attachment_id=project_attachment.id) }}">
                 <i class="fa fa-trash"></i>
