@@ -2398,3 +2398,59 @@ class ProjectContractTests(BaseTestCase):
         # 帳票DL実施
         result = self.app.get('/project/contract/bp_order_report_download/' + str(project_detail.id))
         self.assertEqual(result.status_code, 200)
+
+    # 顧客向け注文請書をダウンロードできる。※ClientOrderReportで使用しているif文が全てtrueの場合
+    def test_client_order_report_download_if_true_pattern(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_all()[0]
+        project.client_order_no = None
+        project.billing_timing = BillingTiming.billing_by_month
+        project.estimation_no = None
+
+        # 帳票作成実行
+        result = self.app.get('/project/contract/client_order_report_download/' + str(project.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 顧客向け注文請書をダウンロードできる。※ClientOrderReportで使用しているif文が全てfalseの場合
+    def test_client_order_report_download_if_false_pattern(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_all()[0]
+        project.client_order_no = "A0000001-000001"
+        project.billing_timing = BillingTiming.billing_at_last
+        project.estimation_no = "M17-17005"
+
+        # 帳票作成実行
+        result = self.app.get('/project/contract/client_order_report_download/' + str(project.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 登録した直後にダウンロードできる
+    def test_client_order_report_download_first_register(self):
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/project/create', data={
+            'project_name': 'テスト',
+            'start_date': date(2017, 4, 1).strftime('%Y/%m/%d'),
+            'end_date': date(2017, 10, 31).strftime('%Y/%m/%d'),
+        })
+        self.assertEqual(result.status_code, 302)
+        project_id = result.headers['Location'].split('/')[-1]
+
+        project = self.project_repository.find_by_id(project_id)
+
+        # 帳票DL実施
+        result = self.app.get('/project/contract/client_order_report_download/' + str(project.id))
+        self.assertEqual(result.status_code, 200)
