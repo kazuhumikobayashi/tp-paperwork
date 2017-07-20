@@ -27,7 +27,7 @@
   <div class="col-lg-9">
     <div class="box box-success">
       <div class="box-header with-border">
-        <h3 class="box-title">
+        <h3 class="box-title" style="font-size: x-large;">
           {% if form.project_name.data %}{{ form.project_name.data[:128] }}
           <small> 見積No : {{ form.estimation_no.data|filter_suppress_none }}</small>
           {% endif %}
