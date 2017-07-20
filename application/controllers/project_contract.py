@@ -25,6 +25,7 @@ from application.service.engineer_service import EngineerService
 from application.service.project_detail_service import ProjectDetailService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
+from application.service.report.client_order_report import ClientOrderReport
 from application.service.report.estimated_report import EstimatedReport
 from application.service.report.bp_order_report import BpOrderReport
 
@@ -197,3 +198,10 @@ def bp_order_report_download(project_detail_id):
     project_detail = project_detail_service.find_by_id(project_detail_id)
     bp_order_report = BpOrderReport(project_detail)
     return bp_order_report.download()
+
+
+@bp.route('/client_order_report_download/<project_id>', methods=['GET'])
+def client_order_report_download(project_id):
+    project = project_service.find_by_id(project_id)
+    client_order_report = ClientOrderReport(project)
+    return client_order_report.download()
