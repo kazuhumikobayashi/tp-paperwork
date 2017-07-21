@@ -23,9 +23,6 @@
       <h3 class="box-title"><i class="fa fa-search"></i>
           {{ form.project_month.data|datetime_format("%Y年%m月") }}請求
       </h3>
-      <div class="box-tools">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-      </div>
     </div>
     <form class="form-horizontal" method="post">
     {{ form.hidden_tag() }}
