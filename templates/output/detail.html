@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}帳票出力{% endblock %}
+{% block include_css %}
+  <!-- bootstrap select -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/css/bootstrap-select.min.css') }}">
+  <!-- bootstrap datepicker -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/css/bootstrap-datepicker3.css') }}">
+{% endblock %}
+{% block include_js %}
+  <!-- bootstrap select -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/bootstrap-select.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-select-1.12.2/js/i18n/defaults-ja_JP.js') }}"></script>
+  <!-- bootstrap datepicker -->
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap-datepicker-1.6.4/locales/bootstrap-datepicker.ja.min.js') }}"></script>
+{% endblock %}
+{% block main_content %}
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="box box-success">
+        <form method="post">
+          {{ form.hidden_tag() }}
+          <div class="box-header">
+            <h3 class="box-title">帳票出力</h3>
+          </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <div class="row">
+              {{ render_field(form.output_report, "col-xs-12", input_class="selectpicker") }}
+              {{ render_field(form.month, "col-xs-12", input_class="date-yyyymm") }}
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.box-body -->
+          <div class="box-footer clearfix">
+            <button type="submit" class="btn btn-sm btn-success save pull-right">
+              <i class="fa fa-key"></i> ダウンロード
+            </button>
+          </div>
+          <!-- /.box-footer -->
+        </form>
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+  <!-- /.row -->
+{% endblock %}
