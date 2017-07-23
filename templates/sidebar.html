@@ -9,29 +9,34 @@
         <li class="header"></li>
         <!-- Optionally, you can add icons to the links -->
         <li{% if request.path == '/' %} class="active"{% endif %}>
-            <a href="/">
-                <i class="fa fa-dashboard fa-fw"></i> <span>ダッシュボード</span>
-            </a>
+          <a href="/">
+            <i class="fa fa-dashboard fa-fw"></i> <span>ダッシュボード</span>
+          </a>
         </li>
         <li{% if request.path.count('/project/') %} class="active"{% endif %}>
-            <a href="{{ url_for('project.index') }}">
-                <i class="fa fa-home fa-fw"></i> <span>プロジェクト検索</span>
-            </a>
+          <a href="{{ url_for('project.index') }}">
+            <i class="fa fa-home fa-fw"></i> <span>プロジェクト検索</span>
+          </a>
         </li>
         <li{% if request.path.count('/search/result/') %} class="active"{% endif %}>
-        	<a href="{{ url_for('search_result.index') }}">
-        		<i class="fa fa-line-chart fa-fw"></i> <span>実績情報検索</span>
-        	</a>
+          <a href="{{ url_for('search_result.index') }}">
+            <i class="fa fa-line-chart fa-fw"></i> <span>実績情報検索</span>
+          </a>
         </li>
         <li{% if request.path.count('/search/billing/') %} class="active"{% endif %}>
-        	<a href="{{ url_for('search_billing.index') }}">
-        		<i class="fa fa-calculator fa-fw"></i> <span>請求情報検索</span>
-        	</a>
+          <a href="{{ url_for('search_billing.index') }}">
+            <i class="fa fa-calculator fa-fw"></i> <span>請求情報検索</span>
+          </a>
         </li>
         <li{% if request.path.count('/search/payment/') %} class="active"{% endif %}>
-        	<a href="{{ url_for('search_payment.index') }}">
-        		<i class="fa fa-sign-out fa-fw"></i> <span>支払情報検索</span>
-        	</a>
+          <a href="{{ url_for('search_payment.index') }}">
+            <i class="fa fa-sign-out fa-fw"></i> <span>支払情報検索</span>
+          </a>
+        </li>
+        <li{% if request.path.count('/output/') %} class="active"{% endif %}>
+          <a href="{{ url_for('output.detail') }}">
+            <i class="fa fa-file-text fa-fw"></i> <span>帳票出力</span>
+          </a>
         </li>
         <li class="treeview{% if request.path.count('/company/') or
                                  request.path.count('/engineer/') or
@@ -47,25 +52,25 @@
           </a>
           <ul class="treeview-menu">
             <li{% if request.path.count('/engineer/') %} class="active"{% endif %}>
-                <a href="{{ url_for('engineer.index') }}"><i class="fa fa-users fa-fw"></i> 技術者マスタ</a>
+              <a href="{{ url_for('engineer.index') }}"><i class="fa fa-users fa-fw"></i> 技術者マスタ</a>
             </li>
             <li{% if request.path.count('/company/') %} class="active"{% endif %}>
-                <a href="{{ url_for('company.index') }}"><i class="fa fa-building fa-fw"></i> 会社マスタ</a>
+              <a href="{{ url_for('company.index') }}"><i class="fa fa-building fa-fw"></i> 会社マスタ</a>
             </li>
             <li{% if request.path.count('/skill/') %} class="active"{% endif %}>
-                <a href="{{ url_for('skill.index') }}"><i class="fa fa-edit fa-fw"></i> スキルマスタ</a>
+              <a href="{{ url_for('skill.index') }}"><i class="fa fa-edit fa-fw"></i> スキルマスタ</a>
             </li>
             <li{% if request.path.count('/business_category/') %} class="active"{% endif %}>
-                <a href="{{ url_for('business_category.index') }}"><i class="fa fa-leaf fa-fw"></i> 業種マスタ</a>
+              <a href="{{ url_for('business_category.index') }}"><i class="fa fa-leaf fa-fw"></i> 業種マスタ</a>
             </li>
             <li{% if request.path.count('/department/') %} class="active"{% endif %}>
-                <a href="{{ url_for('department.index') }}"><i class="fa fa-briefcase fa-fw"></i> 部署マスタ</a>
+              <a href="{{ url_for('department.index') }}"><i class="fa fa-briefcase fa-fw"></i> 部署マスタ</a>
             </li>
             <li{% if request.path.count('/user/') %} class="active"{% endif %}>
-                <a href="{{ url_for('user.index') }}"><i class="fa fa-user-o fa-fw"></i> ユーザーマスタ</a>
+              <a href="{{ url_for('user.index') }}"><i class="fa fa-user-o fa-fw"></i> ユーザーマスタ</a>
             </li>
             <li{% if request.path.count('/holiday/') %} class="active"{% endif %}>
-                <a href="{{ url_for('holiday.index') }}"><i class="fa fa-calendar fa-fw"></i> 祝日マスタ</a>
+              <a href="{{ url_for('holiday.index') }}"><i class="fa fa-calendar fa-fw"></i> 祝日マスタ</a>
             </li>
           </ul>
         </li>
