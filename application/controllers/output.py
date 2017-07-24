@@ -13,4 +13,4 @@ def detail():
     form = OutputForm(request.form)
 
     current_app.logger.debug(form.errors)
-    return render_template('output/detail.html', form=form)
+    return render_template('output/download.html', form=form)
