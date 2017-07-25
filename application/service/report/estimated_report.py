@@ -64,9 +64,9 @@ class EstimatedReport(object):
         if self.project.contract_form:
             self.ws.get_named_range("contract_form")[0].value = self.project.contract_form.name
         # 表示形式
-        self.ws.get_named_range("printed_date")[0].number_format = u'yyyy年m月d日'
-        self.ws.get_named_range("start_date")[0].number_format = u'  yyyy年m月d日'
-        self.ws.get_named_range("end_date")[0].number_format = u'  yyyy年m月d日'
+        self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年m月d日'
+        self.ws.get_named_range("start_date")[0].number_format = '  yyyy年m月d日'
+        self.ws.get_named_range("end_date")[0].number_format = '  yyyy年m月d日'
         # 請負ではない場合、「瑕疵担保期間」を非表示にする。
         if self.project.contract_form != Contract.blanket:
             self.ws.row_dimensions[19].hidden = True
@@ -225,5 +225,5 @@ class EstimatedReport(object):
         self.ws['E' + str(self.current_row)].value = value
         # 表示形式
         if title == '検査完了日':
-            self.ws['E' + str(self.current_row)].number_format = u'yyyy年m月d日'
+            self.ws['E' + str(self.current_row)].number_format = 'yyyy年m月d日'
         self.current_row += 1

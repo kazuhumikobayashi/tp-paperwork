@@ -27,7 +27,7 @@ class BpOrderReport(object):
         self.write_bp_order_original().create_bp_order_style()
 
         self.ws = self.excel.workbook['注文書_副']
-        self.write_bp_order_spare().create_bp_order_style()
+        self.create_bp_order_style()
 
         self.ws = self.excel.workbook['注文請書']
         self.write_bp_order_confirmation().create_bp_order_style()
@@ -57,9 +57,6 @@ class BpOrderReport(object):
             self.ws.get_named_range("remarks")[0].value = engineer_history.remarks
         return self
 
-    def write_bp_order_spare(self):
-        return self
-
     def write_bp_order_confirmation(self):
         # 印紙の罫線を修正
         self.ws['B3'].border = Border(left=Side(style='hair'), right=Side(style='hair'))
@@ -81,9 +78,9 @@ class BpOrderReport(object):
         payment_per_month.alignment = Alignment(horizontal='left')
 
         # 表示形式
-        printed_date.number_format = u'yyyy"年"m"月"d"日"'
-        start_date.number_format = u'yyyy"年"m"月"d"日"'
-        end_date.number_format = u'yyyy"年"m"月"d"日"'
+        printed_date.number_format = 'yyyy"年"m"月"d"日"'
+        start_date.number_format = 'yyyy"年"m"月"d"日"'
+        end_date.number_format = 'yyyy"年"m"月"d"日"'
         payment_per_month.number_format = '¥#,##0.-"/月額"'
 
         # 罫線
