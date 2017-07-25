@@ -22,7 +22,7 @@ SECRET_KEY = 'local key'
 # Google Cloud Storage and upload settings.
 CLOUD_STORAGE_BUCKET = 'tp-paperwork-bucket-development'
 MAX_CONTENT_LENGTH = 8 * 1024 * 1024
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls', 'doc', 'docx', 'txt'}
 
 # Google Cloud Service Account Key File
 CLIENT_SECRET_FILE = 'tp-paperwork-development-2146f321f716.json'

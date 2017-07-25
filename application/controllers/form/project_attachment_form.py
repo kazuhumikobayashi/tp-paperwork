@@ -8,7 +8,7 @@ from application.controllers.form.validators import DataRequired, Length, FileAl
 from application.domain.model.immutables.project_attachment_type import ProjectAttachmentType
 from application.domain.model.upload_set import UploadSet
 
-files = UploadSet('files', ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls'])
+files = UploadSet('files', ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'xlsx', 'xls', 'doc', 'docx', 'txt'])
 
 
 class ProjectAttachmentForm(FlaskForm):
