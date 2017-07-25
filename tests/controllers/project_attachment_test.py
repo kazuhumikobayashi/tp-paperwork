@@ -79,7 +79,7 @@ class ProjectAttachmentTests(BaseTestCase):
             'shain_number': 'test1',
             'password': 'test'
         })
-        file = (BytesIO(b'my file contents'), 'hello world.doc')
+        file = (BytesIO(b'my file contents'), 'hello world.exe')
         result = self.app.post('/project/attachment/create?project_id=1', data={
             'upload': file,
             'type': '1',

@@ -51,6 +51,11 @@ def index(project_id=None):
     form.client_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.client.value])
     form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.end_user.value])
 
+    i = 44
+    for subchoice in form.status:
+        subchoice(**{'data-id': i})
+        i += 1
+
     if project.client_company_id:
         form.billing_site.data = project.client_company.billing_site
         form.billing_tax.data = str(project.client_company.billing_tax)
