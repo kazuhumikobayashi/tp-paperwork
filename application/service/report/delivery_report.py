@@ -13,7 +13,7 @@ project_billing_repository = ProjectBillingRepository()
 class DeliveryReport(BillingBaseReport):
 
     def __init__(self, project_month):
-        super().__init__(project_month)
+        super(DeliveryReport, self).__init__(project_month)
         self.excel = Excel("delivery.xlsx")
         self.ws = self.excel.active
 
@@ -23,14 +23,13 @@ class DeliveryReport(BillingBaseReport):
         return self.excel.download()
 
     def _create_excel(self):
-        super()._create_excel()
+        super(DeliveryReport, self)._create_excel()
 
         # エクセルを一時フォルダに保存
         self.excel.save('05_納品書（{}）_{}.xlsx'.format(self.project_month.client_billing_no,
                                                     datetime.today().strftime("%Y%m%d")))
 
     def create_billing_details(self):
-        super().create_billing_details()
         project_billings = project_billing_repository.find_billings_at_a_month(self.project_month.project_id,
                                                                                self.project_month.project_month)
         # 請求明細----------------------------------------------------------------------------------

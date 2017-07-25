@@ -13,7 +13,7 @@ project_billing_repository = ProjectBillingRepository()
 class BillingReport(BillingBaseReport):
 
     def __init__(self, project_month):
-        super().__init__(project_month)
+        super(BillingReport, self).__init__(project_month)
         self.excel = Excel("billing.xlsx")
         self.ws = self.excel.active
 
@@ -23,7 +23,7 @@ class BillingReport(BillingBaseReport):
         return self.excel.download()
 
     def _create_excel(self):
-        super()._create_excel()
+        super(BillingReport, self)._create_excel()
 
         # 宛名シート作成
         self.address_sheet.create_address_sheet()
@@ -33,14 +33,13 @@ class BillingReport(BillingBaseReport):
                                                     datetime.today().strftime("%Y%m%d")))
 
     def write_top_part(self):
-        super().write_top_part()
+        super(BillingReport, self).write_top_part()
 
         # フォントを調整
         self.ws.get_named_range("total_money_title")[0].font = Font(name="HGP明朝", size=14, underline="single")
         self.ws.get_named_range("total_money")[0].font = Font(name="Century", size=14, underline="single")
 
     def create_billing_details(self):
-        super().create_billing_details()
         project_billings = project_billing_repository.find_billings_at_a_month(self.project_month.project_id,
                                                                                self.project_month.project_month)
         # 請求明細----------------------------------------------------------------------------------
@@ -76,9 +75,9 @@ class BillingReport(BillingBaseReport):
         # 累計--------------------------------------------------------------------------------------
         # 値代入
         self.ws['I' + str(self.current_row)].value = '計'
-        self.ws['K' + str(self.current_row)].value = self.project_month.billing_confirmation_money\
+        self.ws['K' + str(self.current_row)].value = (self.project_month.billing_confirmation_money or 0)\
             + self.project_month.tax_of_billing_confirmation_money()\
-            + self.project_month.billing_transportation
+            + (self.project_month.billing_transportation or 0)
         self.ws['K14'].value = '=K' + str(self.current_row)
         # 書式設定
         self.ws['I' + str(self.current_row)].font = Font(name="HGS明朝")
@@ -89,14 +88,8 @@ class BillingReport(BillingBaseReport):
                 cell.border = Border(top=Side(style='thin'))
         self.current_row += 2
 
-    def create_billing_detail(self):
-        super().create_billing_detail()
-
-    def create_subtotal_list(self, title, value):
-        super().create_subtotal_list(title, value)
-
     def create_bottom_part(self):
-        super().create_bottom_part()
+        super(BillingReport, self).create_bottom_part()
 
         # お支払先記入
         # 値代入

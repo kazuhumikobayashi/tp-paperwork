@@ -52,7 +52,7 @@ class BillingBaseReport(object):
         self.ws.get_named_range("project_name")[0].font = Font(name="HGP明朝", size=13, underline="single")
 
         # 表示形式
-        self.ws.get_named_range("printed_date")[0].number_format = u'yyyy年 m月 d日'
+        self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年 m月 d日'
 
         # 罫線
         for column_num in ['N', 'O']:
@@ -147,16 +147,15 @@ class BillingBaseReport(object):
         self.current_row += 1
 
     def remark(self):
-        if self.project_month.project.client_order_no is None:
-            self.project_month.project.client_order_no = "               "
         if self.project_month.deposit_date is None:
             deposit_date = "               "
         else:
             locale.setlocale(locale.LC_ALL, '')
-            deposit_date = self.project_month.deposit_date.strftime(u'%Y年%m月%d日')
+            deposit_date = self.project_month.deposit_date.strftime('%Y年%m月%d日')
 
-        text = "お支払いは下記口座に{}にお支払い願います。\n\n".format(deposit_date)\
-            + "※作業内容及び納品物等の詳細はご注文書（No.{}）の通り".format(self.project_month.project.client_order_no)
+        text = "お支払いは下記口座に{}までにお支払い願います。\n\n".format(deposit_date)\
+               + "  ※作業内容及び納品物等の詳細はご注文書（No.{}）の通り"\
+                 .format(self.project_month.project.client_order_no or "               ")
         return text
 
     def get_print_name(self):

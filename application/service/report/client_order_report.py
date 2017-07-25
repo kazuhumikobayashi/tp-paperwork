@@ -1,10 +1,8 @@
 from datetime import datetime
 
-from flask import current_app
-from openpyxl.styles import Border, Side, Font, Alignment
+from openpyxl.styles import Border, Side, Font
 
 from application.domain.model.immutables.billing_timing import BillingTiming
-from application.domain.model.immutables.rule import Rule
 from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
 from application.domain.repository.excel import Excel
 
@@ -64,9 +62,9 @@ class ClientOrderReport(object):
         # フォント設定
         self.ws.get_named_range("client_company_name")[0].font = Font(name="ＭＳ ゴシック", size=14, underline="single")
         # 表示形式
-        self.ws.get_named_range("printed_date")[0].number_format = u'yyyy年m月d日'
-        self.ws.get_named_range("start_date")[0].number_format = u'yyyy年m月d日'
-        self.ws.get_named_range("end_date")[0].number_format = u'yyyy年m月d日'
+        self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年m月d日'
+        self.ws.get_named_range("start_date")[0].number_format = 'yyyy年m月d日'
+        self.ws.get_named_range("end_date")[0].number_format = 'yyyy年m月d日'
         # 罫線
         self.write_border_to_merged_cell(row=14)
         self.write_border_to_merged_cell(row=16)

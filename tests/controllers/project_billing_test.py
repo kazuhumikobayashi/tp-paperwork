@@ -547,5 +547,5 @@ class ProjectBillingTests(BaseTestCase):
             project_detail.project_billings.append(project_billing)
 
         # 帳票作成実行
-        result = self.app.get('/project/billing/billing_report_download/' + str(project_month.id))
+        result = self.app.get('/project/billing/delivery_report_download/' + str(project_month.id))
         self.assertEqual(result.status_code, 200)
