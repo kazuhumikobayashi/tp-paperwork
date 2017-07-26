@@ -87,12 +87,12 @@
                       </div>
                     </td>
                     <td>
-                      <a href="{{ url_for('.billing_report_download', project_month_id=project_month.id) }}"
+                      <a href="{{ url_for('.billing_report_download', project_month_id=project_month.id) }}?id={{ now }}"
                           class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i> 請求書出力
                       </a>
                     </td>
                     <td>
-                      <a href="{{ url_for('.delivery_report_download', project_month_id=project_month.id) }}"
+                      <a href="{{ url_for('.delivery_report_download', project_month_id=project_month.id) }}?id={{ now }}"
                           class="btn btn-sm btn-success"><i class="fa fa-file-text-o"></i>  納品書出力
                       </a>
                     </td>
