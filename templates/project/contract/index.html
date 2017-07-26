@@ -50,10 +50,10 @@
           </ul>
           <div class="tab-content">
             <div class="text-right" style="padding-bottom: 10px;">
-              <a href="{{ url_for('.estimated_report_download', project_id=project.id) }}" class="btn btn-sm btn-success">
+              <a href="{{ url_for('.estimated_report_download', project_id=project.id) }}?id={{ now }}" class="btn btn-sm btn-success">
                 <i class="fa fa-download"></i> 見積書出力
               </a>
-              <a href="{{ url_for('.client_order_report_download', project_id=project.id) }}" class="btn btn-sm btn-success">
+              <a href="{{ url_for('.client_order_report_download', project_id=project.id) }}?id={{ now }}" class="btn btn-sm btn-success">
                 <i class="fa fa-download"></i> 注文請書出力
               </a>
             </div>
@@ -124,7 +124,7 @@
                               <td>{{ project_detail.remarks|filter_suppress_none }}</td>
                               <td>
                                 {% if project_detail.is_engineer() and project_detail.engineer.is_bp() %}
-                                  <a href="{{ url_for('.bp_order_report_download', project_detail_id=project_detail.id) }}"
+                                  <a href="{{ url_for('.bp_order_report_download', project_detail_id=project_detail.id) }}?id={{ now }}"
                                       class="btn btn-sm btn-success">
                                     <i class="fa fa-file-text-o"></i> 注文書・請書作成
                                   </a>

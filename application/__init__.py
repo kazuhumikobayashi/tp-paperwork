@@ -1,4 +1,5 @@
 import os
+import time
 
 from flask import Flask
 from flask import redirect
@@ -49,3 +50,8 @@ def before_request():
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db.session.remove()
+
+
+@app.context_processor
+def inject_now():
+    return {'now': time.time()}
