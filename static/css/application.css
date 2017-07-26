@@ -60,3 +60,7 @@ input,textarea {
     box-shadow: none;
     border-color: #aaa;
 }
+
+.datepicker-dropdown.dropdown-menu  {
+	z-index: 1030 !important;
+}
