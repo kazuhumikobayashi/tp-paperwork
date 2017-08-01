@@ -15,6 +15,7 @@ from application.domain.model.department import Department
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.status import Status
+from application.domain.model.immutables.tax import Tax
 from application.domain.model.project_attachment import ProjectAttachment
 from application.domain.model.project_month import ProjectMonth
 from application.domain.model.project_detail import ProjectDetail
@@ -39,6 +40,7 @@ class Project(BaseModel, db.Model):
     contract_form = Column(EnumType(enum_class=Contract))
     billing_timing = Column(EnumType(enum_class=BillingTiming))
     estimated_total_amount = Column(Integer)
+    billing_tax = Column(EnumType(enum_class=Tax))
     scope = Column(String(1024))
     contents = Column(String(1024))
     working_place = Column(String(1024))
@@ -95,6 +97,7 @@ class Project(BaseModel, db.Model):
                  contract_form=None,
                  billing_timing=None,
                  estimated_total_amount=None,
+                 billing_tax=None,
                  scope=None,
                  contents=None,
                  working_place=None,
@@ -124,6 +127,7 @@ class Project(BaseModel, db.Model):
         self.contract_form = contract_form
         self.billing_timing = billing_timing
         self.estimated_total_amount = estimated_total_amount
+        self.billing_tax = billing_tax
         self.scope = scope
         self.contents = contents
         self.working_place = working_place
@@ -186,6 +190,7 @@ class Project(BaseModel, db.Model):
                             self.client_company.bank_holiday_flag)
             project_month = ProjectMonth(
                                 project_month=project_date,
+                                billing_tax=self.client_company.billing_tax,
                                 deposit_date=calculator.get_deposit_date(),
                                 created_at=datetime.today(),
                                 created_user=session['user']['user_name'],
@@ -227,8 +232,8 @@ class Project(BaseModel, db.Model):
         return True in [project_detail.has_payment() for project_detail in self.project_details]
 
     def tax_of_estimated_total_amount(self):
-        if self.client_company:
-            return (self.estimated_total_amount or 0) * self.client_company.billing_tax.rate
+        if self.billing_tax:
+            return (self.estimated_total_amount or 0) * self.billing_tax.rate
         else:
             return 0
 
@@ -248,6 +253,7 @@ class Project(BaseModel, db.Model):
                 "', contract_form='{}".format(self.contract_form) + \
                 "', billing_timing='{}".format(self.billing_timing) + \
                 "', estimated_total_amount='{}".format(self.estimated_total_amount) + \
+                "', billing_tax='{}".format(self.billing_tax) + \
                 "', scope='{}".format(self.scope) + \
                 "', contents='{}".format(self.contents) + \
                 "', working_place='{}".format(self.working_place) + \

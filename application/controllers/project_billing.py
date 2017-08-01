@@ -14,6 +14,7 @@ from application.controllers.form.project_month_form import ProjectMonthForm
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.immutables.message import Message
+from application.domain.model.immutables.tax import Tax
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_detail import ProjectDetail
 from application.service.project_billing_service import ProjectBillingService
@@ -52,6 +53,7 @@ def month(project_month_id=None):
     if form.validate_on_submit():
         project_month.client_billing_no = form.client_billing_no.data
         project_month.billing_confirmation_money = form.billing_confirmation_money.data
+        project_month.billing_tax = Tax.parse(form.billing_tax.data)
         project_month.billing_transportation = form.billing_transportation.data
         project_month.deposit_date = form.deposit_date.data
         project_month.remarks = form.remarks.data

@@ -55,7 +55,7 @@ class ProjectContractForm(FlaskForm):
     billing_tax = SelectField('入金消費税区分',
                               [validators.Optional()],
                               choices=Tax.get_type_for_select(),
-                              render_kw={"title": "入金消費税区分", "disabled": "disabled"})
+                              render_kw={"title": "入金消費税区分"})
     scope = TextAreaField('作業範囲', [Length(max=1024)], filters=[lambda x: x or None])
     contents = TextAreaField('作業内容', [Length(max=1024)], filters=[lambda x: x or None])
     working_place = StringField('作業場所', [Length(max=1024)], filters=[lambda x: x or None])

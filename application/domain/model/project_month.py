@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from application import db
 from application.domain.model.base_model import BaseModel
 from application.domain.model.immutables.input_flag import InputFlag
+from application.domain.model.immutables.tax import Tax
 from application.domain.model.sqlalchemy.types import EnumType
 
 
@@ -17,6 +18,7 @@ class ProjectMonth(BaseModel, db.Model):
     deposit_date = Column(Date)
     billing_estimated_money = Column(Integer)
     billing_confirmation_money = Column(Integer)
+    billing_tax = Column(EnumType(enum_class=Tax))
     billing_transportation = Column(Integer)
     remarks = Column(String(1024))
     client_billing_no = Column(String(64), unique=True)
@@ -31,6 +33,7 @@ class ProjectMonth(BaseModel, db.Model):
                  deposit_date=None,
                  billing_estimated_money=None,
                  billing_confirmation_money=None,
+                 billing_tax=None,
                  billing_transportation=None,
                  remarks=None,
                  client_billing_no=None,
@@ -46,6 +49,7 @@ class ProjectMonth(BaseModel, db.Model):
         self.deposit_date = deposit_date
         self.billing_estimated_money = billing_estimated_money
         self.billing_confirmation_money = billing_confirmation_money
+        self.billing_tax = billing_tax
         self.billing_transportation = billing_transportation
         self.remarks = remarks
         self.client_billing_no = client_billing_no
@@ -58,7 +62,7 @@ class ProjectMonth(BaseModel, db.Model):
             return int(date_.strftime('%y'))
 
     def tax_of_billing_confirmation_money(self):
-        return self.billing_confirmation_money * self.project.client_company.billing_tax.rate
+        return self.billing_confirmation_money * self.billing_tax.rate
 
     def has_billing(self):
         return (self.billing_estimated_money or 0) > 0 or (self.billing_confirmation_money or 0) > 0
@@ -79,6 +83,7 @@ class ProjectMonth(BaseModel, db.Model):
                 "', deposit_date='{}".format(self.deposit_date) + \
                 "', billing_estimated_money='{}".format(self.billing_estimated_money) + \
                 "', billing_confirmation_money='{}".format(self.billing_confirmation_money) + \
+                "', billing_tax='{}".format(self.billing_tax) + \
                 "', billing_transportation='{}".format(self.billing_transportation) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', client_billing_no='{}".format(self.client_billing_no) + \
