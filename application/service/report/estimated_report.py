@@ -103,7 +103,7 @@ class EstimatedReport(object):
         # 書式作成
         self.create_project_detail_style()
         # 値代入
-        if self.project.client_company and self.project.client_company.billing_tax:
+        if self.project.billing_tax:
             tax = str(self.project.client_company.billing_tax.name)
         else:
             tax = ''

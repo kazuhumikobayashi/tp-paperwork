@@ -18,6 +18,7 @@ from application.domain.model.immutables.message import Message
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.status import Status
+from application.domain.model.immutables.tax import Tax
 from application.service.company_service import CompanyService
 from application.service.department_service import DepartmentService
 from application.service.engineer_history_service import EngineerHistoryService
@@ -51,14 +52,8 @@ def index(project_id=None):
     form.client_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.client.value])
     form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.end_user.value])
 
-    i = 44
-    for subchoice in form.status:
-        subchoice(**{'data-id': i})
-        i += 1
-
     if project.client_company_id:
         form.billing_site.data = project.client_company.billing_site
-        form.billing_tax.data = str(project.client_company.billing_tax)
 
     if form.validate_on_submit():
         project.project_name = form.project_name.data
@@ -74,6 +69,12 @@ def index(project_id=None):
         project.contract_form = Contract.parse(form.contract_form.data)
         project.billing_timing = BillingTiming.parse(form.billing_timing.data)
         project.estimated_total_amount = form.estimated_total_amount.data
+        # 顧客登録時に消費税が空の場合は、顧客会社のマスタに登録された入金消費税を取得する。
+        if form.client_company_id.data and not form.billing_tax.data:
+            project.client_company = company_service.find_by_id(form.client_company_id.data)
+            project.billing_tax = project.client_company.billing_tax
+        else:
+            project.billing_tax = Tax.parse(form.billing_tax.data)
         project.scope = form.scope.data
         project.contents = form.contents.data
         project.working_place = form.working_place.data

@@ -1,10 +1,7 @@
 from datetime import date, datetime
 
 from application import db
-from application.domain.model.company import Company
-from application.domain.model.company_client_flag import CompanyClientFlag
 from application.domain.model.immutables.billing_timing import BillingTiming
-from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.status import Status
@@ -264,28 +261,6 @@ class ProjectTests(BaseTestCase):
         self.assertFalse(actual)
 
     def test_tax_of_estimated_total_amount(self):
-        # set_up
-        company = Company(
-            company_name='顧客会社',
-            contract_date=datetime.today().strftime('%Y/%m/%d'),
-            billing_tax=Tax.zero,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-        db.session.add(company)
-        db.session.commit()
-
-        company_client_flag = CompanyClientFlag(
-            company_id=company.id,
-            client_flag=ClientFlag.client,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test')
-        db.session.add(company_client_flag)
-        db.session.commit()
-
         project = Project(
                     project_name='test_project',
                     project_name_for_bp='project',
@@ -294,7 +269,7 @@ class ProjectTests(BaseTestCase):
                     sales_person='営業担当',
                     estimation_no='M2000',
                     end_user_company_id=1,
-                    client_company_id=company.id,
+                    client_company_id=1,
                     start_date=date.today(),
                     end_date='2099/12/31',
                     contract_form=Contract.blanket,
@@ -312,31 +287,24 @@ class ProjectTests(BaseTestCase):
                     created_user='test',
                     updated_at=datetime.today(),
                     updated_user='test')
-        db.session.add(project)
-        db.session.commit()
 
         # 消費税率が0のとき、消費税は0円となる。
         expected = 0
-        project.client_company.billing_tax = Tax.zero
+        project.billing_tax = Tax.zero
         actual = project.tax_of_estimated_total_amount()
         self.assertEqual(expected, actual)
 
         # estimated_total_amountが1000000なので、消費税率が8%のときは消費税が80000円となる。
         expected = 80000
-        project.client_company.billing_tax = Tax.eight
+        project.billing_tax = Tax.eight
         actual = project.tax_of_estimated_total_amount()
         self.assertEqual(expected, actual)
 
         # estimated_total_amountが1000000なので、消費税率が10%のときは消費税が100000円となる。
         expected = 100000
-        project.client_company.billing_tax = Tax.ten
+        project.billing_tax = Tax.ten
         actual = project.tax_of_estimated_total_amount()
         self.assertEqual(expected, actual)
-
-        db.session.delete(project)
-        db.session.delete(company_client_flag)
-        db.session.delete(company)
-        db.session.commit()
 
     # 顧客会社を登録していない状態で、消費税計算を行った場合
     def test_tax_of_estimated_total_amount_fail(self):

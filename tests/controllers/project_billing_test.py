@@ -93,6 +93,7 @@ class ProjectBillingTests(BaseTestCase):
         result = self.app.post('/project/billing/month/' + str(project_billing_id), data={
             'client_billing_no': expected,
             'billing_confirmation_money': project_month.billing_confirmation_money,
+            'billing_tax': project_month.billing_tax.value,
             'billing_transportation': project_month.billing_transportation,
             'deposit_date': project_month.deposit_date.strftime('%Y/%m/%d'),
             'remarks': project_month.remarks
@@ -275,6 +276,7 @@ class ProjectBillingTests(BaseTestCase):
         result = self.app.post('/project/billing/month/' + str(project_billing_id), data={
             'client_billing_no': '',
             'billing_confirmation_money': project_month.billing_confirmation_money,
+            'billing_tax': Tax.eight.value,
             'billing_transportation': project_month.billing_transportation,
             'deposit_date': project_month.deposit_date.strftime('%Y/%m/%d'),
             'remarks': project_month.remarks
@@ -334,6 +336,7 @@ class ProjectBillingTests(BaseTestCase):
         result = self.app.post('/project/billing/month/' + str(project_month.id), data={
             'client_billing_no': '',
             'billing_confirmation_money': project_month.billing_confirmation_money,
+            'billing_tax': project_month.billing_tax.value,
             'billing_transportation': project_month.billing_transportation,
             'deposit_date': project_month.deposit_date.strftime('%Y/%m/%d'),
             'remarks': project_month.remarks

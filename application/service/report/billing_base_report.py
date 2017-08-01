@@ -90,7 +90,7 @@ class BillingBaseReport(object):
         # 値代入
         self.ws['E' + str(self.current_row)].value = title
         if title == '消費税':
-            self.ws['I' + str(self.current_row)].value = self.project_month.project.client_company.billing_tax.name
+            self.ws['I' + str(self.current_row)].value = self.project_month.billing_tax.name
         self.ws['K' + str(self.current_row)].value = value
         # 書式設定
         self.ws['E' + str(self.current_row)].font = Font(name="HGS明朝")
