@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from openpyxl.styles import Border, Side, Font
+from openpyxl.styles import Border, Side, Font, PatternFill
 
 from application.domain.model.immutables.tax import Tax
 from application.domain.repository.excel import Excel
@@ -62,10 +62,10 @@ class BillingReport(BillingBaseReport):
 
         # 小計--------------------------------------------------------------------------------------
         # 値代入
-        self.create_subtotal_list('課税_小計', self.project_month.billing_confirmation_money)
+        self.create_subtotal_list('課税　小計', self.project_month.billing_confirmation_money)
         if self.project_month.project.client_company.billing_tax != Tax.zero:
             self.create_subtotal_list('消費税', self.project_month.tax_of_billing_confirmation_money())
-        self.create_subtotal_list('交通費等_非課税_小計', self.project_month.billing_transportation)
+        self.create_subtotal_list('交通費等　非課税　小計', self.project_month.billing_transportation)
         self.current_row += 1
 
         # 行調整
@@ -86,6 +86,9 @@ class BillingReport(BillingBaseReport):
         for row in self.ws.iter_rows('A' + str(self.current_row) + ":Q" + str(self.current_row)):
             for cell in row:
                 cell.border = Border(top=Side(style='thin'))
+        # セルの色変更
+        for column_num in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q']:
+            self.ws[column_num + str(self.current_row)].fill = PatternFill(patternType='solid', fgColor='E8F0F8')
         self.current_row += 2
 
     def create_bottom_part(self):
