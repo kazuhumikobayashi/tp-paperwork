@@ -62,7 +62,7 @@ class ProjectMonth(BaseModel, db.Model):
             return int(date_.strftime('%y'))
 
     def tax_of_billing_confirmation_money(self):
-        return self.billing_confirmation_money * self.billing_tax.rate
+        return (self.billing_confirmation_money or 0) * self.billing_tax.rate
 
     def has_billing(self):
         return (self.billing_estimated_money or 0) > 0 or (self.billing_confirmation_money or 0) > 0

@@ -2,7 +2,7 @@ import locale
 from datetime import datetime
 
 from openpyxl.drawing.image import Image
-from openpyxl.styles import Border, Side, Font, Alignment
+from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
 
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.service.report.sheet.address_sheet import AddressSheet
@@ -85,6 +85,15 @@ class BillingBaseReport(object):
         self.ws['I' + str(self.current_row)].alignment = Alignment(vertical='top')
         self.ws['K' + str(self.current_row)].alignment = Alignment(vertical='top')
         self.ws['M' + str(self.current_row)].alignment = Alignment(wrap_text=True, vertical='top')
+        # 行調整（2行）
+        self.ws.row_dimensions[self.current_row].height = 13.2 * 2
+        # ユーザー定義
+        self.ws['K' + str(self.current_row)].number_format = '#,##0'
+        # 偶数行の色を変更
+        if self.current_row % 2 == 1:
+            for column_num in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q']:
+                self.ws[column_num + str(self.current_row)].fill = PatternFill(patternType='solid',
+                                                                               fgColor='E8F0F8')
 
     def create_subtotal_list(self, title, value):
         # 値代入
@@ -96,6 +105,8 @@ class BillingBaseReport(object):
         self.ws['E' + str(self.current_row)].font = Font(name="HGS明朝")
         self.ws['I' + str(self.current_row)].font = Font(name="HGS明朝")
         self.ws['K' + str(self.current_row)].font = Font(name="Century")
+        # ユーザー定義
+        self.ws['K' + str(self.current_row)].number_format = '#,##0'
         # 罫線
         for row in self.ws.iter_rows('A' + str(self.current_row) + ":L" + str(self.current_row)):
             for cell in row:
