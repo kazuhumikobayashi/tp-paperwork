@@ -512,6 +512,10 @@ $("form").submit(function() {
 $(function() {
   $('.btn-delete').click(function(event) {
     event.preventDefault();
+    if($(this).hasClass('disabled')){
+      return;
+    }
+
     var $href = $(this).attr('href');
     BootstrapDialog.confirm({
       title: '削除の確認',
