@@ -92,7 +92,9 @@ def create():
 def delete(engineer_history_id):
     engineer_history = engineer_history_service.find_by_id(engineer_history_id)
     engineer_id = engineer_history.engineer_id
-    if engineer_history.id is not None:
+    latest_engineer_history = engineer_history_service.get_latest_history(engineer_id)
+    # 最新の履歴のみ削除できる
+    if engineer_history.id is not None and engineer_history == latest_engineer_history:
         engineer_history_service.destroy(engineer_history)
         flash(Message.deleted.value)
     return redirect('/engineer/detail/' + str(engineer_id))
