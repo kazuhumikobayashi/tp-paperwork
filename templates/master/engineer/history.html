@@ -84,10 +84,15 @@
           <p style="margin: 0;">{{ form.updated_user.label.text }} : {{ form.updated_user.data|filter_suppress_none }}</p>
           <p style="margin: 0;">{{ form.updated_at.label.text }} : {{ form.updated_at.data|filter_suppress_none }}</p>
         </div>
-        <button type="submit" class="btn btn-primary pull-right save"
-            {% if form.id.data != latest_engineer_history.id %}disabled title="最新履歴以外は保存できません"{% endif %}>
-          <i class="fa fa-save"></i> 保存
-        </button>
+        {% if form.id.data != latest_engineer_history.id %}
+          <a class="btn btn-primary pull-right" data-toggle="tooltip" disabled title="最新履歴以外は保存できません">
+            <i class="fa fa-save"></i> 保存
+          </a>
+        {% else %}
+          <button type="submit" class="btn btn-primary pull-right save">
+            <i class="fa fa-save"></i> 保存
+          </button>
+        {% endif %}
       </div>
     </div>
     <!-- /.box -->
