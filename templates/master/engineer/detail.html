@@ -64,12 +64,12 @@
 	    <div class="box box-primary">
 	    <div class="box-body table-responsive no-padding">
 	      <table class="table table-hover">
-	        <tr>
-	          <th width="250px">支払契約開始年月</th>
-	          <th width="300px">支払契約終了年月</th>
-	          <th class="text-right" width="80px">支払単価</th>
-	          <th width="70px" class="center"></th>
-	        </tr>
+            <tr>
+              <th width="80px">支払契約開始年月</th>
+              <th width="80px">支払契約終了年月</th>
+              <th class="text-right" width="80px">支払単価</th>
+              <th width="400px" class="center"></th>
+            </tr>
 		  {% for engineer_history in engineer_histories %}
 		    <tr>
 	          <td>
@@ -99,9 +99,8 @@
           <p style="margin: 0;">{{ form.updated_user.label.text }} : {{ form.updated_user.data|filter_suppress_none }}</p>
           <p style="margin: 0;">{{ form.updated_at.label.text }} : {{ form.updated_at.data|filter_suppress_none }}</p>
         </div>
-	    <button type="submit" class="btn btn-primary pull-right save"><i class="fa fa-save"></i> 保存</button>
+	    <button class="btn btn-primary pull-right save"><i class="fa fa-save"></i> 保存</button>
 	  </div>
     </form>
   </div>
-  
 {% endblock %}
