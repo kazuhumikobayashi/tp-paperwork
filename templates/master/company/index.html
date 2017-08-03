@@ -96,7 +96,11 @@
               <td>{{ company.payment_site.name|filter_suppress_none }}</td>
               <td>{{ company.bank.bank_name|filter_suppress_none }}</td>
               <td>
-                <a class="btn btn-sm btn-danger btn-delete" href="{{ url_for('.delete', company_id=company.id) }}">
+                <a class="btn btn-sm btn-danger btn-delete {% if company.has_relationship() %}disabled{% endif %}"
+                    href="{{ url_for('.delete', company_id=company.id) }}"
+                    {% if company.has_relationship() %}
+                      data-toggle="tooltip" title="この会社は使用されているので削除できません"
+                    {% endif %}>
                   <i class="fa fa-trash"></i> 削除
                 </a>
               </td>

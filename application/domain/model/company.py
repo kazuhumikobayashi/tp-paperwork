@@ -38,6 +38,9 @@ class Company(BaseModel, db.Model):
 
     bank = relationship(Bank, lazy='joined')
     company_client_flags = relationship(CompanyClientFlag, cascade='all, delete-orphan')
+    engineers = relationship("Engineer", foreign_keys="Engineer.company_id")
+    end_user_projects = relationship("Project", foreign_keys="Project.end_user_company_id")
+    client_projects = relationship("Project", foreign_keys="Project.client_company_id")
 
     def __init__(self,
                  company_name=None,
@@ -93,6 +96,10 @@ class Company(BaseModel, db.Model):
             if company_client_flag.client_flag == ClientFlag.our_company:
                 return True
         return False
+
+    # 会社が他のmodelと紐づいているならtrue
+    def has_relationship(self):
+        return self.end_user_projects or self.client_projects or self.engineers
 
     def __repr__(self):
         return "<Company:" + \
