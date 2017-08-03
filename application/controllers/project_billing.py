@@ -55,6 +55,7 @@ def month(project_month_id=None):
         project_month.billing_confirmation_money = form.billing_confirmation_money.data
         project_month.billing_tax = Tax.parse(form.billing_tax.data)
         project_month.billing_transportation = form.billing_transportation.data
+        project_month.billing_printed_date = form.billing_printed_date.data
         project_month.deposit_date = form.deposit_date.data
         project_month.remarks = form.remarks.data
 

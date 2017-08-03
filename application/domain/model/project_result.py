@@ -23,6 +23,7 @@ class ProjectResult(BaseModel, db.Model):
     payment_adjustments = Column(Integer)
     payment_confirmation_money = Column(Integer)
     remarks = Column(String(1024))
+    billing_receipted_date = Column(Date)
     payment_expected_date = Column(Date)
     payment_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
 
@@ -40,6 +41,7 @@ class ProjectResult(BaseModel, db.Model):
                  payment_adjustments=None,
                  payment_confirmation_money=None,
                  remarks=None,
+                 billing_receipted_date=None,
                  payment_expected_date=None,
                  payment_flag=InputFlag.yet,
                  created_at=None,
@@ -58,6 +60,7 @@ class ProjectResult(BaseModel, db.Model):
         self.payment_adjustments = payment_adjustments
         self.payment_confirmation_money = payment_confirmation_money
         self.remarks = remarks
+        self.billing_receipted_date = billing_receipted_date
         self.payment_expected_date = payment_expected_date
         self.payment_flag = payment_flag
 
@@ -78,6 +81,7 @@ class ProjectResult(BaseModel, db.Model):
                 "', payment_adjustments='{}".format(self.payment_adjustments) + \
                 "', payment_confirmation_money='{}".format(self.payment_confirmation_money) + \
                 "', remarks='{}".format(self.remarks) + \
+                "', billing_receipted_date='{}".format(self.billing_receipted_date) + \
                 "', payment_expected_date='{}".format(self.payment_expected_date) + \
                 "', payment_flag='{}".format(self.payment_flag) + \
                 "', created_at='{}".format(self.created_at) + \

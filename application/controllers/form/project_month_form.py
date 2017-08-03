@@ -19,6 +19,7 @@ class ProjectMonthForm(FlaskForm):
                               choices=Tax.get_type_for_select(),
                               render_kw={"title": "消費税"})
     billing_transportation = IntegerField('請求交通費等（請求明細交通費等の合計）', render_kw={"readonly": "readonly"})
+    billing_printed_date = DateField('請求書発行日', format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     deposit_date = DateField('入金予定日', format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     project_month = DateField('プロジェクト年月', format='%Y/%m/%d')

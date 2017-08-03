@@ -15,6 +15,7 @@ class ProjectMonth(BaseModel, db.Model):
     project_month = Column(Date, nullable=False)
     billing_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
     deposit_input_flag = Column(EnumType(enum_class=InputFlag), nullable=False, default=0)
+    billing_printed_date = Column(Date)
     deposit_date = Column(Date)
     billing_estimated_money = Column(Integer)
     billing_confirmation_money = Column(Integer)
@@ -30,6 +31,7 @@ class ProjectMonth(BaseModel, db.Model):
                  project_month=None,
                  billing_input_flag=InputFlag.yet,
                  deposit_input_flag=InputFlag.yet,
+                 billing_printed_date=None,
                  deposit_date=None,
                  billing_estimated_money=None,
                  billing_confirmation_money=None,
@@ -46,6 +48,7 @@ class ProjectMonth(BaseModel, db.Model):
         self.project_month = project_month
         self.billing_input_flag = billing_input_flag
         self.deposit_input_flag = deposit_input_flag
+        self.billing_printed_date = billing_printed_date
         self.deposit_date = deposit_date
         self.billing_estimated_money = billing_estimated_money
         self.billing_confirmation_money = billing_confirmation_money
@@ -80,6 +83,7 @@ class ProjectMonth(BaseModel, db.Model):
                 "', project_month='{}".format(self.project_month) + \
                 "', billing_input_flag='{}".format(self.billing_input_flag) + \
                 "', deposit_input_flag='{}".format(self.deposit_input_flag) + \
+                "', billing_printed_date='{}".format(self.billing_printed_date) + \
                 "', deposit_date='{}".format(self.deposit_date) + \
                 "', billing_estimated_money='{}".format(self.billing_estimated_money) + \
                 "', billing_confirmation_money='{}".format(self.billing_confirmation_money) + \
