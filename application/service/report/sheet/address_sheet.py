@@ -13,18 +13,18 @@ class AddressSheet(object):
         address = ws['B1']
 
         # 宛名を記入する位置を修正
-        ws.column_dimensions['A'].width = 5
+        ws.column_dimensions['A'].width = 2
 
         # 宛名の枠の大きさを修正
-        ws.column_dimensions['B'].width = 30
-        ws.row_dimensions[1].height = 110
+        ws.column_dimensions['B'].width = 46
+        ws.row_dimensions[1].height = 130
 
         # 宛名に値を代入。
         address.value = self.report.get_print_name()
 
         # 書式修正
-        address.font = Font(name='ＭＳ ゴシック')
-        address.alignment = Alignment(vertical="distributed" ,wrap_text=True)
+        address.font = Font(name='ＭＳ ゴシック', size=10)
+        address.alignment = Alignment(vertical="top" ,wrap_text=True)
 
         # 余白の調整
         ws.page_margins.top = 0.5
