@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from flask import Blueprint
 from flask import abort
 from flask import current_app
@@ -51,7 +53,10 @@ def history(engineer_history_id=None):
 
     if form.validate_on_submit():
         # 支払い契約開始年月のデータに変更があった場合、履歴を切る。
-        if engineer_history.payment_start_day != form.payment_start_day.data:
+        if engineer_history.id and engineer_history.payment_start_day != form.payment_start_day.data:
+            # 終了日に新しく登録する履歴の開始日の前月を登録する。
+            engineer_history.payment_end_day = form.payment_start_day.data - timedelta(days=1)
+            engineer_history_service.save(engineer_history)
             engineer_history = engineer_history.create_new_history()
         engineer_history.engineer_id = engineer_history.engineer.id
         engineer_history.payment_start_day = form.payment_start_day.data

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from sqlalchemy import Column, Integer, Date, String
 from sqlalchemy import ForeignKey
@@ -41,7 +41,7 @@ class EngineerHistory(BaseModel, db.Model):
     def __init__(self,
                  engineer_id=None,
                  payment_start_day=None,
-                 payment_end_day=None,
+                 payment_end_day=date(2099, 12, 31),
                  payment_per_month=None,
                  payment_rule=None,
                  payment_site=None,

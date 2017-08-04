@@ -69,11 +69,10 @@ class EngineerHistoryForm(FlaskForm):
 
     def validate_payment_start_day(self, field):
         engineer_history = service.find_by_id(self.id.data)
-        if engineer_history and engineer_history.payment_end_day is not None \
-                and field.data != engineer_history.payment_start_day and field.data < engineer_history.payment_end_day:
-            raise ValidationError('前回の支払い契約終了年月「'
-                                  + engineer_history.payment_end_day.strftime('%Y/%m')
-                                  + '」よりの前の年月で更新できません。')
+        if engineer_history and engineer_history.payment_start_day is not None\
+                and field.data < engineer_history.payment_start_day:
+            raise ValidationError('前回の支払い契約終了年月「{}」よりの前の年月で更新できません。'
+                                  .format(engineer_history.payment_start_day.strftime('%Y/%m')))
 
     def validate_payment_bottom_base_hour(self, field):
         # 支払いのルールが変動の時、フリー時間が空ならエラー
