@@ -178,7 +178,7 @@ class EngineerHistoryTests(BaseTestCase):
         # 前後で件数が変わっていないことを確認
         self.assertEqual(before, after)
 
-    # 支払い契約開始年月は、前回の支払い終了年月より前の年月で登録できない。
+    # 支払い契約開始年月は、現在登録中の日付より前の日付で更新できない
     def test_validation_payment_start_day1(self):
         # ログインする
         self.app.post('/login', data={
@@ -191,8 +191,8 @@ class EngineerHistoryTests(BaseTestCase):
         # 以下のデータを新規作成。
         result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
             'engineer_id': engineer_id,
-            'payment_start_day': date(2017, 1, 1).strftime('%Y/%m'),
-            'payment_end_day': date(2017, 5, 31).strftime('%Y/%m'),
+            'payment_start_day': date(2017, 5, 1).strftime('%Y/%m'),
+            'payment_end_day': date(2099, 12, 31).strftime('%Y/%m'),
             'payment_per_month': '100000',
             'payment_rule': str(Rule.fixed),
             'payment_fraction_rule': ''
@@ -200,15 +200,13 @@ class EngineerHistoryTests(BaseTestCase):
         self.assertEqual(result.status_code, 302)
 
         # engineer=6に紐づく履歴が1件であることを確認
-        before = len(
-            self.engineer_history_repository.find_by_engineer_id(engineer_id))
+        before = len(self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(before, 1)
         # 登録した履歴を取得
-        before_engineer_history = self.engineer_history_repository.find_by_engineer_id(
-            engineer_id)[0]
+        before_engineer_history = self.engineer_history_repository.find_by_engineer_id(engineer_id)[0]
         before_payment_start_day = before_engineer_history.payment_start_day
 
-        # 前回の支払い終了年月が2017年5月のため、開始年月をその前の年月で登録できないことを確認する。
+        # 前回の支払開始年月が2017年5月のため、開始年月をその前の年月で登録できないことを確認する。
         result = self.app.post('/engineer/history/' + str(before_engineer_history.id), data={
             'payment_start_day': date(2017, 3, 1).strftime('%Y/%m'),
             'payment_end_day': before_engineer_history.payment_end_day,
@@ -219,25 +217,22 @@ class EngineerHistoryTests(BaseTestCase):
         self.assertEqual(result.status_code, 200)
 
         # engineer=6に紐づく履歴が1件であることを確認（履歴が切られていないことを確認）
-        after = len(
-            self.engineer_history_repository.find_by_engineer_id(engineer_id))
+        after = len(self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(after, 1)
         # もう一度登録した履歴を取得する
-        after_engineer_history = self.engineer_history_repository.find_by_engineer_id(
-            engineer_id)[0]
+        after_engineer_history = self.engineer_history_repository.find_by_engineer_id(engineer_id)[0]
         after_payment_start_day = after_engineer_history.payment_start_day
 
         # 更新前と更新後の契約開始年月に変化がないことを確認。
         self.assertEqual(before_payment_start_day, after_payment_start_day)
 
         # 追加したデータを削除
-        result = self.app.get('/engineer/history/delete/' +
-                              str(after_engineer_history.id))
+        result = self.app.get('/engineer/history/delete/' + str(after_engineer_history.id))
         # 削除できたことを確認
         self.assertEqual(result.status_code, 302)
 
     # 支払い契約開始年月＜支払い契約終了年月　の関係にあることを確認。
-    def test_validation_payment_start_day2(self):
+    def test_validation_payment_start_day_less_than_payment_end_day(self):
         # ログインする
         self.app.post('/login', data={
             'shain_number': 'test1',
@@ -460,3 +455,45 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_fraction_calculation2': Round.down.value,
         })
         self.assertEqual(result.status_code, 200)
+
+    # 履歴を切ることができる
+    def test_create_new_engineer_history(self):
+        before = len(self.engineer_history_repository.find_all())
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        engineer_id = 8
+
+        result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
+            'engineer_id': engineer_id,
+            'payment_start_day': date(2018, 1, 1).strftime('%Y/%m'),
+            'payment_end_day': date(2099, 12, 31).strftime('%Y/%m'),
+            'payment_per_month': '100000',
+            'payment_rule': Rule.fixed.value,
+            'payment_fraction_rule': ''
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/engineer/history/' in result.headers['Location'])
+        engineer_history_id = result.headers['Location'].split('/')[-1]
+
+        after1 = len(self.engineer_history_repository.find_all())
+        # 1件追加されていることを確認
+        self.assertEqual(before + 1, after1)
+
+        engineer_history = self.engineer_history_repository.find_by_id(engineer_history_id)
+        result = self.app.post('/engineer/history/' + str(engineer_history.id), data={
+            'payment_start_day': date(2018, 10, 1).strftime('%Y/%m'),
+            'payment_end_day': engineer_history.payment_end_day.strftime('%Y/%m'),
+            'payment_per_month': engineer_history.payment_per_month,
+            'payment_rule': engineer_history.payment_rule,
+            'payment_fraction_rule': ''
+        })
+        self.assertEqual(result.status_code, 302)
+        ok_('/engineer/history/' in result.headers['Location'])
+
+        after2 = len(self.engineer_history_repository.find_all())
+        # さらにもう一件追加されていることを確認
+        self.assertEqual(before + 2, after2)
