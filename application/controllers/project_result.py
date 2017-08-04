@@ -52,6 +52,7 @@ def detail(result_id=None):
         result.payment_adjustments = form.payment_adjustments.data
         result.payment_confirmation_money = form.payment_confirmation_money.data
         result.remarks = form.remarks.data
+        result.billing_receipted_date = form.billing_receipted_date.data
         result.payment_expected_date = form.payment_expected_date.data
 
         project_result_service.save(result)

@@ -23,6 +23,7 @@ class ProjectResultTests(BaseTestCase):
                  payment_adjustments=7,
                  payment_confirmation_money=8,
                  remarks='test',
+                 billing_receipted_date=None,
                  payment_expected_date=None,
                  payment_flag=None,
                  created_at=None,
@@ -43,6 +44,7 @@ class ProjectResultTests(BaseTestCase):
                    "', payment_adjustments='{}".format(project_result.payment_adjustments) + \
                    "', payment_confirmation_money='{}".format(project_result.payment_confirmation_money) + \
                    "', remarks='{}".format(project_result.remarks) + \
+                   "', billing_receipted_date='{}".format(project_result.billing_receipted_date) + \
                    "', payment_expected_date='{}".format(project_result.payment_expected_date) + \
                    "', payment_flag='{}".format(project_result.payment_flag) + \
                    "', created_at='{}".format(project_result.created_at) + \

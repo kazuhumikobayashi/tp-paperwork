@@ -31,6 +31,10 @@ class ProjectResultForm(FlaskForm):
     payment_estimated_money = IntegerField('支払予定金額（単価と差分金額の合計）', render_kw={"disabled": "disabled"})
     payment_transportation = IntegerField('支払交通費等_個別')
     payment_adjustments = IntegerField('支払調整金額_個別')
+    billing_receipted_date = DateField('請求書受領日',
+                                      [validators.optional()],
+                                      format='%Y/%m/%d',
+                                      render_kw={"autocomplete": "off"})
     payment_expected_date = DateField('支払予定日',
                                       [validators.optional()],
                                       format='%Y/%m/%d',
