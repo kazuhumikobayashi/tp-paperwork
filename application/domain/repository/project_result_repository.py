@@ -119,9 +119,13 @@ class ProjectResultRepository(BaseRepository):
         return pagination
 
     def find_incomplete_results(self):
+        today = datetime.today().date()
+        first_day = today.replace(day=1)
+        last_first_day = first_day + relativedelta(months=-1)
+
         query = self.model.query.filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))
         query = query.filter(or_(self.model.work_time == 0, self.model.work_time.is_(None)))
-        query = query.filter(self.model.result_month <= date.today())
+        query = query.filter(self.model.result_month <= last_first_day)
         query = query.order_by(asc(self.model.result_month), asc('projects_1.project_name'))
         return query.all()
 
