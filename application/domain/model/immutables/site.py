@@ -5,6 +5,7 @@ class Site(Enum):
     twenty_five = 25
     thirty = 30
     forty = 40
+    forty_five = 45
     fifty = 50
     fifty_one = 51
     fifty_five = 55
@@ -18,6 +19,8 @@ class Site(Enum):
             return '30'
         elif self._value_ == self.forty.value:
             return '40'
+        elif self._value_ == self.forty_five.value:
+            return '45'
         elif self._value_ == self.fifty.value:
             return '50'
         elif self._value_ == self.fifty_one.value:
