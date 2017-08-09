@@ -35,8 +35,8 @@ class CompanyForm(FlaskForm):
     contract_date = DateField('基本契約日', [validators.optional()], format='%Y/%m/%d', render_kw={"autocomplete": "off"})
     postal_code = StringField('郵便番号', [Length(max=32)], filters=[lambda x: x or None])
     address = StringField('住所', [Length(max=1024)], filters=[lambda x: x or None])
-    phone = StringField('電話番号', [Length(max=32)], filters=[lambda x: x or None])
-    fax = StringField('Fax番号', [Length(max=32)], filters=[lambda x: x or None])
+    phone = StringField('電話番号', [Length(max=256)], filters=[lambda x: x or None])
+    fax = StringField('Fax番号', [Length(max=256)], filters=[lambda x: x or None])
     client_code = StringField('顧客コード（顧客フラグ＝顧客の時、必須）',
                               [Length(max=128), required_if_client],
                               filters=[lambda x: x or None])
