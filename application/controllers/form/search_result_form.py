@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from flask_wtf import FlaskForm
 from wtforms import validators, StringField, SelectMultipleField
 
-from application.controllers.form.fields import CheckboxField
+from application.controllers.form.fields import CheckboxField, SelectMultiFieldWithSubtext
 from application.domain.model.immutables.input_flag import InputFlag
 
 
@@ -16,18 +16,18 @@ class SearchResultForm(FlaskForm):
     
     project_name = StringField('プロジェクト名称', [validators.optional()])
     result_input_flag = CheckboxField('実績ステータス', choices=InputFlag.get_result_flag_for_radio())
-    end_user_company_id = SelectMultipleField('エンドユーザー', [validators.optional()],
-                                              render_kw={"title": "エンドユーザー（複数選択）",
-                                                         "data-live-search": "true",
-                                                         "data-size": "8",
-                                                         "data-actions-box": "true",
-                                                         "data-selected-text-format": "count > 3"})
-    client_company_id = SelectMultipleField('顧客', [validators.optional()],
-                                            render_kw={"title": "顧客会社（複数選択）",
-                                                       "data-live-search": "true",
-                                                       "data-size": "8",
-                                                       "data-actions-box": "true",
-                                                       "data-selected-text-format": "count > 3"})
+    end_user_company_id = SelectMultiFieldWithSubtext('エンドユーザー', [validators.optional()],
+                                                      render_kw={"title": "エンドユーザー（複数選択）",
+                                                                 "data-live-search": "true",
+                                                                 "data-size": "8",
+                                                                 "data-actions-box": "true",
+                                                                 "data-selected-text-format": "count > 3"})
+    client_company_id = SelectMultiFieldWithSubtext('顧客', [validators.optional()],
+                                                    render_kw={"title": "顧客会社（複数選択）",
+                                                               "data-live-search": "true",
+                                                               "data-size": "8",
+                                                               "data-actions-box": "true",
+                                                               "data-selected-text-format": "count > 3"})
     recorded_department_id = SelectMultipleField('計上部署',
                                                  render_kw={"title": "計上部署（複数選択）",
                                                             "data-size": "8",

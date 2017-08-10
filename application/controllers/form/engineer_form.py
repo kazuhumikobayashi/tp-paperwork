@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, SelectField, SelectMultipleField, DateTimeField
+from wtforms import validators, StringField, SelectMultipleField, DateTimeField
 
-from application.controllers.form.fields import IntegerField, DateField, RadioField
+from application.controllers.form.fields import IntegerField, DateField, RadioField, SelectFieldWithSubtext
 from application.controllers.form.validators import Length, DataRequired
 from application.domain.model.immutables.gender import Gender
 
@@ -16,10 +16,10 @@ class EngineerForm(FlaskForm):
                          render_kw={"autocomplete": "off"})
     gender = RadioField('性別',
                         choices=Gender.get_gender_for_radio())
-    company_id = SelectField('所属会社（必須）', [DataRequired()],
-                             render_kw={"title": "所属会社（必須）",
-                                        "data-size": "8",
-                                        "data-live-search": "true"})
+    company_id = SelectFieldWithSubtext('所属会社（必須）', [DataRequired()],
+                                        render_kw={"title": "所属会社（必須）",
+                                                   "data-size": "8",
+                                                   "data-live-search": "true"})
     business_category = SelectMultipleField('業種', [Length(max=2048)], coerce=int,
                                             render_kw={"title": "業種（複数選択）",
                                                        "data-size": "8",

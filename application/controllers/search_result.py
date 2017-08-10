@@ -24,9 +24,9 @@ def index(page=1):
     page_session_service.save()
 
     form = SearchResultForm(search.get_dict())
-    form.client_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
+    form.client_company_id.choices = company_service.find_for_multi_select_with_subtext_by_client_flag_id(
         [ClientFlag.client.value])
-    form.end_user_company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
+    form.end_user_company_id.choices = company_service.find_for_multi_select_with_subtext_by_client_flag_id(
         [ClientFlag.end_user.value])
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = project_result_service.find_by_result(page,

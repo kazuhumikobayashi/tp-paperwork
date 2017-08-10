@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import ValidationError, DateTimeField
 from wtforms import validators, StringField, SelectField, TextAreaField
 
-from application.controllers.form.fields import IntegerField, DateField
+from application.controllers.form.fields import IntegerField, DateField, SelectFieldWithSubtext
 from application.controllers.form.validators import Length, DataRequired, LessThan
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
@@ -26,16 +26,16 @@ class ProjectContractForm(FlaskForm):
                                          render_kw={"title": "計上部署（必須）"})
     sales_person = StringField('営業担当者名称', [Length(max=128)], filters=[lambda x: x or None])
     estimation_no = StringField('見積No（必須）', [DataRequired(), Length(max=64)])
-    end_user_company_id = SelectField('エンドユーザー（必須）', [DataRequired()],
-                                      render_kw={"title": "エンドユーザー（必須）",
-                                                 "data-live-search": "true",
-                                                 "data-size": "8",
-                                                 "data-actions-box": "true"})
-    client_company_id = SelectField('顧客会社（必須）', [DataRequired()],
-                                    render_kw={"title": "顧客会社（必須）",
-                                               "data-live-search": "true",
-                                               "data-size": "8",
-                                               "data-actions-box": "true"})
+    end_user_company_id = SelectFieldWithSubtext('エンドユーザー（必須）', [DataRequired()],
+                                                 render_kw={"title": "エンドユーザー（必須）",
+                                                            "data-live-search": "true",
+                                                            "data-size": "8",
+                                                            "data-actions-box": "true"})
+    client_company_id = SelectFieldWithSubtext('顧客会社（必須）', [DataRequired()],
+                                               render_kw={"title": "顧客会社（必須）",
+                                                          "data-live-search": "true",
+                                                          "data-size": "8",
+                                                          "data-actions-box": "true"})
     start_date = DateField('プロジェクト開始日（必須）',
                            [DataRequired(), LessThan('end_date')],
                            format='%Y/%m/%d',

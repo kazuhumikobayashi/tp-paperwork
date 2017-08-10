@@ -1,17 +1,17 @@
 from flask_wtf import FlaskForm
 from wtforms import validators, StringField, SelectMultipleField
 
-from application.controllers.form.fields import CheckboxField
+from application.controllers.form.fields import CheckboxField, SelectMultiFieldWithSubtext
 
 
 class EngineerSearchForm(FlaskForm):
     engineer_name = StringField('技術者名称', [validators.optional()])
-    company_id = SelectMultipleField('所属会社', [validators.optional()],
-                                     render_kw={"title": "所属会社（複数選択）",
-                                                "data-size": "8",
-                                                "data-live-search": "true",
-                                                "data-actions-box": "true",
-                                                "data-selected-text-format": "count > 4"})
+    company_id = SelectMultiFieldWithSubtext('所属会社', [validators.optional()],
+                                             render_kw={"title": "所属会社（複数選択）",
+                                                        "data-size": "8",
+                                                        "data-live-search": "true",
+                                                        "data-actions-box": "true",
+                                                        "data-selected-text-format": "count > 4"})
     contract_engineer_is_checked = CheckboxField('',
                                                  [validators.optional()],
                                                  choices=[('1', '契約終了している技術者を省く')],
