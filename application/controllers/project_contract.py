@@ -49,8 +49,10 @@ def index(project_id=None):
 
     form = ProjectContractForm(request.form, project)
     form.recorded_department_id.choices = department_service.find_all_for_select()
-    form.client_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.client.value])
-    form.end_user_company_id.choices = company_service.find_for_select_by_client_flag_id([ClientFlag.end_user.value])
+    form.client_company_id.choices = \
+        company_service.find_for_multi_select_with_subtext_by_client_flag_id([ClientFlag.client.value])
+    form.end_user_company_id.choices = \
+        company_service.find_for_multi_select_with_subtext_by_client_flag_id([ClientFlag.end_user.value])
 
     if project.client_company_id:
         form.billing_site.data = project.client_company.billing_site

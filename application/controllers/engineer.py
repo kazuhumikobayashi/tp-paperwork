@@ -34,7 +34,7 @@ def index(page=1):
     search = SearchSessionService('engineer', request.args)
     search.save()
     form = EngineerSearchForm(search.get_dict())
-    form.company_id.choices = company_service.find_for_multi_select_by_client_flag_id(
+    form.company_id.choices = company_service.find_for_select_with_subtext_by_client_flag_id(
         [ClientFlag.our_company.value, ClientFlag.bp.value])
     form.skill_id.choices = skill_service.find_all_for_multi_select()
     form.business_category_id.choices = business_category_service.find_all_for_multi_select()
@@ -65,7 +65,7 @@ def detail(engineer_id=None):
     engineer.business_category = [
         h.business_category_id for h in engineer.engineer_business_categories]
     form = EngineerForm(request.form, engineer)
-    form.company_id.choices = company_service.find_for_select_by_client_flag_id(
+    form.company_id.choices = company_service.find_for_select_with_subtext_by_client_flag_id(
         [ClientFlag.our_company.value, ClientFlag.bp.value])
     form.skill.choices = skill_service.find_all_for_multi_select()
     form.business_category.choices = business_category_service.find_all_for_multi_select()

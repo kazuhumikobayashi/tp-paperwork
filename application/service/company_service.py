@@ -7,14 +7,14 @@ class CompanyService(object):
     def find(self, page, company_name, client_flag_id, bank_id):
         return self.repository.find(page, company_name, client_flag_id, bank_id)
 
-    def find_for_select_by_client_flag_id(self, client_flag_id):
-        ret = [('', '')]
-        company_list = self.find_for_multi_select_by_client_flag_id(client_flag_id)
+    def find_for_select_with_subtext_by_client_flag_id(self, client_flag_id):
+        ret = [('', '', '')]
+        company_list = self.find_for_multi_select_with_subtext_by_client_flag_id(client_flag_id)
         ret.extend(company_list)
         return ret
 
-    def find_for_multi_select_by_client_flag_id(self, client_flag_id):
-        company_list = [(str(h.id), h.company_name) for h
+    def find_for_multi_select_with_subtext_by_client_flag_id(self, client_flag_id):
+        company_list = [(str(h.id), h.company_name, h.company_short_name) for h
                         in self.find_by_client_flag(client_flag_id)]
         company_list.sort(key=lambda x: x[1])
         return company_list
