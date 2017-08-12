@@ -126,7 +126,7 @@ class SelectFieldWithSubtext(wtforms.SelectField):
 
     def iter_choices(self):
         for value, label, subtext in self.choices:
-            selected = self.data is not None and self.coerce(value) in self.data
+            selected = self.data is not None and self.coerce(value) == self.data
             yield (value, label, selected, subtext)
 
     def pre_validate(self, form):
