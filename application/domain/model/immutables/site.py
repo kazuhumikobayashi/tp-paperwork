@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Site(Enum):
+    ten = 10
     twenty_five = 25
     thirty = 30
     forty = 40
@@ -13,7 +14,9 @@ class Site(Enum):
 
     @property
     def name(self):
-        if self._value_ == self.twenty_five.value:
+        if self._value_ == self.ten.value:
+            return '10'
+        elif self._value_ == self.twenty_five.value:
             return '25'
         elif self._value_ == self.thirty.value:
             return '30'
