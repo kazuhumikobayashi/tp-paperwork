@@ -534,3 +534,27 @@ $(function() {
     });
   });
 });
+
+//明細登録ページの遷移時の警告
+$(function() {
+  $('.btn-create').click(function(event) {
+    event.preventDefault();
+
+    var $href = $(this).attr('href');
+    BootstrapDialog.confirm({
+      title: 'ページ遷移の確認',
+      message: 'このページの内容を変更した場合、\nページ下部にある保存ボタンを先に押下してください。',
+      closable: true,
+      draggable: true,
+      btnCancelLabel: 'キャンセル',
+      btnOKLabel: 'OK',
+      btnOKClass: 'btn-success',
+      callback: function(result) {
+        if(result) {
+          window.location.href = $href;
+        }
+      }
+    });
+  });
+});
+
