@@ -76,17 +76,15 @@
       <div class="box">
         <div class="box-header">
           {% if pagination %}
-            {% if pagination.total > pagination.per_page %}
-              {{ p.pagination_widget(pagination,'.payment_page',
-              project_name=form.project_name.data,
-              billing_input_flag=form.billing_input_flag.data,
-              deposit_input_flag=form.deposit_input_flag.data,
-              end_user_company_id=form.end_user_company_id.data,
-              client_company_id=form.client_company_id.data,
-              recorded_department_id=form.recorded_department_id.data,
-              deposit_date_from=form.deposit_date_from.data,
-              deposit_date_to=form.deposit_date_to.data) }}
-            {% endif %}
+            {{ p.pagination_widget(pagination,'.payment_page',
+            project_name=form.project_name.data,
+            billing_input_flag=form.billing_input_flag.data,
+            deposit_input_flag=form.deposit_input_flag.data,
+            end_user_company_id=form.end_user_company_id.data,
+            client_company_id=form.client_company_id.data,
+            recorded_department_id=form.recorded_department_id.data,
+            deposit_date_from=form.deposit_date_from.data,
+            deposit_date_to=form.deposit_date_to.data) }}
           {% endif %}
 
         </div>

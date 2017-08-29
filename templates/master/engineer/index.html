@@ -66,17 +66,22 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          {% if pagination %}
-            {% if pagination.total > pagination.per_page %}
-              {{ p.pagination_widget(pagination,'.engineer_page', company_id=form.company_id.data,
+          <div class="row">
+            <div class="col-sm-6">
+            {% if pagination %}
+              {{ p.pagination_widget(pagination,'.engineer_page',
+              company_id=form.company_id.data,
               contract_engineer_is_checked=form.contract_engineer_is_checked.data,
               engineer_name=form.engineer_name.data, skill_id=form.skill_id.data,
               business_category_id=form.business_category_id.data) }}
             {% endif %}
-          {% endif %}
-          <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
-            <i class="fa fa-plus"></i> 新規登録
-          </a>
+            </div>
+            <div class="col-sm-6">
+              <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
+                <i class="fa fa-plus"></i> 新規登録
+              </a>
+            </div>
+          </div>
 
         </div>
         <!-- /.box-header -->
