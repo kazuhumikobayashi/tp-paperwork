@@ -67,6 +67,13 @@ class ProjectResult(BaseModel, db.Model):
     def is_result_input(self):
         return (self.work_time or 0) > 0
 
+    # 指定した月の支払い税率を取得
+    def tax_of_payment_confirmation_money(self, engineer_history):
+        if engineer_history:
+            return (self.payment_confirmation_money or 0) * engineer_history.payment_tax.rate
+        else:
+            return 0
+
     def __repr__(self):
         return "<ProjectResult:" + \
                 "'id='{}".format(self.id) + \

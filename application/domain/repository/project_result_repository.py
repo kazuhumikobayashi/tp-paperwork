@@ -12,6 +12,7 @@ from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.project import Project
 from application.domain.model.project_detail import ProjectDetail
 from application.domain.model.project_result import ProjectResult
+from application.domain.model.report.payment_list_by_department import PaymentListByDepartment
 from application.domain.repository.base_repository import BaseRepository
 
 
@@ -117,6 +118,51 @@ class ProjectResultRepository(BaseRepository):
                            asc(self.model.result_month))\
             .paginate(page, self.model.PER_PAGE)
         return pagination
+
+    def get_payment_list_by_department(self, month, department):
+        query = self.model.query
+        # BPの実績のみ取得
+        query = query.filter(self.model.project_detail
+                             .has(ProjectDetail.engineer
+                                  .has(Engineer.company
+                                       .has(Company.company_client_flags
+                                            .any(CompanyClientFlag.client_flag == ClientFlag.bp)))))
+        # 指定した月の実績を取得
+        query = query.filter(self.model.result_month == month)
+        # 指定の部署に所属しているBPに絞り込む
+        query = query.filter(self.model.project_detail
+                             .has(ProjectDetail.project
+                                  .has(Project.recorded_department_id == department.id)))
+
+        # プロジェクト名称の降順にする。
+        query = query.join(self.model.project_detail)\
+                     .join(ProjectDetail.project)\
+                     .order_by(Project.project_name.asc())
+
+        project_results = query.all()
+
+        payment_list = PaymentListByDepartment(
+                                    month=month,
+                                    department=department,
+                                    project_results=project_results)
+        return payment_list
+
+    def get_payment_list_order_by_payment_date(self, month):
+        query = self.model.query
+        # BPの実績のみ取得
+        query = query.filter(self.model.project_detail
+                             .has(ProjectDetail.engineer
+                                  .has(Engineer.company
+                                       .has(Company.company_client_flags
+                                            .any(CompanyClientFlag.client_flag == ClientFlag.bp)))))
+        # 指定した月の実績を取得。
+        query = query.filter(self.model.result_month == month)
+        # 支払日の昇順にする。
+        query = query.order_by(self.model.payment_expected_date.asc())
+
+        payment_list = query.all()
+
+        return payment_list
 
     def find_incomplete_results(self):
         today = datetime.today().date()
