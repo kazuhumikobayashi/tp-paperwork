@@ -1,4 +1,5 @@
 from application.domain.model.project_result import ProjectResult
+from application.domain.repository.project_result_repository import ProjectResultRepository
 from tests import BaseTestCase
 
 
@@ -6,6 +7,7 @@ class ProjectResultTests(BaseTestCase):
 
     def setUp(self):
         super(ProjectResultTests, self).setUp()
+        self.project_result_repository = ProjectResultRepository()
 
     def tearDown(self):
         super(ProjectResultTests, self).tearDown()
@@ -54,3 +56,12 @@ class ProjectResultTests(BaseTestCase):
                    "'>"
         actual = str(project_result)
         self.assertEqual(actual, expected)
+
+    # 技術者履歴がない場合、taxの値は0になる
+    def test_tax_of_payment_confirmation_money_if_no_history(self):
+        project_result = self.project_result_repository.find_all()[0]
+        expected = 0
+
+        actual = project_result.tax_of_payment_confirmation_money(engineer_history=None)
+
+        self.assertEqual(expected, actual)

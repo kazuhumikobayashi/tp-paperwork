@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, validators
+from wtforms import SelectField
 
 from application.controllers.form.fields import BeginningOfMonthField
 from application.controllers.form.validators import DataRequired
@@ -11,4 +11,7 @@ class OutputForm(FlaskForm):
                                 [DataRequired()],
                                 choices=OutputType.get_type_for_select(),
                                 render_kw={"title": "出力帳票選択"})
-    month = BeginningOfMonthField('年月', [validators.optional()], format='%Y/%m', render_kw={"autocomplete": "off"})
+    month = BeginningOfMonthField('年月',
+                                  [DataRequired()],
+                                  format='%Y/%m',
+                                  render_kw={"autocomplete": "off"})
