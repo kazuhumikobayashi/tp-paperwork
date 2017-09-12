@@ -15,9 +15,9 @@ class BillingTiming(Enum):
     @property
     def name_for_report(self):
         if self._value_ == self.billing_at_last.value:
-            return '検収月月末締め翌月末支払い'
+            return '納入検収後、月末締め翌月末支払'
         else:
-            return '請求毎月末締め翌月末支払い'
+            return '請求毎月末締め翌月末払い'
 
     @staticmethod
     def get_type_for_select():
