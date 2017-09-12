@@ -65,6 +65,8 @@ class ClientOrderReport(object):
         self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年m月d日'
         self.ws.get_named_range("start_date")[0].number_format = 'yyyy年m月d日'
         self.ws.get_named_range("end_date")[0].number_format = 'yyyy年m月d日'
+        if self.project.billing_timing == BillingTiming.billing_at_last:
+            self.ws.get_named_range("inspection_date")[0].number_format = 'yyyy"年"m"月"d"日"'
         # 罫線
         self.write_border_to_merged_cell(row=14)
         self.write_border_to_merged_cell(row=16)
