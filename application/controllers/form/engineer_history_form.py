@@ -50,8 +50,8 @@ class EngineerHistoryForm(FlaskForm):
     payment_per_hour = StringField('支払時間単価（必須）',
                                    [Length(max=128), required_if_variable],
                                    filters=[lambda x: x or None])
-    payment_per_bottom_hour = IntegerField('支払△下限時間単価（必須）', [required_if_variable])
-    payment_per_top_hour = IntegerField('支払＋下限時間単価', [required_if_variable])
+    payment_per_bottom_hour = IntegerField('支払－時間単価（必須）', [required_if_variable])
+    payment_per_top_hour = IntegerField('支払＋時間単価（必須）', [required_if_variable])
     payment_fraction = SelectField('支払端数金額',
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),

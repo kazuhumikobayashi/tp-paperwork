@@ -67,8 +67,8 @@ class ProjectDetailForm(FlaskForm):
                                          [Length(max=128)],
                                          filters=[lambda x: x or None])
     billing_per_hour = StringField('請求時間単価', [Length(max=128), required_if_variable], filters=[lambda x: x or None])
-    billing_per_bottom_hour = IntegerField('請求△下限時間単価', [required_if_variable])
-    billing_per_top_hour = IntegerField('請求＋上限時間単価', [required_if_variable])
+    billing_per_bottom_hour = IntegerField('請求－時間単価', [required_if_variable])
+    billing_per_top_hour = IntegerField('請求＋時間単価', [required_if_variable])
     billing_fraction = SelectField('請求端数金額',
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
@@ -100,9 +100,9 @@ class ProjectDetailForm(FlaskForm):
                                          render_kw={"disabled": "disabled"})
     payment_per_hour = StringField('支払時間単価', [Length(max=128)],
                                    render_kw={"disabled": "disabled"})
-    payment_per_bottom_hour = IntegerField('支払△下限時間単価',
+    payment_per_bottom_hour = IntegerField('支払－時間単価',
                                            render_kw={"disabled": "disabled"})
-    payment_per_top_hour = IntegerField('支払＋上限時間単価',
+    payment_per_top_hour = IntegerField('支払＋時間単価',
                                         render_kw={"disabled": "disabled"})
     payment_fraction = SelectField('支払端数金額',
                                    [validators.Optional()],
