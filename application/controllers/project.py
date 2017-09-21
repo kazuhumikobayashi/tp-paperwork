@@ -40,6 +40,7 @@ def index(page=1):
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = service.find(page,
                               form.project_name.data,
+                              form.estimation_no.data,
                               form.status.data,
                               form.end_user_company_id.data,
                               form.client_company_id.data,

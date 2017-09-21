@@ -62,6 +62,7 @@ class ProjectTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'estimation_no': 'M17-17001',
                                   'status': '99',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',

@@ -10,12 +10,14 @@ class ProjectRepository(BaseRepository):
 
     model = Project
 
-    def find(self, page, project_name, status, end_user_company_id,
+    def find(self, page, project_name, estimation_no, status, end_user_company_id,
              client_company_id, recorded_department_id, start_date, end_date):
         query = self.model.query
         if project_name:
             query = query.filter(self.model.project_name.like('%' + project_name + '%'))
-        if status:    
+        if estimation_no:
+            query = query.filter(self.model.estimation_no.like('%' + estimation_no + '%'))
+        if status:
             query = query.filter(self.model.status.in_([Status.parse(st) for st in status]))         
         if end_user_company_id:
             query = query.filter(self.model.end_user_company_id.in_(end_user_company_id))

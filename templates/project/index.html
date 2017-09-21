@@ -32,7 +32,8 @@
     <!-- /.box-header -->
     <div class="box-body">
       <div class="row">
-        {{ render_search_field(form.project_name, "col-md-12") }}
+        {{ render_search_field(form.project_name, "col-md-6") }}
+        {{ render_search_field(form.estimation_no, "col-md-6") }}
       </div>
       <div class="row">
         {{ render_search_field(form.status, "col-md-6", input_class="selectpicker") }}
@@ -74,6 +75,7 @@
 	        {% if pagination %}
 	          {{ p.pagination_widget(pagination,'.project_page',
 	          project_name=form.project_name.data,
+	          estimation_no=form.estimation_no.data,
 	          status=form.status.data,
 	          recorded_department_id=form.recorded_department_id.data,
 	          end_user_company_id=form.end_user_company_id.data,
@@ -96,7 +98,8 @@
             <tr>
               <th>エンドユーザー</th>
               <th>顧客会社</th>
-              <th>計上部署</th>
+              <th width="120px">計上部署</th>
+              <th width="90px">見積No</th>
               <th>プロジェクト名称</th>
               <th width="60px">開始日</th>
               <th width="60px">終了日</th>
@@ -109,6 +112,7 @@
               <td>{{ project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ project.client_company.company_name }}</td>
               <td>{{ project.recorded_department.department_name }}</td>
+              <td>{{ project.estimation_no }}</td>
               <td><a href="{{ url_for('project_contract.index', project_id=project.id) }}">{{ project.project_name }}</a></td>
               <td>{{ project.start_date|datetime_format("%Y/%m/%d") }}</td>
               <td>{{ project.end_date|datetime_format("%Y/%m/%d") }}</td>
