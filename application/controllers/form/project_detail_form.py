@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, DateField, SelectField, DateTimeField
+from wtforms import validators, StringField, SelectField, DateTimeField
 from wtforms.validators import ValidationError
 
-from application.controllers.form.fields import IntegerField, DateField, RadioField, SelectFieldWithDisable
+from application.controllers.form.fields import IntegerField, RadioField, SelectFieldWithDisable, \
+    BeginningOfMonthField, EndOfMonthField
 from application.controllers.form.validators import Length, DataRequired, InputRequired, LessThan
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
@@ -49,11 +50,11 @@ class ProjectDetailForm(FlaskForm):
     company = StringField('所属会社', render_kw={"disabled": "disabled"})
     billing_money = IntegerField('請求金額（必須）', [InputRequired()])
     remarks = StringField('備考', [Length(max=1024)], filters=[lambda x: x or None])
-    billing_start_day = DateField('請求契約開始年月（必須）',
+    billing_start_day = BeginningOfMonthField('請求契約開始年月（必須）',
                                   [required_if_engineer, LessThan('billing_end_day')],
                                   format='%Y/%m',
                                   render_kw={"autocomplete": "off"})
-    billing_end_day = DateField('請求契約終了年月（必須）',
+    billing_end_day = EndOfMonthField('請求契約終了年月（必須）',
                                 [required_if_engineer],
                                 format='%Y/%m',
                                 render_kw={"autocomplete": "off"})
@@ -79,11 +80,11 @@ class ProjectDetailForm(FlaskForm):
                                         filters=[lambda x: x or None],
                                         choices=Round.get_round_for_select(),
                                         render_kw={"title": "請求端数ルール"})
-    payment_start_day = DateField('支払契約開始年月',
+    payment_start_day = BeginningOfMonthField('支払契約開始年月',
                                   [validators.Optional()],
                                   format='%Y/%m',
                                   render_kw={"autocomplete": "off", "disabled": "disabled"})
-    payment_end_day = DateField('支払契約終了年月',
+    payment_end_day = EndOfMonthField('支払契約終了年月',
                                 [validators.Optional()],
                                 format='%Y/%m',
                                 render_kw={"autocomplete": "off", "disabled": "disabled"})
