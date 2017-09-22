@@ -65,8 +65,8 @@ class EstimatedReport(object):
             self.ws.get_named_range("contract_form")[0].value = self.project.contract_form.name
         # 表示形式
         self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年m月d日'
-        self.ws.get_named_range("start_date")[0].number_format = '  yyyy年m月d日'
-        self.ws.get_named_range("end_date")[0].number_format = '  yyyy年m月d日'
+        self.ws.get_named_range("start_date")[0].number_format = '"  "[$-ja-JP]ggge"年"m"月"d"日";@'
+        self.ws.get_named_range("end_date")[0].number_format = '"  "[$-ja-JP]ggge"年"m"月"d"日";@'
         # 請負ではない場合、「瑕疵担保期間」を非表示にする。
         if self.project.contract_form != Contract.blanket:
             self.ws.row_dimensions[19].hidden = True
