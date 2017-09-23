@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta, date
 
 from flask import session
 
@@ -66,9 +66,11 @@ class EstimatedReportTests(BaseTestCase):
                          self.estimated_report.project.client_company.company_name)
         self.assertEqual(self.estimated_report.ws.get_named_range("project_name")[0].value,
                          self.estimated_report.project.project_name)
-        self.assertEqual(self.estimated_report.ws.get_named_range("start_date")[0].value.date(),
+        self.assertEqual((date(1900, 1, 1)
+                          + timedelta(days=self.estimated_report.ws.get_named_range("start_date")[0].value - 2)),
                          self.estimated_report.project.start_date)
-        self.assertEqual(self.estimated_report.ws.get_named_range("end_date")[0].value.date(),
+        self.assertEqual((date(1900, 1, 1)
+                          + timedelta(days=self.estimated_report.ws.get_named_range("end_date")[0].value - 2)),
                          self.estimated_report.project.end_date)
         self.assertEqual(self.estimated_report.ws.get_named_range("billing_timing")[0].value,
                          self.estimated_report.project.billing_timing.name_for_report)
@@ -90,9 +92,11 @@ class EstimatedReportTests(BaseTestCase):
                          self.estimated_report.project.client_company.company_name)
         self.assertEqual(self.estimated_report.ws.get_named_range("project_name")[0].value,
                          self.estimated_report.project.project_name)
-        self.assertEqual(self.estimated_report.ws.get_named_range("start_date")[0].value.date(),
+        self.assertEqual((date(1900, 1, 1)
+                          + timedelta(days=self.estimated_report.ws.get_named_range("start_date")[0].value - 2)),
                          self.estimated_report.project.start_date)
-        self.assertEqual(self.estimated_report.ws.get_named_range("end_date")[0].value.date(),
+        self.assertEqual((date(1900, 1, 1)
+                          + timedelta(days=self.estimated_report.ws.get_named_range("end_date")[0].value - 2)),
                          self.estimated_report.project.end_date)
         self.assertEqual(self.estimated_report.ws.get_named_range("billing_timing")[0].value,
                          self.estimated_report.project.billing_timing.name_for_report)
