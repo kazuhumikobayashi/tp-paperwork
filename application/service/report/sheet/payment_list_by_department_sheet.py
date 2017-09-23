@@ -51,16 +51,15 @@ class PaymentListByDepartmentSheet(object):
                     = payment_list_by_department.project_results[i].project_detail.engineer.engineer_name
                 self.ws['F' + str(self.current_row)].value\
                     = payment_list_by_department.project_results[i].project_detail.project.project_name
+                # 支払実績 = 税抜実績 ＋ 税抜交通費
                 self.ws['G' + str(self.current_row)].value\
                     = (payment_list_by_department.project_results[i].payment_confirmation_money or 0)\
-                    + payment_list_by_department.project_results[i].tax_of_payment_confirmation_money(engineer_history)\
-                    + (payment_list_by_department.project_results[i].payment_transportation or 0)
-                self.ws['H' + str(self.current_row)].value\
-                    = payment_list_by_department.project_results[i].payment_transportation or 0
-                # プロジェクト計の合計金額を取得
+                    + (payment_list_by_department.project_results[i].payment_transportation or 0)\
+                    - payment_list_by_department.project_results[i].get_tax_of_payment_transportation(engineer_history)
+                # プロジェクト計の合計金額(税抜き)を取得
                 prj_total_money += (payment_list_by_department.project_results[i].payment_confirmation_money or 0)\
-                    + payment_list_by_department.project_results[i].tax_of_payment_confirmation_money(engineer_history)\
-                    + (payment_list_by_department.project_results[i].payment_transportation or 0)
+                    + (payment_list_by_department.project_results[i].payment_transportation or 0)\
+                    - payment_list_by_department.project_results[i].get_tax_of_payment_transportation(engineer_history)
                 # 罫線（それぞれの部署の一行目には、上に太い罫線を引く）
                 if (i + 1) == 1:
                     self.write_border(top_border_style='medium')
@@ -69,10 +68,10 @@ class PaymentListByDepartmentSheet(object):
                 # 表示形式
                 self.ws['C' + str(self.current_row)].alignment = Alignment(horizontal='center')
                 # フォント
-                for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
+                for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
                     self.ws[column_num + str(self.current_row)].font = Font(name="ＭＳ ゴシック")
                 # ユーザー定義
-                for column_num in ['G', 'H', 'I', 'J']:
+                for column_num in ['G', 'H', 'I']:
                     self.ws[column_num + str(self.current_row)].number_format = '#,##0'
                 # 行の高さ調整
                 self.ws.row_dimensions[self.current_row].height = 18
@@ -81,7 +80,7 @@ class PaymentListByDepartmentSheet(object):
                         or (payment_list_by_department.project_results[i].project_detail.project.project_name
                             != payment_list_by_department.project_results[i + 1].project_detail.project.project_name):
                     # PRJ計、部署計を代入
-                    self.ws['I' + str(self.current_row)].value = prj_total_money
+                    self.ws['H' + str(self.current_row)].value = prj_total_money
                     department_total_money += prj_total_money
                     # PRJ計リセット
                     prj_total_money = 0
@@ -94,7 +93,7 @@ class PaymentListByDepartmentSheet(object):
                 self.write_border_if_not_exist_bp()
 
             # 部署ごとの最終行の備考に部署ごとの合計を記載
-            self.ws['J' + str(self.current_row - 1)].value = department_total_money
+            self.ws['I' + str(self.current_row - 1)].value = department_total_money
 
         # 合計------------------------------------------------------------------------------------------------------
         # セルを結合
@@ -104,21 +103,20 @@ class PaymentListByDepartmentSheet(object):
         self.ws['G' + str(self.current_row)].value = "=sum(G3:G{})".format(self.current_row - 1)
         self.ws['H' + str(self.current_row)].value = "=sum(H3:H{})".format(self.current_row - 1)
         self.ws['I' + str(self.current_row)].value = "=sum(I3:I{})".format(self.current_row - 1)
-        self.ws['J' + str(self.current_row)].value = "=sum(J3:J{})".format(self.current_row - 1)
         # 書式設定
         # 書式
         self.ws['B' + str(self.current_row)].alignment = Alignment(horizontal="right")
         for column_num in ['G', 'H', 'I', 'J']:
             self.ws[column_num + str(self.current_row)].font = Font(name="ＭＳ ゴシック")
         # ユーザー定義
-        for column_num in ['G', 'H', 'I', 'J']:
+        for column_num in ['G', 'H', 'I']:
             self.ws[column_num + str(self.current_row)].number_format = '#,##0'
         # 行の高さ調整
         self.ws.row_dimensions[self.current_row].height = 18
         # 罫線
         self.write_border(top_border_style='medium')
         self.current_row += 1
-        for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
+        for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
             self.ws[column_num + str(self.current_row)].border = Border(top=Side(style='medium'))
 
     def write_border(self, top_border_style=None, bottom_border_style='dotted'):
@@ -126,7 +124,7 @@ class PaymentListByDepartmentSheet(object):
             self.ws[column_num + str(self.current_row)].border = Border(top=Side(style=top_border_style),
                                                                         left=Side(style='medium'),
                                                                         right=Side(style='medium'))
-        for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
+        for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
             self.ws[column_num + str(self.current_row)].border = Border(top=Side(style=top_border_style),
                                                                         left=Side(style='medium'),
                                                                         right=Side(style='medium'),

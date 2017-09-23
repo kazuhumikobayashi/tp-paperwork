@@ -19,6 +19,11 @@ class Tax(Enum):
     def rate(self):
         return self._value_ / 100
 
+    # 税込金額から税金を割り出す
+    @property
+    def rate_if_exclude_tax(self):
+        return self._value_ / (100 + self._value_)
+
     @staticmethod
     def get_type_for_select():
         ret = [('', '')]

@@ -51,26 +51,37 @@ class PaymentListByPaymentDateSheet(object):
             else:
                 self.ws['F' + str(self.current_row)].value = ''
             self.ws['G' + str(self.current_row)].value\
-                = self.payment_list_order_by_payment_date[i].billing_receipted_date
+                = self.payment_list_order_by_payment_date[i].payment_confirmation_money or 0
             self.ws['H' + str(self.current_row)].value\
-                = self.payment_list_order_by_payment_date[i].payment_expected_date
+                = self.payment_list_order_by_payment_date[i].payment_transportation or 0
             self.ws['I' + str(self.current_row)].value\
-                = self.payment_list_order_by_payment_date[i].payment_confirmation_money
+                = self.payment_list_order_by_payment_date[i].get_tax_of_payment_transportation(engineer_history)
             self.ws['J' + str(self.current_row)].value\
-                = self.payment_list_order_by_payment_date[i].tax_of_payment_confirmation_money(engineer_history)
+                = self.payment_list_order_by_payment_date[i].billing_receipted_date
             self.ws['K' + str(self.current_row)].value\
-                = self.payment_list_order_by_payment_date[i].payment_transportation
+                = self.payment_list_order_by_payment_date[i].payment_expected_date
+            # 支払実績 = 税抜実績 ＋ 税抜交通費
             self.ws['L' + str(self.current_row)].value\
+                = (self.payment_list_order_by_payment_date[i].payment_confirmation_money or 0)\
+                + (self.payment_list_order_by_payment_date[i].payment_transportation or 0)\
+                - self.payment_list_order_by_payment_date[i].get_tax_of_payment_transportation(engineer_history)
+            # 消費税 = 実績の税 ＋ 交通費の税
+            self.ws['M' + str(self.current_row)].value\
+                = self.payment_list_order_by_payment_date[i].tax_of_payment_confirmation_money(engineer_history)\
+                + self.payment_list_order_by_payment_date[i].get_tax_of_payment_transportation(engineer_history)
+            # 支払(税込) = 実績 ＋ 実績の消費税 ＋ 交通費
+            self.ws['N' + str(self.current_row)].value\
                 = (self.payment_list_order_by_payment_date[i].payment_confirmation_money or 0)\
                 + self.payment_list_order_by_payment_date[i].tax_of_payment_confirmation_money(engineer_history)\
                 + (self.payment_list_order_by_payment_date[i].payment_transportation or 0)
             # 支払日ごとの支払実績、消費税、支払(税込)を計算
             total_money_excluding_tax_by_payment_date\
-                += (self.payment_list_order_by_payment_date[i].payment_confirmation_money or 0)
+                += (self.payment_list_order_by_payment_date[i].payment_confirmation_money or 0)\
+                + (self.payment_list_order_by_payment_date[i].payment_transportation or 0)\
+                - self.payment_list_order_by_payment_date[i].get_tax_of_payment_transportation(engineer_history)
             total_tax_by_payment_date\
-                += self.payment_list_order_by_payment_date[i].tax_of_payment_confirmation_money(engineer_history)
-            total_transportation_by_payment_date\
-                += (self.payment_list_order_by_payment_date[i].payment_transportation or 0)
+                += self.payment_list_order_by_payment_date[i].tax_of_payment_confirmation_money(engineer_history)\
+                + self.payment_list_order_by_payment_date[i].get_tax_of_payment_transportation(engineer_history)
             total_money_by_payment_date\
                 += (self.payment_list_order_by_payment_date[i].payment_confirmation_money or 0)\
                 + self.payment_list_order_by_payment_date[i].tax_of_payment_confirmation_money(engineer_history)\
@@ -79,16 +90,16 @@ class PaymentListByPaymentDateSheet(object):
             # 罫線
             self.write_border_of_payment_list()
             # フォント
-            for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']:
+            for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O']:
                 self.ws[column_num + str(self.current_row)].font = Font(name='ＭＳ ゴシック')
             # 書式設定
-            for column_num in ['E', 'F', 'G', 'H']:
+            for column_num in ['E', 'F', 'J', 'K']:
                 self.ws[column_num + str(self.current_row)].alignment = Alignment(horizontal='center')
             self.ws['B' + str(self.current_row)].alignment = Alignment(shrink_to_fit=True)
             # ユーザー定義
-            for column_num in ['G', 'H']:
+            for column_num in ['J', 'K']:
                 self.ws[column_num + str(self.current_row)].number_format = 'm/d'
-            for column_num in ['I', 'J', 'K', 'L']:
+            for column_num in ['G', 'H', 'I', 'L', 'M', 'N']:
                 self.ws[column_num + str(self.current_row)].number_format = '#,##0'
             # 行の高さ調整
             self.ws.row_dimensions[self.current_row].height = 18
@@ -104,13 +115,12 @@ class PaymentListByPaymentDateSheet(object):
                     or (self.payment_list_order_by_payment_date[i].payment_expected_date
                         != self.payment_list_order_by_payment_date[i+1].payment_expected_date):
                 # セル結合
-                self.ws.merge_cells('G' + str(self.current_row) + ':H' + str(self.current_row))
-                self.ws['G' + str(self.current_row)].value\
+                self.ws.merge_cells('J' + str(self.current_row) + ':K' + str(self.current_row))
+                self.ws['J' + str(self.current_row)].value\
                     = self.payment_list_order_by_payment_date[i].payment_expected_date
-                self.ws['I' + str(self.current_row)].value = total_money_excluding_tax_by_payment_date
-                self.ws['J' + str(self.current_row)].value = total_tax_by_payment_date
-                self.ws['K' + str(self.current_row)].value = total_transportation_by_payment_date
-                self.ws['L' + str(self.current_row)].value = total_money_by_payment_date
+                self.ws['L' + str(self.current_row)].value = total_money_excluding_tax_by_payment_date
+                self.ws['M' + str(self.current_row)].value = total_tax_by_payment_date
+                self.ws['N' + str(self.current_row)].value = total_money_by_payment_date
                 # 支払実績、消費税、支払(税込)の総計を計算
                 total_money_excluding_tax += total_money_excluding_tax_by_payment_date
                 total_tax += total_tax_by_payment_date
@@ -122,10 +132,10 @@ class PaymentListByPaymentDateSheet(object):
                 total_transportation_by_payment_date = 0
                 total_money_by_payment_date = 0
                 # 書式設定
-                self.ws['G' + str(self.current_row)].number_format = 'm/d  集計'
-                self.ws['G' + str(self.current_row)].font = Font(bold=True)
-                self.ws['G' + str(self.current_row)].alignment = Alignment(horizontal='right')
-                for column_num in ['I', 'J', 'K', 'L']:
+                self.ws['J' + str(self.current_row)].number_format = 'm/d  集計'
+                self.ws['J' + str(self.current_row)].font = Font(bold=True)
+                self.ws['J' + str(self.current_row)].alignment = Alignment(horizontal='right')
+                for column_num in ['G', 'H', 'I', 'L', 'M', 'N']:
                     self.ws[column_num + str(self.current_row)].font = Font(name='ＭＳ ゴシック', bold=True)
                     self.ws[column_num + str(self.current_row)].alignment = Alignment(vertical='bottom')
                     self.ws[column_num + str(self.current_row)].number_format = '#,##0'
@@ -134,7 +144,7 @@ class PaymentListByPaymentDateSheet(object):
                 # 行の高さ調整
                 self.ws.row_dimensions[self.current_row].height = 18
                 # セルの背景
-                for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']:
+                for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O']:
                     self.ws[column_num + str(self.current_row)].fill = PatternFill(start_color='00FFFF',
                                                                                    end_color='00FFFF',
                                                                                    fill_type='solid')
@@ -142,18 +152,17 @@ class PaymentListByPaymentDateSheet(object):
 
         # 総計
         # 値の代入
-        self.ws['H' + str(self.current_row)].value = '総計'
-        self.ws['I' + str(self.current_row)].value = total_money_excluding_tax
-        self.ws['J' + str(self.current_row)].value = total_tax
-        self.ws['K' + str(self.current_row)].value = total_transportation
-        self.ws['L' + str(self.current_row)].value = total_money
+        self.ws['K' + str(self.current_row)].value = '総計'
+        self.ws['L' + str(self.current_row)].value = total_money_excluding_tax
+        self.ws['M' + str(self.current_row)].value = total_tax
+        self.ws['N' + str(self.current_row)].value = total_money
         # 表示形式
-        self.ws['H' + str(self.current_row)].alignment = Alignment(horizontal='center')
-        for column_num in ['I', 'J', 'K', 'L']:
+        self.ws['K' + str(self.current_row)].alignment = Alignment(horizontal='center')
+        for column_num in ['L', 'M', 'N']:
             self.ws[column_num + str(self.current_row)].number_format = '#,##0'
         # フォント
-        self.ws['H' + str(self.current_row)].font = Font(bold=True)
-        for column_num in ['I', 'J', 'K', 'L']:
+        self.ws['K' + str(self.current_row)].font = Font(bold=True)
+        for column_num in ['L', 'M', 'N']:
             self.ws[column_num + str(self.current_row)].font = Font(name="ＭＳ ゴシック")
         # 罫線
         self.write_border_of_payment_list(top_border_style='double')
@@ -166,7 +175,7 @@ class PaymentListByPaymentDateSheet(object):
                                                                            fill_type='solid')
 
     def write_border_of_payment_list(self, top_border_style='thin'):
-        for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M']:
+        for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O']:
             self.ws[column_num + str(self.current_row)].border = Border(top=Side(style=top_border_style),
                                                                         left=Side(style='medium'),
                                                                         right=Side(style='medium'),
