@@ -14,7 +14,7 @@ class EngineerSearchForm(FlaskForm):
                                                         "data-selected-text-format": "count > 4"})
     contract_engineer_is_checked = CheckboxField('',
                                                  [validators.optional()],
-                                                 choices=[('1', '契約終了している技術者を省く')],
+                                                 choices=[('1', '契約期間外の技術者を省く')],
                                                  default='1')
     business_category_id = SelectMultipleField('業種', [validators.optional()],
                                                render_kw={"title": "業種（複数選択）",
