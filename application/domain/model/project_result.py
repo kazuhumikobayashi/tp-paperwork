@@ -74,6 +74,13 @@ class ProjectResult(BaseModel, db.Model):
         else:
             return 0
 
+    # 交通費の税額を取得
+    def get_tax_of_payment_transportation(self, engineer_history):
+        if engineer_history:
+            return (self.payment_transportation or 0) * engineer_history.payment_tax.rate_if_exclude_tax
+        else:
+            return 0
+
     def __repr__(self):
         return "<ProjectResult:" + \
                 "'id='{}".format(self.id) + \
