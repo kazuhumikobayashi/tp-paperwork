@@ -47,6 +47,7 @@ class BpOrderReport(object):
         self.ws.get_named_range("bp_order_no")[0].value = self.project_detail.bp_order_no
         self.ws.get_named_range("printed_date")[0].value = datetime.today().date()
         self.ws.get_named_range("bp_company_name")[0].value = self.project_detail.engineer.company.company_name
+        self.ws.get_named_range("contract_date")[0].value = self.project_detail.engineer.company.contract_date
         self.ws.get_named_range("project_name_for_bp")[0].value = self.project_detail.project.project_name_for_bp
         self.ws.get_named_range("start_date")[0].value = self.project_detail.billing_start_day
         self.ws.get_named_range("end_date")[0].value = self.project_detail.billing_end_day
@@ -65,6 +66,7 @@ class BpOrderReport(object):
 
     def create_bp_order_style(self):
         bp_company_name = self.ws['B9']
+        contract_date = self.ws['B18']
         printed_date = self.ws['J4']
         start_date = self.ws['D26']
         end_date = self.ws['D27']
@@ -79,6 +81,7 @@ class BpOrderReport(object):
 
         # 表示形式
         printed_date.number_format = 'yyyy"年"m"月"d"日"'
+        contract_date.number_format = 'yyyy"年"m"月"d"日"'
         start_date.number_format = 'yyyy"年"m"月"d"日"'
         end_date.number_format = 'yyyy"年"m"月"d"日"'
         payment_per_month.number_format = '¥#,##0.-"/月額"'
