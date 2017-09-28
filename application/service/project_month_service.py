@@ -8,6 +8,9 @@ class ProjectMonthService(object):
     result_repository = ProjectResultRepository()
     billing_sequence_repository = BillingSequenceRepository()
 
+    def get_billing_department_report(self, month):
+        return self.repository.get_billing_department_report(month)
+
     def get_project_result_form(self, project_id):
         project_result_forms = self.repository.get_project_result_form(project_id)
         for project_result_form in project_result_forms:

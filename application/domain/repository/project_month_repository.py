@@ -14,6 +14,14 @@ class ProjectMonthRepository(BaseRepository):
 
     model = ProjectMonth
 
+    def get_billing_department_report(self, month):
+        query = self.model.query
+        query = query.filter(self.model.project_month == month)
+        query = query.filter(self.model.billing_confirmation_money > 0)
+        query = query.order_by('departments_1.id asc', 'companies_2.company_name asc', 
+                               'projects_1.estimation_no asc', self.model.project_month.desc()).all()
+        return query
+
     def get_project_result_form(self, project_id):
         project_months = self.model.query.order_by(self.model.project_month.desc())\
                                           .filter(self.model.project_id == project_id).all()
