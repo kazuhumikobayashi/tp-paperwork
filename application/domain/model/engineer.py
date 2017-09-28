@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
@@ -66,6 +68,15 @@ class Engineer(BaseModel, db.Model):
             if history.payment_start_day <= date <= history.payment_end_day:
                 return history.payment_site
         return None
+
+    def get_age(self):
+
+        age = ""
+        if self.birthday:
+            today = int(datetime.today().date().strftime('%Y%m%d'))
+            birthday = int(self.birthday.strftime('%Y%m%d'))
+            age = int((today - birthday) / 10000)
+        return age
 
     def __repr__(self):
         return "<Engineer:" + \

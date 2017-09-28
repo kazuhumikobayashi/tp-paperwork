@@ -8,6 +8,12 @@ class ProjectDetailService(object):
     project_detail_repository = ProjectDetailRepository()
     order_sequence_repository = OrderSequenceRepository()
 
+    def get_project_list_our_company(self, month):
+        return self.project_detail_repository.get_project_list_our_company(month)
+
+    def get_project_list_bp(self, month):
+        return self.project_detail_repository.get_project_list_bp(month)
+
     def find_by_id(self, project_detail_id):
         return self.project_detail_repository.find_by_id(project_detail_id)
 
