@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta, date
+from datetime import datetime
 
+from erajp.converter import strjpftime
 from flask import session
 
 from application import app
@@ -66,12 +67,16 @@ class EstimatedReportTests(BaseTestCase):
                          self.estimated_report.project.client_company.company_name)
         self.assertEqual(self.estimated_report.ws.get_named_range("project_name")[0].value,
                          self.estimated_report.project.project_name)
-        self.assertEqual((date(1900, 1, 1)
-                          + timedelta(days=self.estimated_report.ws.get_named_range("start_date")[0].value - 2)),
-                         self.estimated_report.project.start_date)
-        self.assertEqual((date(1900, 1, 1)
-                          + timedelta(days=self.estimated_report.ws.get_named_range("end_date")[0].value - 2)),
-                         self.estimated_report.project.end_date)
+        start_date = datetime(self.estimated_report.project.start_date.year,
+                              self.estimated_report.project.start_date.month,
+                              self.estimated_report.project.start_date.day)
+        self.assertEqual(self.estimated_report.ws.get_named_range("start_date")[0].value,
+                         strjpftime(start_date, '  %O%E年%m月%d日'))
+        end_date = datetime(self.estimated_report.project.end_date.year,
+                            self.estimated_report.project.end_date.month,
+                            self.estimated_report.project.end_date.day)
+        self.assertEqual(self.estimated_report.ws.get_named_range("end_date")[0].value,
+                         strjpftime(end_date, '  %O%E年%m月%d日'))
         self.assertEqual(self.estimated_report.ws.get_named_range("billing_timing")[0].value,
                          self.estimated_report.project.billing_timing.name_for_report)
         self.assertEqual(self.estimated_report.ws.get_named_range("contract_form")[0].value,
@@ -92,12 +97,16 @@ class EstimatedReportTests(BaseTestCase):
                          self.estimated_report.project.client_company.company_name)
         self.assertEqual(self.estimated_report.ws.get_named_range("project_name")[0].value,
                          self.estimated_report.project.project_name)
-        self.assertEqual((date(1900, 1, 1)
-                          + timedelta(days=self.estimated_report.ws.get_named_range("start_date")[0].value - 2)),
-                         self.estimated_report.project.start_date)
-        self.assertEqual((date(1900, 1, 1)
-                          + timedelta(days=self.estimated_report.ws.get_named_range("end_date")[0].value - 2)),
-                         self.estimated_report.project.end_date)
+        start_date = datetime(self.estimated_report.project.start_date.year,
+                              self.estimated_report.project.start_date.month,
+                              self.estimated_report.project.start_date.day)
+        self.assertEqual(self.estimated_report.ws.get_named_range("start_date")[0].value,
+                         strjpftime(start_date, '  %O%E年%m月%d日'))
+        end_date = datetime(self.estimated_report.project.end_date.year,
+                            self.estimated_report.project.end_date.month,
+                            self.estimated_report.project.end_date.day)
+        self.assertEqual(self.estimated_report.ws.get_named_range("end_date")[0].value,
+                         strjpftime(end_date, '  %O%E年%m月%d日'))
         self.assertEqual(self.estimated_report.ws.get_named_range("billing_timing")[0].value,
                          self.estimated_report.project.billing_timing.name_for_report)
         self.assertEqual(self.estimated_report.ws.get_named_range("contract_form")[0].value,

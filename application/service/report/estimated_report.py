@@ -1,5 +1,7 @@
+import locale
 from datetime import datetime
 
+from erajp.converter import strjpftime
 from openpyxl.drawing.image import Image
 from openpyxl.styles import Border, Side, Font, Alignment
 
@@ -57,16 +59,18 @@ class EstimatedReport(object):
         if self.project.client_company:
             self.ws.get_named_range("client_company_name")[0].value = self.project.client_company.company_name
         self.ws.get_named_range("project_name")[0].value = self.project.project_name
-        self.ws.get_named_range("start_date")[0].value = self.project.start_date
-        self.ws.get_named_range("end_date")[0].value = self.project.end_date
+        # start_date、end_dateをdatetime型に変更
+        start_date = datetime(self.project.start_date.year, self.project.start_date.month, self.project.start_date.day)
+        end_date = datetime(self.project.end_date.year, self.project.end_date.month, self.project.end_date.day)
+        locale.setlocale(locale.LC_ALL, '')
+        self.ws.get_named_range("start_date")[0].value = strjpftime(start_date, '  %O%E年%m月%d日')
+        self.ws.get_named_range("end_date")[0].value = strjpftime(end_date, '  %O%E年%m月%d日')
         if self.project.billing_timing:
             self.ws.get_named_range("billing_timing")[0].value = self.project.billing_timing.name_for_report
         if self.project.contract_form:
             self.ws.get_named_range("contract_form")[0].value = self.project.contract_form.name
         # 表示形式
         self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年m月d日'
-        self.ws.get_named_range("start_date")[0].number_format = '"  "[$-ja-JP]ggge"年"m"月"d"日";@'
-        self.ws.get_named_range("end_date")[0].number_format = '"  "[$-ja-JP]ggge"年"m"月"d"日";@'
         # 請負ではない場合、「瑕疵担保期間」を非表示にする。
         if self.project.contract_form != Contract.blanket:
             self.ws.row_dimensions[19].hidden = True
