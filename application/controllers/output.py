@@ -4,13 +4,16 @@ from flask import request
 from flask import render_template
 
 from application.controllers.form.output_form import OutputForm
-from application.domain.model.immutables.output_type import OutputType
 from application.service.payment_list_service import PaymentListService
 from application.service.report.payment_list_report import PaymentListReport
+from application.domain.model.immutables.output_type import OutputType
+from application.service.project_detail_service import ProjectDetailService
+from application.service.report.project_list import ProjectList
 
 bp = Blueprint('output', __name__, url_prefix='/output')
 
 payment_list_service = PaymentListService()
+project_detail_service = ProjectDetailService()
 
 
 @bp.route('/', methods=['GET', 'POST'])
@@ -26,6 +29,11 @@ def detail():
                                                     project_list_by_payment_date,
                                                     form.month.data)
             return payment_list_report.download()
+        elif form.output_report.data == str(OutputType.project_list):
+            project_details_bp = project_detail_service.get_project_list_bp(form.month.data)
+            project_details_our_company = project_detail_service.get_project_list_our_company(form.month.data)
+            project_list = ProjectList(project_details_bp, project_details_our_company, form.month.data)
+            return project_list.download()
 
     current_app.logger.debug(form.errors)
     return render_template('output/download.html', form=form)
