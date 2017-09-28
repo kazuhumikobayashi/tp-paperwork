@@ -57,8 +57,9 @@ class BeginningOfMonthField(wtforms.DateField):
         if valuelist:
             date_str = ' '.join(valuelist)
             try:
-                tmp_data = datetime.strptime(date_str, self.format).date()
-                self.data = date(tmp_data.year, tmp_data.month, 1)
+                if date_str != '':
+                    tmp_data = datetime.strptime(date_str, self.format).date()
+                    self.data = date(tmp_data.year, tmp_data.month, 1)
             except ValueError:
                 raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
 
@@ -69,8 +70,9 @@ class EndOfMonthField(wtforms.DateField):
         if valuelist:
             date_str = ' '.join(valuelist)
             try:
-                d = datetime.strptime(date_str, self.format).date()
-                self.data = d + relativedelta(months=1, days=-1)
+                if date_str != '':
+                    d = datetime.strptime(date_str, self.format).date()
+                    self.data = d + relativedelta(months=1, days=-1)
             except ValueError:
                 raise ValueError(self.gettext('{}はyyyy/mm形式で入力してください'.format(self.label.text)))
 
