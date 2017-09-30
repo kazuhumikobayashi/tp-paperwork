@@ -253,7 +253,9 @@ class ProjectList(object):
                                                                          top=Side(style='dotted'),
                                                                          left=Side(style='thin'),
                                                                          right=Side(style='thin'),
-                                                                         bottom=Side(style='thin'))                
+                                                                         bottom=Side(style='thin'))
+        
+        self.ws.title = self.ws.title + '{}月'.format(self.month.month)          
 
         # エクセルを一時フォルダに保存
         self.excel.save('案件一覧_{}.xlsx'.format(datetime.today().strftime("%Y%m%d")))
