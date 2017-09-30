@@ -12,11 +12,14 @@ from flask import url_for
 from application.controllers.form.project_billing_form import ProjectBillingForm
 from application.controllers.form.project_month_form import ProjectMonthForm
 from application.domain.model.immutables.detail_type import DetailType
+from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.input_flag import InputFlag
 from application.domain.model.immutables.message import Message
+from application.domain.model.immutables.site import Site
 from application.domain.model.immutables.tax import Tax
 from application.domain.model.project_billing import ProjectBilling
 from application.domain.model.project_detail import ProjectDetail
+from application.service.calculator import Calculator
 from application.service.project_billing_service import ProjectBillingService
 from application.service.project_month_service import ProjectMonthService
 from application.service.project_service import ProjectService
@@ -175,6 +178,13 @@ def save_flag():
 @bp.route('/billing_report_download/<project_month_id>', methods=['GET'])
 def billing_report_download(project_month_id):
     project_month = project_month_service.find_by_id(project_month_id)
+    # 請求日が空の場合、請求月の最終日を登録する。
+    if project_month.billing_printed_date is None:
+        # サイトを0にすることで、当月の最終日を取得（Site.zero）。
+        # 最終月が休日の場合、前倒しする（HolidayFlag.before）。
+        project_month.billing_printed_date\
+            = Calculator(project_month.project_month, Site.zero, HolidayFlag.before).get_deposit_date()
+        project_month_service.save(project_month)
     billing_report = BillingReport(project_month)
     return billing_report.billing_report_download()
 
@@ -182,5 +192,11 @@ def billing_report_download(project_month_id):
 @bp.route('/delivery_report_download/<project_month_id>', methods=['GET'])
 def delivery_report_download(project_month_id):
     project_month = project_month_service.find_by_id(project_month_id)
+    # 請求日が空の場合、請求月の最終日を表示する（請求書発行日なので、登録はしない）。
+    if project_month.billing_printed_date is None:
+        # サイトを0にすることで、当月の最終日を取得（Site.zero）。
+        # 最終月が休日の場合、前倒しする（HolidayFlag.before）。
+        project_month.billing_printed_date\
+            = Calculator(project_month.project_month, Site.zero, HolidayFlag.before).get_deposit_date()
     billing_report = DeliveryReport(project_month)
     return billing_report.delivery_report_download()

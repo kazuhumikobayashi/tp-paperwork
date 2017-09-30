@@ -6,6 +6,7 @@ from application.domain.model.immutables.site import Site
 class SiteTests(unittest.TestCase):
 
     def test_name(self):
+        self.assertEqual(Site.zero.name, '0')
         self.assertEqual(Site.ten.name, '10')
         self.assertEqual(Site.twenty_five.name, '25')
         self.assertEqual(Site.thirty.name, '30')
@@ -17,6 +18,7 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(Site.sixty.name, '60')
 
     def test_parse(self):
+        zero = 0
         ten = 10
         twenty_five = 25
         thirty = 30
@@ -27,6 +29,7 @@ class SiteTests(unittest.TestCase):
         fifty_five = 55
         sixty = 60
 
+        self.assertEquals(Site.parse(zero), Site.zero)
         self.assertEquals(Site.parse(ten), Site.ten)
         self.assertEquals(Site.parse(twenty_five), Site.twenty_five)
         self.assertEquals(Site.parse(thirty), Site.thirty)
@@ -38,10 +41,11 @@ class SiteTests(unittest.TestCase):
         self.assertEquals(Site.parse(sixty), Site.sixty)
 
     def test_parse_fail_is_none(self):
-        self.assertIsNone(Site.parse(0))
+        self.assertIsNone(Site.parse(-1))
         self.assertIsNone(Site.parse('a'))
 
     def test_str(self):
+        zero = '0'
         ten = '10'
         twenty_five = '25'
         thirty = '30'
@@ -52,6 +56,7 @@ class SiteTests(unittest.TestCase):
         fifty_five = '55'
         sixty = '60'
 
+        self.assertEquals(str(Site.zero), zero)
         self.assertEquals(str(Site.ten), ten)
         self.assertEquals(str(Site.twenty_five), twenty_five)
         self.assertEquals(str(Site.thirty), thirty)
