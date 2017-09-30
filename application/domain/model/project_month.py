@@ -76,6 +76,9 @@ class ProjectMonth(BaseModel, db.Model):
     def get_fiscal_year(self):
         return self._get_fiscal_year(self.project_month)
 
+    def get_tax_of_billing_transportation(self):
+        return (self.billing_transportation or 0) * self.billing_tax.rate_if_exclude_tax
+
     def __repr__(self):
         return "<ProjectMonth:" + \
                 "'id='{}".format(self.id) + \
