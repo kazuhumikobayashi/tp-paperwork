@@ -218,8 +218,13 @@ class ProjectTests(BaseTestCase):
 
     # コピー時に見積番号が重複しない
     def test_duplicate_copy_project(self):
-        # 2017年度のシーケンスを取得
-        estimation_sequence = self.estimation_sequence_repository.find_by_fiscal_year(17)
+        # 今年度のシーケンスを取得
+        year = int(date.today().strftime('%y'))
+        if int(date.today().strftime('%m')) >= 10:
+            year += 1
+
+        estimation_sequence = self.estimation_sequence_repository.find_by_fiscal_year(year)
+        print(estimation_sequence)
         # これから作成される見積番号を作成
         estimation_no = 'M' + str(estimation_sequence.fiscal_year)\
                         + '-'\
