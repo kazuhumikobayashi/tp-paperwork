@@ -35,6 +35,7 @@
       <div class="box-body">
         <div class="row">
           {{ render_field(form.client_billing_no, "col-sm-6") }}
+          {{ render_field(form.billing_printed_date, "col-sm-6", input_class="date") }}
         </div>
         <div class="box-frame">
           <div class="box-header with-border">
@@ -85,7 +86,6 @@
           {{ render_field(form.billing_transportation, "col-sm-6") }}
         </div>
         <div class="row">
-          {{ render_field(form.billing_printed_date, "col-sm-6", input_class="date") }}
           {{ render_field(form.deposit_date, "col-sm-6", input_class="date") }}
         </div>
         <div class="row">

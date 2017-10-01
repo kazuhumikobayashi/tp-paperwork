@@ -466,6 +466,7 @@ class ProjectBillingTests(BaseTestCase):
         })
 
         project_month = self.project_month_repository.find_all()[0]
+        project_month.billing_printed_date = None
 
         # 帳票作成実行
         result = self.app.get('/project/billing/billing_report_download/' + str(project_month.id))
@@ -485,6 +486,7 @@ class ProjectBillingTests(BaseTestCase):
         project_month.project.client_order_no = '11111-0170'
         project_month.project.client_company.billing_tax = Tax.eight
         project_detail = self.project_detail_repository.find_by_id(1)
+        project_month.billing_printed_date = date(2017, 1, 1)
 
         for i in range(20):
             project_billing = ProjectBilling(
@@ -514,6 +516,7 @@ class ProjectBillingTests(BaseTestCase):
         })
 
         project_month = self.project_month_repository.find_all()[0]
+        project_month.billing_printed_date = None
 
         # 帳票作成実行
         result = self.app.get('/project/billing/delivery_report_download/' + str(project_month.id))
@@ -533,6 +536,7 @@ class ProjectBillingTests(BaseTestCase):
         project_month.project.client_order_no = '11111-0170'
         project_month.project.client_company.billing_tax = Tax.eight
         project_detail = self.project_detail_repository.find_by_id(1)
+        project_month.billing_printed_date = date(2017, 1, 1)
 
         for i in range(20):
             project_billing = ProjectBilling(

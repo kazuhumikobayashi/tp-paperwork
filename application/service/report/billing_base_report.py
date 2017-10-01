@@ -1,5 +1,4 @@
 import locale
-from datetime import datetime
 
 from openpyxl.drawing.image import Image
 from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
@@ -39,7 +38,7 @@ class BillingBaseReport(object):
     def write_top_part(self):
         # 値を代入
         self.ws.get_named_range("client_billing_no")[0].value = self.project_month.client_billing_no
-        self.ws.get_named_range("printed_date")[0].value = datetime.today().date()
+        self.ws.get_named_range("printed_date")[0].value = self.project_month.billing_printed_date
         self.ws.get_named_range("client_company_name")[0].value = \
             self.project_month.project.client_company.company_name
         self.ws.get_named_range("project_name")[0].value = self.project_month.project.project_name

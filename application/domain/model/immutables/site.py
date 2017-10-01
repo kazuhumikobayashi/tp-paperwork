@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class Site(Enum):
+    zero = 0
     ten = 10
     twenty_five = 25
     thirty = 30
@@ -14,7 +15,9 @@ class Site(Enum):
 
     @property
     def name(self):
-        if self._value_ == self.ten.value:
+        if self._value_ == self.zero.value:
+            return '0'
+        elif self._value_ == self.ten.value:
             return '10'
         elif self._value_ == self.twenty_five.value:
             return '25'
@@ -36,7 +39,12 @@ class Site(Enum):
     @staticmethod
     def get_site_for_select():
         ret = [('', '')]
-        site_list = [(str(site.value), site.name) for site in Site]
+        site_list = []
+        for site in Site:
+            # 0は画面上登録できないようにする。
+            if site.value == 0:
+                continue
+            site_list.append((str(site.value), site.name))
         ret.extend(site_list)
         return ret
 
