@@ -3,10 +3,7 @@ import locale
 from openpyxl.drawing.image import Image
 from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
 
-from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.service.report.sheet.address_sheet import AddressSheet
-
-project_billing_repository = ProjectBillingRepository()
 
 
 class BillingBaseReport(object):

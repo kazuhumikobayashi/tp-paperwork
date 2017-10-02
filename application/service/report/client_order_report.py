@@ -3,10 +3,7 @@ from datetime import datetime
 from openpyxl.styles import Border, Side, Font
 
 from application.domain.model.immutables.billing_timing import BillingTiming
-from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
 from application.domain.repository.excel import Excel
-
-engineer_history_repository = EngineerHistoryRepository()
 
 
 class ClientOrderReport(object):
