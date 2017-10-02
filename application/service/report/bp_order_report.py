@@ -7,10 +7,9 @@ from application.domain.repository.engineer_history_repository import EngineerHi
 from application.domain.repository.excel import Excel
 from application.service.report.sheet.address_sheet import AddressSheet
 
-engineer_history_repository = EngineerHistoryRepository()
-
 
 class BpOrderReport(object):
+    engineer_history_repository = EngineerHistoryRepository()
 
     def __init__(self, project_detail):
         self.project_detail = project_detail
@@ -42,8 +41,8 @@ class BpOrderReport(object):
 
     def write_bp_order_original(self):
         # 値を代入
-        engineer_history = engineer_history_repository.get_history_by_date(self.project_detail.engineer.id,
-                                                                           self.project_detail.billing_start_day)
+        engineer_history = self.engineer_history_repository.get_history_by_date(self.project_detail.engineer.id,
+                                                                                self.project_detail.billing_start_day)
         self.ws.get_named_range("bp_order_no")[0].value = self.project_detail.bp_order_no
         self.ws.get_named_range("printed_date")[0].value = datetime.today().date()
         self.ws.get_named_range("bp_company_name")[0].value = self.project_detail.engineer.company.company_name

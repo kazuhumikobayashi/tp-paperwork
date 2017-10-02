@@ -7,10 +7,9 @@ from application.domain.repository.excel import Excel
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.service.report.billing_base_report import BillingBaseReport
 
-project_billing_repository = ProjectBillingRepository()
-
 
 class DeliveryReport(BillingBaseReport):
+    project_billing_repository = ProjectBillingRepository()
 
     def __init__(self, project_month):
         super(DeliveryReport, self).__init__(project_month)
@@ -30,8 +29,8 @@ class DeliveryReport(BillingBaseReport):
                                                     datetime.today().strftime("%Y%m%d")))
 
     def create_billing_details(self):
-        project_billings = project_billing_repository.find_billings_at_a_month(self.project_month.project_id,
-                                                                               self.project_month.project_month)
+        project_billings = self.project_billing_repository.find_billings_at_a_month(self.project_month.project_id,
+                                                                                    self.project_month.project_month)
         # 請求明細----------------------------------------------------------------------------------
         for n, project_billing in enumerate(project_billings):
             # 書式設定
