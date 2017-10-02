@@ -34,7 +34,7 @@
               <table class="table table-bordered table-hover data-table">
                 <thead>
                 <tr>
-                  <th width="80px">計上部署</th>
+                  <th width="60px">見積りNo</th>
                   <th>プロジェクト名称</th>
                   <th width="60px" class="hidden-xs">開始日</th>
                   <th width="60px" class="hidden-xs">終了日</th>
@@ -43,7 +43,7 @@
                 <tbody>
                 {% for estimate in incomplete_estimates %}
                 <tr>
-                  <td>{{ estimate.recorded_department.department_name }}</td>
+                  <td>{{ estimate.estimation_no }}</td>
                   <td><a href="{{ url_for('project_contract.index', project_id=estimate.id) }}">{{ estimate.project_name }}</a></td>
                   <td class="hidden-xs">{{ estimate.start_date|datetime_format('%Y/%m/%d') }}</td>
                   <td class="hidden-xs">{{ estimate.end_date|datetime_format('%Y/%m/%d') }}</td>
