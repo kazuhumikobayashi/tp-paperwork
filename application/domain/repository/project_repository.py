@@ -31,7 +31,8 @@ class ProjectRepository(BaseRepository):
             query = query.filter(self.model.end_date <= end_date)
         pagination = \
             query.order_by('companies_1.company_name asc', 'companies_2.company_name asc',
-                           'departments_1.department_name asc', self.model.project_name.asc())\
+                           'departments_1.department_name asc', self.model.project_name.asc(),
+                           self.model.estimation_no.asc())\
             .paginate(page, self.model.PER_PAGE)
         return pagination
 
