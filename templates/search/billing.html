@@ -36,7 +36,8 @@
     <form class="form-horizontal" method="get" action="{{ url_for('.index') }}">
     <div class="box-body">
       <div class="row">
-        {{ render_search_field(form.project_name, "col-md-12") }}
+        {{ render_search_field(form.project_name, "col-md-6") }}
+        {{ render_search_field(form.estimation_no, "col-md-6") }}
       </div>
       <div class="row">
         {{ render_search_field(form.billing_input_flag, "col-sm-6") }}
@@ -78,6 +79,7 @@
           {% if pagination %}
             {{ p.pagination_widget(pagination,'.payment_page',
             project_name=form.project_name.data,
+            estimation_no=form.estimation_no.data,
             billing_input_flag=form.billing_input_flag.data,
             deposit_input_flag=form.deposit_input_flag.data,
             end_user_company_id=form.end_user_company_id.data,
@@ -95,6 +97,7 @@
               <th>エンドユーザー</th>
               <th>顧客会社</th>
               <th>計上部署</th>
+              <th width="90px">見積No</th>
               <th>プロジェクト名称</th>
               <th width="90px">入金予定日</th>
               <th class="text-right" width="100px">請求確定金額</th>
@@ -106,6 +109,7 @@
               <td>{{ project_month.project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ project_month.project.client_company.company_name }}</td>
               <td>{{ project_month.project.recorded_department.department_name }}</td>
+              <td>{{ project_month.project.estimation_no }}</td>
               <td><a href="{{ url_for('project_billing.index', project_id=project_month.project.id) }}">{{ project_month.project.project_name }}</a></td>
               <td>{{ project_month.deposit_date|datetime_format("%Y/%m/%d") }}</td>
               <td class="text-right">{{ project_month.billing_confirmation_money|number_with_commas|with_yen|filter_suppress_none }}</td>

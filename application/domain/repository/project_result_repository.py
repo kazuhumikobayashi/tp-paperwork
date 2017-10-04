@@ -38,7 +38,7 @@ class ProjectResultRepository(BaseRepository):
             .filter(self.model.result_month == project_payment_form.month).all()
         project_payment_form.project_results = project_results
 
-    def find_by_payment(self, page, project_name, input_flag, end_user_company_id,
+    def find_by_payment(self, page, project_name, estimation_no, input_flag, end_user_company_id,
                         client_company_id, recorded_department_id, engineer_name,
                         payment_expected_date_from, payment_expected_date_to):
         query = self.model.query\
@@ -49,6 +49,9 @@ class ProjectResultRepository(BaseRepository):
         if project_name:
             query = query.filter(self.model.project_detail
                                  .has(ProjectDetail.project.has(Project.project_name.like('%' + project_name + '%'))))
+        if estimation_no:
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.estimation_no.like('%' + estimation_no + '%'))))
         if input_flag:
             query = query.filter(self.model.payment_flag.in_([InputFlag.parse(st) for st in input_flag]))
         if end_user_company_id:
@@ -76,13 +79,16 @@ class ProjectResultRepository(BaseRepository):
             .paginate(page, self.model.PER_PAGE)
         return pagination
 
-    def find_by_result(self, page, project_name, result_input_flag, end_user_company_id,
+    def find_by_result(self, page, project_name, estimation_no, result_input_flag, end_user_company_id,
                        client_company_id, recorded_department_id, engineer_name, result_month_from, result_month_to):
         query = self.model.query\
             .filter(self.model.project_detail.has(ProjectDetail.detail_type == DetailType.engineer))
         if project_name:
             query = query.filter(self.model.project_detail
                                  .has(ProjectDetail.project.has(Project.project_name.like('%' + project_name + '%'))))
+        if estimation_no:
+            query = query.filter(self.model.project_detail
+                                 .has(ProjectDetail.project.has(Project.estimation_no.like('%' + estimation_no + '%'))))
         if result_input_flag and len(result_input_flag) == 1:
             if InputFlag.yet in [InputFlag.parse(f) for f in result_input_flag]:
                 query = query.filter(or_(self.model.work_time == 0, self.model.work_time.is_(None)))

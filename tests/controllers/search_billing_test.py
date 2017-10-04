@@ -9,18 +9,18 @@ from application.domain.repository.project_month_repository import ProjectMonthR
 from tests import BaseTestCase
 
 
-class BillingSearchTests(BaseTestCase):
+class SearchBillingTests(BaseTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(BillingSearchTests, cls).setUpClass()
+        super(SearchBillingTests, cls).setUpClass()
 
     def setUp(self):
-        super(BillingSearchTests, self).setUp()
+        super(SearchBillingTests, self).setUp()
         self.project_month_repository = ProjectMonthRepository()
 
     def tearDown(self):
-        super(BillingSearchTests, self).tearDown()
+        super(SearchBillingTests, self).tearDown()
 
     # 請求の検索画面に遷移する。
     def test_get_billing_search(self):
@@ -71,6 +71,7 @@ class BillingSearchTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'estimation_no': 'test',
                                   'billing_input_flag': '1',
                                   'deposit_input_flag': '1',
                                   'end_user_company_id': '1', 
@@ -91,6 +92,7 @@ class BillingSearchTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'estimation_no': 'test',
                                   'billing_input_flag': '1',
                                   'deposit_input_flag': '1',
                                   'end_user_company_id': '1', 
@@ -110,7 +112,7 @@ class BillingSearchTests(BaseTestCase):
             'password': 'test'
         })
 
-        project_month  = self.project_month_repository.find_by_id(3)
+        project_month = self.project_month_repository.find_by_id(3)
         self.assertEqual(project_month.deposit_input_flag, InputFlag.yet)
 
         # 入金済みフラグをチェック有りで更新する。
