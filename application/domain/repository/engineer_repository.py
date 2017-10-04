@@ -6,12 +6,10 @@ from flask import session
 
 from application import db
 from application.domain.model.company import Company
-from application.domain.model.company_client_flag import CompanyClientFlag
 from application.domain.model.engineer import Engineer
 from application.domain.model.engineer_history import EngineerHistory
 from application.domain.model.engineer_skill import EngineerSkill
 from application.domain.model.engineer_business_category import EngineerBusinessCategory
-from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.repository.base_repository import BaseRepository
 
 
@@ -27,9 +25,8 @@ class EngineerRepository(BaseRepository):
             query = query.filter(self.model.company_id.in_(company_id))
         if contract_engineer_is_checked:
             query = query\
-                .filter((self.model.engineer_histories.any(EngineerHistory.payment_start_day <= datetime.today().date()) &
-                         self.model.engineer_histories.any(datetime.today().date() <= EngineerHistory.payment_end_day)) |
-                        self.model.company.has(Company.company_client_flags.any(CompanyClientFlag.client_flag == ClientFlag.our_company)))
+                .filter(self.model.engineer_histories.any(EngineerHistory.payment_start_day <= datetime.today().date())
+                        & self.model.engineer_histories.any(datetime.today().date() <= EngineerHistory.payment_end_day))
         if skill_id and skill_id != '' and skill_id != [''] and skill_id != []:
             query = query.filter(self.model.engineer_skills.any(EngineerSkill.skill_id.in_(skill_id)))
         if business_category_id and business_category_id != '' and business_category_id != [''] and business_category_id != []:
