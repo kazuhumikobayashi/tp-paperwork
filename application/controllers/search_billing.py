@@ -34,6 +34,7 @@ def index(page=1):
     form.recorded_department_id.choices = department_service.find_all_for_multi_select()
     pagination = project_month_service.find_by_billing(page,
                                                        form.project_name.data,
+                                                       form.estimation_no.data,
                                                        form.billing_input_flag.data,
                                                        form.deposit_input_flag.data,
                                                        form.end_user_company_id.data,  

@@ -15,14 +15,14 @@ from application.domain.repository.project_month_repository import ProjectMonthR
 from tests import BaseTestCase
 
 
-class ResultSearchTests(BaseTestCase):
+class SearchResultTests(BaseTestCase):
 
     def setUp(self):
-        super(ResultSearchTests, self).setUp()
+        super(SearchResultTests, self).setUp()
         self.project_month_repository = ProjectMonthRepository()
 
     def tearDown(self):
-        super(ResultSearchTests, self).tearDown()
+        super(SearchResultTests, self).tearDown()
 
     # 実績検索画面に遷移する。
     def test_get_result_search(self):
@@ -104,6 +104,7 @@ class ResultSearchTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'estimation_no': 'test',
                                   'result_input_flag': '1',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',
@@ -124,6 +125,7 @@ class ResultSearchTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'estimation_no': 'test',
                                   'result_input_flag': '0',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',

@@ -15,6 +15,7 @@ class SearchResultForm(FlaskForm):
     last_day = first_day + relativedelta(months=1, days=-1)
     
     project_name = StringField('プロジェクト名称', [validators.optional()])
+    estimation_no = StringField('見積No', [validators.optional()])
     result_input_flag = CheckboxField('実績ステータス', choices=InputFlag.get_result_flag_for_radio())
     end_user_company_id = SelectMultiFieldWithSubtext('エンドユーザー', [validators.optional()],
                                                       render_kw={"title": "エンドユーザー（複数選択）",

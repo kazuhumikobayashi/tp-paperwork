@@ -37,6 +37,9 @@
     <div class="box-body">
       <div class="row">
         {{ render_search_field(form.project_name, "col-md-6") }}
+        {{ render_search_field(form.estimation_no, "col-md-6") }}
+      </div>
+      <div class="row">
         {{ render_search_field(form.input_flag, "col-sm-6") }}
       </div>
       <div class="row">
@@ -77,6 +80,7 @@
           {% if pagination %}
             {{ p.pagination_widget(pagination,'.payment_page',
             project_name=form.project_name.data,
+            estimation_no=form.estimation_no.data,
             input_flag=form.input_flag.data,
             end_user_company_id=form.end_user_company_id.data,
             client_company_id=form.client_company_id.data,
@@ -94,6 +98,7 @@
               <th>エンドユーザー</th>
               <th>顧客会社</th>
               <th>計上部署</th>
+              <th width="90px">見積No</th>
               <th>プロジェクト名称</th>
               <th width="160px">技術者名称</th>
               <th width="90px">支払予定日</th>
@@ -105,6 +110,7 @@
               <td>{{ payment.project_detail.project.end_user_company.company_name|filter_suppress_none }}</td>
               <td>{{ payment.project_detail.project.client_company.company_name }}</td>
               <td>{{ payment.project_detail.project.recorded_department.department_name }}</td>
+              <td>{{ payment.project_detail.project.estimation_no }}</td>
               <td><a href="{{ url_for('project_payment.index', project_id=payment.project_detail.project.id) }}">{{ payment.project_detail.project.project_name }}</a></td>
               <td>{{ payment.project_detail.engineer.engineer_name|filter_suppress_none }}</td>
               <td>{{ payment.payment_expected_date|datetime_format("%Y/%m/%d") }}</td>

@@ -14,6 +14,7 @@ class SearchPaymentForm(FlaskForm):
     last_day = first_day + relativedelta(months=1, days=-1)
 
     project_name = StringField('プロジェクト名称', [validators.optional()])
+    estimation_no = StringField('見積No', [validators.optional()])
     input_flag = CheckboxField('支払ステータス', choices=InputFlag.get_flag_for_checkbox())
     end_user_company_id = SelectMultiFieldWithSubtext('エンドユーザー', [validators.optional()],
                                                       render_kw={"title": "エンドユーザー（複数選択）",

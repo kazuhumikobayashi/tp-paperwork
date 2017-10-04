@@ -34,13 +34,15 @@ class ProjectMonthRepository(BaseRepository):
 
         return [ProjectPaymentForm(m.project_id, m.id, m.project_month) for m in project_months]
 
-    def find_by_billing(self, page, project_name, billing_input_flag,
+    def find_by_billing(self, page, project_name, estimation_no, billing_input_flag,
                         deposit_input_flag, end_user_company_id, client_company_id,
                         recorded_department_id, deposit_date_from, deposit_date_to):
         query = self.model.query
         query = query.filter(self.model.billing_confirmation_money > 0)
         if project_name:
             query = query.filter(self.model.project.has(Project.project_name.like('%' + project_name + '%')))
+        if estimation_no:
+            query = query.filter(self.model.project.has(Project.estimation_no.like('%' + estimation_no + '%')))
         if billing_input_flag:
             query = query.filter(self.model.billing_input_flag.
                                  in_([InputFlag.parse(st) for st in billing_input_flag])) 

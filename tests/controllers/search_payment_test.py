@@ -1,28 +1,26 @@
 from urllib.parse import urlencode
 
 from datetime import date, datetime
-from nose.tools import ok_
 
 from application import db
 from application.domain.model.immutables.input_flag import InputFlag
-from application.domain.model.project import Project
 from application.domain.model.project_result import ProjectResult
 from application.domain.repository.project_result_repository import ProjectResultRepository
 from tests import BaseTestCase
 
 
-class PaymentTests(BaseTestCase):
+class SearchPaymentTests(BaseTestCase):
 
     @classmethod
     def setUpClass(cls):
-        super(PaymentTests, cls).setUpClass()
+        super(SearchPaymentTests, cls).setUpClass()
 
     def setUp(self):
-        super(PaymentTests, self).setUp()
+        super(SearchPaymentTests, self).setUp()
         self.project_result_repository = ProjectResultRepository()
 
     def tearDown(self):
-        super(PaymentTests, self).tearDown()
+        super(SearchPaymentTests, self).tearDown()
 
     # 支払の検索画面に遷移する。
     def test_get_payment(self):
@@ -75,6 +73,7 @@ class PaymentTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'estimation_no': 'test',
                                   'input_flag': '0',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',
@@ -95,6 +94,7 @@ class PaymentTests(BaseTestCase):
         })
 
         query_string = urlencode({'project_name': 'test',
+                                  'estimation_no': 'test',
                                   'input_flag': '0',
                                   'end_user_company_id': '1',
                                   'client_company_id': '1',
