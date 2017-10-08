@@ -58,7 +58,7 @@
             {{ render_field(form.billing_money, "col-sm-6") }}
           </div>
           <div class="row">
-            {{ render_field(form.remarks, "col-sm-6") }}
+            {{ render_field(form.remarks, "col-sm-6", rows="2") }}
           </div>
         </div>
         <div class="engineer-variable-area" {% if form.detail_type.data != '1' %}hidden{% endif %}{# '1'=ENGINEER #}>
