@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, SelectField, DateTimeField
+from wtforms import validators, TextAreaField, StringField, SelectField, DateTimeField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, RadioField, SelectFieldWithDisable, \
@@ -49,15 +49,15 @@ class ProjectDetailForm(FlaskForm):
                                                     "data-actions-box": "true"})
     company = StringField('所属会社', render_kw={"disabled": "disabled"})
     billing_money = IntegerField('請求金額（必須）', [InputRequired()])
-    remarks = StringField('備考', [Length(max=1024)], filters=[lambda x: x or None])
+    remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     billing_start_day = BeginningOfMonthField('請求契約開始年月（必須）',
-                                  [required_if_engineer, LessThan('billing_end_day')],
-                                  format='%Y/%m',
-                                  render_kw={"autocomplete": "off"})
+                                              [required_if_engineer, LessThan('billing_end_day')],
+                                              format='%Y/%m',
+                                              render_kw={"autocomplete": "off"})
     billing_end_day = EndOfMonthField('請求契約終了年月（必須）',
-                                [required_if_engineer],
-                                format='%Y/%m',
-                                render_kw={"autocomplete": "off"})
+                                      [required_if_engineer],
+                                      format='%Y/%m',
+                                      render_kw={"autocomplete": "off"})
     billing_per_month = IntegerField('請求単価（必須）', [required_if_engineer])
     billing_rule = RadioField('請求ルール（必須）',
                               [required_if_engineer],
@@ -81,13 +81,13 @@ class ProjectDetailForm(FlaskForm):
                                         choices=Round.get_round_for_select(),
                                         render_kw={"title": "請求端数ルール"})
     payment_start_day = BeginningOfMonthField('支払契約開始年月',
-                                  [validators.Optional()],
-                                  format='%Y/%m',
-                                  render_kw={"autocomplete": "off", "disabled": "disabled"})
+                                              [validators.Optional()],
+                                              format='%Y/%m',
+                                              render_kw={"autocomplete": "off", "disabled": "disabled"})
     payment_end_day = EndOfMonthField('支払契約終了年月',
-                                [validators.Optional()],
-                                format='%Y/%m',
-                                render_kw={"autocomplete": "off", "disabled": "disabled"})
+                                      [validators.Optional()],
+                                      format='%Y/%m',
+                                      render_kw={"autocomplete": "off", "disabled": "disabled"})
     payment_per_month = IntegerField('支払単価', render_kw={"disabled": "disabled"})
     payment_rule = RadioField('支払いルール',
                               [validators.Optional()],
