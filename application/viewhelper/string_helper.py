@@ -1,4 +1,4 @@
-from markupsafe import Markup
+from markupsafe import Markup, soft_unicode
 
 
 def filter_suppress_none(val):
@@ -20,3 +20,8 @@ def with_yen(val):
         return Markup("&yen{}".format(val))
     else:
         return ''
+
+
+def nl2br(val):
+    result = soft_unicode(Markup.escape(val)).replace("\n", Markup("<br />\n"))
+    return Markup(result)
