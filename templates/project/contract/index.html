@@ -121,7 +121,7 @@
                                 </a>
                               </td>
                               <td class="text-right">{{ project_detail.billing_money|number_with_commas|with_yen }}</td>
-                              <td>{{ project_detail.remarks|filter_suppress_none }}</td>
+                              <td>{{ project_detail.remarks|filter_suppress_none|nl2br }}</td>
                               <td>
                                 {% if project_detail.is_engineer() and project_detail.engineer.is_bp() %}
                                   <a href="{{ url_for('.bp_order_report_download', project_detail_id=project_detail.id) }}?id={{ now }}"
