@@ -1,3 +1,4 @@
+from flask import current_app
 from flask_wtf import FlaskForm
 from wtforms import validators, TextAreaField, StringField, SelectField, DateTimeField
 from wtforms.validators import ValidationError
@@ -150,5 +151,5 @@ class ProjectDetailForm(FlaskForm):
             raise ValidationError(field.label.text + 'は必須です。')
 
         project_detail = project_detail_repository.find_by_bp_order_no(field.data)
-        if project_detail and project_detail.id != self.id.data:
+        if field.data and project_detail and project_detail.id != self.id.data:
             raise ValidationError('このBP注文Noは既に登録されています。')
