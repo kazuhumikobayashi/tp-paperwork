@@ -91,12 +91,6 @@ class Company(BaseModel, db.Model):
                 return True
         return False
 
-    def is_our_company(self):
-        for company_client_flag in self.company_client_flags:
-            if company_client_flag.client_flag == ClientFlag.our_company:
-                return True
-        return False
-
     # 会社が他のmodelと紐づいているならtrue
     def has_relationship(self):
         return self.end_user_projects or self.client_projects or self.engineers
