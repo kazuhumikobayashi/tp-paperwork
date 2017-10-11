@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% block title %}銀行登録{% endblock %}
+{% block content_header %}
+  <h1>
+    <a href="{{ url_for('.index') }}" class="btn btn-default">
+      <i class="fa fa-arrow-left"></i> 一覧に戻る
+    </a>
+  </h1>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-success">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 銀行情報</h3>
+    </div>
+    <form class="form-horizontal" method="post">
+    {{ form.hidden_tag() }}
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="row">
+          {{ render_field(form.bank_name, "col-sm-6") }}
+          {{ render_field(form.text_for_document, "col-sm-6") }}
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer">
+        <div class="pull-left small" style="color: #777">
+          <p style="margin: 0;">{{ form.updated_user.label.text }} : {{ form.updated_user.data|filter_suppress_none }}</p>
+          <p style="margin: 0;">{{ form.updated_at.label.text }} : {{ form.updated_at.data|filter_suppress_none }}</p>
+        </div>
+        <button type="submit" class="btn btn-primary pull-right save"><i class="fa fa-save"></i> 保存</button>
+      </div>
+    </form>
+  </div>
+  <!-- /.box -->
+{% endblock %}

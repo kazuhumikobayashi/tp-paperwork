@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% from "_formhelpers.html" import render_search_field %}
+{% import "_pagination.html" as p %}
+{% block title %}銀行マスタ{% endblock %}
+{% block content_header %}
+  <h1>銀行</h1>
+{% endblock %}
+{% block main_content %}
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="fa fa-search"></i> 検索条件</h3>
+
+      <div class="box-tools pull-right">
+        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+      </div>
+    </div>
+    <form class="form-horizontal" method="get" action="{{ url_for('.index') }}">
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row">
+        {{ render_search_field(form.bank_name, "col-md-6") }}
+        {{ render_search_field(form.text_for_document, "col-md-6") }}
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.box-body -->
+    <div class="box-footer">
+      <div class="btn-group pull-right">
+        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> 検索</button>
+        <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+          <span class="sr-only">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+          <li><a class="form-clear">検索条件クリア</a></li>
+        </ul>
+      </div>
+    </div>
+    </form>
+  </div>
+  <!-- /.box -->
+
+  <!-- /.row -->
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="row">
+            <div class="col-sm-6">
+            {% if pagination %}
+              {{ p.pagination_widget(pagination,'.bank_page',
+              bank_name=form.bank_name.data,
+              text_for_document=form.text_for_document.data) }}
+            {% endif %}
+            </div>
+            <div class="col-sm-6">
+            <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
+              <i class="fa fa-plus"></i> 新規登録
+            </a>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+          <table class="table table-hover">
+            <tr>
+              <th>銀行名称</th>
+              <th>書類提出用文言名称</th>
+              <th width="70px" class="center"></th>
+            </tr>
+            {% for bank in pagination.items %}
+            <tr>
+              <td>
+                <a href="{{ url_for('.detail', bank_id=bank.id) }}">
+                  {{ bank.bank_name|filter_suppress_none }}
+                </a>
+              </td>
+              <td>
+                {{ bank.text_for_document|filter_suppress_none }}
+              </td>
+              <td>
+                <a class="btn btn-sm btn-danger btn-delete" href="{{ url_for('.delete', bank_id=bank.id) }}">
+                  <i class="fa fa-trash"></i> 削除
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+          <a href="{{ url_for('.create') }}" class="btn btn-sm btn-success pull-right">
+            <i class="fa fa-plus"></i> 新規登録
+          </a>
+        </div>
+        <!-- /.box-footer -->
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+{% endblock %}

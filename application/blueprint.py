@@ -21,6 +21,7 @@ def register(app):
     from application.controllers import search_billing
     from application.controllers import search_result
     from application.controllers import output
+    from application.controllers import bank
 
     app.register_blueprint(dashboard.bp)
     app.register_blueprint(company.bp)
@@ -44,3 +45,4 @@ def register(app):
     app.register_blueprint(search_billing.bp)
     app.register_blueprint(search_result.bp)
     app.register_blueprint(output.bp)
+    app.register_blueprint(bank.bp)

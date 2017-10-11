@@ -38,7 +38,8 @@
             <i class="fa fa-file-text fa-fw"></i> <span>帳票出力</span>
           </a>
         </li>
-        <li class="treeview{% if request.path.count('/company/') or
+        <li class="treeview{% if request.path.count('/bank/') or
+                                 request.path.count('/company/') or
                                  request.path.count('/engineer/') or
                                  request.path.count('/skill/') or
                                  request.path.count('/business_category/') or
@@ -71,6 +72,9 @@
             </li>
             <li{% if request.path.count('/holiday/') %} class="active"{% endif %}>
               <a href="{{ url_for('holiday.index') }}"><i class="fa fa-calendar fa-fw"></i> 祝日マスタ</a>
+            </li>
+            <li{% if request.path.count('/bank/') %} class="active"{% endif %}>
+              <a href="{{ url_for('bank.index') }}"><i class="fa fa-bank fa-fw"></i> 銀行マスタ</a>
             </li>
           </ul>
         </li>
