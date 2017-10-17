@@ -60,7 +60,8 @@ def create():
 @bp.route('/delete/<bank_id>', methods=['GET'])
 def delete(bank_id):
     bank = service.find_by_id(bank_id)
-    if bank.id is not None:
+    # 他のmodelと紐づいていない会社は削除できる
+    if bank.id is not None and not bank.has_relationship():
         service.destroy(bank)
         flash(Message.deleted.value)
     return redirect('/bank')
