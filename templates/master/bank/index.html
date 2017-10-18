@@ -80,7 +80,11 @@
                 {{ bank.text_for_document|filter_suppress_none }}
               </td>
               <td>
-                <a class="btn btn-sm btn-danger btn-delete" href="{{ url_for('.delete', bank_id=bank.id) }}">
+                <a class="btn btn-sm btn-danger btn-delete {% if bank.has_relationship() %}disabled{% endif %}"
+                    href="{{ url_for('.delete', bank_id=bank.id) }}"
+                    {% if bank.has_relationship() %}
+                      data-toggle="tooltip" title="この銀行は使用されているので削除できません"
+                    {% endif %}>
                   <i class="fa fa-trash"></i> 削除
                 </a>
               </td>
