@@ -347,5 +347,6 @@ class BillingDepartmentReport(object):
         self.ws.merge_cells(col + str(index + self.current_row) + ':G' + str(index + self.current_row))
         # セルの書式設定
         self.ws[col + str(index + self.current_row)].alignment = Alignment(horizontal='center')
+        self.create_outline(index, 'department')
         self.money_format(index, 'department')      
         self.current_row += 1
