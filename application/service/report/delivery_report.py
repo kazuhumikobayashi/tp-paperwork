@@ -50,10 +50,10 @@ class DeliveryReport(BillingBaseReport):
 
         # 小計--------------------------------------------------------------------------------------
         # 値代入
-        self.create_subtotal_list('課税_小計', "")
+        self.create_subtotal_list('課税　小計', "")
         if self.project_month.project.client_company.billing_tax != Tax.zero:
             self.create_subtotal_list('消費税', "")
-        self.create_subtotal_list('交通費等_非課税_小計', "")
+        self.create_subtotal_list('交通費等　非課税　小計', "")
         self.current_row += 1
 
         # 行調整
