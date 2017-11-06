@@ -10,6 +10,7 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(Site.ten.name, '10')
         self.assertEqual(Site.twenty_five.name, '25')
         self.assertEqual(Site.thirty.name, '30')
+        self.assertEqual(Site.thirty_five.name, '35')
         self.assertEqual(Site.forty.name, '40')
         self.assertEqual(Site.forty_five.name, '45')
         self.assertEqual(Site.fifty.name, '50')
@@ -22,6 +23,7 @@ class SiteTests(unittest.TestCase):
         ten = 10
         twenty_five = 25
         thirty = 30
+        thirty_five = 35
         forty = 40
         forty_five = 45
         fifty = 50
@@ -33,6 +35,7 @@ class SiteTests(unittest.TestCase):
         self.assertEquals(Site.parse(ten), Site.ten)
         self.assertEquals(Site.parse(twenty_five), Site.twenty_five)
         self.assertEquals(Site.parse(thirty), Site.thirty)
+        self.assertEquals(Site.parse(thirty_five), Site.thirty_five)
         self.assertEquals(Site.parse(forty), Site.forty)
         self.assertEquals(Site.parse(forty_five), Site.forty_five)
         self.assertEquals(Site.parse(fifty), Site.fifty)
@@ -49,6 +52,7 @@ class SiteTests(unittest.TestCase):
         ten = '10'
         twenty_five = '25'
         thirty = '30'
+        thirty_five = '35'
         forty = '40'
         forty_five = '45'
         fifty = '50'
@@ -60,6 +64,7 @@ class SiteTests(unittest.TestCase):
         self.assertEquals(str(Site.ten), ten)
         self.assertEquals(str(Site.twenty_five), twenty_five)
         self.assertEquals(str(Site.thirty), thirty)
+        self.assertEquals(str(Site.thirty_five), thirty_five)
         self.assertEquals(str(Site.forty), forty)
         self.assertEquals(str(Site.forty_five), forty_five)
         self.assertEquals(str(Site.fifty), fifty)
