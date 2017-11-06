@@ -44,7 +44,7 @@ class BpOrderReport(object):
         engineer_history = self.engineer_history_repository.get_history_by_date(self.project_detail.engineer.id,
                                                                                 self.project_detail.billing_start_day)
         self.ws.get_named_range("bp_order_no")[0].value = self.project_detail.bp_order_no
-        self.ws.get_named_range("printed_date")[0].value = datetime.today().date()
+        self.ws.get_named_range("printed_date")[0].value = self.project_detail.billing_start_day
         self.ws.get_named_range("bp_company_name")[0].value = self.project_detail.engineer.company.company_name
         self.ws.get_named_range("contract_date")[0].value = self.project_detail.engineer.company.contract_date
         self.ws.get_named_range("project_name_for_bp")[0].value = self.project_detail.project.project_name_for_bp
