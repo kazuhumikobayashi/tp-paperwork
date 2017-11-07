@@ -420,6 +420,11 @@ $(function() {
     calculateBilling();
     calculatePayment();
   });
+
+  $(':submit.auto-calc').on('click', function () {
+    calculateBilling();
+    calculatePayment();
+  });
 });
 
 // 請求済みフラグ更新
