@@ -63,6 +63,13 @@ class Engineer(BaseModel, db.Model):
                 return history.payment_site
         return None
 
+    # 指定された日の期間内にある履歴を返却
+    def get_histories_by_date(self, date):
+        for h in self.engineer_histories:
+            if h.payment_start_day <= date <= h.payment_end_day:
+                return h
+        return EngineerHistory()
+
     def get_age(self):
 
         age = ""
