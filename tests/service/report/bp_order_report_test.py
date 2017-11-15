@@ -61,7 +61,7 @@ class BpOrderReportTests(BaseTestCase):
         expected = "test0 氏  ¥100,000.-/月額"\
             + "\n        "\
             + "超過単価：¥1,000.-/H  "\
-            + "減額単価：¥2,000.-/H"
+            + "欠業単価：¥2,000.-/H"
 
         # テスト対象のメソッドを実行
         text = self.bp_order_report.get_payment_detail_text(engineer_history)

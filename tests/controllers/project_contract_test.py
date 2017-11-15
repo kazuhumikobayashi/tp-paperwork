@@ -13,6 +13,7 @@ from application.domain.model.immutables.client_flag import ClientFlag
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
+from application.domain.model.immutables.gender import Gender
 from application.domain.model.immutables.holiday_flag import HolidayFlag
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
@@ -2382,6 +2383,85 @@ class ProjectContractTests(BaseTestCase):
         result = self.app.post('/project/contract/create?project_id=1', data={
             'detail_type': DetailType.engineer,
             'engineer_id': 6,
+            'billing_money': '100000000',
+            'billing_start_day': date(2017, 1, 1).strftime('%Y/%m'),
+            'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed.value,
+            'billing_fraction_rule': '',
+        })
+        self.assertEqual(result.status_code, 302)
+        project_detail_id = result.headers['Location'].split('/')[-1]
+
+        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
+
+        # 帳票DL実施
+        result = self.app.get('/project/contract/bp_order_report_download/' + str(project_detail.id))
+        self.assertEqual(result.status_code, 200)
+
+    # 基本契約日が入力されていない会社のBP注文書を出力できる。
+    def test_bp_order_report_download_without_contract_date(self):
+        # テスト用データsetup
+        company = Company(
+            company_name='test',
+            company_name_kana='test',
+            company_short_name="test",
+            contract_date=None,
+            postal_code='000-0000',
+            address='住所',
+            phone='000-0000',
+            fax='000-0000',
+            client_code='0001',
+            bp_code='9999',
+            billing_site=Site.twenty_five,
+            payment_site=Site.thirty,
+            billing_tax=Tax.zero,
+            payment_tax=Tax.eight,
+            bank_id='2',
+            bank_holiday_flag=HolidayFlag.before,
+            remarks='備考',
+            print_name='印刷用宛名',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company)
+        db.session.commit()
+
+        company_client_flag = CompanyClientFlag(
+            company_id=company.id,
+            client_flag=ClientFlag.bp,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company_client_flag)
+        db.session.commit()
+
+        engineer = Engineer(
+            engineer_name='test',
+            engineer_name_kana='test',
+            birthday=date.today(),
+            gender=Gender.male,
+            company_id=company.id,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        engineer_id = engineer.id
+
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        result = self.app.post('/project/contract/create?project_id=1', data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': engineer_id,
             'billing_money': '100000000',
             'billing_start_day': date(2017, 1, 1).strftime('%Y/%m'),
             'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
