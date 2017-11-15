@@ -166,32 +166,35 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company)
+        db.session.commit()
 
         company_client_flag = CompanyClientFlag(
-            company_id=17,
+            company_id=company.id,
             client_flag=ClientFlag.our_company,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company_client_flag)
+        db.session.commit()
 
         engineer = Engineer(
             engineer_name='プロジェクト一覧テスト01',
             engineer_name_kana='プロジェクトイチランテスト01',
             birthday=date.today(),
             gender=Gender.male,
-            company_id=17,
+            company_id=company.id,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
 
         engineer_history = EngineerHistory(
-            engineer_id=13,
+            engineer_id=engineer.id,
             payment_start_day=date(2016, 1, 1),
-            payment_end_day=datetime.today().date(),
+            payment_end_day=date(2018, 12, 31),
             payment_per_month=100,
             payment_site=Site.twenty_five,
             payment_tax=Tax.eight,
@@ -213,7 +216,7 @@ class OutputTests(BaseTestCase):
         db.session.add(engineer_history)
 
         engineer_business_category = EngineerBusinessCategory(
-            engineer_id=13,
+            engineer_id=engineer.id,
             business_category_id=3,
             created_at=datetime.today(),
             created_user='test',
@@ -223,7 +226,7 @@ class OutputTests(BaseTestCase):
 
         for num in range(2):
             engineer_skill = EngineerSkill(
-                engineer_id=13,
+                engineer_id=engineer.id,
                 skill_id=num + 1,
                 created_at=datetime.today(),
                 created_user='test',
@@ -238,8 +241,8 @@ class OutputTests(BaseTestCase):
             recorded_department_id=1,
             sales_person='営業担当',
             estimation_no='プロジェクト一覧テスト01',
-            end_user_company_id=17,
-            client_company_id=17,
+            end_user_company_id=company.id,
+            client_company_id=company.id,
             start_date='2018/1/1',
             end_date='2018/12/31',
             contract_form=Contract.blanket,
@@ -261,16 +264,17 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(project)
+        db.session.commit()
 
         project_detail = ProjectDetail(
-            project_id=17,
+            project_id=project.id,
             detail_type=DetailType.engineer,
             work_name='プロジェクト一覧テスト01',
-            engineer_id=13,
+            engineer_id=engineer.id,
             billing_money=100,
             remarks='remarks',
             billing_start_day='2017/1/1',
-            billing_end_day='2018/1/1',
+            billing_end_day='2018/12/31',
             billing_per_month=100,
             billing_rule=Rule.fixed,
             billing_bottom_base_hour=120,
@@ -288,7 +292,6 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test', )
         db.session.add(project_detail)
-
         db.session.commit()
 
         # 帳票DL実施
@@ -331,27 +334,30 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company)
+        db.session.commit()
 
         company_client_flag = CompanyClientFlag(
-            company_id=18,
+            company_id=company.id,
             client_flag=ClientFlag.bp,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company_client_flag)
+        db.session.commit()
 
         engineer = Engineer(
             engineer_name='プロジェクト一覧テスト02',
             engineer_name_kana=None,
             birthday=None,
             gender=Gender.male,
-            company_id=18,
+            company_id=company.id,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
 
         project = Project(
             project_name='プロジェクト一覧テスト02',
@@ -383,16 +389,17 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(project)
+        db.session.commit()
 
         project_detail = ProjectDetail(
-            project_id=18,
+            project_id=project.id,
             detail_type=DetailType.engineer,
             work_name=None,
-            engineer_id=14,
+            engineer_id=engineer.id,
             billing_money=None,
             remarks=None,
-            billing_start_day=None,
-            billing_end_day=None,
+            billing_start_day='2018/1/1',
+            billing_end_day='2018/12/31',
             billing_per_month=None,
             billing_rule=None,
             billing_bottom_base_hour=None,
@@ -452,32 +459,35 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company)
+        db.session.commit()
 
         company_client_flag = CompanyClientFlag(
-            company_id=19,
+            company_id=company.id,
             client_flag=ClientFlag.bp,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company_client_flag)
+        db.session.commit()
 
         engineer = Engineer(
             engineer_name='プロジェクト一覧テスト03',
             engineer_name_kana='プロジェクトイチランテスト03',
             birthday=date.today(),
             gender=Gender.male,
-            company_id=19,
+            company_id=company.id,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
 
         engineer_history = EngineerHistory(
-            engineer_id=15,
+            engineer_id=engineer.id,
             payment_start_day=date(2016, 1, 1),
-            payment_end_day=datetime.today().date(),
+            payment_end_day=date(2018, 12, 31),
             payment_per_month=100,
             payment_site=Site.twenty_five,
             payment_tax=Tax.eight,
@@ -497,6 +507,7 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer_history)
+        db.session.commit()
 
         project = Project(
             project_name='プロジェクト一覧テスト03',
@@ -505,8 +516,8 @@ class OutputTests(BaseTestCase):
             recorded_department_id=1,
             sales_person='営業担当',
             estimation_no='プロジェクト一覧テスト03',
-            end_user_company_id=19,
-            client_company_id=19,
+            end_user_company_id=company.id,
+            client_company_id=company.id,
             start_date='2018/1/1',
             end_date='2018/12/31',
             contract_form=Contract.blanket,
@@ -528,16 +539,17 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(project)
+        db.session.commit()
 
         project_detail = ProjectDetail(
-            project_id=19,
+            project_id=project.id,
             detail_type=DetailType.engineer,
             work_name='プロジェクト一覧テスト03',
-            engineer_id=15,
+            engineer_id=engineer.id,
             billing_money=100,
             remarks='remarks',
             billing_start_day='2017/1/1',
-            billing_end_day='2018/1/1',
+            billing_end_day='2018/12/31',
             billing_per_month=100,
             billing_rule=Rule.variable,
             billing_bottom_base_hour=120,
@@ -599,32 +611,35 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company)
+        db.session.commit()
 
         company_client_flag = CompanyClientFlag(
-            company_id=20,
+            company_id=company.id,
             client_flag=ClientFlag.bp,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company_client_flag)
+        db.session.commit()
 
         engineer = Engineer(
             engineer_name='プロジェクト一覧テスト04',
             engineer_name_kana='プロジェクトイチランテスト04',
             birthday=date.today(),
             gender=Gender.male,
-            company_id=20,
+            company_id=company.id,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
 
         engineer_history = EngineerHistory(
             engineer_id=16,
             payment_start_day=date(2016, 1, 1),
-            payment_end_day=datetime.today().date(),
+            payment_end_day=date(2018, 12, 31),
             payment_per_month=100,
             payment_site=Site.twenty_five,
             payment_tax=Tax.eight,
@@ -644,6 +659,7 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer_history)
+        db.session.commit()
 
         project = Project(
             project_name='プロジェクト一覧テスト04',
@@ -652,7 +668,7 @@ class OutputTests(BaseTestCase):
             recorded_department_id=1,
             sales_person='営業担当',
             estimation_no='プロジェクト一覧テスト04',
-            end_user_company_id=20,
+            end_user_company_id=company.id,
             client_company_id=20,
             start_date='2018/1/1',
             end_date='2018/12/31',
@@ -675,16 +691,17 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(project)
+        db.session.commit()
 
         project_detail = ProjectDetail(
-            project_id=20,
+            project_id=project.id,
             detail_type=DetailType.engineer,
             work_name='プロジェクト一覧テスト04',
-            engineer_id=16,
+            engineer_id=engineer.id,
             billing_money=100,
             remarks='remarks',
             billing_start_day='2017/1/1',
-            billing_end_day='2018/1/1',
+            billing_end_day='2018/12/31',
             billing_per_month=100,
             billing_rule=Rule.variable,
             billing_bottom_base_hour=None,
@@ -746,32 +763,62 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company)
+        db.session.commit()
 
         company_client_flag = CompanyClientFlag(
-            company_id=21,
+            company_id=company.id,
             client_flag=ClientFlag.bp,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(company_client_flag)
+        db.session.commit()
 
         engineer = Engineer(
             engineer_name='プロジェクト一覧テスト05',
             engineer_name_kana='プロジェクトイチランテスト05',
             birthday=date.today(),
             gender=Gender.male,
-            company_id=21,
+            company_id=company.id,
             created_at=datetime.today(),
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
 
+        # 範囲外の履歴を作成
         engineer_history = EngineerHistory(
-            engineer_id=17,
-            payment_start_day=date(2016, 1, 1),
-            payment_end_day=datetime.today().date(),
+            engineer_id=engineer.id,
+            payment_start_day=date(2017, 1, 1),
+            payment_end_day=date(2017, 12, 31),
+            payment_per_month=100,
+            payment_site=Site.twenty_five,
+            payment_tax=Tax.eight,
+            payment_rule=Rule.variable,
+            payment_bottom_base_hour=None,
+            payment_top_base_hour=None,
+            payment_free_base_hour='history2',
+            payment_per_hour='1/100, 1/150',
+            payment_per_bottom_hour=100,
+            payment_per_top_hour=100,
+            payment_fraction=Fraction.hundred,
+            payment_fraction_rule=Round.down,
+            payment_condition='test',
+            remarks='test',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer_history)
+        db.session.commit()
+
+        # 範囲内の履歴を作成
+        engineer_history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2018, 1, 1),
+            payment_end_day=date(2018, 12, 31),
             payment_per_month=100,
             payment_site=Site.twenty_five,
             payment_tax=Tax.eight,
@@ -791,6 +838,33 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer_history)
+        db.session.commit()
+
+        # 範囲外の履歴を作成
+        engineer_history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2019, 1, 1),
+            payment_end_day=date(2019, 12, 31),
+            payment_per_month=100,
+            payment_site=Site.twenty_five,
+            payment_tax=Tax.eight,
+            payment_rule=Rule.variable,
+            payment_bottom_base_hour=None,
+            payment_top_base_hour=None,
+            payment_free_base_hour='history2',
+            payment_per_hour='1/100, 1/150',
+            payment_per_bottom_hour=100,
+            payment_per_top_hour=100,
+            payment_fraction=Fraction.hundred,
+            payment_fraction_rule=Round.down,
+            payment_condition='test',
+            remarks='test',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer_history)
+        db.session.commit()
 
         project = Project(
             project_name='プロジェクト一覧テスト05',
@@ -822,16 +896,17 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(project)
+        db.session.commit()
 
         project_detail = ProjectDetail(
-            project_id=21,
+            project_id=project.id,
             detail_type=DetailType.engineer,
             work_name='プロジェクト一覧テスト05',
-            engineer_id=17,
+            engineer_id=engineer.id,
             billing_money=100,
             remarks='remarks',
             billing_start_day='2017/1/1',
-            billing_end_day='2018/1/1',
+            billing_end_day='2018/12/31',
             billing_per_month=100,
             billing_rule=Rule.variable,
             billing_bottom_base_hour=None,
@@ -849,7 +924,187 @@ class OutputTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test', )
         db.session.add(project_detail)
+        db.session.commit()
 
+        # 範囲外の見積明細を作成
+        project_detail = ProjectDetail(
+            project_id=project.id,
+            detail_type=DetailType.engineer,
+            work_name='プロジェクト一覧テスト05_2',
+            engineer_id=engineer.id,
+            billing_money=100,
+            remarks='remarks',
+            billing_start_day='2019/1/1',
+            billing_end_day='2019/12/31',
+            billing_per_month=100,
+            billing_rule=Rule.variable,
+            billing_bottom_base_hour=None,
+            billing_top_base_hour=None,
+            billing_free_base_hour='billing_free_base_hour',
+            billing_per_hour='billing_per_hour',
+            billing_per_bottom_hour=120,
+            billing_per_top_hour=200,
+            billing_fraction=Fraction.one,
+            billing_fraction_rule=Round.down,
+            bp_order_no='bp_order_no',
+            client_order_no_for_bp='client_order_no_for_bp',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test', )
+        db.session.add(project_detail)
+        db.session.commit()
+
+        # 帳票DL実施
+        result = self.app.post('/output/', data={
+            'output_report': OutputType.project_list.value,
+            'month': date(2018, 8, 1).strftime('%Y/%m')
+        })
+        self.assertEqual(result.status_code, 200)
+
+    # 契約範囲外のユーザーが登録されているケース
+    def test_download_project_list_06(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        # setup
+        # 出力するデータがすべて入力されているケース作成
+        company = Company(
+            company_name='プロジェクト一覧テスト06',
+            company_name_kana='プロジェクトイチランテスト06',
+            company_short_name="プロテス06",
+            contract_date=date.today(),
+            postal_code='000-0000',
+            address='住所',
+            phone='000-0000',
+            fax='000-0000',
+            client_code='0001',
+            bp_code='9999',
+            billing_site=Site.twenty_five,
+            payment_site=Site.thirty,
+            billing_tax=Tax.zero,
+            payment_tax=Tax.eight,
+            bank_id='2',
+            bank_holiday_flag=HolidayFlag.before,
+            remarks='備考',
+            print_name='印刷用宛名',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company)
+        db.session.commit()
+
+        company_client_flag = CompanyClientFlag(
+            company_id=company.id,
+            client_flag=ClientFlag.bp,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(company_client_flag)
+        db.session.commit()
+
+        engineer = Engineer(
+            engineer_name='プロジェクト一覧テスト06',
+            engineer_name_kana='プロジェクトイチランテスト06',
+            birthday=date.today(),
+            gender=Gender.male,
+            company_id=company.id,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        # 範囲外の履歴を作成
+        engineer_history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2017, 1, 1),
+            payment_end_day=date(2017, 12, 31),
+            payment_per_month=100,
+            payment_site=Site.twenty_five,
+            payment_tax=Tax.eight,
+            payment_rule=Rule.variable,
+            payment_bottom_base_hour=None,
+            payment_top_base_hour=None,
+            payment_free_base_hour='history2',
+            payment_per_hour='1/100, 1/150',
+            payment_per_bottom_hour=100,
+            payment_per_top_hour=100,
+            payment_fraction=Fraction.hundred,
+            payment_fraction_rule=Round.down,
+            payment_condition='test',
+            remarks='test',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer_history)
+        db.session.commit()
+
+        project = Project(
+            project_name='プロジェクト一覧テスト06',
+            project_name_for_bp='プロジェクト一覧テスト06',
+            status=Status.start,
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no='プロジェクト一覧テスト06',
+            end_user_company_id=21,
+            client_company_id=21,
+            start_date='2018/1/1',
+            end_date='2018/12/31',
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.billing_at_last,
+            estimated_total_amount=1000000,
+            billing_tax=Tax.zero,
+            scope='test',
+            contents=None,
+            working_place=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project)
+        db.session.commit()
+
+        project_detail = ProjectDetail(
+            project_id=project.id,
+            detail_type=DetailType.engineer,
+            work_name='プロジェクト一覧テスト06',
+            engineer_id=engineer.id,
+            billing_money=100,
+            remarks='remarks',
+            billing_start_day='2018/1/1',
+            billing_end_day='2018/12/31',
+            billing_per_month=100,
+            billing_rule=Rule.variable,
+            billing_bottom_base_hour=None,
+            billing_top_base_hour=None,
+            billing_free_base_hour='billing_free_base_hour',
+            billing_per_hour='billing_per_hour',
+            billing_per_bottom_hour=120,
+            billing_per_top_hour=200,
+            billing_fraction=Fraction.one,
+            billing_fraction_rule=Round.down,
+            bp_order_no='bp_order_no',
+            client_order_no_for_bp='client_order_no_for_bp',
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test', )
+        db.session.add(project_detail)
         db.session.commit()
 
         # 帳票DL実施
