@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from erajp.converter import strjpftime
 from openpyxl.styles import Border, Side, Font, Alignment
 
 from application.domain.model.immutables.rule import Rule
@@ -46,7 +47,13 @@ class BpOrderReport(object):
         self.ws.get_named_range("bp_order_no")[0].value = self.project_detail.bp_order_no
         self.ws.get_named_range("printed_date")[0].value = self.project_detail.billing_start_day
         self.ws.get_named_range("bp_company_name")[0].value = self.project_detail.engineer.company.company_name
-        self.ws.get_named_range("contract_date")[0].value = self.project_detail.engineer.company.contract_date
+        if self.project_detail.engineer.company.contract_date:
+            self.ws.get_named_range("contract_date")[0].value = \
+                strjpftime(datetime(
+                    self.project_detail.engineer.company.contract_date.year,
+                    self.project_detail.engineer.company.contract_date.month,
+                    self.project_detail.engineer.company.contract_date.day
+                ), '%O%E年%m月%d日')
         self.ws.get_named_range("project_name_for_bp")[0].value = self.project_detail.project.project_name_for_bp
         self.ws.get_named_range("start_date")[0].value = self.project_detail.billing_start_day
         self.ws.get_named_range("end_date")[0].value = self.project_detail.billing_end_day
@@ -76,6 +83,7 @@ class BpOrderReport(object):
             bp_company_name.font = Font(name='ＭＳ 明朝', size='10.5', underline='single')
 
         # 書式設定
+        contract_date.alignment = Alignment(horizontal='right')
         payment_per_month.alignment = Alignment(horizontal='left')
 
         # 表示形式
@@ -99,7 +107,9 @@ class BpOrderReport(object):
         if engineer_history.payment_rule == Rule.variable:
             text += "\n        "\
                  + "超過単価：" + "¥{:,d}.-/H".format(engineer_history.payment_per_top_hour) + "  "\
-                 + "減額単価：" + "¥{:,d}.-/H".format(engineer_history.payment_per_bottom_hour)
+                 + "欠業単価：" + "¥{:,d}.-/H".format(engineer_history.payment_per_bottom_hour)
+        else:
+            text += "（固定）"
         return text
 
     def get_print_name(self):
