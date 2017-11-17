@@ -118,7 +118,7 @@ def detail(project_detail_id=None):
         return abort(404)
 
     form = ProjectDetailForm(request.form, project_detail)
-    form.engineer_id.choices = engineer_service.find_contract_for_select()
+    form.engineer_id.choices = engineer_history_service.find_contract_for_select()
 
     # 新規作成時にはprojectを取得する。
     if project_id:

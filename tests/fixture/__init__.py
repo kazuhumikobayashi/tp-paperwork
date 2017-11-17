@@ -239,7 +239,7 @@ def create_company_client_flags():
 
 
 def create_engineer_histories():
-    for num in range(5):
+    for num in range(12):
         engineer_history = EngineerHistory(
             engineer_id=num+1,
             payment_start_day=date(2016, 1, 1),

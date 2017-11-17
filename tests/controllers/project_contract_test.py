@@ -886,7 +886,7 @@ class ProjectContractTests(BaseTestCase):
         history = EngineerHistory(
             engineer_id=engineer.id,
             payment_start_day=date(2016, 1, 1),
-            payment_end_day=date(2016, 12, 31),
+            payment_end_day=date(2099, 12, 31),
             payment_per_month=600000,
             payment_rule=Rule.fixed,
             payment_site=engineer.company.payment_site,
@@ -993,6 +993,21 @@ class ProjectContractTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
+
+        history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(2099, 12, 31),
+            payment_per_month=600000,
+            payment_rule=Rule.fixed,
+            payment_site=engineer.company.payment_site,
+            payment_tax=engineer.company.payment_tax,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(history)
         db.session.commit()
 
         result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
@@ -1785,6 +1800,21 @@ class ProjectContractTests(BaseTestCase):
         db.session.add(engineer)
         db.session.commit()
 
+        history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(2099, 12, 31),
+            payment_per_month=600000,
+            payment_rule=Rule.fixed,
+            payment_site=engineer.company.payment_site,
+            payment_tax=engineer.company.payment_tax,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(history)
+        db.session.commit()
+
         project = Project(
             project_name='プロジェクト',
             status=Status.done,
@@ -1867,6 +1897,21 @@ class ProjectContractTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
+
+        history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(2099, 12, 31),
+            payment_per_month=600000,
+            payment_rule=Rule.fixed,
+            payment_site=engineer.company.payment_site,
+            payment_tax=engineer.company.payment_tax,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(history)
         db.session.commit()
 
         project = Project(
@@ -2374,29 +2419,43 @@ class ProjectContractTests(BaseTestCase):
 
     # engineer_historyがないBPの注文書を出力できる。
     def test_bp_order_report_download_without_engineer_history(self):
+        engineer = Engineer(
+            engineer_name='エンジニア',
+            company_id=5,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        project_detail = ProjectDetail(
+            project_id=1,
+            detail_type=DetailType.engineer,
+            engineer_id=engineer.id,
+            billing_money=100000000,
+            billing_start_day=date(2017, 1, 1),
+            billing_end_day=date(2017, 3, 1),
+            billing_per_month=100000,
+            billing_rule=Rule.fixed,
+            billing_fraction_rule=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_detail)
+        db.session.commit()
+
+        project_detail_id = project_detail.id
+
         # ログイン
         self.app.post('/login', data={
             'shain_number': 'test1',
             'password': 'test'
         })
 
-        result = self.app.post('/project/contract/create?project_id=1', data={
-            'detail_type': DetailType.engineer,
-            'engineer_id': 6,
-            'billing_money': '100000000',
-            'billing_start_day': date(2017, 1, 1).strftime('%Y/%m'),
-            'billing_end_day': date(2017, 3, 1).strftime('%Y/%m'),
-            'billing_per_month': '100000',
-            'billing_rule': Rule.fixed.value,
-            'billing_fraction_rule': '',
-        })
-        self.assertEqual(result.status_code, 302)
-        project_detail_id = result.headers['Location'].split('/')[-1]
-
-        project_detail = self.project_detail_repository.find_by_id(project_detail_id)
-
         # 帳票DL実施
-        result = self.app.get('/project/contract/bp_order_report_download/' + str(project_detail.id))
+        result = self.app.get('/project/contract/bp_order_report_download/' + str(project_detail_id))
         self.assertEqual(result.status_code, 200)
 
     # 基本契約日が入力されていない会社のBP注文書を出力できる。
@@ -2449,6 +2508,21 @@ class ProjectContractTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
+
+        engineer_history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(2099, 12, 31),
+            payment_per_month=600000,
+            payment_rule=Rule.fixed,
+            payment_site=engineer.company.payment_site,
+            payment_tax=engineer.company.payment_tax,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer_history)
         db.session.commit()
 
         engineer_id = engineer.id
