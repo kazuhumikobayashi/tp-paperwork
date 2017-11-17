@@ -20,6 +20,9 @@ class EngineerHistoryRepository(BaseRepository):
             latest_engineer_history = self.create()
         return latest_engineer_history
 
+    def find_all_order_by_start_day(self):
+        return self.model.query.order_by(self.model.engineer_id.asc(), self.model.payment_start_day.desc()).all()
+
     def get_history_by_date(self, engineer_id, date):
         fil = self.model.query
         engineer_history_at_date = fil.filter(self.model.engineer_id == engineer_id,

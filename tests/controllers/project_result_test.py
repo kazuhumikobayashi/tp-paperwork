@@ -5,13 +5,13 @@ from nose.tools import ok_
 
 from application import db
 from application.domain.model.engineer import Engineer
+from application.domain.model.engineer_history import EngineerHistory
 from application.domain.model.immutables.billing_timing import BillingTiming
 from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.rule import Rule
 from application.domain.model.immutables.status import Status
 from application.domain.model.project import Project
-from application.domain.model.project_billing import ProjectBilling
 from application.domain.repository.project_billing_repository import ProjectBillingRepository
 from application.domain.repository.project_detail_repository import ProjectDetailRepository
 from application.domain.repository.project_month_repository import ProjectMonthRepository
@@ -98,45 +98,6 @@ class ProjectResultTests(BaseTestCase):
         actual = project_result.work_time
         self.assertEqual(actual, expected)
 
-    # engineer_historyがない技術者を登録。
-    def test_save_proper_engineer(self):
-        shain_number = 'test1'
-        self.app.post('/login', data={
-            'shain_number': shain_number,
-            'password': 'test'
-        })
-
-        # set_up
-        project_result = self.project_result_repository.find_by_id(6)
-        project_billing = ProjectBilling(
-            project_detail_id=project_result.project_detail_id,
-            billing_month=project_result.result_month,
-            created_at=datetime.today(),
-            created_user='test',
-            updated_at=datetime.today(),
-            updated_user='test'
-
-        )
-        db.session.add(project_billing)
-        db.session.commit()
-
-        # engineer_historyがないことを確認。
-        self.assertEqual(project_result.project_detail.engineer.engineer_histories, [])
-
-        expected = Decimal(300)
-        project_result_id = project_result.id
-
-        result = self.app.post('/project/result/detail/' + str(project_result_id), data={
-            'work_time': expected
-        })
-        # 保存できることを確認
-        self.assertEqual(result.status_code, 302)
-        ok_('/project/result/detail/' + str(project_result.id) in result.headers['Location'])
-
-        project_result = self.project_result_repository.find_by_id(project_result_id)
-        actual = project_result.work_time
-        self.assertEqual(actual, expected)
-
     # 明細がengineerの場合、実績を更新すると同月の請求情報が新規作成される。
     def test_create_engineer_billing_when_update_result(self):
         before = len(self.project_billing_repository.find_all())
@@ -186,6 +147,21 @@ class ProjectResultTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
+
+        history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(2099, 12, 31),
+            payment_per_month=600000,
+            payment_rule=Rule.fixed,
+            payment_site=engineer.company.payment_site,
+            payment_tax=engineer.company.payment_tax,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(history)
         db.session.commit()
 
         result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
@@ -293,6 +269,21 @@ class ProjectResultTests(BaseTestCase):
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer)
+        db.session.commit()
+
+        history = EngineerHistory(
+            engineer_id=engineer.id,
+            payment_start_day=date(2016, 1, 1),
+            payment_end_day=date(2099, 12, 31),
+            payment_per_month=600000,
+            payment_rule=Rule.fixed,
+            payment_site=engineer.company.payment_site,
+            payment_tax=engineer.company.payment_tax,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(history)
         db.session.commit()
 
         result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={

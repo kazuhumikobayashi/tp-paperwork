@@ -51,11 +51,6 @@ class Engineer(BaseModel, db.Model):
     def is_bp(self):
         return self.company and self.company.is_bp()
 
-    def is_finished_contract(self):
-        if self.engineer_histories:
-            return [history.is_contract() for history in self.engineer_histories][-1]
-        return True
-
     # 指定された日の期間内にある支払いサイトを返却
     def get_payment_site_by_date(self, date):
         for history in self.engineer_histories:

@@ -3,6 +3,7 @@ from datetime import date, datetime
 from nose.tools import ok_
 
 from application import db
+from application.domain.model.engineer import Engineer
 from application.domain.model.engineer_history import EngineerHistory
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
@@ -180,13 +181,23 @@ class EngineerHistoryTests(BaseTestCase):
 
     # 支払い契約開始年月は、現在登録中の日付より前の日付で更新できない
     def test_validation_payment_start_day1(self):
+        engineer = Engineer(
+            engineer_name='エンジニア',
+            company_id=5,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        engineer_id = engineer.id
+
         # ログインする
         self.app.post('/login', data={
             'shain_number': 'test1',
             'password': 'test'
         })
-
-        engineer_id = 6
 
         # 以下のデータを新規作成。
         result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
@@ -199,7 +210,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         self.assertEqual(result.status_code, 302)
 
-        # engineer=6に紐づく履歴が1件であることを確認
+        # 紐づく履歴が1件であることを確認
         before = len(self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(before, 1)
         # 登録した履歴を取得
@@ -233,13 +244,23 @@ class EngineerHistoryTests(BaseTestCase):
 
     # 支払い契約開始年月＜支払い契約終了年月　の関係にあることを確認。
     def test_validation_payment_start_day_less_than_payment_end_day(self):
+        engineer = Engineer(
+            engineer_name='エンジニア',
+            company_id=5,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(engineer)
+        db.session.commit()
+
+        engineer_id = engineer.id
+
         # ログインする
         self.app.post('/login', data={
             'shain_number': 'test1',
             'password': 'test'
         })
-
-        engineer_id = 7
 
         # 以下のデータを新規作成。
         result = self.app.post('/engineer/history/create?engineer_id=' + str(engineer_id), data={
@@ -251,7 +272,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         self.assertEqual(result.status_code, 302)
 
-        # engineer=7に紐づく履歴が1件であることを確認
+        # 紐づく履歴が1件であることを確認
         before = len(
             self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(before, 1)
@@ -270,7 +291,7 @@ class EngineerHistoryTests(BaseTestCase):
         })
         self.assertEqual(result.status_code, 200)
 
-        # engineer=7に紐づく履歴が1件であることを確認（履歴が切られていないことを確認）
+        # 紐づく履歴が1件であることを確認（履歴が切られていないことを確認）
         after = len(
             self.engineer_history_repository.find_by_engineer_id(engineer_id))
         self.assertEqual(after, 1)
