@@ -1,7 +1,6 @@
 from datetime import date
 
 from application.domain.model.form.project_result_form import ProjectResultForm
-from application.domain.model.immutables.input_flag import InputFlag
 from tests import BaseTestCase
 
 
