@@ -23,13 +23,13 @@ class ProjectMonthRepository(BaseRepository):
         return query
 
     def get_project_result_form(self, project_id):
-        project_months = self.model.query.order_by(self.model.project_month.desc())\
+        project_months = self.model.query.order_by(self.model.project_month.asc())\
                                           .filter(self.model.project_id == project_id).all()
 
         return [ProjectResultForm(m.project_id, m.id, m.project_month) for m in project_months]
 
     def get_project_payment_form(self, project_id):
-        project_months = self.model.query.order_by(self.model.project_month.desc())\
+        project_months = self.model.query.order_by(self.model.project_month.asc())\
                                           .filter(self.model.project_id == project_id).all()
 
         return [ProjectPaymentForm(m.project_id, m.id, m.project_month) for m in project_months]

@@ -1,5 +1,7 @@
 from datetime import date
 
+from application.domain.model.immutables.input_flag import InputFlag
+
 
 class ProjectPaymentForm(object):
 
@@ -16,10 +18,16 @@ class ProjectPaymentForm(object):
         return not self.project_results
 
     def is_opened(self):
-        return date.today().replace(day=1) <= self.month
+        return not self.is_closed()
 
     def is_closed(self):
-        return not self.is_opened()
+        for result in self.project_results:
+            if result.payment_expected_date:
+                if result.payment_flag == InputFlag.yet or date.today() <= result.payment_expected_date:
+                    return False
+            else:
+                return False
+        return True
 
     def __repr__(self):
         return "<ProjectPaymentForm:" + \
