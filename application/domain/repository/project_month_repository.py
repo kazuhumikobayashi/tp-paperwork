@@ -17,7 +17,7 @@ class ProjectMonthRepository(BaseRepository):
     def get_billing_department_report(self, month):
         query = self.model.query
         query = query.filter(self.model.project_month == month)
-        query = query.filter(self.model.billing_confirmation_money > 0)
+        query = query.filter((self.model.billing_confirmation_money > 0) | (self.model.billing_transportation > 0))
         query = query.order_by('departments_1.id asc', 'companies_2.company_name asc', 
                                'projects_1.estimation_no asc', self.model.project_month.desc()).all()
         return query
@@ -38,7 +38,7 @@ class ProjectMonthRepository(BaseRepository):
                         deposit_input_flag, end_user_company_id, client_company_id,
                         recorded_department_id, deposit_date_from, deposit_date_to):
         query = self.model.query
-        query = query.filter(self.model.billing_confirmation_money > 0)
+        query = query.filter((self.model.billing_confirmation_money > 0) | (self.model.billing_transportation > 0))
         if project_name:
             query = query.filter(self.model.project.has(Project.project_name.like('%' + project_name + '%')))
         if estimation_no:
@@ -79,14 +79,14 @@ class ProjectMonthRepository(BaseRepository):
 
     def find_incomplete_billings(self):
         query = self.model.query.filter(self.model.billing_input_flag == InputFlag.yet)
-        query = query.filter(self.model.billing_confirmation_money > 0)
+        query = query.filter((self.model.billing_confirmation_money > 0) | (self.model.billing_transportation > 0))
         query = query.filter(self.model.project_month <= date.today())
         query = query.order_by(asc(self.model.project_month), asc('projects_1.project_name'))
         return query.all()
 
     def find_incomplete_deposits(self):
         query = self.model.query.filter(self.model.deposit_input_flag == InputFlag.yet)
-        query = query.filter(self.model.billing_confirmation_money > 0)
+        query = query.filter((self.model.billing_confirmation_money > 0) | (self.model.billing_transportation > 0))
         query = query.filter(self.model.deposit_date <= date.today())
         query = query.order_by(asc(self.model.deposit_date), asc('projects_1.project_name'))
         return query.all()

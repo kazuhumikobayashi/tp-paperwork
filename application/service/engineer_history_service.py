@@ -1,7 +1,5 @@
 import itertools
 
-from flask import current_app
-
 from application.domain.repository.engineer_history_repository import EngineerHistoryRepository
 
 
