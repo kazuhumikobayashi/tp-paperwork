@@ -227,6 +227,8 @@ class BillingDepartmentReport(object):
                         # 日付セルの書式設定
                         self.day_format(i, 'deposit')
                         # 合計金額の初期化
+                        transportation_total_department = 0
+                        tax_transportation_total_department = 0
                         confirmation_total_department = 0
                         tax_total_department = 0
                         amount_total_department = 0
