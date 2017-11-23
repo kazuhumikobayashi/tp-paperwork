@@ -162,4 +162,5 @@ def insert_rows(self, row_idx, cnt, above=False, copy_style=True, fill_formulae=
             cr
         )
 
+
 Worksheet.insert_rows = insert_rows
