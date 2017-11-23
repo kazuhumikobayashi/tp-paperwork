@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from openpyxl.styles import Border, Side, Alignment
+from openpyxl.styles import Border, Side, Alignment, PatternFill, Font
 
 from application.domain.repository.excel import Excel
 
@@ -58,7 +58,7 @@ class BillingDepartmentReport(object):
             if i != 0:
                 # １つ上の"顧客"の値を比較
                 if company_name != project_month.project.client_company.company_name:
-                    self.amount_total(i, 'D', company_name, transportation_total_company,
+                    self.amount_total(i, 'company', company_name, transportation_total_company,
                                       tax_transportation_total_company, confirmation_total_company,
                                       tax_total_company, amount_total_company)
                     transportation_total_company = 0
@@ -68,7 +68,7 @@ class BillingDepartmentReport(object):
                     amount_total_company = 0
                 # １つ上の"部"の値を比較
                 if department_name != project_month.project.recorded_department.department_name:
-                    self.amount_total(i, 'C', department_name, transportation_total_department,
+                    self.amount_total(i, 'department', department_name, transportation_total_department,
                                       tax_transportation_total_department, confirmation_total_department,
                                       tax_total_department, amount_total_department)
                     transportation_total_department = 0
@@ -78,8 +78,9 @@ class BillingDepartmentReport(object):
                     amount_total_department = 0
                 # １つ上の"本部"の値を比較
                 if group_name != project_month.project.recorded_department.group_name:
-                    self.amount_total(i, 'B', group_name, transportation_total_group, tax_transportation_total_group,
-                                      confirmation_total_group, tax_total_group, amount_total_group)
+                    self.amount_total(i, 'group', group_name, transportation_total_group,
+                                      tax_transportation_total_group, confirmation_total_group, tax_total_group,
+                                      amount_total_group)
                     transportation_total_group = 0
                     tax_transportation_total_group = 0
                     confirmation_total_group = 0
@@ -148,9 +149,9 @@ class BillingDepartmentReport(object):
             company_name = project_month.project.client_company.company_name
             self.create_outline(i, 'department')
         # 最終合計行の追加
-        self.ws['D' + str(i + self.current_row + 1)].value = company_name + "合計"
-        self.ws['C' + str(i + self.current_row + 2)].value = department_name + "合計"
-        self.ws['B' + str(i + self.current_row + 3)].value = group_name + "合計"
+        self.ws['B' + str(i + self.current_row + 1)].value = company_name + " 合計"
+        self.ws['B' + str(i + self.current_row + 2)].value = department_name + " 合計"
+        self.ws['B' + str(i + self.current_row + 3)].value = group_name + " 合計"
         self.ws['B' + str(i + self.current_row + 4)].value = "総合計"
         # 値を代入
         self.ws['H' + str(i + self.current_row + 1)].value = transportation_total_company
@@ -174,15 +175,31 @@ class BillingDepartmentReport(object):
         self.ws['K' + str(i + self.current_row + 4)].value = tax_total_all
         self.ws['L' + str(i + self.current_row + 4)].value = amount_total_all
         # セルの結合
-        self.ws.merge_cells('D' + str(i + self.current_row + 1) + ':G' + str(i + self.current_row + 1))
-        self.ws.merge_cells('C' + str(i + self.current_row + 2) + ':G' + str(i + self.current_row + 2))
+        self.ws.merge_cells('B' + str(i + self.current_row + 1) + ':G' + str(i + self.current_row + 1))
+        self.ws.merge_cells('B' + str(i + self.current_row + 2) + ':G' + str(i + self.current_row + 2))
         self.ws.merge_cells('B' + str(i + self.current_row + 3) + ':G' + str(i + self.current_row + 3))
         self.ws.merge_cells('B' + str(i + self.current_row + 4) + ':G' + str(i + self.current_row + 4))
         # セルの書式設定
-        self.ws['D' + str(i + self.current_row + 1)].alignment = Alignment(horizontal='center')
-        self.ws['C' + str(i + self.current_row + 2)].alignment = Alignment(horizontal='center')
-        self.ws['B' + str(i + self.current_row + 3)].alignment = Alignment(horizontal='center')
-        self.ws['B' + str(i + self.current_row + 4)].alignment = Alignment(horizontal='center')
+        self.ws['B' + str(i + self.current_row + 1)].alignment = Alignment(horizontal='right')
+        self.ws['B' + str(i + self.current_row + 2)].alignment = Alignment(horizontal='right')
+        self.ws['B' + str(i + self.current_row + 3)].alignment = Alignment(horizontal='right')
+        self.ws['B' + str(i + self.current_row + 4)].alignment = Alignment(horizontal='right')
+        for column_num in ['B', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+            # セルの色変更
+            self.ws[column_num + str(i + self.current_row + 1)].fill = \
+                PatternFill(patternType='solid', fgColor='B7D6A3')
+            self.ws[column_num + str(i + self.current_row + 2)].fill = \
+                PatternFill(patternType='solid', fgColor='94C175')
+            self.ws[column_num + str(i + self.current_row + 3)].fill = \
+                PatternFill(patternType='solid', fgColor='70AD47')
+            self.ws[column_num + str(i + self.current_row + 4)].fill = \
+                PatternFill(patternType='solid', fgColor='5A8A39')
+            # フォントサイズの変更
+            self.ws[column_num + str(i + self.current_row + 1)].font = Font(size=14, bold=True)
+            self.ws[column_num + str(i + self.current_row + 2)].font = Font(size=14, bold=True)
+            self.ws[column_num + str(i + self.current_row + 3)].font = Font(size=14, bold=True)
+            self.ws[column_num + str(i + self.current_row + 4)].font = Font(size=14, bold=True)
+
         for j in range(5):
             self.money_format(i + j, 'department')
             self.create_outline(i + j, 'department')
@@ -338,7 +355,7 @@ class BillingDepartmentReport(object):
 
     def amount_total(self, index, col, name, transportation, tax_transportation, confirmation, tax_total, amount_total):
 
-        self.ws[col + str(index + self.current_row)].value = name + "合計"
+        self.ws['B' + str(index + self.current_row)].value = name + " 合計"
         # 値を代入
         self.ws['H' + str(index + self.current_row)].value = transportation
         self.ws['I' + str(index + self.current_row)].value = tax_transportation
@@ -348,9 +365,24 @@ class BillingDepartmentReport(object):
         # 金額セルの書式設定
         self.create_outline(index, 'department')
         # セルの結合
-        self.ws.merge_cells(col + str(index + self.current_row) + ':G' + str(index + self.current_row))
+        self.ws.merge_cells('B' + str(index + self.current_row) + ':G' + str(index + self.current_row))
         # セルの書式設定
-        self.ws[col + str(index + self.current_row)].alignment = Alignment(horizontal='center')
+        self.ws['B' + str(index + self.current_row)].alignment = Alignment(horizontal='right')
+        # セルの色変更
+        for column_num in ['B', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+            if col == 'company':
+                self.ws[column_num + str(index + self.current_row)].fill = \
+                    PatternFill(patternType='solid', fgColor='B7D6A3')
+            elif col == 'department':
+                self.ws[column_num + str(index + self.current_row)].fill = \
+                    PatternFill(patternType='solid', fgColor='94C175')
+            else:
+                self.ws[column_num + str(index + self.current_row)].fill = \
+                    PatternFill(patternType='solid', fgColor='70AD47')
+        # フォントサイズの変更
+        for column_num in ['B', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+            self.ws[column_num + str(index + self.current_row)].font = Font(size=14, bold=True)
+
         self.create_outline(index, 'department')
         self.money_format(index, 'department')      
         self.current_row += 1
