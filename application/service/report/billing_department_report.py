@@ -46,7 +46,7 @@ class BillingDepartmentReport(object):
         confirmation_total_group = 0
         tax_total_group = 0
         amount_total_group = 0
-        # "全合計金額の宣言
+        # 全合計金額の宣言
         transportation_total_all = 0
         tax_transportation_total_all = 0
         confirmation_total_all = 0
@@ -208,31 +208,33 @@ class BillingDepartmentReport(object):
         amount_total_all = 0
         self.current_row = 3
         i = 0
+        # 入金日、会社名順にソート
+        self.project_months.sort(key=lambda x: (x.deposit_date, x.project.client_company.company_name))
         for i, project_month in enumerate(self.project_months):
             if i != 0:
                 if company_name != project_month.project.client_company.company_name:
-                        self.ws['B' + str(i + self.current_row)].value = company_name + "集計"
-                        # 値を代入
-                        self.ws['C' + str(i + self.current_row)].value = transportation_total_department
-                        self.ws['D' + str(i + self.current_row)].value = tax_transportation_total_department
-                        self.ws['E' + str(i + self.current_row)].value = confirmation_total_department
-                        self.ws['F' + str(i + self.current_row)].value = tax_total_department
-                        self.ws['G' + str(i + self.current_row)].value = amount_total_department
-                        self.ws['H' + str(i + self.current_row)].value = deposit_date
-                        self.ws['I' + str(i + self.current_row)].value = bank_name
-                        # 金額セルの書式設定
-                        self.create_outline(i, 'deposit')
-                        # セルの書式設定
-                        self.money_format(i, 'deposit')
-                        # 日付セルの書式設定
-                        self.day_format(i, 'deposit')
-                        # 合計金額の初期化
-                        transportation_total_department = 0
-                        tax_transportation_total_department = 0
-                        confirmation_total_department = 0
-                        tax_total_department = 0
-                        amount_total_department = 0
-                        self.current_row += 1
+                    self.ws['B' + str(i + self.current_row)].value = company_name + " 集計"
+                    # 値を代入
+                    self.ws['C' + str(i + self.current_row)].value = transportation_total_department
+                    self.ws['D' + str(i + self.current_row)].value = tax_transportation_total_department
+                    self.ws['E' + str(i + self.current_row)].value = confirmation_total_department
+                    self.ws['F' + str(i + self.current_row)].value = tax_total_department
+                    self.ws['G' + str(i + self.current_row)].value = amount_total_department
+                    self.ws['H' + str(i + self.current_row)].value = deposit_date
+                    self.ws['I' + str(i + self.current_row)].value = bank_name
+                    # 金額セルの書式設定
+                    self.create_outline(i, 'deposit')
+                    # セルの書式設定
+                    self.money_format(i, 'deposit')
+                    # 日付セルの書式設定
+                    self.day_format(i, 'deposit')
+                    # 合計金額の初期化
+                    transportation_total_department = 0
+                    tax_transportation_total_department = 0
+                    confirmation_total_department = 0
+                    tax_total_department = 0
+                    amount_total_department = 0
+                    self.current_row += 1
             # 値を代入
             self.ws['B' + str(i + self.current_row)].value = project_month.project.project_name
             self.ws['C' + str(i + self.current_row)].value = project_month.billing_transportation or 0
@@ -276,7 +278,7 @@ class BillingDepartmentReport(object):
             bank_name = project_month.project.client_company.bank.bank_name
 
         # 最終合計行の追加
-        self.ws['B' + str(i + self.current_row + 1)].value = company_name + "集計"
+        self.ws['B' + str(i + self.current_row + 1)].value = company_name + " 集計"
         self.ws['B' + str(i + self.current_row + 2)].value = "総計"
         # 値を代入
         self.ws['C' + str(i + self.current_row + 1)].value = transportation_total_department
