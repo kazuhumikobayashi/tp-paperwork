@@ -107,6 +107,10 @@ class BillingDepartmentReport(object):
             self.money_format(i, 'department')
             # 日付セルの書式設定
             self.day_format(i, 'department')
+            # フォントの変更
+            for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+                self.ws[column_num + str(i + self.current_row)].font = Font(name='Meiryo UI')
+
             # "顧客"単位の各合計金額
             transportation_total_company += project_month.billing_transportation or 0
             tax_transportation_total_company += project_month.get_tax_of_billing_transportation()
@@ -195,10 +199,10 @@ class BillingDepartmentReport(object):
             self.ws[column_num + str(i + self.current_row + 4)].fill = \
                 PatternFill(patternType='solid', fgColor='5A8A39')
             # フォントサイズの変更
-            self.ws[column_num + str(i + self.current_row + 1)].font = Font(size=14, bold=True)
-            self.ws[column_num + str(i + self.current_row + 2)].font = Font(size=14, bold=True)
-            self.ws[column_num + str(i + self.current_row + 3)].font = Font(size=14, bold=True)
-            self.ws[column_num + str(i + self.current_row + 4)].font = Font(size=14, bold=True)
+            self.ws[column_num + str(i + self.current_row + 1)].font = Font(name='Meiryo UI', size=14, bold=True)
+            self.ws[column_num + str(i + self.current_row + 2)].font = Font(name='Meiryo UI', size=14, bold=True)
+            self.ws[column_num + str(i + self.current_row + 3)].font = Font(name='Meiryo UI', size=14, bold=True)
+            self.ws[column_num + str(i + self.current_row + 4)].font = Font(name='Meiryo UI', size=14, bold=True)
 
         for j in range(5):
             self.money_format(i + j, 'department')
@@ -245,6 +249,9 @@ class BillingDepartmentReport(object):
                     self.money_format(i, 'deposit')
                     # 日付セルの書式設定
                     self.day_format(i, 'deposit')
+                    # フォントの変更
+                    for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
+                        self.ws[column_num + str(i + self.current_row)].font = Font(name='Meiryo UI')
                     # 合計金額の初期化
                     transportation_total_department = 0
                     tax_transportation_total_department = 0
@@ -271,6 +278,10 @@ class BillingDepartmentReport(object):
             self.money_format(i, 'deposit')
             # 日付セルの書式設定
             self.day_format(i, 'deposit')
+            # フォントの変更
+            for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
+                self.ws[column_num + str(i + self.current_row)].font = Font(name='Meiryo UI')
+
             # "部"単位の各合計金額
             transportation_total_department += project_month.billing_transportation or 0
             tax_transportation_total_department += project_month.get_tax_of_billing_transportation()
@@ -315,6 +326,11 @@ class BillingDepartmentReport(object):
             self.create_outline(i + j, 'deposit')
             self.money_format(i + j, 'deposit')
             self.day_format(i + j, 'deposit')
+        # フォントの変更
+        for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']:
+            self.ws[column_num + str(i + self.current_row + 1)].font = Font(name='Meiryo UI')
+            self.ws[column_num + str(i + self.current_row + 2)].font = Font(name='Meiryo UI')
+
         self.ws.title = '請求一覧（入金日）{}月'.format(self.month.month)
         # エクセルを一時フォルダに保存
         self.excel.save('請求一覧_{}.xlsx'.format(datetime.today().strftime("%Y%m%d")))
@@ -379,10 +395,12 @@ class BillingDepartmentReport(object):
             else:
                 self.ws[column_num + str(index + self.current_row)].fill = \
                     PatternFill(patternType='solid', fgColor='70AD47')
-        # フォントサイズの変更
-        for column_num in ['B', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
-            self.ws[column_num + str(index + self.current_row)].font = Font(size=14, bold=True)
 
         self.create_outline(index, 'department')
         self.money_format(index, 'department')      
+
+        # フォントサイズの変更
+        for column_num in ['B', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+            self.ws[column_num + str(index + self.current_row)].font = Font(name='Meiryo UI', size=14, bold=True)
+
         self.current_row += 1
