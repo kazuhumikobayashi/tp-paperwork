@@ -143,7 +143,7 @@ class ProjectResultRepository(BaseRepository):
         # プロジェクト名称の降順にする。
         query = query.join(self.model.project_detail)\
                      .join(ProjectDetail.project)\
-                     .order_by(Project.project_name.asc())
+                     .order_by(Project.client_company_id.asc(), Project.project_name.asc())
 
         project_results = query.all()
 
