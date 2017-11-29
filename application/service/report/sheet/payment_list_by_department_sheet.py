@@ -79,7 +79,7 @@ class PaymentListByDepartmentSheet(object):
                         or (payment_list_by_department.project_results[i].project_detail.project.project_name
                             != payment_list_by_department.project_results[i + 1].project_detail.project.project_name):
                     # PRJ計、部署計を代入
-                    self.ws['H' + str(self.current_row)].value = prj_total_money
+                    self.ws['I' + str(self.current_row)].value = prj_total_money
                     department_total_money += prj_total_money
                     # PRJ計リセット
                     prj_total_money = 0
@@ -92,7 +92,7 @@ class PaymentListByDepartmentSheet(object):
                 self.write_border_if_not_exist_bp()
 
             # 部署ごとの最終行の備考に部署ごとの合計を記載
-            self.ws['I' + str(self.current_row - 1)].value = department_total_money
+            self.ws['J' + str(self.current_row - 1)].value = department_total_money
 
         # 合計------------------------------------------------------------------------------------------------------
         # セルを結合
