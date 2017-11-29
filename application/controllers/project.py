@@ -67,6 +67,8 @@ def create(project_id=None):
     if form.validate_on_submit():
         if project_id:
             project = service.clone(project_id)
+        if project.inspection_date:
+            project.inspection_date = form.end_date.data
         project.project_name = form.project_name.data
         project.project_name_for_bp = form.project_name_for_bp.data
         project.start_date = form.start_date.data
