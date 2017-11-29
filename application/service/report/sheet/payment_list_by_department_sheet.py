@@ -16,7 +16,7 @@ class PaymentListByDepartmentSheet(object):
 
     def write_payment_list_by_department(self):
         # 支払の月を記載
-        self.ws.merge_cells('B1:I1')
+        self.ws.merge_cells('B1:K1')
         self.ws['B1'].value = self.month
         self.ws['B1'].number_format = 'yyyy"年"m"月度"'
         self.ws['B1'].font = Font(name="ＭＳ ゴシック", size=12, bold=True)
@@ -48,11 +48,13 @@ class PaymentListByDepartmentSheet(object):
                 self.ws['D' + str(self.current_row)].value\
                     = payment_list_by_department.project_results[i].project_detail.engineer.company.company_name
                 self.ws['E' + str(self.current_row)].value\
-                    = payment_list_by_department.project_results[i].project_detail.engineer.engineer_name
+                    = payment_list_by_department.project_results[i].project_detail.project.client_company.company_name
                 self.ws['F' + str(self.current_row)].value\
+                    = payment_list_by_department.project_results[i].project_detail.engineer.engineer_name
+                self.ws['G' + str(self.current_row)].value\
                     = payment_list_by_department.project_results[i].project_detail.project.project_name
                 # 支払実績 = 税抜実績 ＋ 税抜交通費
-                self.ws['G' + str(self.current_row)].value\
+                self.ws['H' + str(self.current_row)].value\
                     = (payment_list_by_department.project_results[i].payment_confirmation_money or 0)\
                     + (payment_list_by_department.project_results[i].payment_transportation or 0)\
                     - payment_list_by_department.project_results[i].get_tax_of_payment_transportation(engineer_history)
@@ -61,17 +63,14 @@ class PaymentListByDepartmentSheet(object):
                     + (payment_list_by_department.project_results[i].payment_transportation or 0)\
                     - payment_list_by_department.project_results[i].get_tax_of_payment_transportation(engineer_history)
                 # 罫線（それぞれの部署の一行目には、上に太い罫線を引く）
-                if (i + 1) == 1:
-                    self.write_border(top_border_style='medium')
-                else:
-                    self.write_border()
+                self.write_border()
                 # 表示形式
                 self.ws['C' + str(self.current_row)].alignment = Alignment(horizontal='center')
                 # フォント
-                for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
+                for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
                     self.ws[column_num + str(self.current_row)].font = Font(name="ＭＳ ゴシック")
                 # ユーザー定義
-                for column_num in ['G', 'H', 'I']:
+                for column_num in ['H', 'I', 'J']:
                     self.ws[column_num + str(self.current_row)].number_format = '#,##0'
                 # 行の高さ調整
                 self.ws.row_dimensions[self.current_row].height = 18
@@ -97,34 +96,35 @@ class PaymentListByDepartmentSheet(object):
 
         # 合計------------------------------------------------------------------------------------------------------
         # セルを結合
-        self.ws.merge_cells('B' + str(self.current_row) + ':F' + str(self.current_row))
+        self.ws.merge_cells('B' + str(self.current_row) + ':G' + str(self.current_row))
         # 値を代入
         self.ws['B' + str(self.current_row)].value = "合計"
-        self.ws['G' + str(self.current_row)].value = "=sum(G3:G{})".format(self.current_row - 1)
         self.ws['H' + str(self.current_row)].value = "=sum(H3:H{})".format(self.current_row - 1)
         self.ws['I' + str(self.current_row)].value = "=sum(I3:I{})".format(self.current_row - 1)
+        self.ws['J' + str(self.current_row)].value = "=sum(J3:J{})".format(self.current_row - 1)
         # 書式設定
         # 書式
         self.ws['B' + str(self.current_row)].alignment = Alignment(horizontal="right")
-        for column_num in ['G', 'H', 'I', 'J']:
+        for column_num in ['H', 'I', 'J', 'K']:
             self.ws[column_num + str(self.current_row)].font = Font(name="ＭＳ ゴシック")
         # ユーザー定義
-        for column_num in ['G', 'H', 'I']:
+        for column_num in ['H', 'I', 'J']:
             self.ws[column_num + str(self.current_row)].number_format = '#,##0'
         # 行の高さ調整
         self.ws.row_dimensions[self.current_row].height = 18
         # 罫線
-        self.write_border(top_border_style='medium')
+        self.write_border(bottom_border_style='medium')
         self.current_row += 1
-        for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
+        for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
             self.ws[column_num + str(self.current_row)].border = Border(top=Side(style='medium'))
 
     def write_border(self, top_border_style=None, bottom_border_style='dotted'):
         for column_num in ['B']:
             self.ws[column_num + str(self.current_row)].border = Border(top=Side(style=top_border_style),
                                                                         left=Side(style='medium'),
-                                                                        right=Side(style='medium'))
-        for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']:
+                                                                        right=Side(style='medium'),
+                                                                        bottom=Side(style=bottom_border_style))
+        for column_num in ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']:
             self.ws[column_num + str(self.current_row)].border = Border(top=Side(style=top_border_style),
                                                                         left=Side(style='medium'),
                                                                         right=Side(style='medium'),
@@ -133,7 +133,7 @@ class PaymentListByDepartmentSheet(object):
     # BPがいないorその月の実績がない計上部署のスタイル処理
     def write_border_if_not_exist_bp(self):
         # 罫線
-        self.write_border(top_border_style='medium')
+        self.write_border(bottom_border_style='medium')
         # 非表示にする。
         self.ws.row_dimensions[self.current_row].hidden = True
         self.current_row += 1
