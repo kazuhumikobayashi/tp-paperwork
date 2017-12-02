@@ -160,9 +160,13 @@ class BillingBaseReport(object):
             locale.setlocale(locale.LC_ALL, '')
             deposit_date = self.project_month.deposit_date.strftime('%Y年%m月%d日')
 
-        text = "お支払いは下記口座に{}までにお支払い願います。\n\n".format(deposit_date)\
-               + "  ※作業内容及び納品物等の詳細はご注文書（No.{}）の通り"\
-                 .format(self.project_month.project.client_order_no or "               ")
+        text = "お支払いは下記口座に{}までにお支払い願います。\n\n".format(deposit_date)
+        if self.project_month.remarks:
+            text += self.project_month.remarks + '\n'
+        if self.project_month.project.client_order_no:
+            text += "※作業内容及び納品物等の詳細はご注文書（No.{}）の通り"\
+                 .format(self.project_month.project.client_order_no)
+
         return text
 
     def get_print_name(self):
