@@ -232,7 +232,7 @@ class ProjectDetail(BaseModel, db.Model):
                 "', project='{}".format(self.project) + \
                 "', detail_type='{}".format(self.detail_type) + \
                 "', work_name='{}".format(self.work_name) + \
-                "', engineer='{}".format(self.engineer) + \
+                "', engineer_id='{}".format(self.engineer_id) + \
                 "', billing_money='{}".format(self.billing_money) + \
                 "', remarks='{}".format(self.remarks) + \
                 "', billing_start_day='{}".format(self.billing_start_day) + \
