@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+from dateutil.tz import tz
 from flask import session
 
 from dateutil.relativedelta import relativedelta
@@ -183,6 +184,8 @@ class Project(BaseModel, db.Model):
     # プロジェクトの年月情報を作成
     def create_project_months(self):
         project_dates = self.get_project_month_list()
+        jst = tz.gettz('Asia/Tokyo')
+        now = datetime.now(jst)
         for project_date in project_dates:
             calculator = Calculator(
                             project_date,
@@ -192,9 +195,9 @@ class Project(BaseModel, db.Model):
                                 project_month=project_date,
                                 billing_tax=self.client_company.billing_tax,
                                 deposit_date=calculator.get_deposit_date(),
-                                created_at=datetime.today(),
+                                created_at=now,
                                 created_user=session['user']['user_name'],
-                                updated_at=datetime.today(),
+                                updated_at=now,
                                 updated_user=session['user']['user_name'])
             if self.billing_timing == BillingTiming.billing_by_month:
                 money = self.get_estimated_total_amount_by_month()
