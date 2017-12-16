@@ -1,3 +1,4 @@
+import numpy
 from sqlalchemy import Column, Integer, String, Date, DECIMAL
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
@@ -77,7 +78,7 @@ class ProjectResult(BaseModel, db.Model):
     # 交通費の税額を取得
     def get_tax_of_payment_transportation(self, engineer_history):
         if engineer_history:
-            return (self.payment_transportation or 0) * engineer_history.payment_tax.rate_if_exclude_tax
+            return numpy.trunc((self.payment_transportation or 0) * engineer_history.payment_tax.rate_if_exclude_tax)
         else:
             return 0
 
