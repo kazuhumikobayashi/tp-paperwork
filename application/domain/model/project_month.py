@@ -1,3 +1,4 @@
+import numpy
 from sqlalchemy import Column, Integer, Date, ForeignKey, String
 from sqlalchemy.orm import relationship
 
@@ -65,7 +66,7 @@ class ProjectMonth(BaseModel, db.Model):
             return int(date_.strftime('%y'))
 
     def tax_of_billing_confirmation_money(self):
-        return (self.billing_confirmation_money or 0) * self.billing_tax.rate
+        return numpy.trunc((self.billing_confirmation_money or 0) * self.billing_tax.rate)
 
     def has_billing(self):
         return (self.billing_estimated_money or 0) > 0 or (self.billing_confirmation_money or 0) > 0
@@ -77,7 +78,7 @@ class ProjectMonth(BaseModel, db.Model):
         return self._get_fiscal_year(self.project_month)
 
     def get_tax_of_billing_transportation(self):
-        return (self.billing_transportation or 0) * self.billing_tax.rate_if_exclude_tax
+        return numpy.trunc((self.billing_transportation or 0) * self.billing_tax.rate_if_exclude_tax)
 
     def __repr__(self):
         return "<ProjectMonth:" + \

@@ -15,3 +15,4 @@ python-dateutil==2.6.0
 openpyxl==2.4.5
 Pillow==4.1.1
 Erajp==0.0.4
+numpy==1.13.3

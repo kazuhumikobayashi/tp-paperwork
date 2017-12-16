@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+import numpy
 from dateutil.tz import tz
 from flask import session
 
@@ -236,7 +237,7 @@ class Project(BaseModel, db.Model):
 
     def tax_of_estimated_total_amount(self):
         if self.billing_tax:
-            return (self.estimated_total_amount or 0) * self.billing_tax.rate
+            return numpy.trunc((self.estimated_total_amount or 0) * self.billing_tax.rate)
         else:
             return 0
 
