@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from dateutil.tz import tz
 from flask import Blueprint, jsonify, session
 from flask import abort
 from flask import current_app
@@ -112,14 +113,16 @@ def create(project_month_id):
     form = ProjectBillingForm(request.form)
 
     if form.validate_on_submit():
+        jst = tz.gettz('Asia/Tokyo')
+        now = datetime.now(jst)
         project_detail = ProjectDetail()
         project_detail.project = project_month.project
         project_detail.detail_type = DetailType.work
         project_detail.work_name = form.billing_content.data
         project_detail.billing_money = form.billing_confirmation_money.data
-        project_detail.created_at = datetime.today()
+        project_detail.created_at = now
         project_detail.created_user = session['user']['user_name']
-        project_detail.updated_at = datetime.today()
+        project_detail.updated_at = now
         project_detail.updated_user = session['user']['user_name']
 
         billing = ProjectBilling()
@@ -129,9 +132,9 @@ def create(project_month_id):
         billing.billing_confirmation_money = form.billing_confirmation_money.data
         billing.billing_transportation = form.billing_transportation.data
         billing.remarks = form.remarks.data
-        billing.created_at = datetime.today()
+        billing.created_at = now
         billing.created_user = session['user']['user_name']
-        billing.updated_at = datetime.today()
+        billing.updated_at = now
         billing.updated_user = session['user']['user_name']
 
         billing.project_detail = project_detail

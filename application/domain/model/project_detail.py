@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+from dateutil.tz import tz
 from flask import session
 
 from dateutil.relativedelta import relativedelta
@@ -169,11 +170,13 @@ class ProjectDetail(BaseModel, db.Model):
     def create_results(self):
         contract_dates = self.get_contract_month_list()
         for contract_date in contract_dates:
+            jst = tz.gettz('Asia/Tokyo')
+            now = datetime.now(jst)
             project_result = ProjectResult(
                                 result_month=contract_date,
-                                created_at=datetime.today(),
+                                created_at=now,
                                 created_user=session['user']['user_name'],
-                                updated_at=datetime.today(),
+                                updated_at=now,
                                 updated_user=session['user']['user_name'])
             if self.has_payment():
                 calculator = Calculator(
@@ -196,13 +199,15 @@ class ProjectDetail(BaseModel, db.Model):
     def create_billing_by_month(self):
         project_dates = self.project.get_project_month_list()
         for project_date in project_dates:
+            jst = tz.gettz('Asia/Tokyo')
+            now = datetime.now(jst)
             project_billing = ProjectBilling(
                                     billing_month=project_date,
                                     billing_content=self.work_name,
                                     billing_confirmation_money=self.get_payment_per_month_by_work(),
-                                    created_at=datetime.today(),
+                                    created_at=now,
                                     created_user=session['user']['user_name'],
-                                    updated_at=datetime.today(),
+                                    updated_at=now,
                                     updated_user=session['user']['user_name'])
             self.project_billings.append(project_billing)
         return self
@@ -210,13 +215,15 @@ class ProjectDetail(BaseModel, db.Model):
     # 最終月の請求情報を作成
     def create_billing_at_last(self):
         project_dates = self.project.get_project_month_list()
+        jst = tz.gettz('Asia/Tokyo')
+        now = datetime.now(jst)
         project_billing = ProjectBilling(
                                 billing_month=max(project_dates),
                                 billing_content=self.work_name,
                                 billing_confirmation_money=self.billing_money,
-                                created_at=datetime.today(),
+                                created_at=now,
                                 created_user=session['user']['user_name'],
-                                updated_at=datetime.today(),
+                                updated_at=now,
                                 updated_user=session['user']['user_name'])
         self.project_billings.append(project_billing)
         return self
