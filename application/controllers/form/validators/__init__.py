@@ -92,3 +92,18 @@ class LessThan(object):
                     message = field.gettext('{} は %(other_label)sより小さい値にして下さい。'.format(field.label.text))
 
             raise ValidationError(message % d)
+
+
+class NumberRange(validators.NumberRange):
+    def __call__(self, form, field):
+        data = field.data
+        if data is not None and \
+            ((self.min is not None and data < self.min) or (self.max is not None and data > self.max)):
+            message = self.message
+            if message is None:
+                if self.min is not None and data < self.min:
+                    message = field.gettext('%(min)s 以上の数値を入力して下さい。')
+                else:
+                    message = field.gettext('%(max)s 以下の数値を入力して下さい。')
+
+            raise ValidationError(message % dict(min=self.min, max=self.max))

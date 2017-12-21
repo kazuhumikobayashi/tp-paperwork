@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField, TextAreaField, StringField, DateField, validators, HiddenField, DateTimeField
 
 from application.controllers.form.fields import IntegerField, DecimalField, RadioField
-from application.controllers.form.validators import Length, InputRequired
+from application.controllers.form.validators import Length, InputRequired, NumberRange
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
@@ -11,35 +11,37 @@ from application.domain.model.immutables.rule import Rule
 class ProjectResultForm(FlaskForm):
     result_month = DateField('実績年月', [validators.optional()], format='%Y/%m/%d')
     engineer_name = StringField('技術者名称', render_kw={"disabled": "disabled"})
-    work_time = DecimalField('実稼働時間（必須）', [InputRequired()])
+    work_time = DecimalField('実稼働時間（必須）', [InputRequired(), NumberRange(min=-1000, max=1000)])
     billing_subtraction_hours = IntegerField('請求差分時間（基準時間と実稼働時間の差分）',
                                              render_kw={"disabled": "disabled"})
     billing_subtraction_money = IntegerField('請求差分金額（差分時間に時間単価を掛けた金額）',
                                              render_kw={"disabled": "disabled"})
     billing_estimated_money = IntegerField('請求予定金額（単価と差分金額の合計）', render_kw={"disabled": "disabled"})
-    billing_transportation = IntegerField('請求交通費等_個別')
-    billing_adjustments = IntegerField('請求調整金額_個別')
+    billing_transportation = IntegerField('請求交通費等_個別', [NumberRange(min=-1000000000, max=1000000000)])
+    billing_adjustments = IntegerField('請求調整金額_個別', [NumberRange(min=-1000000000, max=1000000000)])
     billing_confirmation_number = StringField('請求確定数量_個別（請求書に出力する人月。基本1.0人月）',
                                               [Length(max=128)],
                                               filters=[lambda x: x or None])
     billing_confirmation_money = IntegerField('請求確定金額_個別（予定金額と調整金額の合計）',
+                                              [NumberRange(min=-1000000000, max=1000000000)],
                                               render_kw={"readonly": "readonly"})
     payment_subtraction_hours = IntegerField('支払差分時間（基準時間と実稼働時間の差分）',
                                              render_kw={"disabled": "disabled"})
     payment_subtraction_money = IntegerField('支払差分金額（差分時間に時間単価を掛けた金額）',
                                              render_kw={"disabled": "disabled"})
     payment_estimated_money = IntegerField('支払予定金額（単価と差分金額の合計）', render_kw={"disabled": "disabled"})
-    payment_transportation = IntegerField('支払交通費等_個別')
-    payment_adjustments = IntegerField('支払調整金額_個別')
+    payment_transportation = IntegerField('支払交通費等_個別', [NumberRange(min=-1000000000, max=1000000000)])
+    payment_adjustments = IntegerField('支払調整金額_個別', [NumberRange(min=-1000000000, max=1000000000)])
     billing_receipted_date = DateField('請求書受領日',
-                                      [validators.optional()],
-                                      format='%Y/%m/%d',
-                                      render_kw={"autocomplete": "off"})
+                                       [validators.optional()],
+                                       format='%Y/%m/%d',
+                                       render_kw={"autocomplete": "off"})
     payment_expected_date = DateField('支払予定日',
                                       [validators.optional()],
                                       format='%Y/%m/%d',
                                       render_kw={"autocomplete": "off"})
     payment_confirmation_money = IntegerField('支払確定金額_個別（予定金額と調整金額の合計）',
+                                              [NumberRange(min=-1000000000, max=1000000000)],
                                               render_kw={"readonly": "readonly"})
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     updated_user = StringField('更新者')

@@ -1,11 +1,10 @@
-from flask import current_app
 from flask_wtf import FlaskForm
 from wtforms import validators, TextAreaField, StringField, SelectField, DateTimeField
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, RadioField, SelectFieldWithDisable, \
     BeginningOfMonthField, EndOfMonthField
-from application.controllers.form.validators import Length, DataRequired, InputRequired, LessThan
+from application.controllers.form.validators import Length, DataRequired, InputRequired, LessThan, NumberRange
 from application.domain.model.immutables.detail_type import DetailType
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
@@ -49,7 +48,9 @@ class ProjectDetailForm(FlaskForm):
                                                     "data-size": "8",
                                                     "data-actions-box": "true"})
     company = StringField('所属会社', render_kw={"disabled": "disabled"})
-    billing_money = IntegerField('請求金額（必須）', [InputRequired()])
+    billing_money = IntegerField('請求金額（必須）',
+                                 [InputRequired(),
+                                  NumberRange(min=-1000000000, max=1000000000)])
     remarks = TextAreaField('備考', [Length(max=1024)], filters=[lambda x: x or None])
     billing_start_day = BeginningOfMonthField('請求契約開始年月（必須）',
                                               [required_if_engineer, LessThan('billing_end_day')],
@@ -59,18 +60,26 @@ class ProjectDetailForm(FlaskForm):
                                       [required_if_engineer],
                                       format='%Y/%m',
                                       render_kw={"autocomplete": "off"})
-    billing_per_month = IntegerField('請求単価（必須）', [required_if_engineer])
+    billing_per_month = IntegerField('請求単価（必須）',
+                                     [required_if_engineer,
+                                      NumberRange(min=-1000000000, max=1000000000)])
     billing_rule = RadioField('請求ルール（必須）',
                               [required_if_engineer],
                               choices=Rule.get_rule_for_select())
-    billing_bottom_base_hour = IntegerField('請求下限基準時間')
-    billing_top_base_hour = IntegerField('請求上限基準時間')
+    billing_bottom_base_hour = IntegerField('請求下限基準時間',
+                                            [NumberRange(min=-1000000000, max=1000000000)])
+    billing_top_base_hour = IntegerField('請求上限基準時間',
+                                         [NumberRange(min=-1000000000, max=1000000000)])
     billing_free_base_hour = StringField('請求フリー入力基準時間',
                                          [Length(max=128)],
                                          filters=[lambda x: x or None])
     billing_per_hour = StringField('請求時間単価', [Length(max=128), required_if_variable], filters=[lambda x: x or None])
-    billing_per_bottom_hour = IntegerField('請求－時間単価', [required_if_variable])
-    billing_per_top_hour = IntegerField('請求＋時間単価', [required_if_variable])
+    billing_per_bottom_hour = IntegerField('請求－時間単価',
+                                           [required_if_variable,
+                                            NumberRange(min=-1000000000, max=1000000000)])
+    billing_per_top_hour = IntegerField('請求＋時間単価',
+                                        [required_if_variable,
+                                         NumberRange(min=-1000000000, max=1000000000)])
     billing_fraction = SelectField('請求端数金額',
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
