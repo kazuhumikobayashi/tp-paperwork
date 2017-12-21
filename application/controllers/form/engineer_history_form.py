@@ -3,7 +3,7 @@ from wtforms import StringField, SelectField, TextAreaField, validators, DateTim
 from wtforms.validators import ValidationError
 
 from application.controllers.form.fields import IntegerField, BeginningOfMonthField, EndOfMonthField, RadioField
-from application.controllers.form.validators import Length, DataRequired, LessThan, InputRequired
+from application.controllers.form.validators import Length, DataRequired, LessThan, InputRequired, NumberRange
 from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
@@ -37,21 +37,29 @@ class EngineerHistoryForm(FlaskForm):
                               [DataRequired()],
                               choices=Tax.get_type_for_select(),
                               render_kw={"title": "支払消費税（必須）"})
-    payment_per_month = IntegerField('支払単価（必須）', [InputRequired()])
+    payment_per_month = IntegerField('支払単価（必須）',
+                                     [InputRequired(),
+                                      NumberRange(min=-1000000000, max=1000000000)])
     payment_rule = RadioField('支払ルール（必須）',
                               [DataRequired()],
                               choices=Rule.get_rule_for_select(),
                               filters=[lambda x: x or None])
-    payment_bottom_base_hour = IntegerField('支払下限基準時間（必須）')
-    payment_top_base_hour = IntegerField('支払上限基準時間（必須）')
+    payment_bottom_base_hour = IntegerField('支払下限基準時間（必須）',
+                                            [NumberRange(min=-1000000000, max=1000000000)])
+    payment_top_base_hour = IntegerField('支払上限基準時間（必須）',
+                                         [NumberRange(min=-1000000000, max=1000000000)])
     payment_free_base_hour = StringField('支払フリー入力基準時間（必須）',
                                          [Length(max=128)],
                                          filters=[lambda x: x or None])
     payment_per_hour = StringField('支払時間単価（必須）',
                                    [Length(max=128), required_if_variable],
                                    filters=[lambda x: x or None])
-    payment_per_bottom_hour = IntegerField('支払－時間単価（必須）', [required_if_variable])
-    payment_per_top_hour = IntegerField('支払＋時間単価（必須）', [required_if_variable])
+    payment_per_bottom_hour = IntegerField('支払－時間単価（必須）',
+                                           [required_if_variable,
+                                            NumberRange(min=-1000000000, max=1000000000)])
+    payment_per_top_hour = IntegerField('支払＋時間単価（必須）',
+                                        [required_if_variable,
+                                         NumberRange(min=-1000000000, max=1000000000)])
     payment_fraction = SelectField('支払端数金額',
                                    [validators.Optional()],
                                    choices=Fraction.get_fraction_for_select(),
