@@ -9,7 +9,8 @@ class BillingDepartmentReport(object):
 
     DEPARTMENT = 'department'
     DEPOSIT = 'deposit'
-    
+    RAW_DATA = 'raw_data'
+
     def __init__(self, project_months, month):
         self.project_months = project_months
         self.month = month
@@ -19,6 +20,7 @@ class BillingDepartmentReport(object):
     def download(self):
         self._create_excel_department()
         self._create_excel_deposit()
+        self._create_excel_raw_data()
 
         return self.excel.download()
 
@@ -95,10 +97,8 @@ class BillingDepartmentReport(object):
             self.ws['G' + str(i + self.current_row)].value = project_month.project.project_name
             self.ws['H' + str(i + self.current_row)].value = project_month.billing_transportation or 0
             self.ws['I' + str(i + self.current_row)].value = project_month.get_tax_of_billing_transportation()
-            self.ws['J' + str(i + self.current_row)].value = project_month.billing_confirmation_money \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            self.ws['K' + str(i + self.current_row)].value = project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            self.ws['J' + str(i + self.current_row)].value = project_month.billing_confirmation_money
+            self.ws['K' + str(i + self.current_row)].value = project_month.tax_of_billing_confirmation_money()
             self.ws['L' + str(i + self.current_row)].value = (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
             self.ws['M' + str(i + self.current_row)].value = project_month.deposit_date
@@ -114,37 +114,29 @@ class BillingDepartmentReport(object):
             # "顧客"単位の各合計金額
             transportation_total_company += project_month.billing_transportation or 0
             tax_transportation_total_company += project_month.get_tax_of_billing_transportation()
-            confirmation_total_company += project_month.billing_confirmation_money \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            tax_total_company += project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            confirmation_total_company += project_month.billing_confirmation_money
+            tax_total_company += project_month.tax_of_billing_confirmation_money()
             amount_total_company += (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
             # "部"単位の各合計金額
             transportation_total_department += project_month.billing_transportation or 0
             tax_transportation_total_department += project_month.get_tax_of_billing_transportation()
-            confirmation_total_department += project_month.billing_confirmation_money \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            tax_total_department += project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            confirmation_total_department += project_month.billing_confirmation_money
+            tax_total_department += project_month.tax_of_billing_confirmation_money()
             amount_total_department += (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
             # "本部"単位の各合計金額
             transportation_total_group += project_month.billing_transportation or 0
             tax_transportation_total_group += project_month.get_tax_of_billing_transportation()
-            confirmation_total_group += project_month.billing_confirmation_money \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            tax_total_group += project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            confirmation_total_group += project_month.billing_confirmation_money
+            tax_total_group += project_month.tax_of_billing_confirmation_money()
             amount_total_group += (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
             # 全合計金額
             transportation_total_all += project_month.billing_transportation or 0
             tax_transportation_total_all += project_month.get_tax_of_billing_transportation()
-            confirmation_total_all += project_month.billing_confirmation_money \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            tax_total_all += project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            confirmation_total_all += project_month.billing_confirmation_money
+            tax_total_all += project_month.tax_of_billing_confirmation_money()
             amount_total_all += (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
 
@@ -263,10 +255,8 @@ class BillingDepartmentReport(object):
             self.ws['B' + str(i + self.current_row)].value = project_month.project.project_name
             self.ws['C' + str(i + self.current_row)].value = project_month.billing_transportation or 0
             self.ws['D' + str(i + self.current_row)].value = project_month.get_tax_of_billing_transportation()
-            self.ws['E' + str(i + self.current_row)].value = (project_month.billing_confirmation_money or 0) \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            self.ws['F' + str(i + self.current_row)].value = project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            self.ws['E' + str(i + self.current_row)].value = (project_month.billing_confirmation_money or 0)
+            self.ws['F' + str(i + self.current_row)].value = project_month.tax_of_billing_confirmation_money()
             self.ws['G' + str(i + self.current_row)].value = (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
             self.ws['H' + str(i + self.current_row)].value = project_month.deposit_date
@@ -285,19 +275,15 @@ class BillingDepartmentReport(object):
             # "部"単位の各合計金額
             transportation_total_department += project_month.billing_transportation or 0
             tax_transportation_total_department += project_month.get_tax_of_billing_transportation()
-            confirmation_total_department += project_month.billing_confirmation_money \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            tax_total_department += project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            confirmation_total_department += project_month.billing_confirmation_money or 0
+            tax_total_department += project_month.tax_of_billing_confirmation_money()
             amount_total_department += (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
             # "全合計金額"の各合計金額
             transportation_total_all += project_month.billing_transportation or 0
             tax_transportation_total_all += project_month.get_tax_of_billing_transportation()
-            confirmation_total_all += project_month.billing_confirmation_money \
-                + (project_month.billing_transportation or 0) - project_month.get_tax_of_billing_transportation()
-            tax_total_all += project_month.tax_of_billing_confirmation_money() \
-                + project_month.get_tax_of_billing_transportation() 
+            confirmation_total_all += project_month.billing_confirmation_money or 0
+            tax_total_all += project_month.tax_of_billing_confirmation_money()
             amount_total_all += (project_month.billing_confirmation_money or 0) \
                 + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
 
@@ -332,12 +318,45 @@ class BillingDepartmentReport(object):
             self.ws[column_num + str(i + self.current_row + 2)].font = Font(name='Meiryo UI')
 
         self.ws.title = '請求一覧（入金日）{}月'.format(self.month.month)
+
+    def _create_excel_raw_data(self):
+        self.ws = self.excel.workbook['Sheet3']
+
+        self.current_row = 3
+        for i, project_month in enumerate(self.project_months):
+
+            # 値を代入
+            self.ws['B' + str(i + self.current_row)].value = project_month.project.recorded_department.group_name
+            self.ws['C' + str(i + self.current_row)].value = project_month.project.recorded_department.department_name
+            self.ws['D' + str(i + self.current_row)].value = project_month.project.client_company.company_name
+            self.ws['E' + str(i + self.current_row)].value = project_month.client_billing_no
+            self.ws['F' + str(i + self.current_row)].value = project_month.billing_printed_date
+            self.ws['G' + str(i + self.current_row)].value = project_month.project.project_name
+            self.ws['H' + str(i + self.current_row)].value = project_month.billing_transportation or 0
+            self.ws['I' + str(i + self.current_row)].value = project_month.get_tax_of_billing_transportation()
+            self.ws['J' + str(i + self.current_row)].value = project_month.billing_confirmation_money or 0
+            self.ws['K' + str(i + self.current_row)].value = project_month.tax_of_billing_confirmation_money()
+            self.ws['L' + str(i + self.current_row)].value = (project_month.billing_confirmation_money or 0) \
+                + project_month.tax_of_billing_confirmation_money() + (project_month.billing_transportation or 0)
+            self.ws['M' + str(i + self.current_row)].value = project_month.deposit_date
+            self.ws['N' + str(i + self.current_row)].value = project_month.project.client_company.bank.bank_name
+            # 金額セルの書式設定
+            self.money_format(i, 'raw_data')
+            # 日付セルの書式設定
+            self.day_format(i, 'raw_data')
+            # フォントの変更
+            for column_num in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
+                self.ws[column_num + str(i + self.current_row)].font = Font(name='Meiryo UI')
+
+            self.create_outline(i, 'raw_data')
+
+        self.ws.title = '請求一覧（元データ）{}月'.format(self.month.month)
         # エクセルを一時フォルダに保存
         self.excel.save('請求一覧_{}.xlsx'.format(datetime.today().strftime("%Y%m%d")))
 
     def create_outline(self, index, kind):
         
-        if kind == self.DEPARTMENT:
+        if kind == self.DEPARTMENT or kind == self.RAW_DATA:
             for col in ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N']:
                 self.ws[col + str(index + self.current_row)].border = Border(outline=True,
                                                                              top=Side(style='thin'),
@@ -354,7 +373,7 @@ class BillingDepartmentReport(object):
 
     def day_format(self, index, kind):
 
-        if kind == self.DEPARTMENT:
+        if kind == self.DEPARTMENT or kind == self.RAW_DATA:
             for col in ['F', 'M']:
                 self.ws[col + str(index + self.current_row)].number_format = 'yyyy/mm/dd'
         elif kind == self.DEPOSIT:
@@ -362,7 +381,7 @@ class BillingDepartmentReport(object):
 
     def money_format(self, index, kind):
 
-        if kind == self.DEPARTMENT:
+        if kind == self.DEPARTMENT or kind == self.RAW_DATA:
             for col in ['H', 'I', 'J', 'K', 'L']:
                 self.ws[col + str(index + self.current_row)].number_format = '¥#,###0'
         elif kind == self.DEPOSIT:
