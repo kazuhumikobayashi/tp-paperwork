@@ -61,7 +61,7 @@
             <div class="col-sm-6">
             {% if pagination %}
               {{ p.pagination_widget(pagination,'.company_page',
-              company_name=request.args.get('company_name', '')) }}
+              company_name=form.company_name.data) }}
             {% endif %}
             </div>
             <div class="col-sm-6">
