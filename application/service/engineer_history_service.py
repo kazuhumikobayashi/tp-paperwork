@@ -30,13 +30,22 @@ class EngineerHistoryService(object):
     def find_contract_for_select(self):
         all_list = self.repository.find_all_order_by_start_day()
         group_bys = itertools.groupby(all_list, key=lambda x: x.engineer_id)
-        # 契約開始日付の降順でsortしているので、1件目のデータのみリストに追加
-        latest_history_list = [list(items)[0] for key, items in group_bys]
+        latest_history_list = []
+        for key, items in group_bys:
+            lists = list(items)
+            item = lists[0]
+            if len(lists) > 1:
+                # 契約開始日付の降順でsortしているので、最後のデータの契約開始日付に上書き
+                item.payment_start_day = lists[len(lists)-1].payment_start_day
+            latest_history_list.append(item)
 
-        ret = [('', '', '')]
+        ret = [('', '', '', '')]
         engineer_list = \
             [(str(h.engineer_id),
               h.engineer.engineer_name + '【契約終了】' if h.is_contract() else h.engineer.engineer_name,
-              h.is_contract()) for h in latest_history_list]
+              h.is_contract(),
+              '契約期間：{} - {}'.format(h.payment_start_day.strftime('%Y/%m/%d'),
+                                    h.payment_end_day.strftime('%Y/%m/%d')))
+             for h in latest_history_list]
         ret.extend(engineer_list)
         return ret

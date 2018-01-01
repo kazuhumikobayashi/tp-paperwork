@@ -10,9 +10,11 @@ from application.domain.model.immutables.fraction import Fraction
 from application.domain.model.immutables.round import Round
 from application.domain.model.immutables.rule import Rule
 from application.domain.repository.project_detail_repository import ProjectDetailRepository
+from application.service.engineer_history_service import EngineerHistoryService
 from application.service.engineer_service import EngineerService
 
 service = EngineerService()
+engineer_history_service = EngineerHistoryService()
 project_detail_repository = ProjectDetailRepository()
 
 
@@ -162,3 +164,13 @@ class ProjectDetailForm(FlaskForm):
         project_detail = project_detail_repository.find_by_bp_order_no(field.data)
         if field.data and project_detail and project_detail.id != self.id.data:
             raise ValidationError('このBP注文Noは既に登録されています。')
+
+    def validate_engineer_id(self, field):
+        # 明細区分で技術者を選んだ場合
+        if DetailType.parse(self.detail_type.data) == DetailType.engineer and field.data \
+                and self.billing_start_day.data:
+            engineer = service.find_by_id(self.engineer_id.data)
+            engineer_history = engineer_history_service.get_history_by_start_day(engineer.id,
+                                                                                 self.billing_start_day.data)
+            if not engineer_history:
+                raise ValidationError('この技術者の契約期間はプロジェクト期間外です。')

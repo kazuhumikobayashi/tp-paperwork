@@ -342,7 +342,7 @@ class ProjectResultTests(BaseTestCase):
         project_result_id = project_result.id
 
         result = self.app.post('/project/result/detail/' + str(project_result_id), data={
-            'work_time': '',
+            'work_time': 'aaa',
             'payment_transportation': 10000000000,
             'payment_adjustments': -10000000000
         })

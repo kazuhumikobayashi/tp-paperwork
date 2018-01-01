@@ -24,18 +24,20 @@ class SelectWithDisable(object):
             kwargs['multiple'] = 'multiple'
             kwargs['size'] = len(field.choices) if len(field.choices) < 15 else 15
         html = ['<select %s>' % widgets.html_params(name=field.name, **kwargs)]
-        for val, label, selected, disabled in field.iter_choices():
-            html.append(self.render_option(val, label, selected, disabled))
+        for val, label, selected, disabled, subtext in field.iter_choices():
+            html.append(self.render_option(val, label, selected, disabled, subtext))
         html.append('</select>')
         return widgets.HTMLString(u''.join(html))
 
     @classmethod
-    def render_option(cls, value, label, selected, disabled):
+    def render_option(cls, value, label, selected, disabled, subtext):
         options = {'value': value}
         if selected:
             options['selected'] = 'selected'
         if disabled:
             options['disabled'] = 'disabled'
+        if subtext:
+            options['data-subtext'] = subtext
         return widgets.HTMLString('<option %s>%s</option>' % (widgets.html_params(**options), escape(unicode(label))))
 
 

@@ -465,7 +465,7 @@ class EngineerHistoryTests(BaseTestCase):
             'payment_end_day': date(2017, 2, 28).strftime('%Y/%m'),
             'payment_site': '',
             'payment_tax': '',
-            'payment_per_month': '100000',
+            'payment_per_month': 'aaa',
             'payment_rule': Rule.variable.value,
             'payment_bottom_base_hour': 1,
             'payment_top_base_hour': 2,

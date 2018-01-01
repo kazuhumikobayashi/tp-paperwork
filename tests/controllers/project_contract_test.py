@@ -2078,6 +2078,58 @@ class ProjectContractTests(BaseTestCase):
         after = len(self.project_detail_repository.find_all())
         self.assertEqual(before, after)
 
+    # 契約期間外の技術者の場合はエラー
+    def test_not_resist_when_out_of_constract(self):
+        before = len(self.project_detail_repository.find_all())
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_all()[0]
+
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': '1',
+            'billing_money': '100000000',
+            'billing_start_day': '2014/1',
+            'billing_end_day': '2013/1',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
+        })
+        self.assertEqual(result.status_code, 200)
+
+        # 件数が変わっていないことを確認。
+        after = len(self.project_detail_repository.find_all())
+        self.assertEqual(before, after)
+
+    # 存在しないの技術者の場合はエラー
+    def test_not_resist_when_not_exists_engineer(self):
+        before = len(self.project_detail_repository.find_all())
+        # ログイン
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        project = self.project_repository.find_all()[0]
+
+        result = self.app.post('/project/contract/create?project_id=' + str(project.id), data={
+            'detail_type': DetailType.engineer,
+            'engineer_id': '0',
+            'billing_money': '100000000',
+            'billing_start_day': '2014/1',
+            'billing_end_day': '2013/1',
+            'billing_per_month': '100000',
+            'billing_rule': Rule.fixed,
+        })
+        self.assertEqual(result.status_code, 200)
+
+        # 件数が変わっていないことを確認。
+        after = len(self.project_detail_repository.find_all())
+        self.assertEqual(before, after)
+
     # 10月以降の明細情報（BP）を保存できる
     def test_save_project_detail_october(self):
         project_detail = self.project_detail_repository.find_all()[0]
@@ -2250,7 +2302,7 @@ class ProjectContractTests(BaseTestCase):
         # 明細（BP）を新規登録
         result = self.app.post('/project/contract/create?project_id=' + str(project_id), data={
             'detail_type': DetailType.engineer.value,
-            'engineer_id': '2',
+            'engineer_id': '3',
             'billing_money': '1000000',
             'billing_start_day': '2016/12',
             'billing_end_day': '2017/8',
@@ -2258,12 +2310,13 @@ class ProjectContractTests(BaseTestCase):
             'billing_rule': Rule.fixed,
             'billing_fraction': Fraction.thousand.value,
             'billing_fraction_rule': Round.down.value,
-            'bp_order_no': ''
+            'bp_order_no': 'test'
         })
         # 保存できることを確認
         self.assertEqual(result.status_code, 302)
         ok_('/project/contract/detail/' in result.headers['Location'])
         project_detail_id = result.headers['Location'].split('/')[-1]
+        print(project_detail_id)
         project_detail = self.project_detail_repository.find_by_id(project_detail_id)
 
         # BP向け注文書番号に値が入っていることを確認する
