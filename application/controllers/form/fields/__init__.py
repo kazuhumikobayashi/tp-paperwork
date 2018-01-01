@@ -111,12 +111,12 @@ class SelectFieldWithDisable(wtforms.SelectField):
     widget = SelectWithDisable()
 
     def iter_choices(self):
-        for value, label, disabled in self.choices:
+        for value, label, disabled, subtext in self.choices:
             selected = self.data is not None and self.coerce(value) == self.data
-            yield (value, label, selected, disabled)
+            yield (value, label, selected, disabled, subtext)
 
     def pre_validate(self, form):
-        for v, _, _ in self.choices:
+        for v, _, _, _ in self.choices:
             if self.data == v:
                 break
         else:

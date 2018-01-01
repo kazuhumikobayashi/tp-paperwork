@@ -131,7 +131,8 @@ def detail(project_detail_id=None):
         engineer_history = engineer_history_service.get_history_by_start_day(project_detail.engineer.id,
                                                                              form.billing_start_day.data)
 
-        form.company.data = project_detail.engineer.company.company_name
+        if project_detail.engineer.company:
+            form.company.data = project_detail.engineer.company.company_name
         if engineer_history:
             form.payment_start_day.data = engineer_history.payment_start_day
             form.payment_end_day.data = engineer_history.payment_end_day

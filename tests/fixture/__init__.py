@@ -242,7 +242,7 @@ def create_engineer_histories():
     for num in range(12):
         engineer_history = EngineerHistory(
             engineer_id=num+1,
-            payment_start_day=date(2016, 1, 1),
+            payment_start_day=date(2015, 1, 1),
             payment_end_day=datetime.today().date() + timedelta(days=-1+num),
             payment_per_month=num+1,
             payment_site=Site.twenty_five,
@@ -263,6 +263,30 @@ def create_engineer_histories():
             updated_at=datetime.today(),
             updated_user='test')
         db.session.add(engineer_history)    
+    db.session.commit()
+    engineer_history = EngineerHistory(
+        engineer_id=3,
+        payment_start_day=datetime.today().date() + timedelta(days=1),
+        payment_end_day=date(2099, 12, 31),
+        payment_per_month=3,
+        payment_site=Site.twenty_five,
+        payment_tax=Tax.eight,
+        payment_rule=Rule.fixed,
+        payment_bottom_base_hour=3,
+        payment_top_base_hour=4,
+        payment_free_base_hour='',
+        payment_per_hour='1/100, 1/150',
+        payment_per_bottom_hour=3,
+        payment_per_top_hour=4,
+        payment_fraction=Fraction.hundred,
+        payment_fraction_rule=Round.down,
+        payment_condition='test' + str(2),
+        remarks='test' + str(2),
+        created_at=datetime.today(),
+        created_user='test',
+        updated_at=datetime.today(),
+        updated_user='test')
+    db.session.add(engineer_history)
     db.session.commit()
 
 
