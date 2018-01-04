@@ -2,10 +2,10 @@ from enum import Enum
 
 
 class Fraction(Enum):
-    one = -1
-    ten = -2
-    hundred = -3
-    thousand = -4
+    one = 0
+    ten = -1
+    hundred = -2
+    thousand = -3
 
     @property
     def name(self):
