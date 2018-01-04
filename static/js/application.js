@@ -317,7 +317,6 @@ $(function() {
     var adjustment = 0;
     var ROUND_DOWN = 1;
     var ROUND_OFF = 2;
-    var billing_confirmation_money = 0;
 
     var billing_rule = $("[name=billing_rule]:checked").val();
     var work_time = $('#work_time').val();
@@ -335,10 +334,16 @@ $(function() {
 
       if (work_time < billing_bottom_base_hour) {
         sub_hours = work_time - billing_bottom_base_hour;
-        sub_money = parseInt(sub_hours * billing_per_bottom_hour);
+        sub_money = sub_hours * billing_per_bottom_hour;
       } else if (billing_top_base_hour < work_time) {
         sub_hours = work_time - billing_top_base_hour;
-        sub_money = parseInt(sub_hours * billing_per_top_hour);
+        sub_money = sub_hours * billing_per_top_hour;
+      }
+
+      if (billing_fraction_rule === ROUND_DOWN) {
+        sub_money = round_down(sub_money, billing_fraction)
+      } else if (billing_fraction_rule === ROUND_OFF) {
+        sub_money = round_off(sub_money, billing_fraction)
       }
       estimated_money = billing_per_month + sub_money;
 
@@ -351,15 +356,7 @@ $(function() {
     adjustment = $('#billing_adjustments').val();
     adjustment = parseInt(adjustment.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
 
-    billing_confirmation_money = estimated_money + adjustment;
-
-    if (billing_fraction_rule === ROUND_DOWN) {
-      billing_confirmation_money = round_down(billing_confirmation_money, billing_fraction)
-    } else if (billing_fraction_rule === ROUND_OFF) {
-      billing_confirmation_money = round_off(billing_confirmation_money, billing_fraction)
-    }
-
-    $('#billing_confirmation_money').val(billing_confirmation_money);
+    $('#billing_confirmation_money').val(estimated_money + adjustment);
   }
 
   // 実績の請求計算
@@ -371,7 +368,6 @@ $(function() {
     var adjustment = 0;
     var ROUND_DOWN = 1;
     var ROUND_OFF = 2;
-    var payment_confirmation_money = 0;
 
     var payment_rule = $("[name=payment_rule]:checked").val();
     var work_time = $('#work_time').val();
@@ -394,6 +390,12 @@ $(function() {
         sub_hours = work_time - payment_top_base_hour;
         sub_money = sub_hours * payment_per_top_hour;
       }
+
+      if (payment_fraction_rule === ROUND_DOWN) {
+        sub_money = round_down(sub_money, payment_fraction)
+      } else if (payment_fraction_rule === ROUND_OFF) {
+        sub_money = round_off(sub_money, payment_fraction)
+      }
       estimated_money = payment_per_month + sub_money;
 
     }
@@ -404,14 +406,6 @@ $(function() {
 
     adjustment = $('#payment_adjustments').val();
     adjustment = parseInt(adjustment.replace(/[０-９]/g,function(s){return String.fromCharCode(s.charCodeAt(0)-0xFEE0)})) || 0;
-
-    payment_confirmation_money = estimated_money + adjustment;
-
-    if (payment_fraction_rule === ROUND_DOWN) {
-      payment_confirmation_money = round_down(payment_confirmation_money, payment_fraction)
-    } else if (payment_fraction_rule === ROUND_OFF) {
-      payment_confirmation_money = round_off(payment_confirmation_money, payment_fraction)
-    }
 
     $('#payment_confirmation_money').val(estimated_money + adjustment);
   }
