@@ -12,10 +12,10 @@ class FractionTests(unittest.TestCase):
         self.assertEqual(Fraction.thousand.name, '1000の位')
 
     def test_parse(self):
-        one = 0
-        ten = -1
-        hundred = -2
-        thousand = -3
+        one = -1
+        ten = -2
+        hundred = -3
+        thousand = -4
 
         self.assertEquals(Fraction.parse(one), Fraction.one)
         self.assertEquals(Fraction.parse(ten), Fraction.ten)
@@ -23,14 +23,14 @@ class FractionTests(unittest.TestCase):
         self.assertEquals(Fraction.parse(thousand), Fraction.thousand)
 
     def test_parse_fail_is_none(self):
-        self.assertIsNone(Fraction.parse(1))
+        self.assertIsNone(Fraction.parse(0))
         self.assertIsNone(Fraction.parse('a'))
 
     def test_str(self):
-        one = '0'
-        ten = '-1'
-        hundred = '-2'
-        thousand = '-3'
+        one = '-1'
+        ten = '-2'
+        hundred = '-3'
+        thousand = '-4'
 
         self.assertEquals(str(Fraction.one), one)
         self.assertEquals(str(Fraction.ten), ten)
