@@ -9,7 +9,11 @@ function round_off(number, n){
 
 function round_down(number, n){
     var pow = Math.pow(10, n);
-    return Math.floor(number * pow) / pow
+    if(number >= 0) {
+      return Math.floor(number * pow) / pow
+    } else {
+      return Math.ceil(number * pow) / pow
+    }
 }
 
 $(function () {
