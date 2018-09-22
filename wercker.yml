@@ -57,10 +57,10 @@ build:
           pyenv --version
           pyenv versions
     - script:
-        name: install python 2.7.6
+        name: install python 2.7.13
         code: |
-          sudo pyenv install -v 2.7.6
-          sudo pyenv global 2.7.6
+          sudo pyenv install -v 2.7.13
+          sudo pyenv global 2.7.13
           pyenv versions
     - script:
         name: install google-cloud-sdk
