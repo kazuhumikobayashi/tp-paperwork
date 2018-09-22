@@ -11,6 +11,7 @@ box: python:3.6
 # http://devcenter.wercker.com/docs/services/index.html
 services:
   - id: mysql
+    tag: 5.6
     env:
       MYSQL_ROOT_PASSWORD: password
 
