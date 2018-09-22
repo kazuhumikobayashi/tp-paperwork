@@ -71,7 +71,7 @@ class ProjectResult(BaseModel, db.Model):
     # 指定した月の支払い税率を取得
     def tax_of_payment_confirmation_money(self, engineer_history):
         if engineer_history:
-            return (self.payment_confirmation_money or 0) * engineer_history.payment_tax.rate
+            return numpy.trunc((self.payment_confirmation_money or 0) * engineer_history.payment_tax.rate)
         else:
             return 0
 
