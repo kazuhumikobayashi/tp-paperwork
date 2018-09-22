@@ -74,7 +74,7 @@ build:
         code: |
           export GOOGLE_APPLICATION_CREDENTIALS=/pipeline/source/tp-paperwork-development-2146f321f716.json
           gcloud config set project tp-paperwork-development
-          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json
+          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json -md md5
           gcloud auth activate-service-account --key-file tp-paperwork-development-2146f321f716.json
     - script:
         name: python version change system
@@ -109,7 +109,7 @@ deploy-development:
         code: |
           export GOOGLE_APPLICATION_CREDENTIALS=/pipeline/source/tp-paperwork-development-2146f321f716.json
           gcloud config set project tp-paperwork-development
-          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json
+          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-development-2146f321f716.json.encrypted -out tp-paperwork-development-2146f321f716.json -md md5
           gcloud auth activate-service-account --key-file tp-paperwork-development-2146f321f716.json
     - script:
         name: deploy GAE
