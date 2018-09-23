@@ -141,7 +141,7 @@ deploy-production:
         code: |
           export GOOGLE_APPLICATION_CREDENTIALS=/pipeline/source/tp-paperwork-221d27c465d1.json
           gcloud config set project tp-paperwork
-          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-221d27c465d1.json.encrypted -out tp-paperwork-221d27c465d1.json
+          openssl aes-256-cbc -k ${DECRYPT_KEY} -d -in tp-paperwork-221d27c465d1.json.encrypted -out tp-paperwork-221d27c465d1.json -md md5
           gcloud auth activate-service-account --key-file tp-paperwork-221d27c465d1.json
     - script:
         name: deploy GAE
