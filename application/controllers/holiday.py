@@ -44,7 +44,7 @@ def detail(holiday_id=None):
 
     if holiday.id is None and holiday_id is not None:
         return abort(404)
-    form = HolidayForm(request.form, holiday)
+    form = HolidayForm(request.form, obj=holiday)
 
     if form.validate_on_submit():
         holiday.holiday = form.holiday.data

@@ -35,7 +35,7 @@ def detail(result_id=None):
     engineer_history = engineer_history_service.get_history_at_result_month(result.project_detail.engineer_id,
                                                                             result.result_month)
 
-    form = ProjectResultForm(request.form, result)
+    form = ProjectResultForm(request.form, obj=result)
     project_detail_form = ProjectDetailInResultForm(obj=result.project_detail)
     project_detail_form.project_id.data = result.project_detail.project_id
     engineer_history_form = EngineerHistoryInResultForm(obj=engineer_history)

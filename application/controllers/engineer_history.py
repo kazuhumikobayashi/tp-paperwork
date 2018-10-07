@@ -38,7 +38,7 @@ def history(engineer_history_id=None):
 
     if engineer_history.id is None and engineer_history_id is not None:
         return abort(404)
-    form = EngineerHistoryForm(request.form, engineer_history)
+    form = EngineerHistoryForm(request.form, obj=engineer_history)
 
     # 履歴データ新規作成時にはengineer情報を取得する。
     if engineer_id:

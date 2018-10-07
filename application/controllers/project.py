@@ -63,7 +63,7 @@ def create(project_id=None):
     else:
         project = Project()
 
-    form = ProjectCreateForm(request.form, project)
+    form = ProjectCreateForm(request.form, obj=project)
     if form.validate_on_submit():
         if project_id:
             project = service.clone(project_id)

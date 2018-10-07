@@ -26,7 +26,9 @@ class BillingBaseReport(object):
         self.create_bottom_part()
 
         # ロゴ画像貼り付け
-        img = Image('excel/templates/tp_logo.png', size=(290, 100))
+        img = Image('excel/templates/tp_logo.png')
+        img.width = img.width * 0.75
+        img.height = img.height * 0.75
         self.ws.add_image(img, 'K7')
 
         # 倍率の調整

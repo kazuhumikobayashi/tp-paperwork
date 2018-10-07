@@ -37,7 +37,7 @@ def detail(user_id=None):
 
     if user.id is None and user_id is not None:
         return abort(404)
-    form = UserForm(request.form, user)
+    form = UserForm(request.form, obj=user)
     
     if user.id:
         form.shain_number.render_kw = {"disabled": "disabled"}

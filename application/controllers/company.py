@@ -50,7 +50,7 @@ def detail(company_id=None):
     if company.id is None and company_id is not None:
         return abort(404)
     company.client_flag = [h.client_flag for h in company.company_client_flags]
-    form = CompanyForm(request.form, company)
+    form = CompanyForm(request.form, obj=company)
     form.bank_id.choices = bank_service.find_all_for_select()
     form.client_flag.choices = ClientFlag.get_flag_for_multi_select()
     

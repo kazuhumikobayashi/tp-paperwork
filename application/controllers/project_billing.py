@@ -51,7 +51,7 @@ def month(project_month_id=None):
     if project_month.id is None and project_month_id is not None:
         return abort(404)
 
-    form = ProjectMonthForm(request.form, project_month)
+    form = ProjectMonthForm(request.form, obj=project_month)
     billings = project_billing_service.find_billings_at_a_month(project_month.project.id, project_month.project_month)
 
     if form.validate_on_submit():
@@ -80,7 +80,7 @@ def detail(billing_id=None):
     if billing.id is None and billing_id is not None:
         return abort(404)
 
-    form = ProjectBillingForm(request.form, billing)
+    form = ProjectBillingForm(request.form, obj=billing)
 
     project_month = project_month_service.find_project_month_at_a_month(
         billing.project_detail.project.id, billing.billing_month)

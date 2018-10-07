@@ -47,7 +47,7 @@ def index(project_id=None):
     if project.id is None and project_id is not None:
         return abort(404)
 
-    form = ProjectContractForm(request.form, project)
+    form = ProjectContractForm(request.form, obj=project)
     form.recorded_department_id.choices = department_service.find_all_for_select()
     form.client_company_id.choices = \
         company_service.find_for_multi_select_with_subtext_by_client_flag_id([ClientFlag.client.value])
@@ -117,7 +117,7 @@ def detail(project_detail_id=None):
             or project_detail.project is None and project_id is None:
         return abort(404)
 
-    form = ProjectDetailForm(request.form, project_detail)
+    form = ProjectDetailForm(request.form, obj=project_detail)
     form.engineer_id.choices = engineer_history_service.find_contract_for_select()
 
     # 新規作成時にはprojectを取得する。

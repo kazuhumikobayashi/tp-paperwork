@@ -24,7 +24,7 @@ def detail(project_attachment_id=None):
 
     if project_attachment.id is None and project_attachment_id is not None:
         return abort(404)
-    form = ProjectAttachmentForm(request.form, project_attachment)
+    form = ProjectAttachmentForm(request.form, obj=project_attachment)
     file_form = FileForm()
 
     if project_attachment.id is None:
