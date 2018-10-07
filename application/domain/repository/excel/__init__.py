@@ -8,7 +8,6 @@ from urllib import parse
 from flask import session, send_file
 from openpyxl import Workbook, load_workbook
 from openpyxl.cell import Cell
-from openpyxl.utils import get_column_letter
 from openpyxl.worksheet import Worksheet
 
 
@@ -132,10 +131,9 @@ def insert_rows(self, row_idx, cnt, above=False, copy_style=True, fill_formulae=
         new_rd.index = row
         self.row_dimensions[row] = new_rd
         for col in range(1, self.max_column):
-            col = get_column_letter(col)
-            cell = self.cell('%s%d' % (col, row))
+            cell = self.cell(row, col)
             cell.value = None
-            source = self.cell('%s%d' % (col, row-1))
+            source = self.cell(row-1, col)
             if copy_style:
                 cell.number_format = source.number_format
                 cell.font = source.font.copy()

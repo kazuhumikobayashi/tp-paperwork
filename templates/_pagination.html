@@ -35,14 +35,14 @@
 	<div>
 		{{ pagination.total }} 件中 {{ pagination.total }} から {{ pagination.total }} まで表示
 	</div>
-{% elif pagination.prev_num == 0 %}
+{% elif pagination.prev_num == None %}
 	{% if pagination.total > pagination.per_page %}
 		<div>
-			{{ pagination.total }} 件中 {{ pagination.prev_num + 1 }} から  {{ pagination.per_page }} まで表示
+			{{ pagination.total }} 件中 1 から  {{ pagination.per_page }} まで表示
 		</div>
 	{% else %}
 		<div>
-			{{ pagination.total }} 件中 {{ pagination.prev_num + 1 }} から  {{ pagination.total }} まで表示
+			{{ pagination.total }} 件中 1 から  {{ pagination.total }} まで表示
 		</div>
 	{% endif %}
 {% else %}

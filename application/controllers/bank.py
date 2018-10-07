@@ -37,7 +37,7 @@ def detail(bank_id=None):
 
     if bank.id is None and bank_id is not None:
         return abort(404)
-    form = BankForm(request.form, bank)
+    form = BankForm(request.form, obj=bank)
 
     if form.validate_on_submit():
         bank.bank_name = form.bank_name.data

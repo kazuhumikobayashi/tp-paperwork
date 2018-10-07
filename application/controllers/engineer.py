@@ -64,7 +64,7 @@ def detail(engineer_id=None):
     engineer.skill = [h.skill_id for h in engineer.engineer_skills]
     engineer.business_category = [
         h.business_category_id for h in engineer.engineer_business_categories]
-    form = EngineerForm(request.form, engineer)
+    form = EngineerForm(request.form, obj=engineer)
     form.company_id.choices = company_service.find_for_select_with_subtext_by_client_flag_id(
         [ClientFlag.our_company.value, ClientFlag.bp.value])
     form.skill.choices = skill_service.find_all_for_multi_select()

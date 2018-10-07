@@ -32,7 +32,9 @@ class EstimatedReport(object):
         self.create_contract_content_rows()
 
         # ロゴ画像貼り付け
-        img = Image('excel/templates/tp_logo.png', size=(262, 262))
+        img = Image('excel/templates/tp_logo.png')
+        img.width = img.width * 0.63
+        img.height = img.height * 0.63
         self.ws.add_image(img, 'I10')
 
         # 余白調整

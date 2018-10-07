@@ -36,7 +36,7 @@ def detail(business_category_id=None):
 
     if business_category.id is None and business_category_id is not None:
         return abort(404)
-    form = BusinessCategoryForm(request.form, business_category)
+    form = BusinessCategoryForm(request.form, obj=business_category)
 
     if form.validate_on_submit():
         business_category.business_category_name = form.business_category_name.data

@@ -37,7 +37,7 @@ def detail(department_id=None):
 
     if department.id is None and department_id is not None:
         return abort(404)
-    form = DepartmentForm(request.form, department)
+    form = DepartmentForm(request.form, obj=department)
 
     if form.validate_on_submit():
         department.group_name = form.group_name.data

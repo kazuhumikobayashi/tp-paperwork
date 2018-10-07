@@ -36,7 +36,7 @@ def detail(skill_id=None):
 
     if skill.id is None and skill_id is not None:
         return abort(404)
-    form = SkillForm(request.form, skill)
+    form = SkillForm(request.form, obj=skill)
 
     if form.validate_on_submit():
         skill.skill_name = form.skill_name.data
