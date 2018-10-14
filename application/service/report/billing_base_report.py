@@ -36,21 +36,26 @@ class BillingBaseReport(object):
 
     def write_top_part(self):
         # 値を代入
-        self.ws.get_named_range("client_billing_no")[0].value = self.project_month.client_billing_no
-        self.ws.get_named_range("printed_date")[0].value = self.project_month.billing_printed_date
-        self.ws.get_named_range("client_company_name")[0].value = \
+        self.ws[self.excel.get_defined_name_range("client_billing_no")].value = self.project_month.client_billing_no
+        self.ws[self.excel.get_defined_name_range("printed_date")].value = self.project_month.billing_printed_date
+        self.ws[self.excel.get_defined_name_range("client_company_name")].value = \
             self.project_month.project.client_company.company_name
-        self.ws.get_named_range("project_name")[0].value = self.project_month.project.project_name
+        self.ws[self.excel.get_defined_name_range("project_name")].value = self.project_month.project.project_name
 
         # フォント
-        self.ws.get_named_range("title")[0].font = Font(name="HGP明朝", size=19, bold=True, underline="single")
-        self.ws.get_named_range("printed_date")[0].font = Font(name="HGP明朝", underline="single")
-        self.ws.get_named_range("client_company_name")[0].font = Font(name="HGP明朝", size=13, underline="single")
-        self.ws.get_named_range("project_name_title")[0].font = Font(name="HGP明朝", size=13, underline="single")
-        self.ws.get_named_range("project_name")[0].font = Font(name="HGP明朝", size=13, underline="single")
+        self.ws[self.excel.get_defined_name_range("title")].font = \
+            Font(name="HGP明朝", size=19, bold=True, underline="single")
+        self.ws[self.excel.get_defined_name_range("printed_date")].font = \
+            Font(name="HGP明朝", underline="single")
+        self.ws[self.excel.get_defined_name_range("client_company_name")].font = \
+            Font(name="HGP明朝", size=13, underline="single")
+        self.ws[self.excel.get_defined_name_range("project_name_title")].font = \
+            Font(name="HGP明朝", size=13, underline="single")
+        self.ws[self.excel.get_defined_name_range("project_name")].font = \
+            Font(name="HGP明朝", size=13, underline="single")
 
         # 表示形式
-        self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年 m月 d日'
+        self.ws[self.excel.get_defined_name_range("printed_date")].number_format = 'yyyy年 m月 d日'
 
         # 罫線
         for column_num in ['N', 'O']:
@@ -106,7 +111,7 @@ class BillingBaseReport(object):
         # ユーザー定義
         self.ws['K' + str(self.current_row)].number_format = '#,##0'
         # 罫線
-        for row in self.ws.iter_rows('A' + str(self.current_row) + ":L" + str(self.current_row)):
+        for row in self.ws['A' + str(self.current_row) + ":L" + str(self.current_row)]:
             for cell in row:
                 cell.border = Border(top=Side(style='thin'), bottom=Side(style='thin'))
         self.current_row += 1
@@ -137,7 +142,7 @@ class BillingBaseReport(object):
 
     def create_remark_top_border(self):
         # 上部の罫線
-        for row in self.ws.iter_rows('B' + str(self.current_row) + ":P" + str(self.current_row)):
+        for row in self.ws['B' + str(self.current_row) + ":P" + str(self.current_row)]:
             for cell in row:
                 cell.border = Border(bottom=Side(style='thin'))
         self.current_row += 1
@@ -150,7 +155,7 @@ class BillingBaseReport(object):
 
     def create_remark_bottom_border(self):
         # 下部の罫線
-        for row in self.ws.iter_rows('B' + str(self.current_row) + ":P" + str(self.current_row)):
+        for row in self.ws['B' + str(self.current_row) + ":P" + str(self.current_row)]:
             for cell in row:
                 cell.border = Border(top=Side(style='thin'))
         self.current_row += 1

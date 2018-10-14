@@ -21,16 +21,16 @@ class ProjectAttachmentTypeTests(unittest.TestCase):
         bp_order_confirmation_or_invoice = 5
         other = 9
 
-        self.assertEquals(ProjectAttachmentType.parse(estimate), ProjectAttachmentType.estimate)
-        self.assertEquals(ProjectAttachmentType.parse(client_purchase_order_or_invoice),
+        self.assertEqual(ProjectAttachmentType.parse(estimate), ProjectAttachmentType.estimate)
+        self.assertEqual(ProjectAttachmentType.parse(client_purchase_order_or_invoice),
                           ProjectAttachmentType.client_purchase_order_or_invoice)
-        self.assertEquals(ProjectAttachmentType.parse(bp_purchase_order_or_invoice),
+        self.assertEqual(ProjectAttachmentType.parse(bp_purchase_order_or_invoice),
                           ProjectAttachmentType.bp_purchase_order_or_invoice)
-        self.assertEquals(ProjectAttachmentType.parse(client_order_confirmation_or_invoice),
+        self.assertEqual(ProjectAttachmentType.parse(client_order_confirmation_or_invoice),
                           ProjectAttachmentType.client_order_confirmation_or_invoice)
-        self.assertEquals(ProjectAttachmentType.parse(bp_order_confirmation_or_invoice),
+        self.assertEqual(ProjectAttachmentType.parse(bp_order_confirmation_or_invoice),
                           ProjectAttachmentType.bp_order_confirmation_or_invoice)
-        self.assertEquals(ProjectAttachmentType.parse(other), ProjectAttachmentType.other)
+        self.assertEqual(ProjectAttachmentType.parse(other), ProjectAttachmentType.other)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(ProjectAttachmentType.parse(0))

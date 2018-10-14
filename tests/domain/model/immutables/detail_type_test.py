@@ -13,8 +13,8 @@ class DetailTypeTests(unittest.TestCase):
         engineer = 1
         work = 2
 
-        self.assertEquals(DetailType.parse(engineer), DetailType.engineer)
-        self.assertEquals(DetailType.parse(work), DetailType.work)
+        self.assertEqual(DetailType.parse(engineer), DetailType.engineer)
+        self.assertEqual(DetailType.parse(work), DetailType.work)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(DetailType.parse(0))

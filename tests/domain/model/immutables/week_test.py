@@ -32,13 +32,13 @@ class WeekTests(unittest.TestCase):
         saturday = 5
         sunday = 6
 
-        self.assertEquals(Week.parse(monday), Week.monday)
-        self.assertEquals(Week.parse(tuesday), Week.tuesday)
-        self.assertEquals(Week.parse(wednesday), Week.wednesday)
-        self.assertEquals(Week.parse(thursday), Week.thursday)
-        self.assertEquals(Week.parse(friday), Week.friday)
-        self.assertEquals(Week.parse(saturday), Week.saturday)
-        self.assertEquals(Week.parse(sunday), Week.sunday)
+        self.assertEqual(Week.parse(monday), Week.monday)
+        self.assertEqual(Week.parse(tuesday), Week.tuesday)
+        self.assertEqual(Week.parse(wednesday), Week.wednesday)
+        self.assertEqual(Week.parse(thursday), Week.thursday)
+        self.assertEqual(Week.parse(friday), Week.friday)
+        self.assertEqual(Week.parse(saturday), Week.saturday)
+        self.assertEqual(Week.parse(sunday), Week.sunday)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(Week.parse(10))

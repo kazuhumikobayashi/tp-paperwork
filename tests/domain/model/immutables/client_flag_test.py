@@ -17,10 +17,10 @@ class ClientFlagTests(unittest.TestCase):
         client = 3
         end_user = 4
 
-        self.assertEquals(ClientFlag.parse(our_company), ClientFlag.our_company)
-        self.assertEquals(ClientFlag.parse(bp), ClientFlag.bp)
-        self.assertEquals(ClientFlag.parse(client), ClientFlag.client)
-        self.assertEquals(ClientFlag.parse(end_user), ClientFlag.end_user)
+        self.assertEqual(ClientFlag.parse(our_company), ClientFlag.our_company)
+        self.assertEqual(ClientFlag.parse(bp), ClientFlag.bp)
+        self.assertEqual(ClientFlag.parse(client), ClientFlag.client)
+        self.assertEqual(ClientFlag.parse(end_user), ClientFlag.end_user)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(ClientFlag.parse(0))
