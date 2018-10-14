@@ -17,10 +17,10 @@ class FractionTests(unittest.TestCase):
         hundred = -3
         thousand = -4
 
-        self.assertEquals(Fraction.parse(one), Fraction.one)
-        self.assertEquals(Fraction.parse(ten), Fraction.ten)
-        self.assertEquals(Fraction.parse(hundred), Fraction.hundred)
-        self.assertEquals(Fraction.parse(thousand), Fraction.thousand)
+        self.assertEqual(Fraction.parse(one), Fraction.one)
+        self.assertEqual(Fraction.parse(ten), Fraction.ten)
+        self.assertEqual(Fraction.parse(hundred), Fraction.hundred)
+        self.assertEqual(Fraction.parse(thousand), Fraction.thousand)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(Fraction.parse(0))
@@ -32,7 +32,7 @@ class FractionTests(unittest.TestCase):
         hundred = '-3'
         thousand = '-4'
 
-        self.assertEquals(str(Fraction.one), one)
-        self.assertEquals(str(Fraction.ten), ten)
-        self.assertEquals(str(Fraction.hundred), hundred)
-        self.assertEquals(str(Fraction.thousand), thousand)
+        self.assertEqual(str(Fraction.one), one)
+        self.assertEqual(str(Fraction.ten), ten)
+        self.assertEqual(str(Fraction.hundred), hundred)
+        self.assertEqual(str(Fraction.thousand), thousand)

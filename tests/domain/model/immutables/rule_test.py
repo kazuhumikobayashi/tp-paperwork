@@ -13,8 +13,8 @@ class RuleTests(unittest.TestCase):
         fixed = 1
         variable = 2
 
-        self.assertEquals(Rule.parse(fixed), Rule.fixed)
-        self.assertEquals(Rule.parse(variable), Rule.variable)
+        self.assertEqual(Rule.parse(fixed), Rule.fixed)
+        self.assertEqual(Rule.parse(variable), Rule.variable)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(Rule.parse(0))

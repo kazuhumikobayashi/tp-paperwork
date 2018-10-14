@@ -44,24 +44,27 @@ class BpOrderReport(object):
         # 値を代入
         engineer_history = self.engineer_history_repository.get_history_by_date(self.project_detail.engineer.id,
                                                                                 self.project_detail.billing_start_day)
-        self.ws.get_named_range("bp_order_no")[0].value = self.project_detail.bp_order_no
-        self.ws.get_named_range("printed_date")[0].value = self.project_detail.billing_start_day
-        self.ws.get_named_range("bp_company_name")[0].value = self.project_detail.engineer.company.company_name
+        self.ws[self.excel.get_defined_name_range("bp_order_no")].value = self.project_detail.bp_order_no
+        self.ws[self.excel.get_defined_name_range("printed_date")].value = self.project_detail.billing_start_day
+        self.ws[self.excel.get_defined_name_range("bp_company_name")].value = \
+            self.project_detail.engineer.company.company_name
         if self.project_detail.engineer.company.contract_date:
-            self.ws.get_named_range("contract_date")[0].value = \
+            self.ws[self.excel.get_defined_name_range("contract_date")].value = \
                 strjpftime(datetime(
                     self.project_detail.engineer.company.contract_date.year,
                     self.project_detail.engineer.company.contract_date.month,
                     self.project_detail.engineer.company.contract_date.day
                 ), '%O%E年%m月%d日')
-        self.ws.get_named_range("project_name_for_bp")[0].value = self.project_detail.project.project_name_for_bp
-        self.ws.get_named_range("start_date")[0].value = self.project_detail.billing_start_day
-        self.ws.get_named_range("end_date")[0].value = self.project_detail.billing_end_day
+        self.ws[self.excel.get_defined_name_range("project_name_for_bp")].value = \
+            self.project_detail.project.project_name_for_bp
+        self.ws[self.excel.get_defined_name_range("start_date")].value = self.project_detail.billing_start_day
+        self.ws[self.excel.get_defined_name_range("end_date")].value = self.project_detail.billing_end_day
         if engineer_history:
-            self.ws.get_named_range("payment_per_month")[0].value = engineer_history.payment_per_month
-            self.ws.get_named_range("payment_detail")[0].value = self.get_payment_detail_text(engineer_history)
-            self.ws.get_named_range("payment_condition")[0].value = engineer_history.payment_condition
-            self.ws.get_named_range("remarks")[0].value = engineer_history.remarks
+            self.ws[self.excel.get_defined_name_range("payment_per_month")].value = engineer_history.payment_per_month
+            self.ws[self.excel.get_defined_name_range("payment_detail")].value = \
+                self.get_payment_detail_text(engineer_history)
+            self.ws[self.excel.get_defined_name_range("payment_condition")].value = engineer_history.payment_condition
+            self.ws[self.excel.get_defined_name_range("remarks")].value = engineer_history.remarks
         return self
 
     def write_bp_order_confirmation(self):

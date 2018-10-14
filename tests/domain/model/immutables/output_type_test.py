@@ -17,7 +17,7 @@ class OutputTypeTests(unittest.TestCase):
         payment_list = '3'
         yayoi_interface = '4'
 
-        self.assertEquals(str(OutputType.project_list), project_list)
-        self.assertEquals(str(OutputType.billing_list), billing_list)
-        self.assertEquals(str(OutputType.payment_list), payment_list)
-        self.assertEquals(str(OutputType.yayoi_interface), yayoi_interface)
+        self.assertEqual(str(OutputType.project_list), project_list)
+        self.assertEqual(str(OutputType.billing_list), billing_list)
+        self.assertEqual(str(OutputType.payment_list), payment_list)
+        self.assertEqual(str(OutputType.yayoi_interface), yayoi_interface)

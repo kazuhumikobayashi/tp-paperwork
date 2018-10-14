@@ -28,42 +28,46 @@ class ClientOrderReport(object):
 
     def write_client_order(self):
         # 値を代入
-        self.ws.get_named_range("printed_date")[0].value = datetime.today().date()
+        self.ws[self.excel.get_defined_name_range("printed_date")].value = datetime.today().date()
         if self.project.client_company:
-            self.ws.get_named_range("client_company_name")[0].value = self.project.client_company.company_name
-        self.ws.get_named_range("client_order_no")[0].value = self.project.client_order_no
-        self.ws.get_named_range("estimation_no")[0].value = self.project.estimation_no
-        self.ws.get_named_range("project_name")[0].value = self.project.project_name
+            self.ws[self.excel.get_defined_name_range("client_company_name")].value = \
+                self.project.client_company.company_name
+        self.ws[self.excel.get_defined_name_range("client_order_no")].value = self.project.client_order_no
+        self.ws[self.excel.get_defined_name_range("estimation_no")].value = self.project.estimation_no
+        self.ws[self.excel.get_defined_name_range("project_name")].value = self.project.project_name
         if self.project.contract_form:
-            self.ws.get_named_range("contract_form")[0].value = self.project.contract_form.name
-        self.ws.get_named_range("estimated_total_amount")[0].value = self.project.estimated_total_amount or 0
-        self.ws.get_named_range("contents")[0].value = self.project.contents
-        self.ws.get_named_range("start_date")[0].value = self.project.start_date
-        self.ws.get_named_range("end_date")[0].value = self.project.end_date
-        self.ws.get_named_range("responsible_person")[0].value = self.project.responsible_person
-        self.ws.get_named_range("quality_control")[0].value = self.project.quality_control
-        self.ws.get_named_range("subcontractor")[0].value = self.project.subcontractor
-        self.ws.get_named_range("working_place")[0].value = self.project.working_place
-        self.ws.get_named_range("delivery_place")[0].value = self.project.delivery_place
-        self.ws.get_named_range("deliverables")[0].value = self.project.deliverables
+            self.ws[self.excel.get_defined_name_range("contract_form")].value = self.project.contract_form.name
+        self.ws[self.excel.get_defined_name_range("estimated_total_amount")].value = \
+            self.project.estimated_total_amount or 0
+        self.ws[self.excel.get_defined_name_range("contents")].value = self.project.contents
+        self.ws[self.excel.get_defined_name_range("start_date")].value = self.project.start_date
+        self.ws[self.excel.get_defined_name_range("end_date")].value = self.project.end_date
+        self.ws[self.excel.get_defined_name_range("responsible_person")].value = self.project.responsible_person
+        self.ws[self.excel.get_defined_name_range("quality_control")].value = self.project.quality_control
+        self.ws[self.excel.get_defined_name_range("subcontractor")].value = self.project.subcontractor
+        self.ws[self.excel.get_defined_name_range("working_place")].value = self.project.working_place
+        self.ws[self.excel.get_defined_name_range("delivery_place")].value = self.project.delivery_place
+        self.ws[self.excel.get_defined_name_range("deliverables")].value = self.project.deliverables
         if self.project.billing_timing == BillingTiming.billing_by_month:
-            self.ws.get_named_range("inspection_date")[0].value = '毎月月末'
+            self.ws[self.excel.get_defined_name_range("inspection_date")].value = '毎月月末'
         else:
-            self.ws.get_named_range("inspection_date")[0].value = self.project.inspection_date
+            self.ws[self.excel.get_defined_name_range("inspection_date")].value = self.project.inspection_date
         if self.project.billing_timing:
-            self.ws.get_named_range("billing_timing")[0].value = self.project.billing_timing.name_for_report
-        self.ws.get_named_range("remarks")[0].value = self.remarks()
+            self.ws[self.excel.get_defined_name_range("billing_timing")].value = \
+                self.project.billing_timing.name_for_report
+        self.ws[self.excel.get_defined_name_range("remarks")].value = self.remarks()
         return self
 
     def write_style(self):
         # フォント設定
-        self.ws.get_named_range("client_company_name")[0].font = Font(name="ＭＳ ゴシック", size=14, underline="single")
+        self.ws[self.excel.get_defined_name_range("client_company_name")].font = \
+            Font(name="ＭＳ ゴシック", size=14, underline="single")
         # 表示形式
-        self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年m月d日'
-        self.ws.get_named_range("start_date")[0].number_format = 'yyyy年m月d日'
-        self.ws.get_named_range("end_date")[0].number_format = 'yyyy年m月d日'
+        self.ws[self.excel.get_defined_name_range("printed_date")].number_format = 'yyyy年m月d日'
+        self.ws[self.excel.get_defined_name_range("start_date")].number_format = 'yyyy年m月d日'
+        self.ws[self.excel.get_defined_name_range("end_date")].number_format = 'yyyy年m月d日'
         if self.project.billing_timing == BillingTiming.billing_at_last:
-            self.ws.get_named_range("inspection_date")[0].number_format = 'yyyy"年"m"月"d"日"'
+            self.ws[self.excel.get_defined_name_range("inspection_date")].number_format = 'yyyy"年"m"月"d"日"'
         # 罫線
         self.write_border_to_merged_cell(row=14)
         self.write_border_to_merged_cell(row=16)

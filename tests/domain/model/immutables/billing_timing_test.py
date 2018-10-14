@@ -17,8 +17,8 @@ class BillingTimingTests(unittest.TestCase):
         billing_at_last = 1
         billing_by_month = 2
 
-        self.assertEquals(BillingTiming.parse(billing_at_last), BillingTiming.billing_at_last)
-        self.assertEquals(BillingTiming.parse(billing_by_month), BillingTiming.billing_by_month)
+        self.assertEqual(BillingTiming.parse(billing_at_last), BillingTiming.billing_at_last)
+        self.assertEqual(BillingTiming.parse(billing_by_month), BillingTiming.billing_by_month)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(BillingTiming.parse(0))

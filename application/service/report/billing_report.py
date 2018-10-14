@@ -35,8 +35,10 @@ class BillingReport(BillingBaseReport):
         super(BillingReport, self).write_top_part()
 
         # フォントを調整
-        self.ws.get_named_range("total_money_title")[0].font = Font(name="HGP明朝", size=14, underline="single")
-        self.ws.get_named_range("total_money")[0].font = Font(name="Century", size=14, underline="single")
+        self.ws[self.excel.get_defined_name_range("total_money_title")].font = \
+            Font(name="HGP明朝", size=14, underline="single")
+        self.ws[self.excel.get_defined_name_range("total_money")].font = \
+            Font(name="Century", size=14, underline="single")
 
     def create_billing_details(self):
         project_billings = self.project_billing_repository.find_billings_at_a_month(self.project_month.project_id,
@@ -82,7 +84,7 @@ class BillingReport(BillingBaseReport):
         self.ws['I' + str(self.current_row)].font = Font(name="HGS明朝")
         self.ws['K' + str(self.current_row)].font = Font(name="Century")
         # 罫線
-        for row in self.ws.iter_rows('A' + str(self.current_row) + ":Q" + str(self.current_row)):
+        for row in self.ws['A' + str(self.current_row) + ":Q" + str(self.current_row)]:
             for cell in row:
                 cell.border = Border(top=Side(style='thin'))
         # セルの色変更

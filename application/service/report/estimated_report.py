@@ -53,26 +53,29 @@ class EstimatedReport(object):
 
     def write_estimated_content_rows(self):
         # 結合しているセルの罫線が消えるため、罫線を引き直す。
-        for cell in self.ws.get_named_range('estimated_content'):
-            cell.border = Border(outline=True, bottom=Side(style='dashed'))
+        for rows in self.ws[self.excel.get_defined_name_range("estimated_content")]:
+            for cell in rows:
+                cell.border = Border(outline=True, bottom=Side(style='dashed'))
         # 値を代入
-        self.ws.get_named_range("estimation_no")[0].value = self.project.estimation_no
-        self.ws.get_named_range("printed_date")[0].value = datetime.today().date()
+        self.ws[self.excel.get_defined_name_range("estimation_no")].value = self.project.estimation_no
+        self.ws[self.excel.get_defined_name_range("printed_date")].value = datetime.today().date()
         if self.project.client_company:
-            self.ws.get_named_range("client_company_name")[0].value = self.project.client_company.company_name
-        self.ws.get_named_range("project_name")[0].value = self.project.project_name
+            self.ws[self.excel.get_defined_name_range("client_company_name")].value = \
+                self.project.client_company.company_name
+        self.ws[self.excel.get_defined_name_range("project_name")].value = self.project.project_name
         # start_date、end_dateをdatetime型に変更
         start_date = datetime(self.project.start_date.year, self.project.start_date.month, self.project.start_date.day)
         end_date = datetime(self.project.end_date.year, self.project.end_date.month, self.project.end_date.day)
         locale.setlocale(locale.LC_ALL, '')
-        self.ws.get_named_range("start_date")[0].value = strjpftime(start_date, '  %O%E年%m月%d日')
-        self.ws.get_named_range("end_date")[0].value = strjpftime(end_date, '  %O%E年%m月%d日')
+        self.ws[self.excel.get_defined_name_range("start_date")].value = strjpftime(start_date, '  %O%E年%m月%d日')
+        self.ws[self.excel.get_defined_name_range("end_date")].value = strjpftime(end_date, '  %O%E年%m月%d日')
         if self.project.billing_timing:
-            self.ws.get_named_range("billing_timing")[0].value = self.project.billing_timing.name_for_report
+            self.ws[self.excel.get_defined_name_range("billing_timing")].value = \
+                self.project.billing_timing.name_for_report
         if self.project.contract_form:
-            self.ws.get_named_range("contract_form")[0].value = self.project.contract_form.name
+            self.ws[self.excel.get_defined_name_range("contract_form")].value = self.project.contract_form.name
         # 表示形式
-        self.ws.get_named_range("printed_date")[0].number_format = 'yyyy年m月d日'
+        self.ws[self.excel.get_defined_name_range("printed_date")].number_format = 'yyyy年m月d日'
         # 請負ではない場合、「瑕疵担保期間」を非表示にする。
         if self.project.contract_form != Contract.blanket:
             self.ws.row_dimensions[19].hidden = True

@@ -13,8 +13,8 @@ class GenderTests(unittest.TestCase):
         male = 1
         female = 2
 
-        self.assertEquals(Gender.parse(male), Gender.male)
-        self.assertEquals(Gender.parse(female), Gender.female)
+        self.assertEqual(Gender.parse(male), Gender.male)
+        self.assertEqual(Gender.parse(female), Gender.female)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(Gender.parse(0))

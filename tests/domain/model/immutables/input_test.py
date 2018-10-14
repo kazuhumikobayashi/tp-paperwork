@@ -13,8 +13,8 @@ class InputFlagTests(unittest.TestCase):
         yet = 0
         done = 1
 
-        self.assertEquals(InputFlag.parse(yet), InputFlag.yet)
-        self.assertEquals(InputFlag.parse(done), InputFlag.done)
+        self.assertEqual(InputFlag.parse(yet), InputFlag.yet)
+        self.assertEqual(InputFlag.parse(done), InputFlag.done)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(InputFlag.parse(10))

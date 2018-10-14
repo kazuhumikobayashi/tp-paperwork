@@ -60,26 +60,34 @@ class EstimatedReportTests(BaseTestCase):
         self.estimated_report.write_estimated_content_rows()
 
         # 指定のセルに値が入っていることを確認。
-        self.assertEqual(self.estimated_report.ws.get_named_range("estimation_no")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("estimation_no")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.estimation_no)
-        self.assertIsNotNone(self.estimated_report.ws.get_named_range("printed_date")[0].value)
-        self.assertEqual(self.estimated_report.ws.get_named_range("client_company_name")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("printed_date")
+        self.assertIsNotNone(self.estimated_report.ws[defined_name_range].value)
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("client_company_name")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.client_company.company_name)
-        self.assertEqual(self.estimated_report.ws.get_named_range("project_name")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("project_name")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.project_name)
         start_date = datetime(self.estimated_report.project.start_date.year,
                               self.estimated_report.project.start_date.month,
                               self.estimated_report.project.start_date.day)
-        self.assertEqual(self.estimated_report.ws.get_named_range("start_date")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("start_date")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          strjpftime(start_date, '  %O%E年%m月%d日'))
         end_date = datetime(self.estimated_report.project.end_date.year,
                             self.estimated_report.project.end_date.month,
                             self.estimated_report.project.end_date.day)
-        self.assertEqual(self.estimated_report.ws.get_named_range("end_date")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("end_date")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          strjpftime(end_date, '  %O%E年%m月%d日'))
-        self.assertEqual(self.estimated_report.ws.get_named_range("billing_timing")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("billing_timing")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.billing_timing.name_for_report)
-        self.assertEqual(self.estimated_report.ws.get_named_range("contract_form")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("contract_form")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.contract_form.name)
 
     def test_write_estimated_content_rows_if_not_blanket(self):
@@ -90,26 +98,34 @@ class EstimatedReportTests(BaseTestCase):
         self.estimated_report.write_estimated_content_rows()
 
         # 指定のセルに値が入っていることを確認。
-        self.assertEqual(self.estimated_report.ws.get_named_range("estimation_no")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("estimation_no")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.estimation_no)
-        self.assertIsNotNone(self.estimated_report.ws.get_named_range("printed_date")[0].value)
-        self.assertEqual(self.estimated_report.ws.get_named_range("client_company_name")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("printed_date")
+        self.assertIsNotNone(self.estimated_report.ws[defined_name_range].value)
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("client_company_name")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.client_company.company_name)
-        self.assertEqual(self.estimated_report.ws.get_named_range("project_name")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("project_name")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.project_name)
         start_date = datetime(self.estimated_report.project.start_date.year,
                               self.estimated_report.project.start_date.month,
                               self.estimated_report.project.start_date.day)
-        self.assertEqual(self.estimated_report.ws.get_named_range("start_date")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("start_date")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          strjpftime(start_date, '  %O%E年%m月%d日'))
         end_date = datetime(self.estimated_report.project.end_date.year,
                             self.estimated_report.project.end_date.month,
                             self.estimated_report.project.end_date.day)
-        self.assertEqual(self.estimated_report.ws.get_named_range("end_date")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("end_date")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          strjpftime(end_date, '  %O%E年%m月%d日'))
-        self.assertEqual(self.estimated_report.ws.get_named_range("billing_timing")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("billing_timing")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.billing_timing.name_for_report)
-        self.assertEqual(self.estimated_report.ws.get_named_range("contract_form")[0].value,
+        defined_name_range = self.estimated_report.excel.get_defined_name_range("contract_form")
+        self.assertEqual(self.estimated_report.ws[defined_name_range].value,
                          self.estimated_report.project.contract_form.name)
 
     def test_create_project_detail_rows_if_project_details_over_3(self):

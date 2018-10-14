@@ -106,7 +106,7 @@ class ProjectTests(BaseTestCase):
             working_place=None,
             delivery_place=None,
             deliverables=None,
-            inspection_date=datetime.today(),
+            inspection_date=date.today(),
             responsible_person=None,
             quality_control=None,
             subcontractor=None,

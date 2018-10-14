@@ -15,9 +15,9 @@ class TaxTests(unittest.TestCase):
         eight = 8
         ten = 10
 
-        self.assertEquals(Tax.parse(zero), Tax.zero)
-        self.assertEquals(Tax.parse(eight), Tax.eight)
-        self.assertEquals(Tax.parse(ten), Tax.ten)
+        self.assertEqual(Tax.parse(zero), Tax.zero)
+        self.assertEqual(Tax.parse(eight), Tax.eight)
+        self.assertEqual(Tax.parse(ten), Tax.ten)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(Tax.parse(3))

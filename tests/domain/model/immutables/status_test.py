@@ -20,11 +20,11 @@ class StatusTests(unittest.TestCase):
         done = 4
         failure = 99
 
-        self.assertEquals(Status.parse(start), Status.start)
-        self.assertEquals(Status.parse(placed), Status.placed)
-        self.assertEquals(Status.parse(received), Status.received)
-        self.assertEquals(Status.parse(done), Status.done)
-        self.assertEquals(Status.parse(failure), Status.failure)
+        self.assertEqual(Status.parse(start), Status.start)
+        self.assertEqual(Status.parse(placed), Status.placed)
+        self.assertEqual(Status.parse(received), Status.received)
+        self.assertEqual(Status.parse(done), Status.done)
+        self.assertEqual(Status.parse(failure), Status.failure)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(Status.parse(0))

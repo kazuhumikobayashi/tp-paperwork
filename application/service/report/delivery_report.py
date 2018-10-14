@@ -65,7 +65,7 @@ class DeliveryReport(BillingBaseReport):
         self.ws['I' + str(self.current_row)].font = Font(name="HGS明朝")
         self.ws['K' + str(self.current_row)].font = Font(name="Century")
         # 罫線
-        for row in self.ws.iter_rows('A' + str(self.current_row) + ":Q" + str(self.current_row)):
+        for row in self.ws['A' + str(self.current_row) + ":Q" + str(self.current_row)]:
             for cell in row:
                 cell.border = Border(top=Side(style='thin'))
         self.current_row += 2

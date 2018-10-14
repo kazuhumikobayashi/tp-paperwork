@@ -13,8 +13,8 @@ class RoundTests(unittest.TestCase):
         down = 1
         off = 2
 
-        self.assertEquals(Round.parse(down), Round.down)
-        self.assertEquals(Round.parse(off), Round.off)
+        self.assertEqual(Round.parse(down), Round.down)
+        self.assertEqual(Round.parse(off), Round.off)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(Round.parse(0))
@@ -24,5 +24,5 @@ class RoundTests(unittest.TestCase):
         down = '1'
         off = '2'
 
-        self.assertEquals(str(Round.down), down)
-        self.assertEquals(str(Round.off), off)
+        self.assertEqual(str(Round.down), down)
+        self.assertEqual(str(Round.off), off)

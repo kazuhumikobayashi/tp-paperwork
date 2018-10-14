@@ -13,8 +13,8 @@ class HolidayFlagTests(unittest.TestCase):
         before = -1
         after = 1
 
-        self.assertEquals(HolidayFlag.parse(before), HolidayFlag.before)
-        self.assertEquals(HolidayFlag.parse(after), HolidayFlag.after)
+        self.assertEqual(HolidayFlag.parse(before), HolidayFlag.before)
+        self.assertEqual(HolidayFlag.parse(after), HolidayFlag.after)
 
     def test_parse_fail_is_none(self):
         self.assertIsNone(HolidayFlag.parse(0))
