@@ -3,7 +3,12 @@ from urllib.parse import urlencode
 from datetime import date, datetime
 
 from application import db
+from application.domain.model.immutables.billing_timing import BillingTiming
+from application.domain.model.immutables.contract import Contract
 from application.domain.model.immutables.input_flag import InputFlag
+from application.domain.model.immutables.status import Status
+from application.domain.model.immutables.tax import Tax
+from application.domain.model.project import Project
 from application.domain.model.project_month import ProjectMonth
 from application.domain.repository.project_month_repository import ProjectMonthRepository
 from tests import BaseTestCase
@@ -102,6 +107,51 @@ class SearchBillingTests(BaseTestCase):
                                   'deposit_date_to': ''})
         result = self.app.get('/search/billing/?' + query_string)
 
+        self.assertEqual(result.status_code, 200)
+
+    # 見積Noをカンマ区切りで検索し、２ページ目に遷移する。
+    def test_search_billing_by_searching_in_comma(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        query_string = urlencode({'project_name': '',
+                                  'estimation_no': 'M11,M12',
+                                  'deposit_date_from': '',
+                                  'deposit_date_to': ''})
+        result = self.app.get('/search/billing/page/2?' + query_string)
+        self.assertEqual(result.status_code, 200)
+
+    # 見積Noを全角スペース区切りで検索し、２ページ目に遷移する。
+    def test_search_billing_by_searching_in_space(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        query_string = urlencode({'project_name': '',
+                                  'estimation_no': 'M11　M12',
+                                  'deposit_date_from': '',
+                                  'deposit_date_to': ''})
+        result = self.app.get('/search/billing/page/2?' + query_string)
+        self.assertEqual(result.status_code, 200)
+
+    # 見積Noを半角スペース区切りで検索し、２ページ目に遷移する。
+    def test_search_billing_by_searching_in_half_space(self):
+        # ログインする
+        self.app.post('/login', data={
+            'shain_number': 'test1',
+            'password': 'test'
+        })
+
+        query_string = urlencode({'project_name': '',
+                                  'estimation_no': 'M11 M12',
+                                  'deposit_date_from': '',
+                                  'deposit_date_to': ''})
+        result = self.app.get('/search/billing/page/2?' + query_string)
         self.assertEqual(result.status_code, 200)
 
     # 入金済みフラグが更新されることを確認する
