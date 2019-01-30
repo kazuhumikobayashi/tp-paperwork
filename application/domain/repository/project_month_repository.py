@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import asc
+from sqlalchemy import asc, or_
 
 from application.domain.model.form.project_payment_form import ProjectPaymentForm
 from application.domain.model.form.project_result_form import ProjectResultForm
@@ -42,7 +42,12 @@ class ProjectMonthRepository(BaseRepository):
         if project_name:
             query = query.filter(self.model.project.has(Project.project_name.like('%' + project_name + '%')))
         if estimation_no:
-            query = query.filter(self.model.project.has(Project.estimation_no.like('%' + estimation_no + '%')))
+            cut_space_of_estimation_no = estimation_no.replace(' ', ',').replace('　', ',')
+            estimation_no_list = [estimation_no.strip() for estimation_no in cut_space_of_estimation_no.split(',')
+                                  if not estimation_no.strip() == '']
+            query = query.filter(self.model.project
+                                 .has(or_(*[Project.estimation_no.like('%' + estimation_no + '%')
+                                            for estimation_no in estimation_no_list])))
         if billing_input_flag:
             query = query.filter(self.model.billing_input_flag.
                                  in_([InputFlag.parse(st) for st in billing_input_flag])) 

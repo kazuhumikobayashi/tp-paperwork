@@ -50,8 +50,13 @@ class ProjectResultRepository(BaseRepository):
             query = query.filter(self.model.project_detail
                                  .has(ProjectDetail.project.has(Project.project_name.like('%' + project_name + '%'))))
         if estimation_no:
+            cut_space_of_estimation_no = estimation_no.replace(' ', ',').replace('　', ',')
+            estimation_no_list = [estimation_no.strip() for estimation_no in cut_space_of_estimation_no.split(',')
+                                  if not estimation_no.strip() == '']
             query = query.filter(self.model.project_detail
-                                 .has(ProjectDetail.project.has(Project.estimation_no.like('%' + estimation_no + '%'))))
+                                 .has(ProjectDetail.project
+                                      .has(or_(*[Project.estimation_no.like('%' + estimation_no + '%')
+                                                 for estimation_no in estimation_no_list]))))
         if input_flag:
             query = query.filter(self.model.payment_flag.in_([InputFlag.parse(st) for st in input_flag]))
         if end_user_company_id:
@@ -87,8 +92,13 @@ class ProjectResultRepository(BaseRepository):
             query = query.filter(self.model.project_detail
                                  .has(ProjectDetail.project.has(Project.project_name.like('%' + project_name + '%'))))
         if estimation_no:
+            cut_space_of_estimation_no = estimation_no.replace(' ', ',').replace('　', ',')
+            estimation_no_list = [estimation_no.strip() for estimation_no in cut_space_of_estimation_no.split(',')
+                                  if not estimation_no.strip() == '']
             query = query.filter(self.model.project_detail
-                                 .has(ProjectDetail.project.has(Project.estimation_no.like('%' + estimation_no + '%'))))
+                                 .has(ProjectDetail.project
+                                      .has(or_(*[Project.estimation_no.like('%' + estimation_no + '%')
+                                                 for estimation_no in estimation_no_list]))))
         if result_input_flag and len(result_input_flag) == 1:
             if InputFlag.yet in [InputFlag.parse(f) for f in result_input_flag]:
                 query = query.filter(or_(self.model.work_time == 0, self.model.work_time.is_(None)))

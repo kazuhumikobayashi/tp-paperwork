@@ -168,7 +168,38 @@ def create_projects():
             created_user='test',
             updated_at=datetime.today(),
             updated_user='test')
-
+        db.session.add(project)
+    db.session.commit()
+    for num in range(30):
+        project = Project(
+            project_name='単体テスト' + str(num),
+            project_name_for_bp='テスト' + str(num),
+            status=Status.start,
+            recorded_department_id=1,
+            sales_person='営業担当',
+            estimation_no='M1' + str(num//10) + '-000' + str(num)[-1:],
+            end_user_company_id=1,
+            client_company_id=5,
+            start_date='2017/1/1',
+            end_date='2017/12/31',
+            contract_form=Contract.blanket,
+            billing_timing=BillingTiming.parse((num % 2)+1),
+            estimated_total_amount=1000000,
+            billing_tax=Tax.zero,
+            scope='test',
+            contents=None,
+            working_place=None,
+            delivery_place=None,
+            deliverables=None,
+            inspection_date=None,
+            responsible_person=None,
+            quality_control=None,
+            subcontractor=None,
+            remarks=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
         db.session.add(project)
     db.session.commit()
 
@@ -319,6 +350,34 @@ def create_project_details():
             updated_user='test')
         db.session.add(project_detail)
     db.session.commit()
+    for num in range(30):
+        project_detail = ProjectDetail(
+            project_id=num+13,
+            detail_type=DetailType.engineer,
+            work_name=None,
+            engineer_id=2,
+            billing_money=1000000,
+            remarks='テスト',
+            billing_start_day=date(2017, 1, 1),
+            billing_end_day=date(2017, 1, 1),
+            billing_per_month=700000,
+            billing_rule=Rule.fixed,
+            billing_bottom_base_hour=num+2,
+            billing_top_base_hour=100,
+            billing_free_base_hour='1/100, 1/150',
+            billing_per_hour=1,
+            billing_per_bottom_hour=num+1,
+            billing_per_top_hour=num+1,
+            billing_fraction=Fraction.hundred,
+            billing_fraction_rule=Round.down,
+            bp_order_no=None,
+            client_order_no_for_bp=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_detail)
+    db.session.commit()
 
 
 def create_holiday():
@@ -361,6 +420,24 @@ def create_project_results():
             updated_user='test')
         db.session.add(project_result)
     db.session.commit()
+    for num in range(30):
+        project_result = ProjectResult(
+            project_detail_id=num+7,
+            result_month=date(2017, 1, 1),
+            work_time=160.5,
+            billing_transportation=0,
+            billing_confirmation_number='1人月',
+            billing_confirmation_money=1000000,
+            payment_transportation=1000,
+            payment_confirmation_money=701000,
+            remarks='テスト',
+            payment_expected_date=datetime.today().date(),
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_result)
+    db.session.commit()
 
 
 def create_project_months():
@@ -381,6 +458,23 @@ def create_project_months():
             updated_user='test')
         db.session.add(project_month)
     db.session.commit()
+    for num in range(30):
+        project_month = ProjectMonth(
+            project_id=num+13,
+            project_month=date(2017, 1, 1),
+            deposit_date=date(2017, 1, 31),
+            billing_estimated_money=100000,
+            billing_confirmation_money=100100,
+            billing_tax=Tax.eight,
+            billing_transportation=100,
+            remarks=None,
+            client_billing_no=num+1100,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(project_month)
+    db.session.commit()
 
 
 def create_project_billing():
@@ -388,6 +482,21 @@ def create_project_billing():
         billing = ProjectBilling(
             project_detail_id=1,
             billing_month=date(2017, num+1, 1),
+            billing_content='テスト作業',
+            billing_amount='1人月',
+            billing_confirmation_money=100100,
+            billing_transportation=100,
+            remarks=None,
+            created_at=datetime.today(),
+            created_user='test',
+            updated_at=datetime.today(),
+            updated_user='test')
+        db.session.add(billing)
+    db.session.commit()
+    for num in range(30):
+        billing = ProjectBilling(
+            project_detail_id=num+7,
+            billing_month=date(2017, 1, 1),
             billing_content='テスト作業',
             billing_amount='1人月',
             billing_confirmation_money=100100,
